@@ -5,10 +5,12 @@ import android.view.View
 import androidx.annotation.StringRes
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.onyx.android.sdk.scribble.provider.BaseNoteProvider
+import com.onyx.android.sdk.data.QueryArgs
+import com.onyx.android.sdk.data.provider.RemoteDataProvider
 import com.onyx.android.sdk.scribble.provider.RemoteNoteProvider
 import com.raizlabs.android.dbflow.config.FlowConfig
 import com.raizlabs.android.dbflow.config.FlowManager
+import com.raizlabs.android.dbflow.config.GeneratedDatabaseHolder
 import com.raizlabs.android.dbflow.config.ShapeGeneratedDatabaseHolder
 import kotlinx.android.synthetic.main.activity_main.*
 import online.toolboox.BuildConfig
@@ -37,11 +39,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     private var backUrl: String? = null
 
     /**
-     * The note provider.
-     */
-    private lateinit var noteProvider: BaseNoteProvider
-
-    /**
      * OnCreate hook.
      *
      * @param savedInstanceState the saved state of the instance
@@ -67,14 +64,31 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         val preferences = MainSharedPreferencesModule.provideSharedPreferences(this)
         preferences.edit().putLong("lastTimestamp", Date().time).apply()
 
-        FlowManager.init(FlowConfig.builder(this).addDatabaseHolder(ShapeGeneratedDatabaseHolder::class.java).build())
-        noteProvider = RemoteNoteProvider()
+        FlowManager.init(
+            FlowConfig
+                .builder(this)
+                .addDatabaseHolder(GeneratedDatabaseHolder::class.java)
+                .addDatabaseHolder(ShapeGeneratedDatabaseHolder::class.java)
+                .build()
+        )
+
+        val noteProvider = RemoteNoteProvider()
+        val dataProvider = RemoteDataProvider()
         val notes = noteProvider.loadAllNoteList()
 
         notes.stream().forEach {
             Timber.i(
                 "uniqueId=%s, parentUniqueId=%s, isLibrary=%s, title=%s",
                 it.uniqueId, it.parentUniqueId, it.isLibrary, it.title
+            )
+        }
+
+        val libraries = dataProvider.loadAllLibrary(null, QueryArgs())
+        Timber.i("Libraries: %d", libraries.size)
+        libraries.stream().forEach {
+            Timber.i(
+                "storageId=%s, parentUniqueId=%s, name=%s",
+                it.storageId, it.parentUniqueId, it.name
             )
         }
 
