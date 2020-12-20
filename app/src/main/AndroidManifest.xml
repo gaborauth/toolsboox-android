@@ -16,17 +16,6 @@
                 android:name="firebase_crashlytics_collection_enabled"
                 android:value="false"/>
 
-        <!--activity
-                android:name=".main.ui.NoteDemoActivity"
-                android:screenOrientation="portrait"
-                android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity-->
-
         <activity
                 android:name=".main.ui.MainActivity"
                 android:screenOrientation="portrait"
