@@ -1,0 +1,28 @@
+<resources>
+    <dimen name="activity_horizontal_padding">16dp</dimen>
+    <dimen name="activity_vertical_padding">16dp</dimen>
+
+    <dimen name="button_bottom_margin">4dp</dimen>
+    <dimen name="button_top_margin">16dp</dimen>
+
+    <dimen name="widget_horizontal_margin">4dp</dimen>
+    <dimen name="widget_vertical_margin">4dp</dimen>
+    <dimen name="widget_horizontal_half_margin">2dp</dimen>
+    <dimen name="widget_vertical_half_margin">2dp</dimen>
+
+    <dimen name="widget_horizontal_padding">8dp</dimen>
+    <dimen name="widget_vertical_padding">8dp</dimen>
+
+    <dimen name="widget_height">40dp</dimen>
+
+    <dimen name="item_text_primary">16sp</dimen>
+    <dimen name="item_text_secondary">14sp</dimen>
+    <dimen name="item_text_tertiary">12sp</dimen>
+
+    <dimen name="fab_fg_margin">32dp</dimen>
+
+    <dimen name="item_icon_width_height">40dp</dimen>
+    <dimen name="item_icon_star">24dp</dimen>
+
+    <dimen name="padding_list_row">16dp</dimen>
+</resources>

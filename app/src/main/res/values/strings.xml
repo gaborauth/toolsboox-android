@@ -1,0 +1,67 @@
+<resources>
+    <string name="drawer_title">%s &#8211; %s</string>
+    <string name="filter_title">Intent filter</string>
+    <string name="fab_add_item">Add item</string>
+    <string name="something_happened_error">Something happened&#8230; please check your network status. :(</string>
+    <string name="something_happened_action">Okay</string>
+    <string name="logo_content_description">ToolBoox logo</string>
+
+    <string name="validation_field_required">This field is required</string>
+    <plurals name="validation_field_too_long">
+        <item quantity="zero">Too long, content is not allowed</item>
+        <item quantity="one">Too long, maximum %d character allowed</item>
+        <item quantity="other">Too long, maximum %d characters allowed</item>
+    </plurals>
+    <plurals name="validation_field_value_too_small">
+        <item quantity="other">The value is too small, the smallest value can be %d</item>
+    </plurals>
+
+    <!-- Strings related to router -->
+    <string name="router_not_implemented_yet">Sorry guys, this feature is not yet implemented! (%s)</string>
+    <string name="router_not_implemented_yet_action">Okay</string>
+
+    <!-- Strings related to drawer menu -->
+    <string name="drawer_menu_dashboard">Dashboard</string>
+    <string name="drawer_menu_website">Our website</string>
+    <string name="drawer_menu_forum">Support forum</string>
+    <string name="drawer_menu_facebook">Facebook</string>
+    <string name="drawer_menu_twitter">Twitter</string>
+    <string name="drawer_menu_logout">Logout</string>
+
+    <!-- Strings related to main activity -->
+    <string name="main_title">Dashboard</string>
+    <string name="main_text">Welcome in your dashboard!</string>
+
+    <!-- Strings related to dashboard -->
+    <string name="dashboard_version">"%s&#8211;%s</string>
+
+    <!-- Strings related to utils -->
+    <string name="util_fluent_unknown">unknown</string>
+    <string name="util_fluent_days">days</string>
+    <string name="util_fluent_day">day</string>
+    <string name="util_fluent_hours">hours</string>
+    <string name="util_fluent_hour">hour</string>
+    <string name="util_fluent_minutes">minutes</string>
+    <string name="util_fluent_minute">minute</string>
+    <string name="util_fluent_seconds">seconds</string>
+    <string name="util_fluent_second">second</string>
+
+    <!-- Placeholder texts -->
+    <!--string name="placeholder_2">To</string-->
+    <!--string name="placeholder_3">But</string-->
+    <!--string name="placeholder_4">Must</string-->
+    <!--string name="placeholder_6">To you</string-->
+    <!--string name="placeholder_8">Pleasure</string-->
+    <!--string name="placeholder_12">Was born and</string-->
+    <!--string name="placeholder_16">You how all this</string-->
+    <string name="placeholder_24">But I must explain to we</string>
+    <!--string name="placeholder_32">But I must explain to we how all</string-->
+    <!--string name="placeholder_48">But we must explain to you how all this mistaken</string-->
+    <string name="placeholder_64">But I must explain to you how all this mistaken idea of praising</string>
+    <string name="placeholder_96">But I must explain to we how all this mistaken idea of denouncing pleasure and praising pain was</string>
+    <string name="placeholder_128">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a hat</string>
+    <!--string name="placeholder_192">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of</string-->
+    <!--string name="placeholder_256">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human we</string-->
+    <!--string name="placeholder_384">But you must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to</string-->
+    <!--string name="placeholder_512">But you must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or</string-->
+</resources>

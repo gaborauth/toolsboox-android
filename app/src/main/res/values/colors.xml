@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryLightDark">#BFD5D2</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="colorBackgroundFloating">#FAE3EB</color>
+    <color name="colorError">#D81B60</color>
+
+    <color name="item_text_primary">#000000</color>
+    <color name="item_text_secondary">#111111</color>
+    <color name="item_text_tertiary">#4285f4</color>
+
+    <color name="fabBgColor">#FF0000</color>
+    <color name="fabFgColor">#FFFFFF</color>
+    <color name="starColor">@color/colorPrimary</color>
+
+    <color name="row_activated">#e0e0e0</color>
+</resources>
