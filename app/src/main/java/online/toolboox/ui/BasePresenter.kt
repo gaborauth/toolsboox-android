@@ -17,7 +17,7 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:auth.gabor@gmail.com">Gábor AUTH</a>
  */
-abstract class BasePresenter<out V : BaseView>(private val view: V) {
+abstract class BasePresenter<out V : BaseView>(protected val view: V) {
 
     /**
      * Inject the main service.

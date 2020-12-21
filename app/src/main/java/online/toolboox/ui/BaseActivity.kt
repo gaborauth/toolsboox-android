@@ -17,7 +17,7 @@ abstract class BaseActivity<P : BasePresenter<BaseView>> : BaseView, AppCompatAc
     /**
      * The presenter instance.
      */
-    private lateinit var presenter: P
+    protected lateinit var presenter: P
 
     /**
      * OnCreate hook.

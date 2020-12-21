@@ -29,8 +29,8 @@
     <string name="drawer_menu_logout">Logout</string>
 
     <!-- Strings related to main activity -->
-    <string name="main_title">Dashboard</string>
-    <string name="main_text">Welcome in your dashboard!</string>
+    <string name="main_title">TeamDrawer</string>
+    <string name="main_text">Welcome in our team drawer! :)</string>
 
     <!-- Strings related to dashboard -->
     <string name="dashboard_version">"%s&#8211;%s</string>

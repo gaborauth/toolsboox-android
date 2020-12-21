@@ -5,7 +5,6 @@ import dagger.Provides
 import dagger.Reusable
 import online.toolboox.main.nw.MainService
 import retrofit2.Retrofit
-import javax.inject.Named
 
 /**
  * Main service module, provides main service.
@@ -23,7 +22,7 @@ object MainServiceModule {
      */
     @Provides
     @Reusable
-    fun provideService(@Named("plain") retrofit: Retrofit): MainService {
+    fun provideService(retrofit: Retrofit): MainService {
         return retrofit.create(MainService::class.java)
     }
 }
