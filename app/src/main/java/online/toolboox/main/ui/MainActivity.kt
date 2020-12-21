@@ -84,7 +84,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     /**
      * Timestamp of the last stroke.
      */
-    private var last: Long = 0;
+    private var last: Long = 0
 
     /**
      * OnCreate hook.
@@ -235,7 +235,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         for (stroke in strokes) {
             if (stroke.isNotEmpty()) {
                 val path = Path()
-                val prePoint = PointF(stroke.get(0).x, stroke.get(0).y)
+                val prePoint = PointF(stroke[0].x, stroke[0].y)
                 path.moveTo(prePoint.x, prePoint.y)
                 for (point in stroke) {
                     path.quadTo(prePoint.x, prePoint.y, point.x, point.y)
