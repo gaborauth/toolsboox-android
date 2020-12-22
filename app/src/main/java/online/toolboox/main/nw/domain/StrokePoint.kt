@@ -3,7 +3,7 @@ package online.toolboox.main.nw.domain
 /**
  * Stroke point data class.
  *
- * @author <a href="mailto:auth.gabor@gmail.com">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 data class StrokePoint(
     var x: Float,

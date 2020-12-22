@@ -15,7 +15,7 @@ import javax.inject.Inject
  * @property view the view the presenter is based on
  * @constructor Injects the required dependencies
  *
- * @author <a href="mailto:auth.gabor@gmail.com">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 abstract class BasePresenter<out V : BaseView>(protected val view: V) {
 

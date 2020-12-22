@@ -20,10 +20,10 @@ import com.raizlabs.android.dbflow.config.FlowConfig
 import com.raizlabs.android.dbflow.config.FlowManager
 import com.raizlabs.android.dbflow.config.GeneratedDatabaseHolder
 import com.raizlabs.android.dbflow.config.ShapeGeneratedDatabaseHolder
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import online.toolboox.BuildConfig
 import online.toolboox.R
+import online.toolboox.databinding.ActivityMainBinding
 import online.toolboox.main.di.MainSharedPreferencesModule
 import online.toolboox.main.nw.domain.StrokePoint
 import online.toolboox.ui.BaseActivity
@@ -37,7 +37,7 @@ import kotlin.math.sqrt
 /**
  * A dashboard screen that offers the main menu.
  *
- * @author <a href="mailto:auth.gabor@gmail.com">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 class MainActivity : BaseActivity<MainPresenter>(), MainView {
 
@@ -45,6 +45,10 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      * The Firebase analytics.
      */
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    /**
+     * The view binding.
+     */
+    private lateinit var binding: ActivityMainBinding
 
     /**
      * The back URL from intent extra.
@@ -93,6 +97,8 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
@@ -102,8 +108,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             Timber.plant(ReleaseTree())
         }
 
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(mainToolbar)
+        setSupportActionBar(binding.mainToolbar)
 
         title = getString(R.string.drawer_title).format(getString(R.string.app_name), getString(R.string.main_title))
 
@@ -140,7 +145,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             )
         }
 
-        touchHelper = TouchHelper.create(surfaceView, callback)
+        touchHelper = TouchHelper.create(binding.surfaceView, callback)
         initializeSurface()
     }
 
@@ -190,21 +195,21 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      * @param messageResId the resource id of the error
      */
     override fun showMessage(@StringRes messageResId: Int) {
-        Snackbar.make(mainToolbar, messageResId, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(binding.mainToolbar, messageResId, Snackbar.LENGTH_LONG).show()
     }
 
     /**
      * Show progress and hide login form.
      */
     override fun showLoading() {
-        mainProgress.visibility = View.VISIBLE
+        binding.mainProgress.visibility = View.VISIBLE
     }
 
     /**
      * Hide progress and show login form.
      */
     override fun hideLoading() {
-        mainProgress.visibility = View.INVISIBLE
+        binding.mainProgress.visibility = View.INVISIBLE
     }
 
     override fun addResult(response: Response<List<StrokePoint>>) {
@@ -223,12 +228,12 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     override fun listResult(response: Response<List<List<StrokePoint>>>) {
         Timber.i("$response")
 
-        val lockCanvas = surfaceView.holder.lockCanvas()
+        val lockCanvas = binding.surfaceView.holder.lockCanvas()
 
         val fillPaint = Paint()
         fillPaint.style = Paint.Style.FILL
         fillPaint.color = Color.WHITE
-        val rect = Rect(0, 0, surfaceView.width, surfaceView.height)
+        val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
         lockCanvas.drawRect(rect, fillPaint)
 
         val strokes: List<List<StrokePoint>> = response.body()!!
@@ -247,7 +252,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             }
         }
 
-        surfaceView.holder.unlockCanvasAndPost(lockCanvas)
+        binding.surfaceView.holder.unlockCanvasAndPost(lockCanvas)
 
         touchHelper.setRawDrawingEnabled(true)
     }
@@ -270,28 +275,29 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
                 override fun surfaceCreated(holder: SurfaceHolder) {
                     Timber.w("surfaceCreated")
                     val limit = Rect()
-                    surfaceView!!.getLocalVisibleRect(limit)
+                    binding.surfaceView.getLocalVisibleRect(limit)
                     bitmap = Bitmap.createBitmap(
-                        surfaceView!!.width,
-                        surfaceView!!.height,
+                        binding.surfaceView.width,
+                        binding.surfaceView.height,
                         Bitmap.Config.ARGB_8888
                     )
                     bitmap.eraseColor(Color.WHITE)
                     canvas = Canvas(bitmap)
 
-                    if (surfaceView.holder == null) {
+                    if (binding.surfaceView.holder == null) {
                         return
                     }
-                    val canvas = surfaceView.holder.lockCanvas() ?: return
-                    EpdController.enablePost(surfaceView, 1)
+
+                    val canvas = binding.surfaceView.holder.lockCanvas() ?: return
+                    EpdController.enablePost(binding.surfaceView, 1)
                     val paint = Paint()
                     paint.style = Paint.Style.FILL
                     paint.color = Color.WHITE
-                    val rect = Rect(0, 0, surfaceView.width, surfaceView.height)
+                    val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
                     canvas.drawRect(rect, paint)
 
                     canvas.drawBitmap(bitmap, 0f, 0f, paint)
-                    surfaceView.holder.unlockCanvasAndPost(canvas)
+                    binding.surfaceView.holder.unlockCanvasAndPost(canvas)
                     touchHelper.setLimitRect(limit, ArrayList())
                         .setStrokeWidth(3.0f)
                         .openRawDrawing()
@@ -310,9 +316,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             }
         }
 
-        surfaceView!!.holder.addCallback(surfaceCallback)
+        binding.surfaceView.holder.addCallback(surfaceCallback)
 
-        surfaceView!!.viewTreeObserver.addOnGlobalLayoutListener {
+        binding.surfaceView.viewTreeObserver.addOnGlobalLayoutListener {
             Timber.w("addOnGlobalLayoutListener")
             touchHelper.setRawDrawingEnabled(true)
         }

@@ -22,7 +22,7 @@ import javax.inject.Singleton
 /**
  * Retrofit DI module of network services.
  *
- * @author <a href="mailto:auth.gabor@gmail.com">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 @Module
 object NetworkModule {

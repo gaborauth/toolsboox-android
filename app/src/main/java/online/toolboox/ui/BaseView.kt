@@ -7,7 +7,7 @@ import online.toolboox.R
 /**
  * Base view interface.
  *
- * @author <a href="mailto:auth.gabor@gmail.com">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 interface BaseView {
 

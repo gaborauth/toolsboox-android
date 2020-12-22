@@ -10,7 +10,7 @@ import online.toolboox.BuildConfig
  * Base activity, it provides required methods and presenter instantiation and calls.
  * @param P the type of the presenter the Activity is based on
  *
- * @author <a href="mailto:auth.gabor@gmail.com">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 abstract class BaseActivity<P : BasePresenter<BaseView>> : BaseView, AppCompatActivity() {
 

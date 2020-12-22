@@ -11,7 +11,7 @@ import javax.inject.Singleton
 /**
  * Component providing inject() methods for presenters.
  *
- * @author <a href="mailto:auth.gabor@gmail.com">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 @Singleton
 @Component(

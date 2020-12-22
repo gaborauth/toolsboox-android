@@ -9,7 +9,7 @@ import retrofit2.Retrofit
 /**
  * Main service module, provides main service.
  *
- * @author <a href="mailto:auth.gabor@gmail.com">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 @Module
 object MainServiceModule {
