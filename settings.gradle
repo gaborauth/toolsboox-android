@@ -1,3 +1,3 @@
 rootProject.name = 'toolboox'
-include ':app'
-include ':web'
+include 'app'
+include 'web'
