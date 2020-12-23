@@ -1,16 +1,21 @@
 package online.toolboox.main.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.*
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.SurfaceHolder
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.data.QueryArgs
 import com.onyx.android.sdk.data.provider.RemoteDataProvider
-import com.onyx.android.sdk.pen.BrushRender
 import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.pen.data.TouchPoint
@@ -25,11 +30,13 @@ import online.toolboox.BuildConfig
 import online.toolboox.R
 import online.toolboox.databinding.ActivityMainBinding
 import online.toolboox.main.di.MainSharedPreferencesModule
+import online.toolboox.main.nw.domain.Stroke
 import online.toolboox.main.nw.domain.StrokePoint
 import online.toolboox.ui.BaseActivity
 import online.toolboox.utils.ReleaseTree
 import retrofit2.Response
 import timber.log.Timber
+import java.time.Instant
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -45,6 +52,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      * The Firebase analytics.
      */
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     /**
      * The view binding.
      */
@@ -111,7 +119,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         setSupportActionBar(binding.mainToolbar)
 
         title = getString(R.string.drawer_title).format(getString(R.string.app_name), getString(R.string.main_title))
-
         backUrl = intent.getStringExtra("backUrl")
 
         val preferences = MainSharedPreferencesModule.provideSharedPreferences(this)
@@ -143,6 +150,38 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
                 "storageId=%s, parentUniqueId=%s, name=%s",
                 it.storageId, it.parentUniqueId, it.name
             )
+        }
+
+        binding.buttonExport.setOnClickListener {
+            Timber.i("Start of the export process")
+
+            val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
+                    showExplanation(
+                        "Permission Needed",
+                        "Rationale",
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE
+                    )
+                } else {
+                    requestPermission(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE
+                    )
+                }
+                return@setOnClickListener
+            }
+
+            val title = "export-${Instant.now().epochSecond}"
+            MediaStore.Images.Media.insertImage(contentResolver, bitmap, title, "Export")
+            Toast.makeText(this, "Exported as $title", Toast.LENGTH_LONG).show()
+            Timber.i("End of the export process")
+        }
+
+        binding.buttonErase.setOnClickListener {
+            presenter.del()
         }
 
         touchHelper = TouchHelper.create(binding.surfaceView, callback)
@@ -212,8 +251,12 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         binding.mainProgress.visibility = View.INVISIBLE
     }
 
-    override fun addResult(response: Response<List<StrokePoint>>) {
+    override fun addResult(response: Response<Stroke>) {
         Timber.i("$response")
+    }
+
+    override fun delResult(response: Response<List<Stroke>>) {
+        clearSurface()
     }
 
     override fun lastResult(response: Response<Long>) {
@@ -225,7 +268,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         }
     }
 
-    override fun listResult(response: Response<List<List<StrokePoint>>>) {
+    override fun listResult(response: Response<List<Stroke>>) {
         Timber.i("$response")
 
         val lockCanvas = binding.surfaceView.holder.lockCanvas()
@@ -236,22 +279,23 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
         lockCanvas.drawRect(rect, fillPaint)
 
-        val strokes: List<List<StrokePoint>> = response.body()!!
+        val strokes: List<Stroke> = response.body()!!
         for (stroke in strokes) {
-            if (stroke.isNotEmpty()) {
+            val points = stroke.strokePoints
+            if (points.isNotEmpty()) {
                 val path = Path()
-                val prePoint = PointF(stroke[0].x, stroke[0].y)
+                val prePoint = PointF(points[0].x, points[0].y)
                 path.moveTo(prePoint.x, prePoint.y)
-                for (point in stroke) {
+                for (point in points) {
                     path.quadTo(prePoint.x, prePoint.y, point.x, point.y)
                     prePoint.x = point.x
                     prePoint.y = point.y
                 }
 
                 lockCanvas.drawPath(path, paint)
+                canvas.drawPath(path, paint)
             }
         }
-
         binding.surfaceView.holder.unlockCanvasAndPost(lockCanvas)
 
         touchHelper.setRawDrawingEnabled(true)
@@ -288,16 +332,8 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
                         return
                     }
 
-                    val canvas = binding.surfaceView.holder.lockCanvas() ?: return
-                    EpdController.enablePost(binding.surfaceView, 1)
-                    val paint = Paint()
-                    paint.style = Paint.Style.FILL
-                    paint.color = Color.WHITE
-                    val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
-                    canvas.drawRect(rect, paint)
+                    clearSurface()
 
-                    canvas.drawBitmap(bitmap, 0f, 0f, paint)
-                    binding.surfaceView.holder.unlockCanvasAndPost(canvas)
                     touchHelper.setLimitRect(limit, ArrayList())
                         .setStrokeWidth(3.0f)
                         .openRawDrawing()
@@ -317,12 +353,25 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         }
 
         binding.surfaceView.holder.addCallback(surfaceCallback)
-
         binding.surfaceView.viewTreeObserver.addOnGlobalLayoutListener {
             Timber.w("addOnGlobalLayoutListener")
             touchHelper.setRawDrawingEnabled(true)
         }
     }
+
+    private fun clearSurface() {
+        val lockerCanvas = binding.surfaceView.holder.lockCanvas() ?: return
+        EpdController.enablePost(binding.surfaceView, 1)
+        val paint = Paint()
+        paint.style = Paint.Style.FILL
+        paint.color = Color.WHITE
+        val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
+        lockerCanvas.drawRect(rect, paint)
+        binding.surfaceView.holder.unlockCanvasAndPost(lockerCanvas)
+
+        canvas.drawRect(rect, paint)
+    }
+
     private val callback: RawInputCallback = object : RawInputCallback() {
 
         var lastPoint: TouchPoint? = null
@@ -359,9 +408,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
                 stroke.add(StrokePoint(tp.x, tp.y, tp.pressure))
             }
             presenter.add(stroke)
-
-            val maxPressure = EpdController.getMaxTouchPressure()
-            BrushRender.drawStroke(canvas, paint, touchPointList.points,1.0f, 3.0f, maxPressure, false)
         }
 
         override fun onBeginRawErasing(b: Boolean, touchPoint: TouchPoint) {

@@ -2,9 +2,9 @@ package online.toolboox.ui
 
 import kotlinx.coroutines.*
 import online.toolboox.di.NetworkModule
-import online.toolboox.main.di.MainServiceModule
+import online.toolboox.main.di.StrokeServiceModule
 import online.toolboox.main.di.MainSharedPreferencesModule
-import online.toolboox.main.nw.MainService
+import online.toolboox.main.nw.StrokeService
 import online.toolboox.main.ui.MainPresenter
 import javax.inject.Inject
 
@@ -20,10 +20,10 @@ import javax.inject.Inject
 abstract class BasePresenter<out V : BaseView>(protected val view: V) {
 
     /**
-     * Inject the main service.
+     * Inject the stroke service.
      */
     @Inject
-    lateinit var mainService: MainService
+    lateinit var strokeService: StrokeService
 
     /**
      * The injector used to inject required dependencies.
@@ -33,7 +33,7 @@ abstract class BasePresenter<out V : BaseView>(protected val view: V) {
         .baseView(view)
         .networkModule(NetworkModule)
         .mainSharedPreferencesModule(MainSharedPreferencesModule)
-        .mainServiceModule(MainServiceModule)
+        .strokeServiceModule(StrokeServiceModule)
         .build()
 
     /**

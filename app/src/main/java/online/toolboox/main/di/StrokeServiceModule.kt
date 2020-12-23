@@ -3,16 +3,16 @@ package online.toolboox.main.di
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import online.toolboox.main.nw.MainService
+import online.toolboox.main.nw.StrokeService
 import retrofit2.Retrofit
 
 /**
- * Main service module, provides main service.
+ * Stroke service module, provides stroke service.
  *
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 @Module
-object MainServiceModule {
+object StrokeServiceModule {
 
     /**
      * Provides the service.
@@ -22,7 +22,7 @@ object MainServiceModule {
      */
     @Provides
     @Reusable
-    fun provideService(retrofit: Retrofit): MainService {
-        return retrofit.create(MainService::class.java)
+    fun provideService(retrofit: Retrofit): StrokeService {
+        return retrofit.create(StrokeService::class.java)
     }
 }

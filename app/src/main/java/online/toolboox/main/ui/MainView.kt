@@ -1,6 +1,6 @@
 package online.toolboox.main.ui
 
-import online.toolboox.main.nw.domain.StrokePoint
+import online.toolboox.main.nw.domain.Stroke
 import online.toolboox.ui.BaseView
 import retrofit2.Response
 
@@ -15,7 +15,14 @@ interface MainView : BaseView {
      *
      * @param response the response
      */
-    fun addResult(response: Response<List<StrokePoint>>)
+    fun addResult(response: Response<Stroke>)
+
+    /**
+     * Process the result of the 'del' call.
+     *
+     * @param response the response
+     */
+    fun delResult(response: Response<List<Stroke>>)
 
     /**
      * Process the result of the 'last' call.
@@ -29,5 +36,5 @@ interface MainView : BaseView {
      *
      * @param response the response
      */
-    fun listResult(response: Response<List<List<StrokePoint>>>)
+    fun listResult(response: Response<List<Stroke>>)
 }

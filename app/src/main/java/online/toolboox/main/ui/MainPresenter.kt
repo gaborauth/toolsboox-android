@@ -2,6 +2,7 @@ package online.toolboox.main.ui
 
 import online.toolboox.main.nw.domain.StrokePoint
 import online.toolboox.ui.BasePresenter
+import java.util.*
 
 /**
  * Presenter of main.
@@ -11,14 +12,31 @@ import online.toolboox.ui.BasePresenter
 class MainPresenter(mainView: MainView) : BasePresenter<MainView>(mainView) {
 
     /**
+     * The static UUID of the page.
+     */
+    private val pageId = UUID.fromString("178e0a77-d9d2-4a88-b29c-b09007972b53")
+
+    /**
      * Add stroke.
      *
      * @return the response
      */
     fun add(stroke: List<StrokePoint>) {
         coroutinesCallHelper(
-            { mainService.addAsync(stroke) },
+            { strokeService.addAsync(pageId, stroke) },
             { response -> view.addResult(response) }
+        )
+    }
+
+    /**
+     * Delete all strokes of the page.
+     *
+     * @return the empty page
+     */
+    fun del() {
+        coroutinesCallHelper(
+            { strokeService.delAsync(pageId) },
+            { response -> view.delResult(response) }
         )
     }
 
@@ -29,7 +47,7 @@ class MainPresenter(mainView: MainView) : BasePresenter<MainView>(mainView) {
      */
     fun last() {
         coroutinesCallHelper(
-            { mainService.lastAsync() },
+            { strokeService.lastAsync(pageId) },
             { response -> view.lastResult(response) }
         )
     }
@@ -41,7 +59,7 @@ class MainPresenter(mainView: MainView) : BasePresenter<MainView>(mainView) {
      */
     fun list() {
         coroutinesCallHelper(
-            { mainService.listAsync() },
+            { strokeService.listAsync(pageId) },
             { response -> view.listResult(response) }
         )
     }

@@ -60,6 +60,8 @@
     <string name="placeholder_64">But I must explain to you how all this mistaken idea of praising</string>
     <string name="placeholder_96">But I must explain to we how all this mistaken idea of denouncing pleasure and praising pain was</string>
     <string name="placeholder_128">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a hat</string>
+    <string name="main_button_export">Export</string>
+    <string name="main_button_erase">Erase</string>
     <!--string name="placeholder_192">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of</string-->
     <!--string name="placeholder_256">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human we</string-->
     <!--string name="placeholder_384">But you must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to</string-->
