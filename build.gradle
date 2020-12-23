@@ -1,3 +1,8 @@
+ext {
+    parentVersionCode = 1_00_00_02
+    parentVersionName = '1.0.0-02'
+}
+
 buildscript {
     repositories {
         mavenLocal()
