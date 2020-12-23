@@ -33,6 +33,14 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
+    applicationVariants.all {
+        variant ->
+            variant.outputs.each {
+                output ->
+                    output.outputFileName = "${applicationName}-${variant.flavorName}-${variant.buildType.name}-${defaultConfig.versionName}.apk"
+            }
+    }
+
     buildFeatures {
         dataBinding true
         viewBinding true
