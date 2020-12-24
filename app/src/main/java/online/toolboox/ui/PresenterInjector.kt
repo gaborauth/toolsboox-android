@@ -39,7 +39,6 @@ interface PresenterInjector {
 
         fun networkModule(networkModule: NetworkModule): Builder
         fun mainSharedPreferencesModule(mainSharedPreferencesModule: MainSharedPreferencesModule): Builder
-        fun teamDrawerServiceModule(strokeService: TeamDrawerServiceModule): Builder
 
         @BindsInstance
         fun baseView(baseView: BaseView): Builder

@@ -1,12 +1,12 @@
 package online.toolboox.ui
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import online.toolboox.di.NetworkModule
-import online.toolboox.plugin.teamdrawer.di.TeamDrawerServiceModule
 import online.toolboox.main.di.MainSharedPreferencesModule
-import online.toolboox.plugin.teamdrawer.nw.StrokeService
 import online.toolboox.main.ui.MainPresenter
-import javax.inject.Inject
 
 /**
  * Base presenter, provides initial injections and required methods.
@@ -20,12 +20,6 @@ import javax.inject.Inject
 abstract class BasePresenter<out V : BaseView>(protected val view: V) {
 
     /**
-     * Inject the stroke service.
-     */
-    @Inject
-    lateinit var strokeService: StrokeService
-
-    /**
      * The injector used to inject required dependencies.
      */
     private val injector: PresenterInjector = DaggerPresenterInjector
@@ -33,7 +27,6 @@ abstract class BasePresenter<out V : BaseView>(protected val view: V) {
         .baseView(view)
         .networkModule(NetworkModule)
         .mainSharedPreferencesModule(MainSharedPreferencesModule)
-        .teamDrawerServiceModule(TeamDrawerServiceModule)
         .build()
 
     /**
