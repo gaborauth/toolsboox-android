@@ -1,6 +1,6 @@
 package online.toolboox.main.ui
 
-import online.toolboox.main.nw.domain.Stroke
+import online.toolboox.plugin.teamdrawer.nw.domain.Stroke
 import online.toolboox.ui.BaseView
 import retrofit2.Response
 

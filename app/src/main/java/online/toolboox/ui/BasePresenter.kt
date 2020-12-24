@@ -2,9 +2,9 @@ package online.toolboox.ui
 
 import kotlinx.coroutines.*
 import online.toolboox.di.NetworkModule
-import online.toolboox.main.di.StrokeServiceModule
+import online.toolboox.plugin.teamdrawer.di.TeamDrawerServiceModule
 import online.toolboox.main.di.MainSharedPreferencesModule
-import online.toolboox.main.nw.StrokeService
+import online.toolboox.plugin.teamdrawer.nw.StrokeService
 import online.toolboox.main.ui.MainPresenter
 import javax.inject.Inject
 
@@ -33,7 +33,7 @@ abstract class BasePresenter<out V : BaseView>(protected val view: V) {
         .baseView(view)
         .networkModule(NetworkModule)
         .mainSharedPreferencesModule(MainSharedPreferencesModule)
-        .strokeServiceModule(StrokeServiceModule)
+        .teamDrawerServiceModule(TeamDrawerServiceModule)
         .build()
 
     /**

@@ -30,8 +30,8 @@ import online.toolboox.BuildConfig
 import online.toolboox.R
 import online.toolboox.databinding.ActivityMainBinding
 import online.toolboox.main.di.MainSharedPreferencesModule
-import online.toolboox.main.nw.domain.Stroke
-import online.toolboox.main.nw.domain.StrokePoint
+import online.toolboox.plugin.teamdrawer.nw.domain.Stroke
+import online.toolboox.plugin.teamdrawer.nw.domain.StrokePoint
 import online.toolboox.ui.BaseActivity
 import online.toolboox.utils.ReleaseTree
 import retrofit2.Response

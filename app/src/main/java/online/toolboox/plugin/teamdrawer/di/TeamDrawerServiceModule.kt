@@ -1,28 +1,28 @@
-package online.toolboox.main.di
+package online.toolboox.plugin.teamdrawer.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import online.toolboox.main.nw.StrokeService
+import online.toolboox.plugin.teamdrawer.nw.StrokeService
 import retrofit2.Retrofit
 
 /**
- * Stroke service module, provides stroke service.
+ * Team drawer service module, provides services.
  *
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 @Module
-object StrokeServiceModule {
+object TeamDrawerServiceModule {
 
     /**
-     * Provides the service.
+     * Provides the stroke service.
      *
      * @param retrofit the Retrofit instance
      * @return the service
      */
     @Provides
     @Reusable
-    fun provideService(retrofit: Retrofit): StrokeService {
+    fun provideStrokeService(retrofit: Retrofit): StrokeService {
         return retrofit.create(StrokeService::class.java)
     }
 }

@@ -1,4 +1,4 @@
-package online.toolboox.main.nw.domain
+package online.toolboox.plugin.teamdrawer.nw.domain
 
 /**
  * Stroke point data class.

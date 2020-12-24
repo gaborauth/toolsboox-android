@@ -4,7 +4,7 @@ import dagger.BindsInstance
 import dagger.Component
 import online.toolboox.di.NetworkModule
 import online.toolboox.main.di.MainSharedPreferencesModule
-import online.toolboox.main.di.StrokeServiceModule
+import online.toolboox.plugin.teamdrawer.di.TeamDrawerServiceModule
 import online.toolboox.main.ui.MainPresenter
 import javax.inject.Singleton
 
@@ -18,7 +18,7 @@ import javax.inject.Singleton
     modules = [
         (NetworkModule::class),
         (MainSharedPreferencesModule::class),
-        (StrokeServiceModule::class)
+        (TeamDrawerServiceModule::class)
     ]
 )
 interface PresenterInjector {
@@ -39,7 +39,7 @@ interface PresenterInjector {
 
         fun networkModule(networkModule: NetworkModule): Builder
         fun mainSharedPreferencesModule(mainSharedPreferencesModule: MainSharedPreferencesModule): Builder
-        fun strokeServiceModule(strokeService: StrokeServiceModule): Builder
+        fun teamDrawerServiceModule(strokeService: TeamDrawerServiceModule): Builder
 
         @BindsInstance
         fun baseView(baseView: BaseView): Builder

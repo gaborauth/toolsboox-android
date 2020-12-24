@@ -1,6 +1,6 @@
 package online.toolboox.main.ui
 
-import online.toolboox.main.nw.domain.StrokePoint
+import online.toolboox.plugin.teamdrawer.nw.domain.StrokePoint
 import online.toolboox.ui.BasePresenter
 import java.util.*
 

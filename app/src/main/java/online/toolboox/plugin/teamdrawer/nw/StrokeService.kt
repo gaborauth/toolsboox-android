@@ -1,8 +1,8 @@
-package online.toolboox.main.nw
+package online.toolboox.plugin.teamdrawer.nw
 
 import kotlinx.coroutines.Deferred
-import online.toolboox.main.nw.domain.Stroke
-import online.toolboox.main.nw.domain.StrokePoint
+import online.toolboox.plugin.teamdrawer.nw.domain.Stroke
+import online.toolboox.plugin.teamdrawer.nw.domain.StrokePoint
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
