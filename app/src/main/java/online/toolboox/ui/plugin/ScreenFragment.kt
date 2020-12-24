@@ -1,11 +1,16 @@
 package online.toolboox.ui.plugin
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import online.toolboox.R
@@ -17,6 +22,11 @@ import timber.log.Timber
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 abstract class ScreenFragment : Fragment() {
+    /**
+     * Result code of WRITE_EXTERNAL_STORAGE permission.
+     */
+    protected val REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 12345
+
     init {
         retainInstance = true
     }
@@ -107,4 +117,78 @@ abstract class ScreenFragment : Fragment() {
      * Hides the loading indicator of the view.
      */
     abstract fun hideLoading()
+
+    /**
+     * Result of request permission.
+     */
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this.context, "Permission Granted!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this.context, "Permission Denied!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if permission granted or start the request process.
+     *
+     * @param permissionName the name of the permission (Manifest.permission)
+     * @param permissionCode the result code of the request Activity
+     * @param title the title of the request dialog
+     * @param message the message of the request dialog
+     * @return true, if the permission is granted
+     */
+    protected fun checkPermissionGranted(
+        permissionName: String,
+        permissionRequestCode: Int,
+        title: String,
+        message: String
+    ): Boolean {
+        val permission = ContextCompat.checkSelfPermission(this.requireContext(), permissionName)
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this.requireActivity(), permissionName)) {
+                showExplanation(title, message, permissionName, permissionRequestCode)
+            } else {
+                requestPermission(permissionName, permissionRequestCode)
+            }
+
+            return false
+        }
+
+        return true
+    }
+
+    /**
+     * Show explanation of the permission request.
+     *
+     * @param title the title
+     * @param message the message
+     * @param permission the permission
+     * @param permissionRequestCode the request code of the dialog
+     */
+    private fun showExplanation(title: String, message: String, permission: String, permissionRequestCode: Int) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+        builder.setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(
+                android.R.string.ok,
+                { dialog, id -> requestPermission(permission, permissionRequestCode) }
+            )
+        builder.create().show()
+    }
+
+    /**
+     * Request a permission.
+     *
+     * @param permissionName the name of the permission
+     * @param permissionRequestCode the request code of the dialog
+     */
+    private fun requestPermission(permissionName: String, permissionRequestCode: Int) {
+        ActivityCompat.requestPermissions(this.requireActivity(), arrayOf(permissionName), permissionRequestCode)
+    }
 }

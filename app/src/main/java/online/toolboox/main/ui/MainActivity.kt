@@ -1,45 +1,33 @@
 package online.toolboox.main.ui
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.graphics.*
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.view.SurfaceHolder
-import android.view.View
-import android.widget.Toast
+import android.view.MenuItem
+import android.widget.TextView
 import androidx.annotation.StringRes
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.data.QueryArgs
 import com.onyx.android.sdk.data.provider.RemoteDataProvider
-import com.onyx.android.sdk.pen.RawInputCallback
-import com.onyx.android.sdk.pen.TouchHelper
-import com.onyx.android.sdk.pen.data.TouchPoint
-import com.onyx.android.sdk.pen.data.TouchPointList
 import com.onyx.android.sdk.scribble.provider.RemoteNoteProvider
 import com.raizlabs.android.dbflow.config.FlowConfig
 import com.raizlabs.android.dbflow.config.FlowManager
 import com.raizlabs.android.dbflow.config.GeneratedDatabaseHolder
 import com.raizlabs.android.dbflow.config.ShapeGeneratedDatabaseHolder
-import kotlinx.coroutines.*
 import online.toolboox.BuildConfig
 import online.toolboox.R
 import online.toolboox.databinding.ActivityMainBinding
 import online.toolboox.main.di.MainSharedPreferencesModule
-import online.toolboox.plugin.teamdrawer.nw.domain.Stroke
-import online.toolboox.plugin.teamdrawer.nw.domain.StrokePoint
 import online.toolboox.ui.BaseActivity
+import online.toolboox.ui.DefaultRouter
+import online.toolboox.ui.plugin.ScreenFragment
 import online.toolboox.utils.ReleaseTree
-import retrofit2.Response
 import timber.log.Timber
-import java.time.Instant
 import java.util.*
-import kotlin.math.abs
-import kotlin.math.sqrt
 
 /**
  * A dashboard screen that offers the main menu.
@@ -57,46 +45,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      * The view binding.
      */
     private lateinit var binding: ActivityMainBinding
-
-    /**
-     * The back URL from intent extra.
-     */
-    private var backUrl: String? = null
-
-    /**
-     * The paint in the bitmap.
-     */
-    private var paint = Paint()
-
-    /**
-     * TouchHelper of the Onyx's pen.
-     */
-    private lateinit var touchHelper: TouchHelper
-
-    /**
-     * The bitmap of the canvas.
-     */
-    private lateinit var bitmap: Bitmap
-
-    /**
-     * The canvas of the surface view.
-     */
-    private lateinit var canvas: Canvas
-
-    /**
-     * The callback of the surface holder.
-     */
-    private var surfaceCallback: SurfaceHolder.Callback? = null
-
-    /**
-     * The timer job.
-     */
-    private lateinit var timer: Job
-
-    /**
-     * Timestamp of the last stroke.
-     */
-    private var last: Long = 0
 
     /**
      * OnCreate hook.
@@ -117,9 +65,13 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         }
 
         setSupportActionBar(binding.mainToolbar)
+        val headerEmail = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_email)
+        headerEmail.text = "unknown"
 
-        title = getString(R.string.drawer_title).format(getString(R.string.app_name), getString(R.string.main_title))
-        backUrl = intent.getStringExtra("backUrl")
+        val headerVersion = binding.navigationView.getHeaderView(0)
+            .findViewById<TextView>(R.id.navigation_header_version)
+        headerVersion.text = getString(R.string.dashboard_version)
+                .format(BuildConfig.VERSION_NAME, BuildConfig.BUILD_TYPE)
 
         val preferences = MainSharedPreferencesModule.provideSharedPreferences(this)
         preferences.edit().putLong("lastTimestamp", Date().time).apply()
@@ -152,70 +104,47 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             )
         }
 
-        binding.buttonExport.setOnClickListener {
-            Timber.i("Start of the export process")
+        /**
+         * The route instance.
+         */
+        val router = DefaultRouter(this, binding.mainContentFrame)
+        val routingUrl = intent.getStringExtra("routingUrl")
+        if (routingUrl == null) {
+            router.dispatch("/teamDrawer/178e0a77-d9d2-4a88-b29c-b09007972b53", true)
+        } else {
+            router.dispatch(routingUrl, true)
+        }
 
-            val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.drawer_item_dashboard -> router.dispatch("/", true)
 
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
-                    showExplanation(
-                        "Permission Needed",
-                        "Rationale",
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE
-                    )
-                } else {
-                    requestPermission(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE
-                    )
+                R.id.drawer_item_website -> {
+                    intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://toolboox.online"))
+                    this.startActivity(intent)
                 }
-                return@setOnClickListener
+                R.id.drawer_item_forum -> {
+                    intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forum.toolboox.online"))
+                    this.startActivity(intent)
+                }
+                R.id.drawer_item_facebook -> {
+                    Timber.i("Not implemented yet...")
+                }
+                R.id.drawer_item_twitter -> {
+                    Timber.i("Not implemented yet...")
+                }
+
+                R.id.drawer_item_logout -> {
+                    Timber.i("Not implemented yet...")
+                }
             }
 
-            val title = "export-${Instant.now().epochSecond}"
-            MediaStore.Images.Media.insertImage(contentResolver, bitmap, title, "Export")
-            Toast.makeText(this, "Exported as $title", Toast.LENGTH_LONG).show()
-            Timber.i("End of the export process")
+            menuItem.isChecked = true
+            binding.drawerLayout.closeDrawers()
+            true
         }
 
-        binding.buttonErase.setOnClickListener {
-            presenter.del()
-        }
-
-        touchHelper = TouchHelper.create(binding.surfaceView, callback)
-        initializeSurface()
-    }
-
-    override fun onResume() {
-        initializeSurface()
-        touchHelper.setRawDrawingEnabled(true)
-
-        timer = GlobalScope.launch(Dispatchers.Main) {
-            while (true) {
-                presenter.last()
-                delay(5000L)
-            }
-        }
-
-        super.onResume()
-    }
-
-    override fun onPause() {
-        touchHelper.setRawDrawingEnabled(false)
-
-        timer.cancel()
-        last = 0
-
-        super.onPause()
-    }
-
-    override fun onDestroy() {
-        touchHelper.closeRawDrawing()
-        bitmap.recycle()
-
-        super.onDestroy()
+        presenter.onViewCreated()
     }
 
     /**
@@ -241,64 +170,12 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      * Show progress and hide login form.
      */
     override fun showLoading() {
-        binding.mainProgress.visibility = View.VISIBLE
     }
 
     /**
      * Hide progress and show login form.
      */
     override fun hideLoading() {
-        binding.mainProgress.visibility = View.INVISIBLE
-    }
-
-    override fun addResult(response: Response<Stroke>) {
-        Timber.i("$response")
-    }
-
-    override fun delResult(response: Response<List<Stroke>>) {
-        clearSurface()
-    }
-
-    override fun lastResult(response: Response<Long>) {
-        Timber.i("$response")
-        val responseLast: Long = response.body()!!
-        if (last != responseLast) {
-            last = responseLast
-            presenter.list()
-        }
-    }
-
-    override fun listResult(response: Response<List<Stroke>>) {
-        Timber.i("$response")
-
-        val lockCanvas = binding.surfaceView.holder.lockCanvas()
-
-        val fillPaint = Paint()
-        fillPaint.style = Paint.Style.FILL
-        fillPaint.color = Color.WHITE
-        val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
-        lockCanvas.drawRect(rect, fillPaint)
-
-        val strokes: List<Stroke> = response.body()!!
-        for (stroke in strokes) {
-            val points = stroke.strokePoints
-            if (points.isNotEmpty()) {
-                val path = Path()
-                val prePoint = PointF(points[0].x, points[0].y)
-                path.moveTo(prePoint.x, prePoint.y)
-                for (point in points) {
-                    path.quadTo(prePoint.x, prePoint.y, point.x, point.y)
-                    prePoint.x = point.x
-                    prePoint.y = point.y
-                }
-
-                lockCanvas.drawPath(path, paint)
-                canvas.drawPath(path, paint)
-            }
-        }
-        binding.surfaceView.holder.unlockCanvasAndPost(lockCanvas)
-
-        touchHelper.setRawDrawingEnabled(true)
     }
 
     /**
@@ -308,122 +185,58 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         return MainPresenter(this)
     }
 
-    private fun initializeSurface() {
-        paint.isAntiAlias = true
-        paint.style = Paint.Style.STROKE
-        paint.color = Color.BLACK
-        paint.strokeWidth = 3.0f
-
-        if (surfaceCallback == null) {
-            surfaceCallback = object : SurfaceHolder.Callback {
-                override fun surfaceCreated(holder: SurfaceHolder) {
-                    Timber.w("surfaceCreated")
-                    val limit = Rect()
-                    binding.surfaceView.getLocalVisibleRect(limit)
-                    bitmap = Bitmap.createBitmap(
-                        binding.surfaceView.width,
-                        binding.surfaceView.height,
-                        Bitmap.Config.ARGB_8888
-                    )
-                    bitmap.eraseColor(Color.WHITE)
-                    canvas = Canvas(bitmap)
-
-                    if (binding.surfaceView.holder == null) {
-                        return
-                    }
-
-                    clearSurface()
-
-                    touchHelper.setLimitRect(limit, ArrayList())
-                        .setStrokeWidth(3.0f)
-                        .openRawDrawing()
-                    touchHelper.setStrokeStyle(TouchHelper.STROKE_STYLE_BRUSH)
-                }
-
-                override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-                    Timber.w("surfaceChanged")
-                }
-
-                override fun surfaceDestroyed(holder: SurfaceHolder) {
-                    Timber.w("surfaceDestroyed")
-                    holder.removeCallback(surfaceCallback)
-                    surfaceCallback = null
-                }
+    /**
+     * Close the drawer menu.
+     *
+     * @param item the selected menu item
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                binding.drawerLayout.openDrawer(GravityCompat.START)
+                true
             }
-        }
-
-        binding.surfaceView.holder.addCallback(surfaceCallback)
-        binding.surfaceView.viewTreeObserver.addOnGlobalLayoutListener {
-            Timber.w("addOnGlobalLayoutListener")
-            touchHelper.setRawDrawingEnabled(true)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun clearSurface() {
-        val lockerCanvas = binding.surfaceView.holder.lockCanvas() ?: return
-        EpdController.enablePost(binding.surfaceView, 1)
-        val paint = Paint()
-        paint.style = Paint.Style.FILL
-        paint.color = Color.WHITE
-        val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
-        lockerCanvas.drawRect(rect, paint)
-        binding.surfaceView.holder.unlockCanvasAndPost(lockerCanvas)
-
-        canvas.drawRect(rect, paint)
+    /**
+     * OnBackPressed hook.
+     */
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
+        }
     }
 
-    private val callback: RawInputCallback = object : RawInputCallback() {
-
-        var lastPoint: TouchPoint? = null
-
-        private fun epsilon(touchPoint: TouchPoint): Boolean {
-            val dx = abs(touchPoint.x - lastPoint!!.x).toDouble()
-            val dy = abs(touchPoint.y - lastPoint!!.y).toDouble()
-            val d = sqrt(dx * dx + dy * dy)
-            return d > 5.0
+    /**
+     * Replace the fragment on the dashboard content.
+     *
+     * @param fragment the fragment
+     */
+    fun addFragment(fragment: Fragment?, replace: Boolean = true) {
+        if (fragment == null) {
+            return
         }
 
-        override fun onBeginRawDrawing(b: Boolean, touchPoint: TouchPoint) {
-            Timber.i("onBeginRawDrawing (${touchPoint.x}/${touchPoint.y})")
-            lastPoint = touchPoint
-        }
+        (fragment as ScreenFragment).toolBar = binding.mainToolbar
 
-        override fun onEndRawDrawing(b: Boolean, touchPoint: TouchPoint) {
-            Timber.i("onEndRawDrawing (${touchPoint.x}/${touchPoint.y})")
-            lastPoint = null
-        }
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, fragment.javaClass.name)
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "fragment")
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
 
-        override fun onRawDrawingTouchPointMoveReceived(touchPoint: TouchPoint) {
-            if (epsilon(touchPoint)) {
-                lastPoint = touchPoint
-                Timber.i("onRawDrawingTouchPointMoveReceived (${touchPoint.x}/${touchPoint.y} - ${touchPoint.pressure})")
-            }
+        val transaction = supportFragmentManager.beginTransaction()
+        if (replace) {
+            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            transaction.replace(R.id.fragmentContent, fragment)
+        } else {
+            transaction.replace(R.id.fragmentContent, fragment)
+            transaction.addToBackStack(fragment.javaClass.simpleName)
         }
-
-        override fun onRawDrawingTouchPointListReceived(touchPointList: TouchPointList) {
-            Timber.i("onRawDrawingTouchPointListReceived (${touchPointList.size()})")
-
-            val stroke: MutableList<StrokePoint> = mutableListOf()
-            for (tp in touchPointList) {
-                stroke.add(StrokePoint(tp.x, tp.y, tp.pressure))
-            }
-            presenter.add(stroke)
-        }
-
-        override fun onBeginRawErasing(b: Boolean, touchPoint: TouchPoint) {
-            Timber.i("onBeginRawErasing (${touchPoint.x} - ${touchPoint.y})")
-        }
-
-        override fun onEndRawErasing(b: Boolean, touchPoint: TouchPoint) {
-            Timber.i("onEndRawErasing (${touchPoint.x} - ${touchPoint.y})")
-        }
-
-        override fun onRawErasingTouchPointMoveReceived(touchPoint: TouchPoint) {
-            Timber.i("onRawErasingTouchPointMoveReceived (${touchPoint.x} - ${touchPoint.y})")
-        }
-
-        override fun onRawErasingTouchPointListReceived(touchPointList: TouchPointList) {
-            Timber.i("onRawErasingTouchPointListReceived (${touchPointList.size()})")
-        }
+        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+        transaction.commit()
     }
 }
