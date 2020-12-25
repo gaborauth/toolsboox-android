@@ -66,11 +66,11 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
 
         setSupportActionBar(binding.mainToolbar)
         val headerEmail = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_email)
-        headerEmail.text = "unknown"
+        headerEmail.text = "unknown@unknown"
 
         val headerVersion = binding.navigationView.getHeaderView(0)
             .findViewById<TextView>(R.id.navigation_header_version)
-        headerVersion.text = getString(R.string.dashboard_version)
+        headerVersion.text = getString(R.string.main_version)
                 .format(BuildConfig.VERSION_NAME, BuildConfig.BUILD_TYPE)
 
         val preferences = MainSharedPreferencesModule.provideSharedPreferences(this)

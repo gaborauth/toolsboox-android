@@ -94,9 +94,6 @@ class PageFragment @Inject constructor(
 
         binding = FragmentTeamdrawerPageBinding.bind(view)
 
-        toolBar.title = getString(R.string.drawer_title)
-            .format(getString(R.string.app_name), getString(R.string.main_title))
-
         if (parameters["pageId"] == null) {
             somethingHappened()
             return
@@ -119,7 +116,7 @@ class PageFragment @Inject constructor(
                     title,
                     title
                 )
-                showMessage(getString(R.string.team_drawer_page_export_message).format(title))
+                showMessage(getString(R.string.team_drawer_page_export_message).format(title), binding.root)
             }
         }
 
@@ -136,6 +133,9 @@ class PageFragment @Inject constructor(
      */
     override fun onResume() {
         super.onResume()
+
+        toolBar.title = getString(R.string.drawer_title)
+            .format(getString(R.string.app_name), getString(R.string.team_drawer_page_title))
 
         initializeSurface()
         touchHelper.setRawDrawingEnabled(true)

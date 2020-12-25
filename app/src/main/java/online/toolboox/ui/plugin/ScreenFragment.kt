@@ -35,7 +35,7 @@ abstract class ScreenFragment : Fragment() {
     }
 
     /**
-     * The progress bar of the parent activity
+     * The toolbar of the parent activity
      */
     lateinit var toolBar: Toolbar
 
@@ -70,10 +70,13 @@ abstract class ScreenFragment : Fragment() {
 
     /**
      * Show the 'something happened' error...
+     *
+     * @param t the optional throwable
+     * @param parentView the optional parent view of the snackbar
      */
-    fun somethingHappened(t: Throwable? = null) {
+    fun somethingHappened(t: Throwable? = null, parentView: View? = null) {
         runOnActivity {
-            showError(t, R.string.something_happened_error)
+            showError(t, R.string.something_happened_error, parentView)
         }
     }
 
@@ -82,31 +85,34 @@ abstract class ScreenFragment : Fragment() {
      *
      * @param t the optional throwable
      * @param errorResId the resource id of the error
+     * @param parentView the optional parent view of the snackbar
      */
-    open fun showError(t: Throwable?, @StringRes errorResId: Int) {
+    open fun showError(t: Throwable?, @StringRes errorResId: Int, parentView: View? = null) {
         t?.let { Timber.e(it, getString(errorResId)) }
 
-        Snackbar.make(toolBar, errorResId, Snackbar.LENGTH_INDEFINITE)
-            .setAction(R.string.something_happened_action) {}
-            .show()
+        val snackbar = Snackbar.make(parentView?.let { parentView } ?: toolBar, errorResId, Snackbar.LENGTH_INDEFINITE)
+        snackbar.setAction(R.string.something_happened_action) {}
+        snackbar.show()
     }
 
     /**
      * Displays an error in the view.
      *
      * @param message the message
+     * @param parentView the optional parent view of the snackbar
      */
-    open fun showMessage(message: String) {
-        Snackbar.make(toolBar, message, Snackbar.LENGTH_LONG).show()
+    open fun showMessage(message: String, parentView: View? = null) {
+        Snackbar.make(parentView?.let { parentView } ?: toolBar, message, Snackbar.LENGTH_LONG).show()
     }
 
     /**
      * Displays an error in the view.
      *
      * @param messageResId the resource id of the error
+     * @param parentView the optional parent view of the snackbar
      */
-    open fun showMessage(@StringRes messageResId: Int) {
-        Snackbar.make(toolBar, messageResId, Snackbar.LENGTH_LONG).show()
+    open fun showMessage(@StringRes messageResId: Int, parentView: View? = null) {
+        showMessage(getString(messageResId), parentView)
     }
 
     /**

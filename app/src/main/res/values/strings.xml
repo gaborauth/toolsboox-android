@@ -29,13 +29,13 @@
     <string name="drawer_menu_logout">Logout</string>
 
     <!-- Strings related to main activity -->
-    <string name="main_title">TeamDrawer</string>
-    <string name="main_text">Welcome in our team drawer! :)</string>
-
-    <!-- Strings related to dashboard -->
-    <string name="dashboard_version">%s&#8211;%s</string>
+    <string name="main_version">%s&#8211;%s</string>
 
     <!-- Strings related to team drawer page fragment -->
+    <string name="team_drawer_page_title">TeamDrawer</string>
+    <string name="team_drawer_page_text">Welcome in our team drawer! :)</string>
+    <string name="team_drawer_page_button_export_text">Export</string>
+    <string name="team_drawer_page_button_erase_text">Erase</string>
     <string name="team_drawer_page_external_storage_write_permission_title">Export pages</string>
     <string name="team_drawer_page_external_storage_write_permission_message">Write storage is needed to export pages content</string>
     <string name="team_drawer_page_export_message">Exported as %s</string>
@@ -59,14 +59,12 @@
     <!--string name="placeholder_8">Pleasure</string-->
     <!--string name="placeholder_12">Was born and</string-->
     <!--string name="placeholder_16">You how all this</string-->
-    <string name="placeholder_24">But I must explain to we</string>
+    <!--string name="placeholder_24">But I must explain to we</string-->
     <!--string name="placeholder_32">But I must explain to we how all</string-->
     <!--string name="placeholder_48">But we must explain to you how all this mistaken</string-->
-    <string name="placeholder_64">But I must explain to you how all this mistaken idea of praising</string>
-    <string name="placeholder_96">But I must explain to we how all this mistaken idea of denouncing pleasure and praising pain was</string>
-    <string name="placeholder_128">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a hat</string>
-    <string name="main_button_export">Export</string>
-    <string name="main_button_erase">Erase</string>
+    <!--string name="placeholder_64">But I must explain to you how all this mistaken idea of praising</string-->
+    <!--string name="placeholder_96">But I must explain to we how all this mistaken idea of denouncing pleasure and praising pain was</string-->
+    <!--string name="placeholder_128">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a hat</string-->
     <!--string name="placeholder_192">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of</string-->
     <!--string name="placeholder_256">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human we</string-->
     <!--string name="placeholder_384">But you must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to</string-->

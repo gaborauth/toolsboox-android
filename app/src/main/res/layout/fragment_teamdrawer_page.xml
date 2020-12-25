@@ -33,20 +33,20 @@
                     android:id="@+id/button_export"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/main_button_export"/>
+                    android:text="@string/team_drawer_page_button_export_text"/>
 
             <Button
                     android:id="@+id/button_erase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/main_button_erase"/>
+                    android:text="@string/team_drawer_page_button_erase_text"/>
 
             <TextView
                     android:id="@+id/mainMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:text="@string/main_text"
+                    android:text="@string/team_drawer_page_text"
                     android:textAlignment="center"/>
 
         </LinearLayout>
