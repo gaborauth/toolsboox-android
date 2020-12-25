@@ -33,7 +33,12 @@
     <string name="main_text">Welcome in our team drawer! :)</string>
 
     <!-- Strings related to dashboard -->
-    <string name="dashboard_version">"%s&#8211;%s</string>
+    <string name="dashboard_version">%s&#8211;%s</string>
+
+    <!-- Strings related to team drawer page fragment -->
+    <string name="team_drawer_page_external_storage_write_permission_title">Export pages</string>
+    <string name="team_drawer_page_external_storage_write_permission_message">Write storage is needed to export pages content</string>
+    <string name="team_drawer_page_export_message">Exported as %s</string>
 
     <!-- Strings related to utils -->
     <string name="util_fluent_unknown">unknown</string>

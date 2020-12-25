@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.SurfaceHolder
 import android.view.View
-import android.widget.Toast
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.pen.TouchHelper
@@ -108,8 +107,8 @@ class PageFragment @Inject constructor(
             val permissionGranted = checkPermissionGranted(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE,
-                "Export pages",
-                "Write storage is needed to export pages content"
+                getString(R.string.team_drawer_page_external_storage_write_permission_title),
+                getString(R.string.team_drawer_page_external_storage_write_permission_message)
             )
 
             if (permissionGranted) {
@@ -118,9 +117,9 @@ class PageFragment @Inject constructor(
                     this@PageFragment.requireActivity().contentResolver,
                     bitmap,
                     title,
-                    "Export"
+                    title
                 )
-                Toast.makeText(this.requireContext(), "Exported as $title", Toast.LENGTH_LONG).show()
+                showMessage(getString(R.string.team_drawer_page_export_message).format(title))
             }
         }
 

@@ -17,7 +17,7 @@ import online.toolboox.main.ui.MainPresenter
  *
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
-abstract class BasePresenter<out V : BaseView>(protected val view: V) {
+abstract class BasePresenter<out V : BaseView>(private val view: V) {
 
     /**
      * The injector used to inject required dependencies.

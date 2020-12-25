@@ -22,10 +22,13 @@ import timber.log.Timber
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 abstract class ScreenFragment : Fragment() {
-    /**
-     * Result code of WRITE_EXTERNAL_STORAGE permission.
-     */
-    protected val REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 12345
+    companion object {
+
+        /**
+         * Result code of WRITE_EXTERNAL_STORAGE permission.
+         */
+        const val REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 12345
+    }
 
     init {
         retainInstance = true
@@ -91,6 +94,15 @@ abstract class ScreenFragment : Fragment() {
     /**
      * Displays an error in the view.
      *
+     * @param message the message
+     */
+    open fun showMessage(message: String) {
+        Snackbar.make(toolBar, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    /**
+     * Displays an error in the view.
+     *
      * @param messageResId the resource id of the error
      */
     open fun showMessage(@StringRes messageResId: Int) {
@@ -137,7 +149,7 @@ abstract class ScreenFragment : Fragment() {
      * Check if permission granted or start the request process.
      *
      * @param permissionName the name of the permission (Manifest.permission)
-     * @param permissionCode the result code of the request Activity
+     * @param permissionRequestCode the result code of the request Activity
      * @param title the title of the request dialog
      * @param message the message of the request dialog
      * @return true, if the permission is granted
@@ -168,17 +180,16 @@ abstract class ScreenFragment : Fragment() {
      *
      * @param title the title
      * @param message the message
-     * @param permission the permission
+     * @param permissionName the name of the permission (Manifest.permission)
      * @param permissionRequestCode the request code of the dialog
      */
-    private fun showExplanation(title: String, message: String, permission: String, permissionRequestCode: Int) {
+    private fun showExplanation(title: String, message: String, permissionName: String, permissionRequestCode: Int) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
         builder.setTitle(title)
             .setMessage(message)
             .setPositiveButton(
-                android.R.string.ok,
-                { dialog, id -> requestPermission(permission, permissionRequestCode) }
-            )
+                android.R.string.ok
+            ) { _, _ -> requestPermission(permissionName, permissionRequestCode) }
         builder.create().show()
     }
 
