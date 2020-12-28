@@ -31,6 +31,9 @@
     <!-- Strings related to main activity -->
     <string name="main_version">%s&#8211;%s</string>
 
+    <!-- Strings related to dashboard fragment -->
+    <string name="dashboard_title">Dashboard</string>
+
     <!-- Strings related to team drawer page fragment -->
     <string name="team_drawer_page_title">TeamDrawer</string>
     <string name="team_drawer_page_text">Welcome in our team drawer! :)</string>
@@ -50,6 +53,7 @@
     <string name="util_fluent_minute">minute</string>
     <string name="util_fluent_seconds">seconds</string>
     <string name="util_fluent_second">second</string>
+    <string name="dashboard_item_image">Dashboard item image</string>
 
     <!-- Placeholder texts -->
     <!--string name="placeholder_2">To</string-->

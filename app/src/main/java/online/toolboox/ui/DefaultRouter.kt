@@ -5,6 +5,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.code.regexp.Pattern
 import online.toolboox.R
 import online.toolboox.main.ui.MainActivity
+import online.toolboox.plugin.dashboard.DashboardPlugin
 import online.toolboox.plugin.teamdrawer.TeamDrawerPlugin
 import online.toolboox.ui.plugin.Plugin
 import online.toolboox.ui.plugin.Router
@@ -17,6 +18,7 @@ import online.toolboox.ui.plugin.Router
 class DefaultRouter(private val main: MainActivity, private val view: View) : Router {
 
     private val plugins: List<Plugin> = listOf(
+        DashboardPlugin(this),
         TeamDrawerPlugin(this),
     )
 

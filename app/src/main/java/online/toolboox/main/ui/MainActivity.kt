@@ -118,7 +118,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         val router = DefaultRouter(this, binding.mainContentFrame)
         val routingUrl = intent.getStringExtra("routingUrl")
         if (routingUrl == null) {
-            router.dispatch("/teamDrawer/178e0a77-d9d2-4a88-b29c-b09007972b53", true)
+            router.dispatch("/", true)
         } else {
             router.dispatch(routingUrl, true)
         }
