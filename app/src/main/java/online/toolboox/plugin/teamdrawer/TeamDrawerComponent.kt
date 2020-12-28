@@ -4,6 +4,7 @@ import dagger.Component
 import online.toolboox.di.NetworkModule
 import online.toolboox.plugin.teamdrawer.di.TeamDrawerServiceModule
 import online.toolboox.plugin.teamdrawer.ui.PageFragment
+import online.toolboox.plugin.teamdrawer.ui.RoomFragment
 import javax.inject.Singleton
 
 /**
@@ -14,11 +15,15 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        TeamDrawerServiceModule::class,
-        NetworkModule::class
+        NetworkModule::class,
+
+        TeamDrawerModule::class,
+        TeamDrawerServiceModule::class
     ]
 )
 interface TeamDrawerComponent {
     fun inject(plugin: TeamDrawerPlugin)
-    fun fragment(): PageFragment
+
+    fun pageFragment(): PageFragment
+    fun roomFragment(): RoomFragment
 }

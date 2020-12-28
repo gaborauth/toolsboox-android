@@ -3,6 +3,7 @@ package online.toolboox.plugin.teamdrawer.di
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import online.toolboox.plugin.teamdrawer.nw.RoomService
 import online.toolboox.plugin.teamdrawer.nw.StrokeService
 import retrofit2.Retrofit
 
@@ -15,7 +16,19 @@ import retrofit2.Retrofit
 object TeamDrawerServiceModule {
 
     /**
-     * Provides the stroke service.
+     * Provides the 'room' service.
+     *
+     * @param retrofit the Retrofit instance
+     * @return the service
+     */
+    @Provides
+    @Reusable
+    fun provideRoomService(retrofit: Retrofit): RoomService {
+        return retrofit.create(RoomService::class.java)
+    }
+
+    /**
+     * Provides the 'stroke' service.
      *
      * @param retrofit the Retrofit instance
      * @return the service

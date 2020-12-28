@@ -33,6 +33,7 @@
 
     <!-- Strings related to dashboard fragment -->
     <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_item_image">Dashboard item image</string>
     <string name="dashboard_new_version_title">New version</string>
     <string name="dashboard_new_version_message">There is a new version of ToolBoox available, please upgrade it unless some functions may not work.</string>
 
@@ -45,6 +46,10 @@
     <string name="team_drawer_page_external_storage_write_permission_message">Write storage is needed to export pages content</string>
     <string name="team_drawer_page_export_message">Exported as %s</string>
 
+    <!-- Strings related to team drawer room fragment -->
+    <string name="team_drawer_room_title">TeamDrawer &#8211; Rooms</string>
+    <string name="team_drawer_room_item_image">Room item image</string>
+
     <!-- Strings related to utils -->
     <string name="util_fluent_unknown">unknown</string>
     <string name="util_fluent_days">days</string>
@@ -55,7 +60,6 @@
     <string name="util_fluent_minute">minute</string>
     <string name="util_fluent_seconds">seconds</string>
     <string name="util_fluent_second">second</string>
-    <string name="dashboard_item_image">Dashboard item image</string>
 
     <!-- Placeholder texts -->
     <!--string name="placeholder_2">To</string-->

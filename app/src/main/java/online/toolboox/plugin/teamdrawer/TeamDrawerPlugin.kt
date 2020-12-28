@@ -15,12 +15,16 @@ class TeamDrawerPlugin(private val router: Router) : Plugin {
 
     private val component = DaggerTeamDrawerComponent.builder()
         .teamDrawerServiceModule(TeamDrawerServiceModule)
+        .teamDrawerModule(TeamDrawerModule(this, router))
         .networkModule(NetworkModule)
         .build()
 
     override fun getRoute(url: String): ScreenFragment? {
-        router.getParameters("/teamDrawer/(?<pageId>.*)", url).let {
-            if (it is Router.Parameters.Match) return component.fragment().setParameters(it.parameters)
+        router.getParameters("/teamDrawer", url).let {
+            if (it is Router.Parameters.Match) return component.roomFragment().setParameters(it.parameters)
+        }
+        router.getParameters("/teamDrawer/(?<roomId>.*)/(?<noteId>.*)/(?<pageId>.*)", url).let {
+            if (it is Router.Parameters.Match) return component.pageFragment().setParameters(it.parameters)
         }
 
         return null

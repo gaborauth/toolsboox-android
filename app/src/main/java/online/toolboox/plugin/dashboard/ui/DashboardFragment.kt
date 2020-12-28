@@ -70,7 +70,7 @@ class DashboardFragment @Inject constructor(
         dashboardItems.add(
             DashboardItem(
                 "TeamDrawer", R.drawable.ic_dashboard_item_teamdrawer,
-                "/teamDrawer/c6f20b50-491e-11eb-b30d-83c3228f2a6e"
+                "/teamDrawer"
             )
         )
 

@@ -3,12 +3,13 @@ package online.toolboox.plugin.teamdrawer.nw.domain
 import java.util.*
 
 /**
- * Stroke data class.
+ * Room data class.
  *
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
-data class Stroke(
-    var pageId: UUID,
-    var strokeId: UUID,
-    var strokePoints: List<StrokePoint>
+data class Room(
+    val roomId: UUID,
+    val created: Date,
+    val lastUpdated: Date,
+    val name: String
 )
