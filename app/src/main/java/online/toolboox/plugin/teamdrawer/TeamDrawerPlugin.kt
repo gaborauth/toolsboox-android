@@ -20,11 +20,14 @@ class TeamDrawerPlugin(private val router: Router) : Plugin {
         .build()
 
     override fun getRoute(url: String): ScreenFragment? {
-        router.getParameters("/teamDrawer", url).let {
-            if (it is Router.Parameters.Match) return component.roomFragment().setParameters(it.parameters)
-        }
         router.getParameters("/teamDrawer/(?<roomId>.*)/(?<noteId>.*)/(?<pageId>.*)", url).let {
             if (it is Router.Parameters.Match) return component.pageFragment().setParameters(it.parameters)
+        }
+        router.getParameters("/teamDrawer/(?<roomId>.*)", url).let {
+            if (it is Router.Parameters.Match) return component.noteFragment().setParameters(it.parameters)
+        }
+        router.getParameters("/teamDrawer", url).let {
+            if (it is Router.Parameters.Match) return component.roomFragment().setParameters(it.parameters)
         }
 
         return null

@@ -3,6 +3,7 @@ package online.toolboox.plugin.teamdrawer.di
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import online.toolboox.plugin.teamdrawer.nw.NoteService
 import online.toolboox.plugin.teamdrawer.nw.RoomService
 import online.toolboox.plugin.teamdrawer.nw.StrokeService
 import retrofit2.Retrofit
@@ -14,6 +15,18 @@ import retrofit2.Retrofit
  */
 @Module
 object TeamDrawerServiceModule {
+
+    /**
+     * Provides the 'note' service.
+     *
+     * @param retrofit the Retrofit instance
+     * @return the service
+     */
+    @Provides
+    @Reusable
+    fun provideNoteService(retrofit: Retrofit): NoteService {
+        return retrofit.create(NoteService::class.java)
+    }
 
     /**
      * Provides the 'room' service.

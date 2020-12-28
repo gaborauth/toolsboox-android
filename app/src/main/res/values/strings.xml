@@ -50,6 +50,10 @@
     <string name="team_drawer_room_title">TeamDrawer &#8211; Rooms</string>
     <string name="team_drawer_room_item_image">Room item image</string>
 
+    <!-- Strings related to team drawer room fragment -->
+    <string name="team_drawer_note_title">TeamDrawer &#8211; Notes</string>
+    <string name="team_drawer_note_item_image">Note item image</string>
+
     <!-- Strings related to utils -->
     <string name="util_fluent_unknown">unknown</string>
     <string name="util_fluent_days">days</string>
