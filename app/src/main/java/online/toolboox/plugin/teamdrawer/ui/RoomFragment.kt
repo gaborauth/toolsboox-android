@@ -3,6 +3,7 @@ package online.toolboox.plugin.teamdrawer.ui
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import kotlinx.coroutines.*
 import online.toolboox.R
 import online.toolboox.databinding.FragmentTeamdrawerRoomBinding
 import online.toolboox.plugin.teamdrawer.da.RoomItem
@@ -44,6 +45,11 @@ class RoomFragment @Inject constructor(
     private val roomItems = mutableListOf<RoomItem>()
 
     /**
+     * The timer job.
+     */
+    private lateinit var timer: Job
+
+    /**
      * OnViewCreated hook.
      *
      * @param view the parent view
@@ -68,8 +74,6 @@ class RoomFragment @Inject constructor(
         adapter = RoomItemAdapter(this.requireContext(), roomItems, clickListener)
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
-
-        presenter.list(this)
     }
 
     /**
@@ -80,6 +84,22 @@ class RoomFragment @Inject constructor(
 
         toolBar.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.team_drawer_room_title))
+
+        timer = GlobalScope.launch(Dispatchers.Main) {
+            while (true) {
+                presenter.list(this@RoomFragment)
+                delay(30000L)
+            }
+        }
+    }
+
+    /**
+     * OnPause hook.
+     */
+    override fun onPause() {
+        super.onPause()
+
+        timer.cancel()
     }
 
     /**
