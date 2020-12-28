@@ -51,7 +51,7 @@ class PageFragment @Inject constructor(
     /**
      * The page ID.
      */
-    private var pageId: UUID = UUID.fromString("178e0a77-d9d2-4a88-b29c-b09007972b53")
+    private lateinit var pageId: UUID
 
     /**
      * The paint in the bitmap.

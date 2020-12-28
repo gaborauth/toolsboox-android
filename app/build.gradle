@@ -102,7 +102,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation "com.github.tony19:named-regexp:0.2.5"
 
-    // AndroidX dependecies
+    // AndroidX dependencies
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
