@@ -11,4 +11,30 @@ import javax.inject.Inject
  */
 class DashboardPresenter @Inject constructor(
     private val dashboardService: DashboardService
-) : FragmentPresenter()
+) : FragmentPresenter() {
+    /**
+     * Get the server API version.
+     *
+     * @param fragment the fragment
+     * @return the server API version
+     */
+    fun version(fragment: DashboardFragment) {
+        coroutinesCallHelper(
+            fragment,
+            { dashboardService.versionAsync() },
+            { response ->
+                when (response.code()) {
+                    200 -> {
+                        val body = response.body()
+                        if (body == null) {
+                            fragment.somethingHappened()
+                        } else {
+                            fragment.versionResult(body)
+                        }
+                    }
+                    else -> fragment.somethingHappened()
+                }
+            }
+        )
+    }
+}

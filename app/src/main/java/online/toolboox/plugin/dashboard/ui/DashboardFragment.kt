@@ -2,7 +2,9 @@ package online.toolboox.plugin.dashboard.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
+import online.toolboox.BuildConfig
 import online.toolboox.R
 import online.toolboox.databinding.FragmentDashboardBinding
 import online.toolboox.plugin.dashboard.da.DashboardItem
@@ -72,7 +74,7 @@ class DashboardFragment @Inject constructor(
             )
         )
 
-        val clickListener = object: DashboardItemAdapter.OnItemClickListener {
+        val clickListener = object : DashboardItemAdapter.OnItemClickListener {
             override fun onItemClicked(dashboardItem: DashboardItem) {
                 Timber.i("Route to ${dashboardItem.routeUrl}")
                 router.dispatch(dashboardItem.routeUrl, false)
@@ -82,6 +84,8 @@ class DashboardFragment @Inject constructor(
         adapter = DashboardItemAdapter(this.requireContext(), dashboardItems, clickListener)
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
+
+        presenter.version(this)
     }
 
     /**
@@ -92,6 +96,23 @@ class DashboardFragment @Inject constructor(
 
         toolBar.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.dashboard_title))
+    }
+
+    /**
+     * Render the result of 'version' service call.
+     *
+     * @param the version code
+     */
+    fun versionResult(version: Int) {
+        if (BuildConfig.VERSION_CODE != version) {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+            builder.setTitle(R.string.dashboard_new_version_title)
+                .setMessage(R.string.dashboard_new_version_message)
+                .setPositiveButton(
+                    android.R.string.ok
+                ) { _, _ -> Timber.i("Sigh... okay...") }
+            builder.create().show()
+        }
     }
 
     /**

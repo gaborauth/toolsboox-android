@@ -33,6 +33,8 @@
 
     <!-- Strings related to dashboard fragment -->
     <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_new_version_title">New version</string>
+    <string name="dashboard_new_version_message">There is a new version of ToolBoox available, please upgrade it unless some functions may not work.</string>
 
     <!-- Strings related to team drawer page fragment -->
     <string name="team_drawer_page_title">TeamDrawer</string>
