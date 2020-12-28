@@ -66,8 +66,9 @@ class RoomFragment @Inject constructor(
 
         val clickListener = object : RoomItemAdapter.OnItemClickListener {
             override fun onItemClicked(roomItem: RoomItem) {
-                Timber.i("Route to ${roomItem.roomId}")
-                router.dispatch("/teamDrawer/${roomItem.roomId}", false)
+                val routeUrl = "/teamDrawer/${roomItem.roomId}"
+                Timber.i("Route to $routeUrl")
+                router.dispatch(routeUrl, false)
             }
         }
 

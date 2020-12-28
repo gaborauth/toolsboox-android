@@ -104,7 +104,7 @@ class DashboardFragment @Inject constructor(
      * @param the version code
      */
     fun versionResult(version: Int) {
-        if (BuildConfig.VERSION_CODE != version) {
+        if (BuildConfig.VERSION_CODE < version) {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
             builder.setTitle(R.string.dashboard_new_version_title)
                 .setMessage(R.string.dashboard_new_version_message)

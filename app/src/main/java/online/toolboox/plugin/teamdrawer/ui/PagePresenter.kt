@@ -19,13 +19,15 @@ class PagePresenter @Inject constructor(
      * Add stroke.
      *
      * @param fragment the fragment
+     * @param roomId the room ID
+     * @param noteId the note ID
      * @param pageId the page ID
      * @param stroke the stroke
      */
-    fun add(fragment: PageFragment, pageId: UUID, stroke: List<StrokePoint>) {
+    fun add(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID, stroke: List<StrokePoint>) {
         coroutinesCallHelper(
             fragment,
-            { strokeService.addAsync(pageId, stroke) },
+            { strokeService.addAsync(roomId, noteId, pageId, stroke) },
             { response ->
                 when (response.code()) {
                     200 -> {
@@ -46,12 +48,14 @@ class PagePresenter @Inject constructor(
      * Delete all strokes of the page.
      *
      * @param fragment the fragment
+     * @param roomId the room ID
+     * @param noteId the note ID
      * @param pageId the page ID
      */
-    fun del(fragment: PageFragment, pageId: UUID) {
+    fun del(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID) {
         coroutinesCallHelper(
             fragment,
-            { strokeService.delAsync(pageId) },
+            { strokeService.delAsync(roomId, noteId, pageId) },
             { response ->
                 when (response.code()) {
                     200 -> {
@@ -72,12 +76,14 @@ class PagePresenter @Inject constructor(
      * Get the timestamp of the last stroke on the page.
      *
      * @param fragment the fragment
+     * @param roomId the room ID
+     * @param noteId the note ID
      * @param pageId the page ID
      */
-    fun last(fragment: PageFragment, pageId: UUID) {
+    fun last(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID) {
         coroutinesCallHelper(
             fragment,
-            { strokeService.lastAsync(pageId) },
+            { strokeService.lastAsync(roomId, noteId, pageId) },
             { response ->
                 when (response.code()) {
                     200 -> {
@@ -98,12 +104,14 @@ class PagePresenter @Inject constructor(
      * List the strokes by page ID.
      *
      * @param fragment the fragment
+     * @param roomId the room ID
+     * @param noteId the note ID
      * @param pageId the page ID
      */
-    fun list(fragment: PageFragment, pageId: UUID) {
+    fun list(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID) {
         coroutinesCallHelper(
             fragment,
-            { strokeService.listAsync(pageId) },
+            { strokeService.listAsync(roomId, noteId, pageId) },
             { response ->
                 when (response.code()) {
                     200 -> {

@@ -78,8 +78,9 @@ class NoteFragment @Inject constructor(
 
         val clickListener = object : NoteItemAdapter.OnItemClickListener {
             override fun onItemClicked(noteItem: NoteItem) {
-                Timber.i("Route to ${noteItem.noteId} and ${noteItem.pages[0]}")
-                router.dispatch("/teamDrawer/$roomId/${noteItem.noteId}/${noteItem.pages[0]}", false)
+                val routeUrl = "/teamDrawer/$roomId/${noteItem.noteId}/${noteItem.pages[0]}"
+                Timber.i("Route to $routeUrl")
+                router.dispatch(routeUrl, false)
             }
         }
 
@@ -124,8 +125,8 @@ class NoteFragment @Inject constructor(
         notes.forEach {
             noteItems.add(
                 NoteItem(
-                    it.noteId,
                     it.roomId,
+                    it.noteId,
                     it.created,
                     it.lastUpdated,
                     it.pages,

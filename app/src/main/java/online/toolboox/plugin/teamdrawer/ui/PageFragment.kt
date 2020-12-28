@@ -49,6 +49,14 @@ class PageFragment @Inject constructor(
     private lateinit var timer: Job
 
     /**
+     * The room ID.
+     */
+    private lateinit var roomId: UUID
+    /**
+     * The note ID.
+     */
+    private lateinit var noteId: UUID
+    /**
      * The page ID.
      */
     private lateinit var pageId: UUID
@@ -94,6 +102,18 @@ class PageFragment @Inject constructor(
 
         binding = FragmentTeamdrawerPageBinding.bind(view)
 
+        if (parameters["roomId"] == null) {
+            somethingHappened()
+            return
+        }
+        roomId = UUID.fromString(parameters["roomId"])
+
+        if (parameters["noteId"] == null) {
+            somethingHappened()
+            return
+        }
+        noteId = UUID.fromString(parameters["noteId"])
+
         if (parameters["pageId"] == null) {
             somethingHappened()
             return
@@ -121,7 +141,7 @@ class PageFragment @Inject constructor(
         }
 
         binding.buttonErase.setOnClickListener {
-            presenter.del(this, pageId)
+            presenter.del(this, roomId, noteId, pageId)
         }
 
         touchHelper = TouchHelper.create(binding.surfaceView, callback)
@@ -140,10 +160,10 @@ class PageFragment @Inject constructor(
         initializeSurface()
         touchHelper.setRawDrawingEnabled(true)
 
-        presenter.last(this, pageId)
+        presenter.last(this, roomId, noteId, pageId)
         timer = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
-                presenter.last(this@PageFragment, pageId)
+                presenter.last(this@PageFragment, roomId, noteId, pageId)
                 delay(1000L)
             }
         }
@@ -177,7 +197,7 @@ class PageFragment @Inject constructor(
      * @param stroke the saved stroke
      */
     fun addResult(stroke: Stroke) {
-        presenter.last(this, pageId)
+        presenter.last(this, roomId, noteId, pageId)
     }
 
     /**
@@ -197,7 +217,7 @@ class PageFragment @Inject constructor(
     fun lastResult(last: Long) {
         if (this.last != last) {
             this.last = last
-            presenter.list(this, pageId)
+            presenter.list(this, roomId, noteId, pageId)
         }
     }
 
@@ -358,7 +378,7 @@ class PageFragment @Inject constructor(
             for (tp in touchPointList) {
                 stroke.add(StrokePoint(tp.x, tp.y, tp.pressure))
             }
-            presenter.add(this@PageFragment, pageId, stroke)
+            presenter.add(this@PageFragment, roomId, noteId, pageId, stroke)
         }
 
         override fun onBeginRawErasing(b: Boolean, touchPoint: TouchPoint) {
