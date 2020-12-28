@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.appcompat.app.ActionBar
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -65,6 +66,13 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         }
 
         setSupportActionBar(binding.mainToolbar)
+
+        val actionbar: ActionBar? = supportActionBar
+        actionbar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_menu)
+        }
+
         val headerEmail = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_email)
         headerEmail.text = "unknown@unknown"
 
