@@ -1,7 +1,10 @@
 package online.toolboox.plugin.teamdrawer.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
+import android.widget.EditText
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.*
 import online.toolboox.R
@@ -64,6 +67,25 @@ class RoomFragment @Inject constructor(
             layoutManager = GridLayoutManager(this@RoomFragment.requireContext(), 4)
         }
 
+        binding.fabAddItem.setOnClickListener {
+            val builder = AlertDialog.Builder(this.requireContext())
+
+            builder.setTitle(R.string.team_drawer_room_add_dialog_title)
+
+            val input = EditText(this.requireContext())
+            input.inputType = InputType.TYPE_CLASS_TEXT
+            builder.setView(input)
+
+            builder.setPositiveButton(android.R.string.ok) { _, _ ->
+                presenter.add(this@RoomFragment, input.text.toString())
+            }
+            builder.setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                dialog.cancel()
+            }
+            builder.create().show()
+            input.requestFocus()
+        }
+
         val clickListener = object : RoomItemAdapter.OnItemClickListener {
             override fun onItemClicked(roomItem: RoomItem) {
                 val routeUrl = "/teamDrawer/${roomItem.roomId}"
@@ -101,6 +123,17 @@ class RoomFragment @Inject constructor(
         super.onPause()
 
         timer.cancel()
+    }
+
+    /**
+     * Render the result of 'add' service call.
+     *
+     * @param room the saved room
+     */
+    fun addResult(room: Room) {
+        val routeUrl = "/teamDrawer/${room.roomId}"
+        Timber.i("Route to $routeUrl")
+        router.dispatch(routeUrl, false)
     }
 
     /**

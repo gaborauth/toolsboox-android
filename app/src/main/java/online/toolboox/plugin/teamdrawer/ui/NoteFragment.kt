@@ -1,7 +1,10 @@
 package online.toolboox.plugin.teamdrawer.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
+import android.widget.EditText
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.*
 import online.toolboox.R
@@ -76,6 +79,25 @@ class NoteFragment @Inject constructor(
         }
         roomId = UUID.fromString(parameters["roomId"])
 
+        binding.fabAddItem.setOnClickListener {
+            val builder = AlertDialog.Builder(this.requireContext())
+
+            builder.setTitle(R.string.team_drawer_note_add_dialog_title)
+
+            val input = EditText(this.requireContext())
+            input.inputType = InputType.TYPE_CLASS_TEXT
+            builder.setView(input)
+
+            builder.setPositiveButton(android.R.string.ok) { _, _ ->
+                presenter.add(this@NoteFragment, roomId, input.text.toString())
+            }
+            builder.setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                dialog.cancel()
+            }
+            builder.create().show()
+            input.requestFocus()
+        }
+
         val clickListener = object : NoteItemAdapter.OnItemClickListener {
             override fun onItemClicked(noteItem: NoteItem) {
                 val routeUrl = "/teamDrawer/$roomId/${noteItem.noteId}/${noteItem.pages[0]}"
@@ -113,6 +135,17 @@ class NoteFragment @Inject constructor(
         super.onPause()
 
         timer.cancel()
+    }
+
+    /**
+     * Render the result of 'add' service call.
+     *
+     * @param note the saved room
+     */
+    fun addResult(note: Note) {
+        val routeUrl = "/teamDrawer/${roomId}/${note.noteId}/${note.pages[0]}"
+        Timber.i("Route to $routeUrl")
+        router.dispatch(routeUrl, false)
     }
 
     /**

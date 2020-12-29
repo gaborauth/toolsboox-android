@@ -15,9 +15,37 @@ class NotePresenter @Inject constructor(
 ) : FragmentPresenter() {
 
     /**
+     * Add a new note.
+     *
+     * @param fragment the fragment
+     * @param roomId the room ID
+     * @param title the title of the note
+     */
+    fun add(fragment: NoteFragment, roomId: UUID, title: String) {
+        coroutinesCallHelper(
+            fragment,
+            { noteService.addAsync(roomId, title) },
+            { response ->
+                when (response.code()) {
+                    200 -> {
+                        val body = response.body()
+                        if (body == null) {
+                            fragment.somethingHappened()
+                        } else {
+                            fragment.addResult(body)
+                        }
+                    }
+                    else -> fragment.somethingHappened()
+                }
+            }
+        )
+    }
+
+    /**
      * List the notes.
      *
      * @param fragment the fragment
+     * @param roomId the room ID
      */
     fun list(fragment: NoteFragment, roomId: UUID) {
         coroutinesCallHelper(

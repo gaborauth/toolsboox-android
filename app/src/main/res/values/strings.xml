@@ -49,10 +49,12 @@
     <!-- Strings related to team drawer room fragment -->
     <string name="team_drawer_room_title">TeamDrawer &#8211; Rooms</string>
     <string name="team_drawer_room_item_image">Room item image</string>
+    <string name="team_drawer_room_add_dialog_title">Add new room</string>
 
-    <!-- Strings related to team drawer room fragment -->
+    <!-- Strings related to team drawer note fragment -->
     <string name="team_drawer_note_title">TeamDrawer &#8211; Notes</string>
     <string name="team_drawer_note_item_image">Note item image</string>
+    <string name="team_drawer_note_add_dialog_title">Add new note</string>
 
     <!-- Strings related to utils -->
     <string name="util_fluent_unknown">unknown</string>
