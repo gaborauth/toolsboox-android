@@ -21,7 +21,9 @@ import timber.log.Timber
 import java.time.Instant
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 import kotlin.math.abs
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 /**
@@ -52,10 +54,12 @@ class PageFragment @Inject constructor(
      * The room ID.
      */
     private lateinit var roomId: UUID
+
     /**
      * The note ID.
      */
     private lateinit var noteId: UUID
+
     /**
      * The page ID.
      */
@@ -90,6 +94,11 @@ class PageFragment @Inject constructor(
      * Timestamp of the last stroke.
      */
     private var last: Long = 0
+
+    /**
+     * The list of strokes.
+     */
+    private var strokes: List<Stroke> = mutableListOf()
 
     /**
      * OnViewCreated hook.
@@ -206,7 +215,17 @@ class PageFragment @Inject constructor(
      * @param strokes the strokes on the erased page
      */
     fun delResult(strokes: List<Stroke>) {
+        this.strokes = strokes
         clearSurface()
+    }
+
+    /**
+     * Render the result of 'del' service call.
+     *
+     * @param strokes the strokes on the erased page
+     */
+    fun delResult(stroke: Stroke) {
+        presenter.list(this, roomId, noteId, pageId)
     }
 
     /**
@@ -227,6 +246,7 @@ class PageFragment @Inject constructor(
      * @param strokes the list of strokes
      */
     fun listResult(strokes: List<Stroke>) {
+        this.strokes = strokes
         val lockCanvas = binding.surfaceView.holder.lockCanvas()
 
         val fillPaint = Paint()
@@ -240,7 +260,11 @@ class PageFragment @Inject constructor(
             if (points.isNotEmpty()) {
                 val path = Path()
                 val prePoint = PointF(points[0].x, points[0].y)
-                path.moveTo(prePoint.x, prePoint.y)
+                if (points.size == 1) {
+                    path.moveTo(prePoint.x - 1f, prePoint.y - 1f)
+                } else {
+                    path.moveTo(prePoint.x, prePoint.y)
+                }
                 for (point in points) {
                     path.quadTo(prePoint.x, prePoint.y, point.x, point.y)
                     prePoint.x = point.x
@@ -347,11 +371,15 @@ class PageFragment @Inject constructor(
 
         var lastPoint: TouchPoint? = null
 
-        private fun epsilon(touchPoint: TouchPoint): Boolean {
-            val dx = abs(touchPoint.x - lastPoint!!.x).toDouble()
-            val dy = abs(touchPoint.y - lastPoint!!.y).toDouble()
+        private fun epsilon(touchPoint: TouchPoint, lastPoint: TouchPoint, epsilon: Float = 5.0f): Boolean {
+            return epsilon(touchPoint.x, touchPoint.y, lastPoint.x, lastPoint.y, epsilon)
+        }
+
+        private fun epsilon(x1: Float, y1: Float, x2: Float, y2: Float, epsilon: Float = 5.0f): Boolean {
+            val dx = abs(x1 - x2).toDouble()
+            val dy = abs(y1 - y2).toDouble()
             val d = sqrt(dx * dx + dy * dy)
-            return d > 5.0
+            return d > epsilon
         }
 
         override fun onBeginRawDrawing(b: Boolean, touchPoint: TouchPoint) {
@@ -365,18 +393,32 @@ class PageFragment @Inject constructor(
         }
 
         override fun onRawDrawingTouchPointMoveReceived(touchPoint: TouchPoint) {
-            if (epsilon(touchPoint)) {
-                lastPoint = touchPoint
-                Timber.i("onRawDrawingTouchPointMoveReceived (${touchPoint.x}/${touchPoint.y} - ${touchPoint.pressure})")
-            }
+            Timber.i("onRawDrawingTouchPointMoveReceived (${touchPoint.x}/${touchPoint.y} - ${touchPoint.pressure})")
         }
 
         override fun onRawDrawingTouchPointListReceived(touchPointList: TouchPointList) {
             Timber.i("onRawDrawingTouchPointListReceived (${touchPointList.size()})")
 
             val stroke: MutableList<StrokePoint> = mutableListOf()
+            var prevPoint: TouchPoint = touchPointList[0]
+            stroke.add(
+                StrokePoint(
+                    (10 * prevPoint.x).roundToInt() / 10.0f,
+                    (10 * prevPoint.y).roundToInt() / 10.0f,
+                    (10 * prevPoint.pressure).roundToInt() / 10.0f
+                )
+            )
             for (tp in touchPointList) {
-                stroke.add(StrokePoint(tp.x, tp.y, tp.pressure))
+                if (epsilon(tp, prevPoint)) {
+                    prevPoint = tp
+                    stroke.add(
+                        StrokePoint(
+                            (10 * tp.x).roundToInt() / 10.0f,
+                            (10 * tp.y).roundToInt() / 10.0f,
+                            (10 * tp.pressure).roundToInt() / 10.0f
+                        )
+                    )
+                }
             }
             presenter.add(this@PageFragment, roomId, noteId, pageId, stroke)
         }
@@ -395,6 +437,28 @@ class PageFragment @Inject constructor(
 
         override fun onRawErasingTouchPointListReceived(touchPointList: TouchPointList) {
             Timber.i("onRawErasingTouchPointListReceived (${touchPointList.size()})")
+
+            val eraserPoints: MutableList<TouchPoint> = mutableListOf()
+            var prevPoint: TouchPoint = touchPointList[0]
+            eraserPoints.add(prevPoint)
+            for (tp in touchPointList) {
+                if (epsilon(tp, prevPoint)) {
+                    prevPoint = tp
+                    eraserPoints.add(prevPoint)
+                }
+            }
+
+            Timber.i("onRawErasingTouchPointListReceived ($eraserPoints)")
+            for (ep in eraserPoints) {
+                for (stroke in strokes) {
+                    for (tp in stroke.strokePoints) {
+                        if (!epsilon(ep.x, ep.y, tp.x, tp.y, 10.0f)) {
+                            presenter.del(this@PageFragment, roomId, noteId, pageId, stroke.strokeId)
+                            return
+                        }
+                    }
+                }
+            }
         }
     }
 }

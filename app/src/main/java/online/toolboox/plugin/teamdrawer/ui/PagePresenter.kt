@@ -73,6 +73,35 @@ class PagePresenter @Inject constructor(
     }
 
     /**
+     * Delete a stroke of the page.
+     *
+     * @param fragment the fragment
+     * @param roomId the room ID
+     * @param noteId the note ID
+     * @param pageId the page ID
+     * @param strokeId the stroke ID
+     */
+    fun del(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID, strokeId: UUID) {
+        coroutinesCallHelper(
+            fragment,
+            { strokeService.delAsync(roomId, noteId, pageId, strokeId) },
+            { response ->
+                when (response.code()) {
+                    200 -> {
+                        val body = response.body()
+                        if (body == null) {
+                            fragment.somethingHappened()
+                        } else {
+                            fragment.delResult(body)
+                        }
+                    }
+                    else -> fragment.somethingHappened()
+                }
+            }
+        )
+    }
+
+    /**
      * Get the timestamp of the last stroke on the page.
      *
      * @param fragment the fragment
