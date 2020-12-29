@@ -101,7 +101,7 @@ class DashboardFragment @Inject constructor(
     /**
      * Render the result of 'version' service call.
      *
-     * @param the version code
+     * @param version the version code
      */
     fun versionResult(version: Int) {
         if (BuildConfig.VERSION_CODE < version) {
