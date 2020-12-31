@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <ImageButton
+            android:id="@+id/toolbar_back"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+
+            android:background="@android:color/transparent"
+            android:tint="@android:color/black"
+            android:src="@drawable/ic_back"
+            android:contentDescription="@string/toolbar_back_image"/>
+
+    <LinearLayout
+            android:id="@+id/toolbar_pager"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="end"
+
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+        <ImageButton
+                android:id="@+id/toolbar_previous"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@android:color/transparent"
+                android:tint="@android:color/black"
+                android:src="@drawable/ic_previous"
+                android:contentDescription="@string/toolbar_previous_image"/>
+
+        <TextView
+                android:id="@+id/toolbar_pages"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/black"
+                android:text="@string/toolbar_pages_placeholder"/>
+
+        <ImageButton
+                android:id="@+id/toolbar_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@android:color/transparent"
+                android:tint="@android:color/black"
+                android:src="@drawable/ic_next"
+                android:contentDescription="@string/toolbar_next_image"/>
+
+    </LinearLayout>
+
+</androidx.appcompat.widget.Toolbar>

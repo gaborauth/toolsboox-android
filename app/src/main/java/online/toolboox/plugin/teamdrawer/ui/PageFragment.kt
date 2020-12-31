@@ -163,8 +163,9 @@ class PageFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
 
-        toolBar.title = getString(R.string.drawer_title)
+        toolBar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.team_drawer_page_title))
+        toolBar.toolbarPager.visibility = View.VISIBLE
 
         initializeSurface()
         touchHelper.setRawDrawingEnabled(true)
@@ -183,6 +184,8 @@ class PageFragment @Inject constructor(
      */
     override fun onPause() {
         super.onPause()
+
+        toolBar.toolbarPager.visibility = View.GONE
 
         touchHelper.setRawDrawingEnabled(false)
         last = 0

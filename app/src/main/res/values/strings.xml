@@ -20,13 +20,18 @@
     <string name="router_not_implemented_yet">Sorry guys, this feature is not yet implemented! (%s)</string>
     <string name="router_not_implemented_yet_action">Okay</string>
 
-    <!-- Strings related to drawer menu -->
+    <!-- Strings related to toolbar and drawer menu -->
     <string name="drawer_menu_dashboard">Dashboard</string>
     <string name="drawer_menu_website">Our website</string>
     <string name="drawer_menu_forum">Support forum</string>
     <string name="drawer_menu_facebook">Facebook</string>
     <string name="drawer_menu_twitter">Twitter</string>
     <string name="drawer_menu_logout">Logout</string>
+    <string name="toolbar_previous_image">Previous</string>
+    <string name="toolbar_pages_placeholder">1 / 1</string>
+    <string name="toolbar_pages_template">%d / %d</string>
+    <string name="toolbar_next_image">Next</string>
+    <string name="toolbar_back_image">Back</string>
 
     <!-- Strings related to main activity -->
     <string name="main_version">%s&#8211;%s</string>

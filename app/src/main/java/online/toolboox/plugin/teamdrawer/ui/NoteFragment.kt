@@ -117,7 +117,7 @@ class NoteFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
 
-        toolBar.title = getString(R.string.drawer_title)
+        toolBar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.team_drawer_note_title))
 
         timer = GlobalScope.launch(Dispatchers.Main) {

@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import online.toolboox.R
+import online.toolboox.databinding.ToolbarBinding
 import timber.log.Timber
 
 /**
@@ -37,7 +37,7 @@ abstract class ScreenFragment : Fragment() {
     /**
      * The toolbar of the parent activity
      */
-    lateinit var toolBar: Toolbar
+    lateinit var toolBar: ToolbarBinding
 
     /**
      * The view resource.
@@ -90,7 +90,7 @@ abstract class ScreenFragment : Fragment() {
     open fun showError(t: Throwable?, @StringRes errorResId: Int, parentView: View? = null) {
         t?.let { Timber.e(it, getString(errorResId)) }
 
-        val snackbar = Snackbar.make(parentView?.let { parentView } ?: toolBar, errorResId, Snackbar.LENGTH_INDEFINITE)
+        val snackbar = Snackbar.make(parentView?.let { parentView } ?: toolBar.root, errorResId, Snackbar.LENGTH_INDEFINITE)
         snackbar.setAction(R.string.something_happened_action) {}
         snackbar.show()
     }
@@ -102,7 +102,7 @@ abstract class ScreenFragment : Fragment() {
      * @param parentView the optional parent view of the snackbar
      */
     open fun showMessage(message: String, parentView: View? = null) {
-        Snackbar.make(parentView?.let { parentView } ?: toolBar, message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(parentView?.let { parentView } ?: toolBar.root, message, Snackbar.LENGTH_LONG).show()
     }
 
     /**

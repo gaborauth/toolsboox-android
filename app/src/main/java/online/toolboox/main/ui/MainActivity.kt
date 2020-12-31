@@ -65,7 +65,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             Timber.plant(ReleaseTree())
         }
 
-        setSupportActionBar(binding.mainToolbar)
+        setSupportActionBar(binding.mainToolbar.root)
 
         val actionbar: ActionBar? = supportActionBar
         actionbar?.apply {
@@ -79,7 +79,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         val headerVersion = binding.navigationView.getHeaderView(0)
             .findViewById<TextView>(R.id.navigation_header_version)
         headerVersion.text = getString(R.string.main_version)
-                .format(BuildConfig.VERSION_NAME, BuildConfig.BUILD_TYPE)
+            .format(BuildConfig.VERSION_NAME, BuildConfig.BUILD_TYPE)
 
         val preferences = MainSharedPreferencesModule.provideSharedPreferences(this)
         preferences.edit().putLong("lastTimestamp", Date().time).apply()
@@ -152,6 +152,10 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             true
         }
 
+        binding.mainToolbar.toolbarBack.setOnClickListener {
+            onBackPressed()
+        }
+
         presenter.onViewCreated()
     }
 
@@ -171,7 +175,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      * @param messageResId the resource id of the error
      */
     override fun showMessage(@StringRes messageResId: Int) {
-        Snackbar.make(binding.mainToolbar, messageResId, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(binding.mainToolbar.root, messageResId, Snackbar.LENGTH_LONG).show()
     }
 
     /**
