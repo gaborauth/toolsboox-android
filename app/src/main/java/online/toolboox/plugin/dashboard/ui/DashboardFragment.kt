@@ -1,5 +1,7 @@
 package online.toolboox.plugin.dashboard.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -108,9 +110,15 @@ class DashboardFragment @Inject constructor(
             val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
             builder.setTitle(R.string.dashboard_new_version_title)
                 .setMessage(R.string.dashboard_new_version_message)
-                .setPositiveButton(
-                    android.R.string.ok
-                ) { _, _ -> Timber.i("Sigh... okay...") }
+                .setPositiveButton( R.string.main_update
+                ) { _, _ ->
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://toolboox.online/changelog"))
+                    this.startActivity(intent)
+                }
+                .setNegativeButton( R.string.main_update_not_now
+                ) { dialog, _ ->
+                    dialog.cancel()
+                }
             builder.create().show()
         }
     }

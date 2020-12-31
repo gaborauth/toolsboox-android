@@ -35,6 +35,8 @@
 
     <!-- Strings related to main activity -->
     <string name="main_version">%s&#8211;%s</string>
+    <string name="main_update_not_now">Now now</string>
+    <string name="main_update">Update</string>
 
     <!-- Strings related to dashboard fragment -->
     <string name="dashboard_title">Dashboard</string>
