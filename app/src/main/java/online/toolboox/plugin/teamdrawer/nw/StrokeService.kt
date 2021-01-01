@@ -56,7 +56,7 @@ interface StrokeService {
      * @param noteId       the note ID
      * @param pageId   the page ID
      * @param strokeId the stroke ID
-     * @return the removed stroke
+     * @return the strokes on the page
      */
     @GET(value = "stroke/del/{roomId}/{noteId}/{pageId}/{strokeId}")
     fun delAsync(
@@ -64,7 +64,7 @@ interface StrokeService {
         @Path("noteId") noteId: UUID,
         @Path("pageId") pageId: UUID,
         @Path("strokeId") strokeId: UUID
-    ): Deferred<Response<Stroke>>
+    ): Deferred<Response<List<Stroke>>>
 
     /**
      * Get the timestamp of the last stroke on the page.

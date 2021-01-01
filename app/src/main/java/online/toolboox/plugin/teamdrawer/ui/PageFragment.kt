@@ -12,6 +12,7 @@ import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.pen.data.TouchPoint
 import com.onyx.android.sdk.pen.data.TouchPointList
 import kotlinx.coroutines.*
+import online.toolboox.BuildConfig
 import online.toolboox.R
 import online.toolboox.databinding.FragmentTeamdrawerPageBinding
 import online.toolboox.plugin.teamdrawer.nw.domain.Stroke
@@ -170,11 +171,10 @@ class PageFragment @Inject constructor(
         initializeSurface()
         touchHelper.setRawDrawingEnabled(true)
 
-        presenter.last(this, roomId, noteId, pageId)
         timer = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 presenter.last(this@PageFragment, roomId, noteId, pageId)
-                delay(1000L)
+                delay(if (BuildConfig.DEBUG) 10000L else 1000L)
             }
         }
     }
@@ -218,17 +218,7 @@ class PageFragment @Inject constructor(
      * @param strokes the strokes on the erased page
      */
     fun delResult(strokes: List<Stroke>) {
-        this.strokes = strokes
-        clearSurface()
-    }
-
-    /**
-     * Render the result of 'del' service call.
-     *
-     * @param strokes the strokes on the erased page
-     */
-    fun delResult(stroke: Stroke) {
-        presenter.list(this, roomId, noteId, pageId)
+        listResult(strokes, true)
     }
 
     /**
@@ -239,7 +229,7 @@ class PageFragment @Inject constructor(
     fun lastResult(last: Long) {
         if (this.last != last) {
             this.last = last
-            presenter.list(this, roomId, noteId, pageId)
+            presenter.list(this, roomId, noteId, pageId, false)
         }
     }
 
@@ -247,8 +237,13 @@ class PageFragment @Inject constructor(
      * Render the result of 'list' service call.
      *
      * @param strokes the list of strokes
+     * @param clearPage clear the page
      */
-    fun listResult(strokes: List<Stroke>) {
+    fun listResult(strokes: List<Stroke>, clearPage: Boolean) {
+        if (clearPage) {
+            touchHelper.isRawDrawingRenderEnabled = false
+        }
+
         this.strokes = strokes
         val lockCanvas = binding.surfaceView.holder.lockCanvas()
 
@@ -257,6 +252,7 @@ class PageFragment @Inject constructor(
         fillPaint.color = Color.WHITE
         val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
         lockCanvas.drawRect(rect, fillPaint)
+        if (clearPage) canvas.drawRect(rect, fillPaint)
 
         for (stroke in strokes) {
             val points = stroke.strokePoints
@@ -280,6 +276,9 @@ class PageFragment @Inject constructor(
         }
         binding.surfaceView.holder.unlockCanvasAndPost(lockCanvas)
 
+        if (clearPage) {
+            touchHelper.isRawDrawingRenderEnabled = true
+        }
         touchHelper.setRawDrawingEnabled(true)
     }
 

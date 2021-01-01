@@ -136,8 +136,9 @@ class PagePresenter @Inject constructor(
      * @param roomId the room ID
      * @param noteId the note ID
      * @param pageId the page ID
+     * @param clearPage clear the page flag
      */
-    fun list(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID) {
+    fun list(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID, clearPage: Boolean) {
         coroutinesCallHelper(
             fragment,
             { strokeService.listAsync(roomId, noteId, pageId) },
@@ -148,7 +149,7 @@ class PagePresenter @Inject constructor(
                         if (body == null) {
                             fragment.somethingHappened()
                         } else {
-                            fragment.listResult(body)
+                            fragment.listResult(body, clearPage)
                         }
                     }
                     else -> fragment.somethingHappened()
