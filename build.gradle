@@ -1,7 +1,7 @@
 ext {
     applicationName = 'toolboox'
-    parentVersionCode = 1_00_00_06
-    parentVersionName = '1.0.0-06'
+    parentVersionCode = 1_00_00_07
+    parentVersionName = '1.0.0-07'
 }
 
 buildscript {
