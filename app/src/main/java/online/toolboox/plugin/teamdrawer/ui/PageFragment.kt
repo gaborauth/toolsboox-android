@@ -373,15 +373,15 @@ class PageFragment @Inject constructor(
 
         var lastPoint: TouchPoint? = null
 
-        private fun epsilon(touchPoint: TouchPoint, lastPoint: TouchPoint, epsilon: Float = 5.0f): Boolean {
+        private fun epsilon(touchPoint: TouchPoint, lastPoint: TouchPoint, epsilon: Float): Boolean {
             return epsilon(touchPoint.x, touchPoint.y, lastPoint.x, lastPoint.y, epsilon)
         }
 
-        private fun epsilon(x1: Float, y1: Float, x2: Float, y2: Float, epsilon: Float = 5.0f): Boolean {
+        private fun epsilon(x1: Float, y1: Float, x2: Float, y2: Float, epsilon: Float): Boolean {
             val dx = abs(x1 - x2).toDouble()
             val dy = abs(y1 - y2).toDouble()
             val d = sqrt(dx * dx + dy * dy)
-            return d > epsilon
+            return d <= epsilon
         }
 
         override fun onBeginRawDrawing(b: Boolean, touchPoint: TouchPoint) {
@@ -411,7 +411,7 @@ class PageFragment @Inject constructor(
                 )
             )
             for (tp in touchPointList) {
-                if (epsilon(tp, prevPoint)) {
+                if (!epsilon(tp, prevPoint, 3.0f) and epsilon(tp, prevPoint, 30.0f)) {
                     prevPoint = tp
                     stroke.add(
                         StrokePoint(
@@ -430,21 +430,21 @@ class PageFragment @Inject constructor(
         }
 
         override fun onEndRawErasing(b: Boolean, touchPoint: TouchPoint) {
-            Timber.i("onEndRawErasing (${touchPoint.x} - ${touchPoint.y})")
+            Timber.d("onEndRawErasing (${touchPoint.x} - ${touchPoint.y})")
         }
 
         override fun onRawErasingTouchPointMoveReceived(touchPoint: TouchPoint) {
-            Timber.i("onRawErasingTouchPointMoveReceived (${touchPoint.x} - ${touchPoint.y})")
+            Timber.d("onRawErasingTouchPointMoveReceived (${touchPoint.x} - ${touchPoint.y})")
         }
 
         override fun onRawErasingTouchPointListReceived(touchPointList: TouchPointList) {
-            Timber.i("onRawErasingTouchPointListReceived (${touchPointList.size()})")
+            Timber.d("onRawErasingTouchPointListReceived (${touchPointList.size()})")
 
             val eraserPoints: MutableList<TouchPoint> = mutableListOf()
             var prevPoint: TouchPoint = touchPointList[0]
             eraserPoints.add(prevPoint)
             for (tp in touchPointList) {
-                if (epsilon(tp, prevPoint)) {
+                if (!epsilon(tp, prevPoint, 5.0f)) {
                     prevPoint = tp
                     eraserPoints.add(prevPoint)
                 }
@@ -454,7 +454,7 @@ class PageFragment @Inject constructor(
             for (ep in eraserPoints) {
                 for (stroke in strokes) {
                     for (tp in stroke.strokePoints) {
-                        if (!epsilon(ep.x, ep.y, tp.x, tp.y, 10.0f)) {
+                        if (epsilon(ep.x, ep.y, tp.x, tp.y, 10.0f)) {
                             presenter.del(this@PageFragment, roomId, noteId, pageId, stroke.strokeId)
                             return
                         }
