@@ -7,6 +7,11 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
+/**
+ * Room service interface.
+ *
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ */
 interface RoomService {
     /**
      * Add a new room.

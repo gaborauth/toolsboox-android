@@ -9,6 +9,11 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import java.util.*
 
+/**
+ * Note service interface.
+ *
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ */
 interface NoteService {
     /**
      * Add a new note.
