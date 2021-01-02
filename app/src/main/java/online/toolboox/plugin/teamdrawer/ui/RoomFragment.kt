@@ -10,6 +10,7 @@ import kotlinx.coroutines.*
 import online.toolboox.R
 import online.toolboox.databinding.FragmentTeamdrawerRoomBinding
 import online.toolboox.plugin.teamdrawer.da.RoomItem
+import online.toolboox.plugin.teamdrawer.nw.RoomRepository
 import online.toolboox.plugin.teamdrawer.nw.domain.Room
 import online.toolboox.plugin.teamdrawer.ot.RoomItemAdapter
 import online.toolboox.ui.plugin.Router
@@ -24,6 +25,7 @@ import javax.inject.Inject
  */
 class RoomFragment @Inject constructor(
     private val presenter: RoomPresenter,
+    private val roomRepository: RoomRepository,
     private val router: Router
 ) : ScreenFragment() {
 
@@ -108,6 +110,7 @@ class RoomFragment @Inject constructor(
         toolBar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.team_drawer_room_title))
 
+        listResult(roomRepository.getRoomList())
         timer = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 presenter.list(this@RoomFragment)
@@ -147,6 +150,7 @@ class RoomFragment @Inject constructor(
             roomItems.add(RoomItem(it.roomId, it.created, it.lastUpdated, it.name, R.drawable.ic_teamdrawer_room))
         }
         adapter.notifyDataSetChanged()
+        roomRepository.updateRoomList(rooms)
     }
 
     /**

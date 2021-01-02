@@ -10,6 +10,8 @@ import kotlinx.coroutines.*
 import online.toolboox.R
 import online.toolboox.databinding.FragmentTeamdrawerNoteBinding
 import online.toolboox.plugin.teamdrawer.da.NoteItem
+import online.toolboox.plugin.teamdrawer.nw.NoteRepository
+import online.toolboox.plugin.teamdrawer.nw.RoomRepository
 import online.toolboox.plugin.teamdrawer.nw.domain.Note
 import online.toolboox.plugin.teamdrawer.ot.NoteItemAdapter
 import online.toolboox.ui.plugin.Router
@@ -25,6 +27,8 @@ import javax.inject.Inject
  */
 class NoteFragment @Inject constructor(
     private val presenter: NotePresenter,
+    private val noteRepository: NoteRepository,
+    private val roomRepository: RoomRepository,
     private val router: Router
 ) : ScreenFragment() {
 
@@ -117,9 +121,11 @@ class NoteFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
 
-        toolBar.root.title = getString(R.string.drawer_title)
-            .format(getString(R.string.app_name), getString(R.string.team_drawer_note_title))
+        val roomName = roomRepository.getRoom(roomId)!!.name
+        val noteTitle = getString(R.string.team_drawer_note_title).format(roomName)
+        toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.team_drawer_title), noteTitle)
 
+        listResult(noteRepository.getNotesList(roomId))
         timer = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 presenter.list(this@NoteFragment, roomId)
@@ -169,6 +175,7 @@ class NoteFragment @Inject constructor(
             )
         }
         adapter.notifyDataSetChanged()
+        noteRepository.updateNotesList(roomId, notes)
     }
 
     /**
