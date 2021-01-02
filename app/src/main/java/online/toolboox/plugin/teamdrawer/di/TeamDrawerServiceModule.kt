@@ -38,6 +38,18 @@ object TeamDrawerServiceModule {
     }
 
     /**
+     * Provides the 'page' service.
+     *
+     * @param retrofit the Retrofit instance
+     * @return the service
+     */
+    @Provides
+    @Reusable
+    fun providePageService(retrofit: Retrofit): PageService {
+        return retrofit.create(PageService::class.java)
+    }
+
+    /**
      * Provides the 'room' repository.
      *
      * @return the 'room' repository

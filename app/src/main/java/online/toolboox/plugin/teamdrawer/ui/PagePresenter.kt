@@ -1,5 +1,6 @@
 package online.toolboox.plugin.teamdrawer.ui
 
+import online.toolboox.plugin.teamdrawer.nw.PageService
 import online.toolboox.plugin.teamdrawer.nw.StrokeService
 import online.toolboox.plugin.teamdrawer.nw.domain.StrokePoint
 import online.toolboox.ui.plugin.FragmentPresenter
@@ -12,6 +13,7 @@ import javax.inject.Inject
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 class PagePresenter @Inject constructor(
+    private val pageService: PageService,
     private val strokeService: StrokeService
 ) : FragmentPresenter() {
 
@@ -36,6 +38,33 @@ class PagePresenter @Inject constructor(
                             fragment.somethingHappened()
                         } else {
                             fragment.addResult(body)
+                        }
+                    }
+                    else -> fragment.somethingHappened()
+                }
+            }
+        )
+    }
+
+    /**
+     * Add new page.
+     *
+     * @param fragment the fragment
+     * @param roomId the room ID
+     * @param noteId the note ID
+     */
+    fun addPage(fragment: PageFragment, roomId: UUID, noteId: UUID) {
+        coroutinesCallHelper(
+            fragment,
+            { pageService.addAsync(roomId, noteId) },
+            { response ->
+                when (response.code()) {
+                    200 -> {
+                        val body = response.body()
+                        if (body == null) {
+                            fragment.somethingHappened()
+                        } else {
+                            fragment.addPageResult(body)
                         }
                     }
                     else -> fragment.somethingHappened()
@@ -108,8 +137,9 @@ class PagePresenter @Inject constructor(
      * @param roomId the room ID
      * @param noteId the note ID
      * @param pageId the page ID
+     * @param clearPage clear page flag
      */
-    fun last(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID) {
+    fun last(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID, clearPage: Boolean) {
         coroutinesCallHelper(
             fragment,
             { strokeService.lastAsync(roomId, noteId, pageId) },
@@ -120,7 +150,7 @@ class PagePresenter @Inject constructor(
                         if (body == null) {
                             fragment.somethingHappened()
                         } else {
-                            fragment.lastResult(body)
+                            fragment.lastResult(body, clearPage)
                         }
                     }
                     else -> fragment.somethingHappened()

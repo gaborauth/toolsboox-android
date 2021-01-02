@@ -18,6 +18,7 @@ interface NoteService {
     /**
      * Add a new note.
      *
+     * @param roomId the room ID
      * @param title the title of the note
      * @return the added note
      */

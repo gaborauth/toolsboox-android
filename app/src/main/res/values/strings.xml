@@ -56,6 +56,8 @@
     <string name="team_drawer_page_external_storage_write_permission_title">Export pages</string>
     <string name="team_drawer_page_external_storage_write_permission_message">Write storage is needed to export pages content</string>
     <string name="team_drawer_page_export_message">Exported as %s</string>
+    <string name="team_drawer_page_add_new_page_dialog_title">Add page</string>
+    <string name="team_drawer_page_add_new_page_dialog_message">Do you want to add a new page?</string>
 
     <!-- Strings related to team drawer room fragment -->
     <string name="team_drawer_room_title">TeamDrawer &#8211; Rooms</string>

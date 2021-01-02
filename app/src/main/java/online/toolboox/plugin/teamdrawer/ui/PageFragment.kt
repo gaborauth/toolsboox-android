@@ -1,6 +1,7 @@
 package online.toolboox.plugin.teamdrawer.ui
 
 import android.Manifest
+import android.app.AlertDialog
 import android.graphics.*
 import android.os.Bundle
 import android.provider.MediaStore
@@ -17,8 +18,10 @@ import online.toolboox.R
 import online.toolboox.databinding.FragmentTeamdrawerPageBinding
 import online.toolboox.plugin.teamdrawer.nw.NoteRepository
 import online.toolboox.plugin.teamdrawer.nw.RoomRepository
+import online.toolboox.plugin.teamdrawer.nw.domain.Note
 import online.toolboox.plugin.teamdrawer.nw.domain.Stroke
 import online.toolboox.plugin.teamdrawer.nw.domain.StrokePoint
+import online.toolboox.plugin.teamdrawer.nw.dto.NotePageComplex
 import online.toolboox.ui.plugin.ScreenFragment
 import timber.log.Timber
 import java.time.Instant
@@ -106,6 +109,17 @@ class PageFragment @Inject constructor(
     private var strokes: List<Stroke> = mutableListOf()
 
     /**
+     * The cached note.
+     */
+    private lateinit var note: Note
+
+    /**
+     * The actual page number and the number of pages.
+     */
+    private var pageNumber: Int = 1
+    private var pageNumbers: Int = 1
+
+    /**
      * OnViewCreated hook.
      *
      * @param view the parent view
@@ -158,6 +172,24 @@ class PageFragment @Inject constructor(
             presenter.del(this, roomId, noteId, pageId)
         }
 
+        note = noteRepository.getNote(roomId, noteId)!!
+        pageNumbers = note.pages.size
+
+        toolBar.toolbarNext.setOnClickListener {
+            if (pageNumber < pageNumbers) {
+                pageNumber++
+            } else {
+                createNewPageDialog()
+            }
+            renderPage()
+        }
+        toolBar.toolbarPrevious.setOnClickListener {
+            if (pageNumber > 1) {
+                pageNumber--
+            }
+            renderPage()
+        }
+
         touchHelper = TouchHelper.create(binding.surfaceView, callback)
         initializeSurface()
     }
@@ -171,8 +203,8 @@ class PageFragment @Inject constructor(
         val note = noteRepository.getNote(roomId, noteId)!!
         val pageTitle = getString(R.string.team_drawer_page_title).format(note.title)
         toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.team_drawer_title), pageTitle)
-        
-        toolBar.toolbarPages.text = getString(R.string.toolbar_pages_template).format(1, note.pages.size)
+
+        toolBar.toolbarPages.text = getString(R.string.toolbar_pages_template).format(1, pageNumbers)
         toolBar.toolbarPager.visibility = View.VISIBLE
 
         initializeSurface()
@@ -180,7 +212,7 @@ class PageFragment @Inject constructor(
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
-                presenter.last(this@PageFragment, roomId, noteId, pageId)
+                presenter.last(this@PageFragment, roomId, noteId, pageId, false)
                 delay(if (BuildConfig.DEBUG) 10000L else 1000L)
             }
         }
@@ -216,7 +248,24 @@ class PageFragment @Inject constructor(
      * @param stroke the saved stroke
      */
     fun addResult(stroke: Stroke) {
-        presenter.last(this, roomId, noteId, pageId)
+        presenter.last(this, roomId, noteId, pageId, false)
+    }
+
+    /**
+     * Render the result of 'addPage' service call.
+     *
+     * @param notePageComplex the note-page complex response
+     */
+    fun addPageResult(notePageComplex: NotePageComplex) {
+        val page = notePageComplex.page
+        note = notePageComplex.note
+        pageNumbers = note.pages.size
+        pageNumber = note.pages.indexOf(page.pageId) + 1
+        pageId = page.pageId
+
+        noteRepository.updateNote(roomId, note)
+
+        renderPage()
     }
 
     /**
@@ -232,11 +281,12 @@ class PageFragment @Inject constructor(
      * Render the result of 'last' service call.
      *
      * @param last the last update timestamp
+     * @param clearPage clear page flag
      */
-    fun lastResult(last: Long) {
+    fun lastResult(last: Long, clearPage: Boolean) {
         if (this.last != last) {
             this.last = last
-            presenter.list(this, roomId, noteId, pageId, false)
+            presenter.list(this, roomId, noteId, pageId, clearPage)
         }
     }
 
@@ -287,6 +337,34 @@ class PageFragment @Inject constructor(
             touchHelper.isRawDrawingRenderEnabled = true
         }
         touchHelper.setRawDrawingEnabled(true)
+    }
+
+    /**
+     * Reload the current page.
+     */
+    private fun renderPage() {
+        val note = noteRepository.getNote(roomId, noteId)!!
+        pageId = note.pages[pageNumber - 1]
+        last = 0
+        presenter.last(this, roomId, noteId, pageId, true)
+        toolBar.toolbarPages.text = getString(R.string.toolbar_pages_template).format(pageNumber, pageNumbers)
+    }
+
+    /**
+     * Show the add page dialog
+     */
+    private fun createNewPageDialog() {
+        val builder = AlertDialog.Builder(this.requireContext())
+
+        builder.setTitle(R.string.team_drawer_page_add_new_page_dialog_title)
+        builder.setMessage(R.string.team_drawer_page_add_new_page_dialog_message)
+        builder.setPositiveButton(android.R.string.yes) { _, _ ->
+            presenter.addPage(this@PageFragment, roomId, noteId)
+        }
+        builder.setNegativeButton(android.R.string.cancel) { dialog, _ ->
+            dialog.cancel()
+        }
+        builder.create().show()
     }
 
     /**
