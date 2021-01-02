@@ -15,6 +15,8 @@ import kotlinx.coroutines.*
 import online.toolboox.BuildConfig
 import online.toolboox.R
 import online.toolboox.databinding.FragmentTeamdrawerPageBinding
+import online.toolboox.plugin.teamdrawer.nw.NoteRepository
+import online.toolboox.plugin.teamdrawer.nw.RoomRepository
 import online.toolboox.plugin.teamdrawer.nw.domain.Stroke
 import online.toolboox.plugin.teamdrawer.nw.domain.StrokePoint
 import online.toolboox.ui.plugin.ScreenFragment
@@ -33,7 +35,9 @@ import kotlin.math.sqrt
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 class PageFragment @Inject constructor(
-    private val presenter: PagePresenter
+    private val presenter: PagePresenter,
+    private val noteRepository: NoteRepository,
+    private val roomRepository: RoomRepository
 ) : ScreenFragment() {
 
     /**
@@ -164,8 +168,11 @@ class PageFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
 
-        toolBar.root.title = getString(R.string.drawer_title)
-            .format(getString(R.string.app_name), getString(R.string.team_drawer_page_title))
+        val note = noteRepository.getNote(roomId, noteId)!!
+        val pageTitle = getString(R.string.team_drawer_page_title).format(note.title)
+        toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.team_drawer_title), pageTitle)
+        
+        toolBar.toolbarPages.text = getString(R.string.toolbar_pages_template).format(1, note.pages.size)
         toolBar.toolbarPager.visibility = View.VISIBLE
 
         initializeSurface()
