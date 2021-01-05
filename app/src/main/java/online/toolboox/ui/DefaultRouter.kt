@@ -4,7 +4,7 @@ import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import com.google.code.regexp.Pattern
 import online.toolboox.R
-import online.toolboox.main.ui.MainActivity
+import online.toolboox.ui.main.MainActivity
 import online.toolboox.plugin.calendar.CalendarPlugin
 import online.toolboox.plugin.dashboard.DashboardPlugin
 import online.toolboox.plugin.teamdrawer.TeamDrawerPlugin

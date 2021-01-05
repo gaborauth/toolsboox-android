@@ -1,4 +1,4 @@
-package online.toolboox.main.ui
+package online.toolboox.ui.main
 
 import online.toolboox.ui.BasePresenter
 

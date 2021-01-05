@@ -6,7 +6,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import online.toolboox.di.NetworkModule
 import online.toolboox.di.MainSharedPreferencesModule
-import online.toolboox.main.ui.MainPresenter
+import online.toolboox.ui.main.MainPresenter
 
 /**
  * Base presenter, provides initial injections and required methods.

@@ -5,7 +5,7 @@ import dagger.Component
 import online.toolboox.di.NetworkModule
 import online.toolboox.di.MainSharedPreferencesModule
 import online.toolboox.plugin.teamdrawer.di.TeamDrawerServiceModule
-import online.toolboox.main.ui.MainPresenter
+import online.toolboox.ui.main.MainPresenter
 import javax.inject.Singleton
 
 /**
