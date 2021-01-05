@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import online.toolboox.BuildConfig
 import online.toolboox.R
 import online.toolboox.databinding.FragmentDashboardBinding
-import online.toolboox.da.DashboardItem
+import online.toolboox.da.SquareItem
 import online.toolboox.ot.DashboardItemAdapter
 import online.toolboox.ui.plugin.Router
 import online.toolboox.ui.plugin.ScreenFragment
@@ -56,34 +56,34 @@ class DashboardFragment @Inject constructor(
             layoutManager = GridLayoutManager(this@DashboardFragment.requireContext(), 4)
         }
 
-        val dashboardItems = mutableListOf<DashboardItem>()
-        dashboardItems.add(
-            DashboardItem(
+        val squareItems = mutableListOf<SquareItem>()
+        squareItems.add(
+            SquareItem(
                 "Calendar", R.drawable.ic_dashboard_item_calendar,
                 "/calendar"
             )
         )
-        dashboardItems.add(
-            DashboardItem(
+        squareItems.add(
+            SquareItem(
                 "Templates", R.drawable.ic_dashboard_item_templates,
                 "/templates"
             )
         )
-        dashboardItems.add(
-            DashboardItem(
+        squareItems.add(
+            SquareItem(
                 "TeamDrawer", R.drawable.ic_dashboard_item_teamdrawer,
                 "/teamDrawer"
             )
         )
 
         val clickListener = object : DashboardItemAdapter.OnItemClickListener {
-            override fun onItemClicked(dashboardItem: DashboardItem) {
-                Timber.i("Route to ${dashboardItem.routeUrl}")
-                router.dispatch(dashboardItem.routeUrl, false)
+            override fun onItemClicked(squareItem: SquareItem) {
+                Timber.i("Route to ${squareItem.routeUrl}")
+                router.dispatch(squareItem.routeUrl, false)
             }
         }
 
-        adapter = DashboardItemAdapter(this.requireContext(), dashboardItems, clickListener)
+        adapter = DashboardItemAdapter(this.requireContext(), squareItems, clickListener)
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
 

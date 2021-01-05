@@ -8,11 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import online.toolboox.R
-import online.toolboox.da.DashboardItem
+import online.toolboox.da.SquareItem
 
 internal class DashboardItemAdapter(
     private val context: Context,
-    private val dashboardItems: List<DashboardItem>,
+    private val squareItems: List<SquareItem>,
     private val clickListener: OnItemClickListener
 ) : RecyclerView.Adapter<DashboardItemAdapter.ViewHolder>() {
 
@@ -24,7 +24,7 @@ internal class DashboardItemAdapter(
      * @return The newly created ViewHolder.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.list_item_dashboard, parent, false))
+        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.list_item_square, parent, false))
     }
 
     /**
@@ -34,7 +34,7 @@ internal class DashboardItemAdapter(
      * @param position The adapter position.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindTo(dashboardItems[position], clickListener)
+        holder.bindTo(squareItems[position], clickListener)
     }
 
     /**
@@ -43,7 +43,7 @@ internal class DashboardItemAdapter(
      * @return Size of the data set.
      */
     override fun getItemCount(): Int {
-        return dashboardItems.size
+        return squareItems.size
     }
 
     /**
@@ -53,17 +53,17 @@ internal class DashboardItemAdapter(
         private val titleText: TextView = itemView.findViewById(R.id.title)
         private val titleImage: ImageView = itemView.findViewById(R.id.titleImage)
 
-        fun bindTo(dashboardItem: DashboardItem, clickListener: OnItemClickListener) {
-            titleText.text = dashboardItem.title
-            titleImage.setImageResource(dashboardItem.imageRes)
+        fun bindTo(squareItem: SquareItem, clickListener: OnItemClickListener) {
+            titleText.text = squareItem.title
+            titleImage.setImageResource(squareItem.imageRes)
 
             itemView.setOnClickListener {
-                clickListener.onItemClicked(dashboardItem)
+                clickListener.onItemClicked(squareItem)
             }
         }
     }
 
-    interface OnItemClickListener{
-        fun onItemClicked(dashboardItem: DashboardItem)
+    interface OnItemClickListener {
+        fun onItemClicked(squareItem: SquareItem)
     }
 }

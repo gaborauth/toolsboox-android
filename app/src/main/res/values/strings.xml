@@ -33,6 +33,9 @@
     <string name="toolbar_next_image">Next</string>
     <string name="toolbar_back_image">Back</string>
 
+    <!-- Strings related to square item -->
+    <string name="square_item_image">Square item image</string>
+
     <!-- Strings related to main activity -->
     <string name="main_version">%s&#8211;%s</string>
     <string name="main_update_not_now">Now now</string>
@@ -44,7 +47,6 @@
     <!-- Strings related to dashboard plugin -->
     <!-- Strings related to dashboard fragment -->
     <string name="dashboard_title">Dashboard</string>
-    <string name="dashboard_item_image">Dashboard item image</string>
     <string name="dashboard_new_version_title">New version</string>
     <string name="dashboard_new_version_message">There is a new version of ToolBoox available, please upgrade it unless some functions may not work.</string>
 
