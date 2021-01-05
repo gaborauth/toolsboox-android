@@ -21,7 +21,7 @@ class TemplatesPlugin(private val router: Router) : Plugin {
 
     override fun getRoute(url: String): ScreenFragment? {
         router.getParameters("/templates", url).let {
-            if (it is Router.Parameters.Match) return component.fragment().setParameters(it.parameters)
+            if (it is Router.Parameters.Match) return component.mainFragment().setParameters(it.parameters)
         }
 
         return null

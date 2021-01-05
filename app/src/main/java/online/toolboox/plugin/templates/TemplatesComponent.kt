@@ -21,5 +21,5 @@ import javax.inject.Singleton
 )
 interface TemplatesComponent {
     fun inject(plugin: TemplatesPlugin)
-    fun fragment(): MainFragment
+    fun mainFragment(): MainFragment
 }
