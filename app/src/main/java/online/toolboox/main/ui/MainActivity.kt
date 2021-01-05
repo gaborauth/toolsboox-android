@@ -22,7 +22,7 @@ import com.raizlabs.android.dbflow.config.ShapeGeneratedDatabaseHolder
 import online.toolboox.BuildConfig
 import online.toolboox.R
 import online.toolboox.databinding.ActivityMainBinding
-import online.toolboox.main.di.MainSharedPreferencesModule
+import online.toolboox.di.MainSharedPreferencesModule
 import online.toolboox.ui.BaseActivity
 import online.toolboox.ui.DefaultRouter
 import online.toolboox.ui.plugin.ScreenFragment

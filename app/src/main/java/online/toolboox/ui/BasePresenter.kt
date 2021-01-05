@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import online.toolboox.di.NetworkModule
-import online.toolboox.main.di.MainSharedPreferencesModule
+import online.toolboox.di.MainSharedPreferencesModule
 import online.toolboox.main.ui.MainPresenter
 
 /**

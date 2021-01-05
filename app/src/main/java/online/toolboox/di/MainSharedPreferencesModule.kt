@@ -1,4 +1,4 @@
-package online.toolboox.main.di
+package online.toolboox.di
 
 import android.content.Context
 import android.content.SharedPreferences
