@@ -38,15 +38,15 @@
     <string name="main_update_not_now">Now now</string>
     <string name="main_update">Update</string>
 
+    <!-- Strings related to calendar plugin -->
+    <string name="calendar_main_title">Calendar</string>
+
     <!-- Strings related to dashboard plugin -->
     <!-- Strings related to dashboard fragment -->
     <string name="dashboard_title">Dashboard</string>
     <string name="dashboard_item_image">Dashboard item image</string>
     <string name="dashboard_new_version_title">New version</string>
     <string name="dashboard_new_version_message">There is a new version of ToolBoox available, please upgrade it unless some functions may not work.</string>
-
-    <!-- Strings related to calendar plugin -->
-    <string name="calendar_main_title">Calendar</string>
 
     <!-- Strings related to team drawer plugin -->
     <string name="team_drawer_title">TeamDrawer</string>
@@ -71,6 +71,9 @@
     <string name="team_drawer_note_title">\'%s\' notes</string>
     <string name="team_drawer_note_item_image">Note item image</string>
     <string name="team_drawer_note_add_dialog_title">Add new note</string>
+
+    <!-- Strings related to templates plugin -->
+    <string name="templates_main_title">Templates</string>
 
     <!-- Strings related to utils -->
     <string name="util_fluent_unknown">unknown</string>

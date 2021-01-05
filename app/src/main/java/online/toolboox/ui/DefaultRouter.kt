@@ -8,6 +8,7 @@ import online.toolboox.main.ui.MainActivity
 import online.toolboox.plugin.calendar.CalendarPlugin
 import online.toolboox.plugin.dashboard.DashboardPlugin
 import online.toolboox.plugin.teamdrawer.TeamDrawerPlugin
+import online.toolboox.plugin.templates.TemplatesPlugin
 import online.toolboox.ui.plugin.Plugin
 import online.toolboox.ui.plugin.Router
 
@@ -22,6 +23,7 @@ class DefaultRouter(private val main: MainActivity, private val view: View) : Ro
         CalendarPlugin(this),
         DashboardPlugin(this),
         TeamDrawerPlugin(this),
+        TemplatesPlugin(this),
     )
 
     /**
