@@ -77,6 +77,9 @@
     <!-- Strings related to templates plugin -->
     <string name="templates_main_title">Templates</string>
 
+    <!-- Strings related to templates 'this week's calendar' fragment -->
+    <string name="templates_this_weeks_calendar_title">This week\'s calendar</string>
+
     <!-- Strings related to utils -->
     <string name="util_fluent_unknown">unknown</string>
     <string name="util_fluent_days">days</string>
