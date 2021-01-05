@@ -36,7 +36,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="4dp"
                     android:scaleType="fitXY"
-                    android:contentDescription="@string/dashboard_item_image"/>
+                    android:contentDescription="@string/square_item_image"/>
 
         </online.toolboox.ot.SquareLinearLayout>
 
