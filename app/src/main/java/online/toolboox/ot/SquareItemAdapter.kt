@@ -10,6 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import online.toolboox.R
 import online.toolboox.da.SquareItem
 
+/**
+ * Square item adapter class.
+ *
+ * @param context the context
+ * @param squareItems the square items
+ * @param clickListener the click listener callback
+ *
+ * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ */
 internal class SquareItemAdapter(
     private val context: Context,
     private val squareItems: List<SquareItem>,
