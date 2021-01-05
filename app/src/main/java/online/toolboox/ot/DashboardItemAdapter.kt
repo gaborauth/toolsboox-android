@@ -1,4 +1,4 @@
-package online.toolboox.plugin.dashboard.ot
+package online.toolboox.ot
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import online.toolboox.R
-import online.toolboox.plugin.dashboard.da.DashboardItem
+import online.toolboox.da.DashboardItem
 
 internal class DashboardItemAdapter(
     private val context: Context,

@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import online.toolboox.BuildConfig
 import online.toolboox.R
 import online.toolboox.databinding.FragmentDashboardBinding
-import online.toolboox.plugin.dashboard.da.DashboardItem
-import online.toolboox.plugin.dashboard.ot.DashboardItemAdapter
+import online.toolboox.da.DashboardItem
+import online.toolboox.ot.DashboardItemAdapter
 import online.toolboox.ui.plugin.Router
 import online.toolboox.ui.plugin.ScreenFragment
 import timber.log.Timber

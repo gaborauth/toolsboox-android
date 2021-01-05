@@ -1,4 +1,4 @@
-package online.toolboox.plugin.dashboard.ot
+package online.toolboox.ot
 
 import android.content.Context
 import android.util.AttributeSet

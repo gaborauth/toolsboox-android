@@ -1,4 +1,4 @@
-package online.toolboox.plugin.dashboard.da
+package online.toolboox.da
 
 /**
  * Dashboard item data class.
