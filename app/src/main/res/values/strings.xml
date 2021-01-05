@@ -45,6 +45,9 @@
     <string name="dashboard_new_version_title">New version</string>
     <string name="dashboard_new_version_message">There is a new version of ToolBoox available, please upgrade it unless some functions may not work.</string>
 
+    <!-- Strings related to calendar plugin -->
+    <string name="calendar_main_title">Calendar</string>
+
     <!-- Strings related to team drawer plugin -->
     <string name="team_drawer_title">TeamDrawer</string>
 
