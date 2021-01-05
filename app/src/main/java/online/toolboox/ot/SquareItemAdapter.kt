@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import online.toolboox.R
 import online.toolboox.da.SquareItem
 
-internal class DashboardItemAdapter(
+internal class SquareItemAdapter(
     private val context: Context,
     private val squareItems: List<SquareItem>,
     private val clickListener: OnItemClickListener
-) : RecyclerView.Adapter<DashboardItemAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<SquareItemAdapter.ViewHolder>() {
 
     /**
      * Required method for creating the ViewHolder objects.

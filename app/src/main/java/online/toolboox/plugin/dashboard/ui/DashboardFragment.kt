@@ -10,7 +10,7 @@ import online.toolboox.BuildConfig
 import online.toolboox.R
 import online.toolboox.databinding.FragmentDashboardBinding
 import online.toolboox.da.SquareItem
-import online.toolboox.ot.DashboardItemAdapter
+import online.toolboox.ot.SquareItemAdapter
 import online.toolboox.ui.plugin.Router
 import online.toolboox.ui.plugin.ScreenFragment
 import timber.log.Timber
@@ -39,7 +39,7 @@ class DashboardFragment @Inject constructor(
     /**
      * The dashboard item adapter.
      */
-    private lateinit var adapter: DashboardItemAdapter
+    private lateinit var adapter: SquareItemAdapter
 
     /**
      * OnViewCreated hook.
@@ -76,14 +76,14 @@ class DashboardFragment @Inject constructor(
             )
         )
 
-        val clickListener = object : DashboardItemAdapter.OnItemClickListener {
+        val clickListener = object : SquareItemAdapter.OnItemClickListener {
             override fun onItemClicked(squareItem: SquareItem) {
                 Timber.i("Route to ${squareItem.routeUrl}")
                 router.dispatch(squareItem.routeUrl, false)
             }
         }
 
-        adapter = DashboardItemAdapter(this.requireContext(), squareItems, clickListener)
+        adapter = SquareItemAdapter(this.requireContext(), squareItems, clickListener)
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
 
