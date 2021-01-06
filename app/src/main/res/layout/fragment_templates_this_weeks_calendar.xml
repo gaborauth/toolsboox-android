@@ -7,22 +7,53 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <ProgressBar
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:id="@+id/mainProgress"
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            android:layout_marginTop="-7dp"
-            android:indeterminate="true"
-            android:visibility="invisible"
+        <ProgressBar
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:id="@+id/mainProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-            tools:visibility="visible"/>
+                android:layout_marginTop="-7dp"
+                android:indeterminate="true"
+                android:visibility="invisible"
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+                tools:visibility="visible"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <Button
+                    android:id="@+id/button_export"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+
+                    android:text="@string/templates_this_weeks_calendar_button_export_text"/>
+
+            <TextView
+                    android:id="@+id/mainMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+
+                    android:text="@string/templates_this_weeks_calendar_message"
+                    android:textAlignment="textEnd"/>
+
+        </LinearLayout>
+
+        <ImageView
+                android:id="@+id/preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/templates_this_weeks_calendar_preview_description"/>
+
+    </LinearLayout>
 
 </FrameLayout>

@@ -81,6 +81,12 @@
 
     <!-- Strings related to templates 'this week's calendar' fragment -->
     <string name="templates_this_weeks_calendar_title">This week\'s calendar</string>
+    <string name="templates_this_weeks_calendar_preview_description">Preview image</string>
+    <string name="templates_this_weeks_calendar_button_export_text">Export</string>
+    <string name="templates_this_weeks_calendar_message">Export this preview as local template</string>
+    <string name="templates_this_weeks_calendar_preview_title">%dW%d</string>
+    <string name="templates_this_weeks_calendar_preview_weekly_notes">Weekly notes</string>
+    <string name="templates_this_weeks_calendar_preview_export_message">Exported as %s</string>
 
     <!-- Strings related to utils -->
     <string name="util_fluent_unknown">unknown</string>
