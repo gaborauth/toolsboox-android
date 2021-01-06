@@ -12,6 +12,7 @@
             android:label="@string/app_name"
             android:supportsRtl="true"
             android:theme="@style/App.Theme"
+            android:requestLegacyExternalStorage="true"
             android:fullBackupContent="@xml/backup_descriptor">
 
         <meta-data

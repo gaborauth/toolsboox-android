@@ -152,8 +152,8 @@ class PageFragment @Inject constructor(
             val permissionGranted = checkPermissionGranted(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE,
-                getString(R.string.team_drawer_page_external_storage_write_permission_title),
-                getString(R.string.team_drawer_page_external_storage_write_permission_message)
+                getString(R.string.main_write_external_storage_permission_title),
+                getString(R.string.main_write_external_storage_permission_message)
             )
 
             if (permissionGranted) {

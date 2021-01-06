@@ -40,6 +40,10 @@
     <string name="main_version">%s&#8211;%s</string>
     <string name="main_update_not_now">Now now</string>
     <string name="main_update">Update</string>
+    <string name="main_read_external_storage_permission_title">Read storage</string>
+    <string name="main_read_external_storage_permission_message">Read of storage is needed to export content</string>
+    <string name="main_write_external_storage_permission_title">Write storage</string>
+    <string name="main_write_external_storage_permission_message">Write storage is needed to export content</string>
 
     <!-- Strings related to calendar plugin -->
     <string name="calendar_main_title">Calendar</string>
@@ -58,8 +62,6 @@
     <string name="team_drawer_page_text">Welcome in our team drawer! :)</string>
     <string name="team_drawer_page_button_export_text">Export</string>
     <string name="team_drawer_page_button_erase_text">Erase</string>
-    <string name="team_drawer_page_external_storage_write_permission_title">Export pages</string>
-    <string name="team_drawer_page_external_storage_write_permission_message">Write storage is needed to export pages content</string>
     <string name="team_drawer_page_export_message">Exported as %s</string>
     <string name="team_drawer_page_add_new_page_dialog_title">Add page</string>
     <string name="team_drawer_page_add_new_page_dialog_message">Do you want to add a new page?</string>
