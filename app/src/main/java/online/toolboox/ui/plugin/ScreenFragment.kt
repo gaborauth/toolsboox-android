@@ -25,9 +25,14 @@ abstract class ScreenFragment : Fragment() {
     companion object {
 
         /**
+         * Result code of READ_EXTERNAL_STORAGE permission.
+         */
+        const val REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 12345
+
+        /**
          * Result code of WRITE_EXTERNAL_STORAGE permission.
          */
-        const val REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 12345
+        const val REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 12346
     }
 
     init {
@@ -90,7 +95,8 @@ abstract class ScreenFragment : Fragment() {
     open fun showError(t: Throwable?, @StringRes errorResId: Int, parentView: View? = null) {
         t?.let { Timber.e(it, getString(errorResId)) }
 
-        val snackbar = Snackbar.make(parentView?.let { parentView } ?: toolBar.root, errorResId, Snackbar.LENGTH_INDEFINITE)
+        val snackbar =
+            Snackbar.make(parentView?.let { parentView } ?: toolBar.root, errorResId, Snackbar.LENGTH_INDEFINITE)
         snackbar.setAction(R.string.something_happened_action) {}
         snackbar.show()
     }
