@@ -59,6 +59,12 @@ class MainFragment @Inject constructor(
                 "/templates/thisWeeksCalendar"
             )
         )
+        squareItems.add(
+            SquareItem(
+                "Weeks\ncalendar", R.drawable.ic_dashboard_item_calendar,
+                "/templates/weeksCalendar"
+            )
+        )
 
         val clickListener = object : SquareItemAdapter.OnItemClickListener {
             override fun onItemClicked(squareItem: SquareItem) {
