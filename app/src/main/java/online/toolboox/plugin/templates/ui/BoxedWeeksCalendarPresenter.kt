@@ -19,11 +19,11 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 /**
- * Templates 'week's calendar' presenter.
+ * Templates 'boxed week's calendar' presenter.
  *
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
-class WeeksCalendarPresenter @Inject constructor(
+class BoxedWeeksCalendarPresenter @Inject constructor(
     private val templatesService: TemplatesService
 ) : FragmentPresenter() {
     /**
@@ -73,7 +73,7 @@ class WeeksCalendarPresenter @Inject constructor(
                 }
 
                 val rootPath = Environment.getExternalStorageDirectory()
-                val title = "weeks-calendar-${LocalDate.now().year}.pdf"
+                val title = "boxed-weeks-calendar-${LocalDate.now().year}.pdf"
                 val filename = "$rootPath/noteTemplate/$title"
                 try {
                     FileOutputStream(filename).use { out -> doc.writeTo(out) }

@@ -20,7 +20,7 @@ import javax.inject.Inject
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 class WeeksCalendarFragment @Inject constructor(
-    private val presenter: WeeksCalendarPresenter,
+    private val presenter: BoxedWeeksCalendarPresenter,
     private val router: Router
 ) : ScreenFragment() {
 
