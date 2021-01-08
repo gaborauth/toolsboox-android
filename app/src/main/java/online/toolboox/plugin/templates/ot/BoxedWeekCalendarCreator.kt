@@ -13,16 +13,16 @@ import java.time.temporal.WeekFields
 import java.util.*
 
 /**
- * Create page fragment of 'week's calendar'.
+ * Create boxed week of year calendar template.
  *
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
-class WeekCalendarCreator {
+class BoxedWeekCalendarCreator {
 
     companion object {
 
         /**
-         * Draw the page of the weekly calendar.
+         * Draw the page of the boxed weeks of year calendar.
          *
          * @param context the context
          * @param canvas the canvas
@@ -58,7 +58,7 @@ class WeekCalendarCreator {
         }
 
         /**
-         * Draw one day of week.
+         * Draw one day of week box.
          *
          * @param context the context
          * @param canvas the canvas

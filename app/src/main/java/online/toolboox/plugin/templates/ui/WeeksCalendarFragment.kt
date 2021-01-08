@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import online.toolboox.R
 import online.toolboox.databinding.FragmentTemplatesWeeksCalendarBinding
-import online.toolboox.plugin.templates.ot.WeekCalendarCreator
+import online.toolboox.plugin.templates.ot.BoxedWeekCalendarCreator
 import online.toolboox.ui.plugin.Router
 import online.toolboox.ui.plugin.ScreenFragment
 import java.time.LocalDate
@@ -116,7 +116,7 @@ class WeeksCalendarFragment @Inject constructor(
 
         val localDate = LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1)
         val weekOfYear = localDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
-        WeekCalendarCreator.drawPage(
+        BoxedWeekCalendarCreator.drawPage(
             this.requireContext(),
             canvas,
             weekOfYear.toLong() - 1,

@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import online.toolboox.R
 import online.toolboox.databinding.FragmentTemplatesWeeksCalendarBinding
 import online.toolboox.plugin.templates.nw.TemplatesService
-import online.toolboox.plugin.templates.ot.WeekCalendarCreator
+import online.toolboox.plugin.templates.ot.BoxedWeekCalendarCreator
 import online.toolboox.ui.plugin.FragmentPresenter
 import online.toolboox.ui.plugin.ScreenFragment
 import java.io.FileOutputStream
@@ -63,7 +63,7 @@ class WeeksCalendarPresenter @Inject constructor(
                 for (p in 0L..52L) {
                     val pageInfo = PdfDocument.PageInfo.Builder(1404, 1872, p.toInt() + 1).create()
                     val page = doc.startPage(pageInfo)
-                    WeekCalendarCreator.drawPage(
+                    BoxedWeekCalendarCreator.drawPage(
                         fragment.requireContext(),
                         page.canvas,
                         p,
