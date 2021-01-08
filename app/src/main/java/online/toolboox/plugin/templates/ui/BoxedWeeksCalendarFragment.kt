@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
 import online.toolboox.R
-import online.toolboox.databinding.FragmentTemplatesWeeksCalendarBinding
+import online.toolboox.databinding.FragmentTemplatesBoxedWeeksCalendarBinding
 import online.toolboox.plugin.templates.ot.BoxedWeekCalendarCreator
 import online.toolboox.ui.plugin.Router
 import online.toolboox.ui.plugin.ScreenFragment
@@ -27,12 +27,12 @@ class BoxedWeeksCalendarFragment @Inject constructor(
     /**
      * The inflated layout.
      */
-    override val view = R.layout.fragment_templates_weeks_calendar
+    override val view = R.layout.fragment_templates_boxed_weeks_calendar
 
     /**
      * The view binding.
      */
-    private lateinit var binding: FragmentTemplatesWeeksCalendarBinding
+    private lateinit var binding: FragmentTemplatesBoxedWeeksCalendarBinding
 
     /**
      * The canvas of the template.
@@ -53,7 +53,7 @@ class BoxedWeeksCalendarFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentTemplatesWeeksCalendarBinding.bind(view)
+        binding = FragmentTemplatesBoxedWeeksCalendarBinding.bind(view)
 
         binding.buttonPreview.isChecked = true
         binding.buttonPreview.setOnClickListener {
@@ -90,7 +90,7 @@ class BoxedWeeksCalendarFragment @Inject constructor(
         super.onResume()
 
         toolBar.root.title = getString(R.string.drawer_title)
-            .format(getString(R.string.app_name), getString(R.string.templates_weeks_calendar_title))
+            .format(getString(R.string.app_name), getString(R.string.templates_boxed_weeks_calendar_title))
     }
 
     /**

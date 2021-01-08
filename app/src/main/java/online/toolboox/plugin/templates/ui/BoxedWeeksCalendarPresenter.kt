@@ -8,7 +8,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import online.toolboox.R
-import online.toolboox.databinding.FragmentTemplatesWeeksCalendarBinding
+import online.toolboox.databinding.FragmentTemplatesBoxedWeeksCalendarBinding
 import online.toolboox.plugin.templates.nw.TemplatesService
 import online.toolboox.plugin.templates.ot.BoxedWeekCalendarCreator
 import online.toolboox.ui.plugin.FragmentPresenter
@@ -32,7 +32,7 @@ class BoxedWeeksCalendarPresenter @Inject constructor(
      * @param fragment the fragment
      * @param binding the data binding
      */
-    fun export(fragment: BoxedWeeksCalendarFragment, binding: FragmentTemplatesWeeksCalendarBinding) {
+    fun export(fragment: BoxedWeeksCalendarFragment, binding: FragmentTemplatesBoxedWeeksCalendarBinding) {
         val readPermissionGranted = fragment.checkPermissionGranted(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             ScreenFragment.REQUEST_PERMISSION_READ_EXTERNAL_STORAGE,
@@ -79,7 +79,7 @@ class BoxedWeeksCalendarPresenter @Inject constructor(
                     FileOutputStream(filename).use { out -> doc.writeTo(out) }
                     withContext(Dispatchers.Main) {
                         binding.exportMessage.text =
-                            fragment.getString(R.string.templates_weeks_calendar_preview_export_message, title)
+                            fragment.getString(R.string.templates_boxed_weeks_calendar_preview_export_message, title)
                     }
                     doc.close()
                 } catch (e: IOException) {

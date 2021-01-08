@@ -86,6 +86,16 @@
     <string name="templates_week_calendar_creator_title">%dW%d</string>
     <string name="templates_week_calendar_creator_weekly_notes">Weekly notes</string>
 
+    <!-- Strings related to templates 'boxed week's calendar' fragment -->
+    <string name="templates_boxed_weeks_calendar_title">Boxed weeks of year calendar template</string>
+    <string name="templates_boxed_weeks_calendar_preview_description">Preview image</string>
+    <string name="templates_boxed_weeks_calendar_button_export_text">Export</string>
+    <string name="templates_boxed_weeks_calendar_message">Export this preview as multi-page local PDF template</string>
+    <string name="templates_boxed_weeks_calendar_preview_export_message">Exported as %s</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_message">Layout of days in the week:</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_vertical">Vertical</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_horizontal">Horizontal</string>
+
     <!-- Strings related to templates 'this week's calendar' fragment -->
     <string name="templates_this_weeks_calendar_title">This week\'s calendar</string>
     <string name="templates_this_weeks_calendar_preview_description">Preview image</string>
@@ -94,15 +104,6 @@
     <string name="templates_this_weeks_calendar_preview_title">%dW%d</string>
     <string name="templates_this_weeks_calendar_preview_weekly_notes">Weekly notes</string>
     <string name="templates_this_weeks_calendar_preview_export_message">Exported as %s</string>
-
-    <!-- Strings related to templates 'week's calendar' fragment -->
-    <string name="templates_weeks_calendar_title">Weeks of year calendar template</string>
-    <string name="templates_weeks_calendar_preview_description">Preview image</string>
-    <string name="templates_weeks_calendar_button_export_text">Export</string>
-    <string name="templates_weeks_calendar_message">Export this preview as multi-page local PDF template</string>
-    <string name="templates_weeks_calendar_preview_export_message">Exported as %s</string>
-    <string name="templates_weeks_calendar_settings_vertical_button_text">Vertical days layout</string>
-    <string name="templates_weeks_calendar_settings_horizontal_button_text">Horizontal days layout</string>
 
     <!-- Strings related to utils -->
     <string name="util_fluent_unknown">unknown</string>
