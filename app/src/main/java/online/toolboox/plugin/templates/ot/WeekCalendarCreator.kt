@@ -21,22 +21,42 @@ class WeekCalendarCreator {
 
     companion object {
 
-        fun drawPage(context: Context, canvas:Canvas, we: Long) {
+        /**
+         * Draw the page of the weekly calendar.
+         *
+         * @param context the context
+         * @param canvas the canvas
+         * @param we the week of year
+         * @param vertical the vertical day layout flag
+         */
+        fun drawPage(context: Context, canvas: Canvas, we: Long, vertical: Boolean) {
             val fillPaint = Paint()
             fillPaint.style = Paint.Style.FILL
             fillPaint.color = Color.WHITE
 
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, fillPaint)
 
-            drawCalendarRect(context, canvas, 0, 0, we, 0)
-            drawCalendarRect(context, canvas, 0, 1, we, 1)
-            drawCalendarRect(context, canvas, 0, 2, we, 2)
-            drawCalendarRect(context, canvas, 0, 3, we, 3)
-            drawCalendarRect(context, canvas, 1, 0, we, 4)
-            drawCalendarRect(context, canvas, 1, 1, we, 5)
-            drawCalendarRect(context, canvas, 1, 2, we, 6)
-            drawCalendarRect(context, canvas, 1, 3, we, 7)
+            if (vertical) {
+                drawCalendarRect(context, canvas, 0, 0, we, 0)
+                drawCalendarRect(context, canvas, 0, 1, we, 1)
+                drawCalendarRect(context, canvas, 0, 2, we, 2)
+                drawCalendarRect(context, canvas, 0, 3, we, 3)
+                drawCalendarRect(context, canvas, 1, 0, we, 4)
+                drawCalendarRect(context, canvas, 1, 1, we, 5)
+                drawCalendarRect(context, canvas, 1, 2, we, 6)
+                drawCalendarRect(context, canvas, 1, 3, we, 7)
+            } else {
+                drawCalendarRect(context, canvas, 0, 0, we, 0)
+                drawCalendarRect(context, canvas, 1, 0, we, 1)
+                drawCalendarRect(context, canvas, 0, 1, we, 2)
+                drawCalendarRect(context, canvas, 1, 1, we, 3)
+                drawCalendarRect(context, canvas, 0, 2, we, 4)
+                drawCalendarRect(context, canvas, 1, 2, we, 5)
+                drawCalendarRect(context, canvas, 0, 3, we, 6)
+                drawCalendarRect(context, canvas, 1, 3, we, 7)
+            }
         }
+
         /**
          * Draw one day of week.
          *
@@ -54,8 +74,6 @@ class WeekCalendarCreator {
             val he = 400.0f // Height
             val hg = 44.0f // Horizontal gap
             val vg = 43.0f // Vertical gap
-
-
 
             val fillPaint = Paint()
             fillPaint.style = Paint.Style.FILL

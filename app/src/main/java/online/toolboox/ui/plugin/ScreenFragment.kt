@@ -166,7 +166,7 @@ abstract class ScreenFragment : Fragment() {
      * @param message the message of the request dialog
      * @return true, if the permission is granted
      */
-    protected fun checkPermissionGranted(
+    fun checkPermissionGranted(
         permissionName: String,
         permissionRequestCode: Int,
         title: String,

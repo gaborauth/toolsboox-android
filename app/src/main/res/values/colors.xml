@@ -12,6 +12,9 @@
     <color name="item_text_secondary">#111111</color>
     <color name="item_text_tertiary">#4285f4</color>
 
+    <color name="fgColor">#000000</color>
+    <color name="bgColor">#FFFFFF</color>
+
     <color name="fabBgColor">#FF0000</color>
     <color name="fabFgColor">#FFFFFF</color>
     <color name="starColor">@color/colorPrimary</color>

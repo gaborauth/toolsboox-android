@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <layer-list>
+            <item>
+                <color android:color="@color/fgColor"/>
+            </item>
+            <item android:bottom="2dp" android:drawable="@color/bgColor"/>
+        </layer-list>
+    </item>
+    <item android:state_checked="false">
+        <layer-list>
+            <item>
+                <color android:color="@color/fgColor"/>
+            </item>
+            <item android:bottom="0dp" android:drawable="@color/bgColor"/>
+        </layer-list>
+    </item>
+</selector>
