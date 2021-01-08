@@ -32,7 +32,7 @@ class BoxedWeeksCalendarPresenter @Inject constructor(
      * @param fragment the fragment
      * @param binding the data binding
      */
-    fun export(fragment: WeeksCalendarFragment, binding: FragmentTemplatesWeeksCalendarBinding) {
+    fun export(fragment: BoxedWeeksCalendarFragment, binding: FragmentTemplatesWeeksCalendarBinding) {
         val readPermissionGranted = fragment.checkPermissionGranted(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             ScreenFragment.REQUEST_PERMISSION_READ_EXTERNAL_STORAGE,

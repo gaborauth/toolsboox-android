@@ -15,11 +15,11 @@ import java.util.*
 import javax.inject.Inject
 
 /**
- * Templates 'week's calendar' fragment.
+ * Templates 'boxed week's calendar' fragment.
  *
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
-class WeeksCalendarFragment @Inject constructor(
+class BoxedWeeksCalendarFragment @Inject constructor(
     private val presenter: BoxedWeeksCalendarPresenter,
     private val router: Router
 ) : ScreenFragment() {
