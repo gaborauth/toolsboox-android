@@ -6,6 +6,7 @@ import online.toolboox.plugin.templates.di.TemplatesServiceModule
 import online.toolboox.plugin.templates.ui.MainFragment
 import online.toolboox.plugin.templates.ui.ThisWeeksCalendarFragment
 import online.toolboox.plugin.templates.ui.BoxedWeeksCalendarFragment
+import online.toolboox.plugin.templates.ui.FlatWeeksCalendarFragment
 import javax.inject.Singleton
 
 /**
@@ -26,5 +27,6 @@ interface TemplatesComponent {
     fun mainFragment(): MainFragment
 
     fun boxedWeeksCalendarFragment(): BoxedWeeksCalendarFragment
+    fun flatWeeksCalendarFragment(): FlatWeeksCalendarFragment
     fun thisWeeksCalendarFragment(): ThisWeeksCalendarFragment
 }

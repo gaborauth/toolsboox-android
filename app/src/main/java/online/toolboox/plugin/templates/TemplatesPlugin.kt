@@ -26,6 +26,9 @@ class TemplatesPlugin(private val router: Router) : Plugin {
         router.getParameters("/templates/boxedWeeksCalendar", url).let {
             if (it is Router.Parameters.Match) return component.boxedWeeksCalendarFragment().setParameters(it.parameters)
         }
+        router.getParameters("/templates/flatWeeksCalendar", url).let {
+            if (it is Router.Parameters.Match) return component.flatWeeksCalendarFragment().setParameters(it.parameters)
+        }
         router.getParameters("/templates/thisWeeksCalendar", url).let {
             if (it is Router.Parameters.Match) return component.thisWeeksCalendarFragment().setParameters(it.parameters)
         }
