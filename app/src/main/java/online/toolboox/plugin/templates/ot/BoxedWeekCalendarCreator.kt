@@ -119,14 +119,14 @@ class BoxedWeekCalendarCreator {
 
                 textPaint.textSize = 80.0f
                 canvas.drawText(
-                    context.getString(R.string.templates_week_calendar_creator_title, year, weekOfYear),
+                    context.getString(R.string.templates_boxed_week_calendar_creator_title, year, weekOfYear),
                     100.0f, 80.0f,
                     textPaint
                 )
 
                 textPaint.textSize = 40.0f
                 canvas.drawText(
-                    context.getString(R.string.templates_week_calendar_creator_weekly_notes),
+                    context.getString(R.string.templates_boxed_week_calendar_creator_weekly_notes),
                     le + xo * (wi + hg) + 10.0f, to + yo * (he + vg) + 40.0f,
                     textPaint
                 )
