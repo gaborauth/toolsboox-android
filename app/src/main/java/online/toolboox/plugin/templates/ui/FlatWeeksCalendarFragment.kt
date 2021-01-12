@@ -76,6 +76,8 @@ class FlatWeeksCalendarFragment @Inject constructor(
             presenter.export(this, binding)
         }
 
+        binding.withDays.isChecked = true
+
         binding.preview.post {
             createPreview()
         }
@@ -117,7 +119,10 @@ class FlatWeeksCalendarFragment @Inject constructor(
         FlatWeekCalendarCreator.drawPage(
             this.requireContext(),
             canvas,
-            weekOfYear.toLong() - 1
+            weekOfYear.toLong() - 1,
+            0.5f,
+            binding.withDays.isChecked
+
         )
 
         binding.preview.setImageBitmap(bitmap)

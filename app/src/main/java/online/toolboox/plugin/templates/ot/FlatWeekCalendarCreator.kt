@@ -28,8 +28,9 @@ class FlatWeekCalendarCreator {
          * @param canvas the canvas
          * @param we the week of year
          * @param wr the width ratio of the vertical line (default 0.5f)
+         * @param wd generate with days
          */
-        fun drawPage(context: Context, canvas: Canvas, we: Long, wr: Float = 0.5f) {
+        fun drawPage(context: Context, canvas: Canvas, we: Long, wr: Float, wd: Boolean) {
             val fillPaint = Paint()
             fillPaint.style = Paint.Style.FILL
             fillPaint.color = Color.WHITE
@@ -57,11 +58,13 @@ class FlatWeekCalendarCreator {
             val weekOfYear = localDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
 
             textPaint.textSize = 80.0f
-            canvas.drawText(
-                context.getString(R.string.templates_flat_week_calendar_creator_title, year, weekOfYear),
-                100.0f, 80.0f,
-                textPaint
-            )
+            if (wd) {
+                canvas.drawText(
+                    context.getString(R.string.templates_flat_week_calendar_creator_title, year, weekOfYear),
+                    100.0f, 80.0f,
+                    textPaint
+                )
+            }
 
             linePaint.strokeWidth = 2.0f
             linePaint.color = Color.argb(0.2f, 0.5f, 0.5f, 0.5f)
@@ -84,7 +87,9 @@ class FlatWeekCalendarCreator {
                 canvas.drawText(dayFormat, le + 10.0f, to + (i - 1) * he + 40.0f, textPaint)
 
                 textPaint.textAlign = Paint.Align.RIGHT
-                canvas.drawText(dateFormat, le + wi - 10.0f, to + (i - 1) * he + 40.0f, textPaint)
+                if (wd) {
+                    canvas.drawText(dateFormat, le + wi - 10.0f, to + (i - 1) * he + 40.0f, textPaint)
+                }
                 textPaint.textAlign = Paint.Align.LEFT
             }
 

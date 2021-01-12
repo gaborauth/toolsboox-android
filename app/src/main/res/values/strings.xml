@@ -100,9 +100,7 @@
     <string name="templates_flat_weeks_calendar_button_export_text">Export</string>
     <string name="templates_flat_weeks_calendar_message">Export this preview as multi-page local PDF template</string>
     <string name="templates_flat_weeks_calendar_preview_export_message">Exported as %s</string>
-    <string name="templates_flat_weeks_calendar_settings_days_layout_message">Layout of days in the week:</string>
-    <string name="templates_flat_weeks_calendar_settings_days_layout_vertical">Vertical</string>
-    <string name="templates_flat_weeks_calendar_settings_days_layout_horizontal">Horizontal</string>
+    <string name="templates_flat_weeks_calendar_settings_with_days">Generate with dates</string>
     <string name="templates_flat_week_calendar_creator_title">%dW%d</string>
 
     <!-- Strings related to templates 'this week's calendar' fragment -->

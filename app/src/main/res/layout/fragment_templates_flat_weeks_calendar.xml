@@ -93,6 +93,14 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
+            <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/withDays"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/templates_flat_weeks_calendar_settings_with_days">
+
+            </com.google.android.material.checkbox.MaterialCheckBox>
         </LinearLayout>
 
         <LinearLayout

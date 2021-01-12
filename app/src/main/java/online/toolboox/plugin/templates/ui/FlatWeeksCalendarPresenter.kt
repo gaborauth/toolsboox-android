@@ -66,7 +66,9 @@ class FlatWeeksCalendarPresenter @Inject constructor(
                     FlatWeekCalendarCreator.drawPage(
                         fragment.requireContext(),
                         page.canvas,
-                        p
+                        p,
+                        0.5f,
+                        binding.withDays.isChecked
                     )
                     doc.finishPage(page)
                 }
