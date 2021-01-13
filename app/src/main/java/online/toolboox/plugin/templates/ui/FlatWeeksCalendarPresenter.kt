@@ -68,7 +68,7 @@ class FlatWeeksCalendarPresenter @Inject constructor(
                         page.canvas,
                         p,
                         0.5f,
-                        binding.withDays.isChecked
+                        binding.settingsWithDays.isChecked
                     )
                     doc.finishPage(page)
                 }

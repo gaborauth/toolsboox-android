@@ -76,7 +76,7 @@ class FlatWeeksCalendarFragment @Inject constructor(
             presenter.export(this, binding)
         }
 
-        binding.withDays.isChecked = true
+        binding.settingsWithDays.isChecked = true
 
         binding.preview.post {
             createPreview()
@@ -121,7 +121,7 @@ class FlatWeeksCalendarFragment @Inject constructor(
             canvas,
             weekOfYear.toLong() - 1,
             0.5f,
-            binding.withDays.isChecked
+            binding.settingsWithDays.isChecked
 
         )
 
