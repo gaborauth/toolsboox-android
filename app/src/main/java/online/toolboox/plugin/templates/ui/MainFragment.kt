@@ -55,6 +55,12 @@ class MainFragment @Inject constructor(
         val squareItems = mutableListOf<SquareItem>()
         squareItems.add(
             SquareItem(
+                "Boxed days\ncalendar", R.drawable.ic_dashboard_item_calendar,
+                "/templates/boxedDaysCalendar"
+            )
+        )
+        squareItems.add(
+            SquareItem(
                 "Boxed weeks\ncalendar", R.drawable.ic_dashboard_item_calendar,
                 "/templates/boxedWeeksCalendar"
             )

@@ -3,10 +3,7 @@ package online.toolboox.plugin.templates
 import dagger.Component
 import online.toolboox.di.NetworkModule
 import online.toolboox.plugin.templates.di.TemplatesServiceModule
-import online.toolboox.plugin.templates.ui.MainFragment
-import online.toolboox.plugin.templates.ui.ThisWeeksCalendarFragment
-import online.toolboox.plugin.templates.ui.BoxedWeeksCalendarFragment
-import online.toolboox.plugin.templates.ui.FlatWeeksCalendarFragment
+import online.toolboox.plugin.templates.ui.*
 import javax.inject.Singleton
 
 /**
@@ -26,6 +23,7 @@ interface TemplatesComponent {
     fun inject(plugin: TemplatesPlugin)
     fun mainFragment(): MainFragment
 
+    fun boxedDaysCalendarFragment(): BoxedDaysCalendarFragment
     fun boxedWeeksCalendarFragment(): BoxedWeeksCalendarFragment
     fun flatWeeksCalendarFragment(): FlatWeeksCalendarFragment
     fun thisWeeksCalendarFragment(): ThisWeeksCalendarFragment

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <ProgressBar
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:id="@+id/mainProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="-7dp"
+                android:indeterminate="true"
+                android:visibility="invisible"
+
+                tools:visibility="visible"/>
+
+        <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="0dp">
+
+            <RadioButton
+                    android:id="@+id/buttonPreview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/templates_preview_button_text"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:button="@null"
+                    android:background="@drawable/selector_tabbed_radio_button"/>
+
+            <RadioButton
+                    android:id="@+id/buttonSettings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/templates_settings_button_text"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:button="@null"
+                    android:background="@drawable/selector_tabbed_radio_button"/>
+
+            <RadioButton
+                    android:id="@+id/buttonExport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/templates_export_button_text"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:button="@null"
+                    android:background="@drawable/selector_tabbed_radio_button"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:id="@+id/previewPane"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <ImageView
+                    android:id="@+id/preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/templates_boxed_days_calendar_preview_description"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/settingsPane"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/settingsWithNotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/templates_boxed_days_calendar_settings_with_notes">
+
+            </com.google.android.material.checkbox.MaterialCheckBox>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/settingsWithTasks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/templates_boxed_days_calendar_settings_with_tasks">
+
+            </com.google.android.material.checkbox.MaterialCheckBox>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/settingsWithHours"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/templates_boxed_days_calendar_settings_with_hours">
+
+            </com.google.android.material.checkbox.MaterialCheckBox>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/exportPane"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+            <TextView
+                    android:id="@+id/exportMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="20sp"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>
