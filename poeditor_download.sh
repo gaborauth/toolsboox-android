@@ -11,12 +11,13 @@ do
   then
     echo "Skip \"en\"..."
   else
+    VALUESDIRNAME=`echo $i | sed -e 's/\-\(.*\)/'-r'\U\1/'`
     JSON=`curl -s -X POST https://api.poeditor.com/v2/projects/export -d api_token="$1" -d id="403165" -d language="$i" -d type="android_strings" -d filters="translated"`
     echo "Export URL of $i: $JSON"
     URL=`echo $JSON | jq -r .result.url`
-    mkdir -p app/src/main/res/values-$i
-    curl -s $URL --output app/src/main/res/values-$i/strings.xml
-    echo "Saved to app/src/main/res/values-$i/strings.xml"
+    mkdir -p app/src/main/res/values-$VALUESDIRNAME
+    curl -s $URL --output app/src/main/res/values-$VALUESDIRNAME/strings.xml
+    echo "Saved to app/src/main/res/values-$VALUESDIRNAME/strings.xml"
     echo ""
   fi
 done
