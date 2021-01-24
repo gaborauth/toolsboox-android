@@ -33,6 +33,11 @@ object NetworkModule {
     private const val SERVICE_BASE_URL = "https://api.toolboox.online/"
 
     /**
+     * Base URL of GitHub raw.
+     */
+    private const val GITHUB_BASE_URL = "https://raw.githubusercontent.com/gaborauth/toolboox/main/"
+
+    /**
      * Provides the OkHttpClient.
      *
      * @return the client
@@ -104,6 +109,24 @@ object NetworkModule {
     }
 
     /**
+     * Provides the Retrofit instance with GSON converter of GitHub RAW.
+     *
+     * @param okHttpClient the OkHttpClient instance
+     * @return the instance
+     */
+    @Provides
+    @Singleton
+    @Named("gitHubRaw")
+    fun provideGitHubRawRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .baseUrl(GITHUB_BASE_URL)
+            .client(okHttpClient)
+            .build()
+    }
+
+    /**
      * Provides the Retrofit instance with GSON converter.
      *
      * @param okHttpClient the OkHttpClient instance
@@ -111,7 +134,7 @@ object NetworkModule {
      */
     @Provides
     @Singleton
-    fun provideCoroutineRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
+    fun provideGsonRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
