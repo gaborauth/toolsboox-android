@@ -67,6 +67,12 @@ class MainFragment @Inject constructor(
         )
         squareItems.add(
             SquareItem(
+                "Community\ntemplates", R.drawable.ic_community_templates,
+                "/templates/community"
+            )
+        )
+        squareItems.add(
+            SquareItem(
                 "Flat weeks\ncalendar", R.drawable.ic_dashboard_item_calendar,
                 "/templates/flatWeeksCalendar"
             )

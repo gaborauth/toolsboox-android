@@ -78,6 +78,7 @@
 
     <!-- Strings related to templates plugin -->
     <string name="templates_main_title">Templates</string>
+    <string name="templates_list_button_text">List</string>
     <string name="templates_preview_button_text">Preview</string>
     <string name="templates_settings_button_text">Settings</string>
     <string name="templates_export_button_text">Export</string>
@@ -106,6 +107,9 @@
     <string name="templates_boxed_weeks_calendar_settings_days_layout_horizontal">Horizontal</string>
     <string name="templates_boxed_week_calendar_creator_title">%dW%d</string>
     <string name="templates_boxed_week_calendar_creator_weekly_notes">Weekly notes</string>
+
+    <!-- Strings related to templates 'community' fragment -->
+    <string name="templates_community_title">Community templates</string>
 
     <!-- Strings related to templates 'flat week's calendar' fragment -->
     <string name="templates_flat_weeks_calendar_title">Flat weeks of year calendar template</string>

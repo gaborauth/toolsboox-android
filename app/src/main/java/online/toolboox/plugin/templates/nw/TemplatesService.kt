@@ -1,8 +1,22 @@
 package online.toolboox.plugin.templates.nw
 
+import kotlinx.coroutines.Deferred
+import online.toolboox.plugin.templates.da.CommunityTemplate
+import retrofit2.Response
+import retrofit2.http.GET
+
 /**
  * Templates service interface.
  *
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
-interface TemplatesService
+interface TemplatesService {
+    /**
+     * List the community templates.
+     *
+     * @return the list of templates
+     */
+    @GET(value = "communityTemplates.json")
+    fun listAsync(
+    ): Deferred<Response<List<CommunityTemplate>>>
+}

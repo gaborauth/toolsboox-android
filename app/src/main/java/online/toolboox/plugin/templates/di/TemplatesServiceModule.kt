@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.Reusable
 import online.toolboox.plugin.templates.nw.TemplatesService
 import retrofit2.Retrofit
+import javax.inject.Named
 
 /**
  * Templates service module, provides services.
@@ -21,7 +22,7 @@ object TemplatesServiceModule {
      */
     @Provides
     @Reusable
-    fun provideTemplatesService(retrofit: Retrofit): TemplatesService {
+    fun provideTemplatesService(@Named("gitHubRaw") retrofit: Retrofit): TemplatesService {
         return retrofit.create(TemplatesService::class.java)
     }
 }

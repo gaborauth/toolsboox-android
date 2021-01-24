@@ -25,6 +25,7 @@ interface TemplatesComponent {
 
     fun boxedDaysCalendarFragment(): BoxedDaysCalendarFragment
     fun boxedWeeksCalendarFragment(): BoxedWeeksCalendarFragment
+    fun communityFragment(): CommunityFragment
     fun flatWeeksCalendarFragment(): FlatWeeksCalendarFragment
     fun thisWeeksCalendarFragment(): ThisWeeksCalendarFragment
 }
