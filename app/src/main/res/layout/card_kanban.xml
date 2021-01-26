@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        android:id="@+id/widget_Layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="fill"
+        android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/card_edge">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/card_content">
+
+            <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <ImageView
+                        android:id="@+id/settingsButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|top"
+                        android:contentDescription="@string/dashboard_item_settings_alt"
+
+                        app:tint="@color/colorPrimaryDark"
+                        app:srcCompat="@drawable/ic_more_vert"/>
+
+                <ImageView
+                        android:id="@+id/editButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|top"
+                        android:layout_marginEnd="24dp"
+                        android:contentDescription="@string/dashboard_item_edit_alt"
+
+                        app:tint="@color/colorPrimaryDark"
+                        app:srcCompat="@drawable/ic_edit"/>
+
+                <TextView
+                        android:id="@+id/dueDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="48dp"
+                        android:tint="@color/colorPrimaryDark"
+
+                        android:text="in a day and three hours"
+                        android:textAlignment="textStart"
+                        android:textSize="12sp"
+                        android:textStyle="normal"
+                        android:singleLine="true"
+                        android:ellipsize="middle"/>
+
+            </FrameLayout>
+
+            <ImageView
+                    android:id="@+id/cardPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/kanban_planner_card_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -75,6 +75,12 @@ class DashboardFragment @Inject constructor(
                 "/teamDrawer"
             )
         )
+        squareItems.add(
+            SquareItem(
+                "Kanban\nplanner", R.drawable.ic_dashboard_item_kanban,
+                "/kanbanPlanner"
+            )
+        )
 
         val clickListener = object : SquareItemAdapter.OnItemClickListener {
             override fun onItemClicked(squareItem: SquareItem) {

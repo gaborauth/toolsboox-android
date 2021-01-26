@@ -1,6 +1,7 @@
 package online.toolboox.ui.main
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
@@ -218,9 +219,26 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
+            orientateFragment(null)
         } else {
             super.onBackPressed()
         }
+    }
+
+    /**
+     * Orientate the fragment by name.
+     *
+     * @param fragment the fragment
+     */
+    private fun orientateFragment(fragment: Fragment?) {
+        if (fragment is online.toolboox.plugin.kanban.ui.MainFragment) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            Timber.i("Sensor landscape: ${fragment.javaClass.name}")
+            return
+        }
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+        Timber.i("Sensor portrait: ${fragment?.javaClass?.name}")
     }
 
     /**
@@ -250,5 +268,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         }
         transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
         transaction.commit()
+
+        orientateFragment(fragment)
     }
 }
