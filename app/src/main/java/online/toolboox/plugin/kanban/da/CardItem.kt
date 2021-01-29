@@ -1,12 +1,15 @@
 package online.toolboox.plugin.kanban.da
 
+import online.toolboox.plugin.teamdrawer.nw.domain.Stroke
+import java.util.*
+
 /**
  * Card item data class.
  *
  * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
  */
 data class CardItem(
-    var id: String,
+    var id: UUID,
     var version: Int,
-    val content: String
+    val strokes: MutableList<Stroke>,
 )
