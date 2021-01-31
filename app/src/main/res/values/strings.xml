@@ -54,7 +54,9 @@
     <string name="dashboard_new_version_title">New version</string>
     <string name="dashboard_new_version_message">There is a new version of ToolBoox available, please upgrade it unless some functions may not work.</string>
     <string name="dashboard_item_cancel_alt">Cancel</string>
+    <string name="dashboard_item_delete_alt">Delete</string>
     <string name="dashboard_item_edit_alt">Edit</string>
+    <string name="dashboard_item_erase_alt">Erase</string>
     <string name="dashboard_item_save_alt">Save</string>
     <string name="dashboard_item_settings_alt">Settings</string>
 

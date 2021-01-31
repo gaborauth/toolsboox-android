@@ -11,5 +11,8 @@ import java.util.*
 data class CardItem(
     var id: UUID,
     var version: Int,
+
+    var lane: Int,
+    var position: Int,
     val strokes: MutableList<Stroke>,
 )

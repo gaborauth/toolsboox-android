@@ -10,12 +10,14 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.GestureDetectorCompat
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.pen.TouchHelper
-import kotlinx.coroutines.*
 import online.toolboox.R
 import online.toolboox.databinding.FragmentKanbanMainBinding
+import online.toolboox.ot.DeepCopy
 import online.toolboox.ot.OnGestureListener
 import online.toolboox.ot.PenRawInputCallback
 import online.toolboox.plugin.kanban.da.CardItem
+import online.toolboox.plugin.teamdrawer.nw.domain.Stroke
+import online.toolboox.plugin.teamdrawer.nw.domain.StrokePoint
 import online.toolboox.ui.plugin.Router
 import online.toolboox.ui.plugin.ScreenFragment
 import timber.log.Timber
@@ -43,28 +45,15 @@ class MainFragment @Inject constructor(
     private lateinit var binding: FragmentKanbanMainBinding
 
     /**
-     * The card items on the five lane.
-     */
-    private val cardAllBacklog = mutableListOf<CardItem>()
-    private val cardBacklog = mutableListOf<CardItem>()
-    private val cardToday = mutableListOf<CardItem>()
-    private val cardTodayDone = mutableListOf<CardItem>()
-    private val cardAllDone = mutableListOf<CardItem>()
-
-    /**
      * The current card.
      */
     private var currentCard: CardItem? = null
 
     /**
-     * Map of card views by id.
+     * Map of card items and views by id.
      */
-    private val cardsById: MutableMap<UUID, CardView> = mutableMapOf()
-
-    /**
-     * The timer job.
-     */
-    private lateinit var timer: Job
+    private val cardsById: MutableMap<UUID, CardItem> = mutableMapOf()
+    private val cardViewsById: MutableMap<UUID, CardView> = mutableMapOf()
 
     /**
      * The width of the screen.
@@ -92,14 +81,24 @@ class MainFragment @Inject constructor(
     private val laneTitles = mutableListOf<TextView>()
 
     /**
-     * The bitmap of the canvas.
+     * The bitmap of the preview canvas.
      */
-    private lateinit var bitmap: Bitmap
+    private lateinit var previewBitmap: Bitmap
 
     /**
-     * The canvas of the surface view.
+     * The canvas of the card preview.
      */
-    private lateinit var canvas: Canvas
+    private lateinit var previewCanvas: Canvas
+
+    /**
+     * The bitmap of the edit canvas.
+     */
+    private lateinit var editBitmap: Bitmap
+
+    /**
+     * The canvas of the card edit.
+     */
+    private lateinit var editCanvas: Canvas
 
     /**
      * The pen raw input callback class.
@@ -158,31 +157,69 @@ class MainFragment @Inject constructor(
             gridSize = (width / 9.0f).toInt()
 
             surfaceView = createEditCard()
-            callback = PenRawInputCallback(null, null)
+            callback = PenRawInputCallback(penCallback, eraseCallback)
             touchHelper = TouchHelper.create(binding.drawLayout, callback)
             initializeSurface()
 
-            cardBacklog.forEachIndexed { position, it -> createCard(0, position, it) }
-            cardToday.forEachIndexed { position, it -> createCard(1, position, it) }
-            cardTodayDone.forEachIndexed { position, it -> createCard(2, position, it) }
+            createLaneTitle(0, "Due soon backlog (x)")
+            createLaneTitle(1, "Planned today (x)")
+            createLaneTitle(2, "Done today (x)")
 
-            createLaneTitle(0, "Due soon backlog (${cardBacklog.size})")
-            createLaneTitle(1, "Planned today (${cardToday.size})")
-            createLaneTitle(2, "Done today (${cardTodayDone.size})")
+            presenter.loadLocal(this)
         }
 
         gestureListener = OnGestureListener()
         gestureDetector = GestureDetectorCompat(requireActivity(), gestureListener)
+    }
 
-        cardBacklog.add(CardItem(UUID.randomUUID(), 1, mutableListOf()))
-        cardBacklog.add(CardItem(UUID.randomUUID(), 1, mutableListOf()))
-        cardBacklog.add(CardItem(UUID.randomUUID(), 1, mutableListOf()))
-        cardBacklog.add(CardItem(UUID.randomUUID(), 1, mutableListOf()))
+    /**
+     * Render the result of the load method.
+     *
+     * @param cardItems the loaded card items
+     */
+    fun renderLoad(cardItems: MutableMap<UUID, CardItem>) {
+        cardsById.clear()
+        cardsById.putAll(cardItems)
+        defaultCardItems()
 
-        cardToday.add(CardItem(UUID.randomUUID(), 1, mutableListOf()))
+        cardViewsById.clear()
+        binding.gridLayout.removeAllViews()
+        cardsById.values.forEach { createCard(it) }
+    }
 
-        cardTodayDone.add(CardItem(UUID.randomUUID(), 1, mutableListOf()))
-        cardTodayDone.add(CardItem(UUID.randomUUID(), 1, mutableListOf()))
+    /**
+     * Default card items.
+     */
+    fun defaultCardItems() {
+        addCardItem(CardItem(UUID.randomUUID(), 1, 1, -4, mutableListOf()))
+        addCardItem(CardItem(UUID.randomUUID(), 1, 1, -3, mutableListOf()))
+        addCardItem(CardItem(UUID.randomUUID(), 1, 1, -2, mutableListOf()))
+        addCardItem(CardItem(UUID.randomUUID(), 1, 1, -1, mutableListOf()))
+        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 0, mutableListOf()))
+        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 1, mutableListOf()))
+        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 2, mutableListOf()))
+        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 3, mutableListOf()))
+        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 4, mutableListOf()))
+
+
+        if (cardsById.isNotEmpty()) return
+
+        addCardItem(CardItem(UUID.randomUUID(), 1, 0, 0, mutableListOf()))
+        addCardItem(CardItem(UUID.randomUUID(), 1, 0, 1, mutableListOf()))
+
+        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 0, mutableListOf()))
+
+        addCardItem(CardItem(UUID.randomUUID(), 1, 2, 0, mutableListOf()))
+        addCardItem(CardItem(UUID.randomUUID(), 1, 2, 1, mutableListOf()))
+    }
+
+    /**
+     * Add card item to the map.
+     *
+     * @param cardItem the card item
+     */
+    private fun addCardItem(cardItem: CardItem) {
+        cardsById[cardItem.id] = cardItem
     }
 
     /**
@@ -193,22 +230,6 @@ class MainFragment @Inject constructor(
 
         toolBar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.kanban_planner_main_title))
-
-        timer = GlobalScope.launch(Dispatchers.Main) {
-            while (true) {
-                presenter.list(this@MainFragment)
-                delay(30000L)
-            }
-        }
-    }
-
-    /**
-     * OnPause hook.
-     */
-    override fun onPause() {
-        super.onPause()
-
-        timer.cancel()
     }
 
     /**
@@ -245,19 +266,29 @@ class MainFragment @Inject constructor(
                 surfaceView.getGlobalVisibleRect(surfaceOffset)
                 Timber.i("Limit: $surfaceOffset")
 
-                bitmap = Bitmap.createBitmap(
+                editBitmap = Bitmap.createBitmap(
                     surfaceView.width,
                     surfaceView.height,
                     Bitmap.Config.ARGB_8888
                 )
-                bitmap.eraseColor(Color.WHITE)
-                canvas = Canvas(bitmap)
+                editBitmap.eraseColor(Color.WHITE)
+                editCanvas = Canvas(editBitmap)
+                Timber.i("Edit bitmap and canvas created: ${surfaceView.width} x ${surfaceView.height}")
+
+                previewBitmap = Bitmap.createBitmap(
+                    surfaceView.width,
+                    surfaceView.height,
+                    Bitmap.Config.ARGB_8888
+                )
+                previewBitmap.eraseColor(Color.WHITE)
+                previewCanvas = Canvas(previewBitmap)
+                Timber.i("Preview bitmap and canvas created: ${surfaceView.width} x ${surfaceView.height}")
 
                 if (surfaceView.holder == null) {
                     return
                 }
 
-                clearSurface(null)
+                clearSurface()
 
                 touchHelper.closeRawDrawing()
                 touchHelper.setLimitRect(listOf(surfaceOffset), listOf())
@@ -283,10 +314,8 @@ class MainFragment @Inject constructor(
 
     /**
      * Clear the surface and the shadow canvas.
-     *
-     * @param cardItem
      */
-    private fun clearSurface(cardItem: CardItem?) {
+    private fun clearSurface() {
         val lockerCanvas = surfaceView.holder.lockCanvas() ?: return
 
         EpdController.enablePost(surfaceView, 1)
@@ -295,38 +324,49 @@ class MainFragment @Inject constructor(
         fillPaint.color = Color.WHITE
         val rect = Rect(0, 0, surfaceView.width, surfaceView.height)
         lockerCanvas.drawRect(rect, fillPaint)
-        canvas.drawRect(rect, fillPaint)
+        editCanvas.drawRect(rect, fillPaint)
 
+        if (currentCard != null) {
+            drawStroke(currentCard!!, lockerCanvas)
+            editCanvas.drawRect(rect, fillPaint)
+        }
+
+        surfaceView.holder.unlockCanvasAndPost(lockerCanvas)
+    }
+
+    /**
+     * Draw strokes of the card to the canvas.
+     *
+     * @param cardItem the card item
+     * @param lockerCanvas the canvas
+     */
+    private fun drawStroke(cardItem: CardItem, lockerCanvas: Canvas) {
         val linePaint = Paint()
         linePaint.isAntiAlias = true
         linePaint.style = Paint.Style.STROKE
         linePaint.color = Color.BLACK
         linePaint.strokeWidth = 3.0f
 
-        if (cardItem != null) {
-            for (stroke in cardItem.strokes) {
-                val points = stroke.strokePoints
-                if (points.isNotEmpty()) {
-                    val path = Path()
-                    val prePoint = PointF(points[0].x, points[0].y)
-                    if (points.size == 1) {
-                        path.moveTo(prePoint.x - 1f, prePoint.y - 1f)
-                    } else {
-                        path.moveTo(prePoint.x, prePoint.y)
-                    }
-                    for (point in points) {
-                        path.quadTo(prePoint.x, prePoint.y, point.x, point.y)
-                        prePoint.x = point.x
-                        prePoint.y = point.y
-                    }
-
-                    lockerCanvas.drawPath(path, linePaint)
-                    canvas.drawPath(path, linePaint)
+        for (stroke in cardItem.strokes) {
+            val points = stroke.strokePoints
+            if (points.isNotEmpty()) {
+                val path = Path()
+                val prePoint = PointF(points[0].x, points[0].y)
+                if (points.size == 1) {
+                    path.moveTo(prePoint.x - 1f, prePoint.y - 1f)
+                } else {
+                    path.moveTo(prePoint.x, prePoint.y)
                 }
+                for (point in points) {
+                    path.quadTo(prePoint.x, prePoint.y, point.x, point.y)
+                    prePoint.x = point.x
+                    prePoint.y = point.y
+                }
+
+                lockerCanvas.drawPath(path, linePaint)
+                editCanvas.drawPath(path, linePaint)
             }
         }
-
-        surfaceView.holder.unlockCanvasAndPost(lockerCanvas)
     }
 
     /**
@@ -350,7 +390,6 @@ class MainFragment @Inject constructor(
 
     /**
      * Create editable view of card.
-     *
      */
     private fun createEditCard(): SurfaceView {
         val itemEdit = LayoutInflater.from(context).inflate(
@@ -374,12 +413,53 @@ class MainFragment @Inject constructor(
             binding.titleLayout.visibility = View.VISIBLE
             touchHelper.setRawDrawingEnabled(false)
 
+            Timber.i("Current card: $currentCard")
             if (currentCard != null) {
-                val itemView = cardsById[currentCard!!.id]
+                val itemView = cardViewsById[currentCard!!.id]
                 val cardPreview = itemView!!.findViewById<ImageView>(R.id.cardPreview)
-                cardPreview.setImageBitmap(bitmap)
+                drawStroke(currentCard!!, previewCanvas)
+                cardPreview.setImageBitmap(previewBitmap.copy(previewBitmap.config, false))
                 cardPreview.invalidate()
+
+                cardsById[currentCard!!.id] = DeepCopy.deepCopy(currentCard!!)
+                presenter.saveLocal(this, currentCard!!)
             }
+        }
+
+        val eraseButton = itemEdit.findViewById<ImageView>(R.id.eraseButton)
+        eraseButton.setOnClickListener { v ->
+            binding.drawLayout.visibility = View.INVISIBLE
+            binding.gridLayout.visibility = View.VISIBLE
+            binding.titleLayout.visibility = View.VISIBLE
+
+            touchHelper.setRawDrawingEnabled(false)
+
+            Timber.i("Current card: $currentCard")
+            if (currentCard != null) {
+                currentCard!!.strokes.clear()
+                val itemView = cardViewsById[currentCard!!.id]
+                val cardPreview = itemView!!.findViewById<ImageView>(R.id.cardPreview)
+
+                val fillPaint = Paint()
+                fillPaint.style = Paint.Style.FILL
+                fillPaint.color = Color.WHITE
+                val rect = Rect(0, 0, surfaceView.width, surfaceView.height)
+                previewCanvas.drawRect(rect, fillPaint)
+
+                cardPreview.setImageBitmap(previewBitmap.copy(previewBitmap.config, false))
+                cardPreview.invalidate()
+
+                cardsById[currentCard!!.id] = DeepCopy.deepCopy(currentCard!!)
+                presenter.saveLocal(this, currentCard!!)
+            }
+        }
+
+        val cancelButton = itemEdit.findViewById<ImageView>(R.id.cancelButton)
+        cancelButton.setOnClickListener { v ->
+            binding.drawLayout.visibility = View.INVISIBLE
+            binding.gridLayout.visibility = View.VISIBLE
+            binding.titleLayout.visibility = View.VISIBLE
+            touchHelper.setRawDrawingEnabled(false)
         }
 
         binding.drawLayout.requestLayout()
@@ -390,26 +470,22 @@ class MainFragment @Inject constructor(
     /**
      * Create card by item
      *
-     * @param lane displayed lane
-     * @param position the position
      * @param cardItem the card item
      */
-    private fun createCard(lane: Int, position: Int, cardItem: CardItem) {
+    private fun createCard(cardItem: CardItem) {
         val itemView = LayoutInflater.from(context).inflate(R.layout.card_kanban, binding.gridLayout, false) as CardView
         itemView.id = View.generateViewId()
-
-        cardItem.id = UUID.randomUUID()
-        cardsById[cardItem.id] = itemView
+        cardViewsById[cardItem.id] = itemView
 
         val layoutParams = RelativeLayout.LayoutParams(
             gridSize * 3 - 2 * margin,
             gridSize * 2 - 2 * margin
         )
 
-        layoutParams.leftMargin = 3 * lane * gridSize + margin
-        layoutParams.topMargin = margin * 10 + position * 2 * gridSize + margin
+        Timber.i("Grid height: ${binding.gridLayout.height}")
+        layoutParams.leftMargin = 3 * cardItem.lane * gridSize + margin
+        layoutParams.topMargin = margin * 10 + cardItem.position * 2 * gridSize + margin
         itemView.layoutParams = layoutParams
-
         binding.gridLayout.addView(itemView)
 
         val imageView = itemView.findViewById<ImageView>(R.id.cardPreview)
@@ -428,21 +504,37 @@ class MainFragment @Inject constructor(
             binding.gridLayout.visibility = View.INVISIBLE
             binding.drawLayout.visibility = View.VISIBLE
 
-            currentCard = cardItem
-            clearSurface(cardItem)
+            currentCard = DeepCopy.deepCopy(cardsById[cardItem.id])
+            clearSurface()
             touchHelper.setRawDrawingEnabled(true)
         }
 
         itemView.post {
-            val bitmap = Bitmap.createBitmap(itemView.width, itemView.height, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
+            Timber.i("Draw cardItem: $cardItem")
+            drawStroke(cardItem, previewCanvas)
+            imageView.setImageBitmap(previewBitmap.copy(previewBitmap.config, false))
+        }
+    }
 
-            val fillPaint = Paint()
-            fillPaint.style = Paint.Style.FILL
-            fillPaint.color = Color.WHITE
+    /**
+     * Pen callback of the raw input callback.
+     */
+    private val penCallback = object : PenRawInputCallback.PenCallback {
+        override fun addStrokes(strokes: List<StrokePoint>) {
+            val offsetStrokes = mutableListOf<StrokePoint>()
+            for (stroke in strokes) {
+                offsetStrokes.add(StrokePoint(stroke.x - surfaceOffset.left, stroke.y - surfaceOffset.top, stroke.p))
+            }
+            currentCard!!.strokes.add(Stroke(UUID.randomUUID(), UUID.randomUUID(), offsetStrokes))
+        }
+    }
 
-            canvas.drawRect(0.0f, 0.0f, itemView.width.toFloat(), itemView.height.toFloat(), fillPaint)
-            imageView.setImageBitmap(bitmap)
+    /**
+     * Pen callback of the raw input callback.
+     */
+    private val eraseCallback = object : PenRawInputCallback.EraseCallback {
+        override fun removeStroke(strokeId: UUID) {
+            Timber.i("Not implemented yet.")
         }
     }
 }

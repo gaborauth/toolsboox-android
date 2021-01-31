@@ -48,13 +48,24 @@
                         app:tint="@color/colorPrimaryDark"
                         app:srcCompat="@drawable/ic_save"/>
 
+                <ImageView
+                        android:id="@+id/eraseButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|top"
+                        android:layout_marginEnd="48dp"
+                        android:contentDescription="@string/dashboard_item_erase_alt"
+
+                        app:tint="@color/colorPrimaryDark"
+                        app:srcCompat="@drawable/ic_erase"/>
+
                 <TextView
                         android:id="@+id/dueDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:layout_marginStart="8dp"
-                        android:layout_marginEnd="48dp"
+                        android:layout_marginEnd="72dp"
                         android:tint="@color/colorPrimaryDark"
 
                         android:text="in a day and three hours"

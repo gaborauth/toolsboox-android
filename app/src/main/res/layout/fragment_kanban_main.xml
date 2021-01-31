@@ -47,4 +47,13 @@
 
     </RelativeLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="@style/App.FloatingActionButton"
+            android:id="@+id/fabAddItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:contentDescription="@string/fab_add_item"
+            app:srcCompat="@drawable/ic_add"/>
+
 </FrameLayout>
