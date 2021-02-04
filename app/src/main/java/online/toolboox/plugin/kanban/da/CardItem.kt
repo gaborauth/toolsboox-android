@@ -13,6 +13,7 @@ data class CardItem(
     var version: Int,
 
     var lane: Int,
-    var position: Int,
+    var dueDate: Date,
+    var doneDate: Date?,
     val strokes: MutableList<Stroke>,
 )

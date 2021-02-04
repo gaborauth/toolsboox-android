@@ -38,11 +38,18 @@ class MainPresenter @Inject constructor(
                     val kanbanDir = File(fragment.requireContext().filesDir, "kanban")
                     kanbanDir.mkdirs()
 
+                    //kanbanDir.list().forEach {
+                    //    val item = File(kanbanDir, it)
+                    //    item.delete()
+                    //    Timber.i("Item $it deleted.")
+                    //}
+
                     kanbanDir.list { d, n -> n.endsWith(".card.v1", true) }?.forEach {
                         Timber.i("Processing of cardItem: $it")
                         val cardItemJson = File(kanbanDir, it).readText(Charsets.UTF_8)
                         if (cardItemJson.isNotEmpty()) {
                             val cardItem = gson.fromJson(cardItemJson, CardItem::class.java)
+                            Timber.i("Card item: ${cardItem.lane}")
                             cardItems[cardItem.id] = cardItem
                         }
                     }

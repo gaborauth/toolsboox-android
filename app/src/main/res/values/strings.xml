@@ -63,6 +63,9 @@
     <!-- Strings related to kanban planner plugin -->
     <string name="kanban_planner_main_title">Kanban planner</string>
     <string name="kanban_planner_card_content">Kanban planner preview content</string>
+    <string name="kanban_planner_lane_dueSoonBacklogTitle">Due soon backlog (%d)</string>
+    <string name="kanban_planner_lane_plannedTodayTitle">Planned today (%d)</string>
+    <string name="kanban_planner_lane_doneTodayTitle">Done today (%d)</string>
 
     <!-- Strings related to team drawer plugin -->
     <string name="team_drawer_title">TeamDrawer</string>

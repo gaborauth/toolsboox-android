@@ -33,6 +33,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|top"
                         android:contentDescription="@string/dashboard_item_settings_alt"
+                        android:visibility="invisible"
 
                         app:tint="@color/colorPrimaryDark"
                         app:srcCompat="@drawable/ic_more_vert"/>
@@ -44,15 +45,16 @@
                         android:layout_gravity="end|top"
                         android:layout_marginEnd="24dp"
                         android:contentDescription="@string/dashboard_item_edit_alt"
+                        android:visibility="invisible"
 
                         app:tint="@color/colorPrimaryDark"
                         app:srcCompat="@drawable/ic_edit"/>
 
                 <TextView
-                        android:id="@+id/dueDate"
+                        android:id="@+id/dueDateText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start"
+                        android:layout_gravity="start|center_vertical"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="48dp"
                         android:tint="@color/colorPrimaryDark"

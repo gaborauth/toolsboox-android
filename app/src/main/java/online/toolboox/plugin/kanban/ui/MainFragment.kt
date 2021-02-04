@@ -1,5 +1,7 @@
 package online.toolboox.plugin.kanban.ui
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.graphics.*
 import android.os.Bundle
 import android.view.*
@@ -21,8 +23,12 @@ import online.toolboox.plugin.teamdrawer.nw.domain.StrokePoint
 import online.toolboox.ui.plugin.Router
 import online.toolboox.ui.plugin.ScreenFragment
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.sign
 
 /**
  * Kanban planner main fragment.
@@ -45,15 +51,20 @@ class MainFragment @Inject constructor(
     private lateinit var binding: FragmentKanbanMainBinding
 
     /**
-     * The current card.
+     * The current selected card and positions.
      */
-    private var currentCard: CardItem? = null
+    private var currentCarouselPositions: MutableList<Int> = mutableListOf(0, 0, 0)
 
     /**
      * Map of card items and views by id.
      */
     private val cardsById: MutableMap<UUID, CardItem> = mutableMapOf()
-    private val cardViewsById: MutableMap<UUID, CardView> = mutableMapOf()
+    private val cardsByLane: List<MutableList<CardItem>> = listOf(mutableListOf(), mutableListOf(), mutableListOf())
+
+    /**
+     * Carousel card views.
+     */
+    private val carouselCardViews: MutableList<MutableList<CardView?>?> = mutableListOf()
 
     /**
      * The width of the screen.
@@ -99,6 +110,11 @@ class MainFragment @Inject constructor(
      * The canvas of the card edit.
      */
     private lateinit var editCanvas: Canvas
+
+    /**
+     * The currently edited card.
+     */
+    private var editedCard: CardItem? = null
 
     /**
      * The pen raw input callback class.
@@ -161,15 +177,161 @@ class MainFragment @Inject constructor(
             touchHelper = TouchHelper.create(binding.drawLayout, callback)
             initializeSurface()
 
-            createLaneTitle(0, "Due soon backlog (x)")
-            createLaneTitle(1, "Planned today (x)")
-            createLaneTitle(2, "Done today (x)")
+            createLaneTitle(0, getString(R.string.kanban_planner_lane_dueSoonBacklogTitle, 0))
+            createLaneTitle(1, getString(R.string.kanban_planner_lane_plannedTodayTitle, 0))
+            createLaneTitle(2, getString(R.string.kanban_planner_lane_doneTodayTitle, 0))
 
+            createCarouselCardViews()
+            placeCardItems()
             presenter.loadLocal(this)
+        }
+
+        binding.fabAddItem.setOnClickListener {
+            addNewCardItem()
         }
 
         gestureListener = OnGestureListener()
         gestureDetector = GestureDetectorCompat(requireActivity(), gestureListener)
+    }
+
+    /**
+     * Add new (blank) card item.
+     */
+    private fun addNewCardItem() {
+        val c = Calendar.getInstance()
+        c.add(Calendar.DATE, 1)
+
+        val newCard = CardItem(UUID.randomUUID(), 1, 0, c.time, null, mutableListOf())
+        cardsById.put(newCard.id, newCard)
+        cardsByLane[0].add(newCard)
+        presenter.saveLocal(this, newCard)
+        placeCardItems()
+    }
+
+    /**
+     * Create static carousel view of cards.
+     */
+    private fun createCarouselCardViews() {
+        for (lane in 0..2) {
+            carouselCardViews.add(mutableListOf())
+            for (position in -4..4) {
+                carouselCardViews[lane]!!.add(null)
+            }
+
+            createCarouselCardView(lane, -4)
+            createCarouselCardView(lane, 4)
+            createCarouselCardView(lane, -3)
+            createCarouselCardView(lane, 3)
+            createCarouselCardView(lane, -2)
+            createCarouselCardView(lane, 2)
+            createCarouselCardView(lane, -1)
+            createCarouselCardView(lane, 1)
+            createCarouselCardView(lane, 0)
+        }
+    }
+
+    /**
+     * Create static carousel view of a card.
+     *
+     * @param lane the lane
+     * @param position the position
+     */
+    private fun createCarouselCardView(lane: Int, position: Int) {
+        val itemView = LayoutInflater.from(context).inflate(R.layout.card_kanban, binding.gridLayout, false) as CardView
+        itemView.id = View.generateViewId()
+        carouselCardViews[lane]!![position + 4] = itemView
+
+        val w = gridSize * 3 - 2 * margin
+        val h = gridSize * 2 - 2 * margin
+        val layoutParams = RelativeLayout.LayoutParams(w, h)
+
+        val hh = (binding.gridLayout.height / 2) - h / 2 - margin * 5
+        var o = hh
+        if (position != 0) {
+            o = hh + (sign(position * 1.0) * (h - h / 2 * 0.75.pow(abs(position) - 1.0))).toInt()
+        }
+
+        layoutParams.leftMargin = 3 * lane * gridSize + margin
+        layoutParams.topMargin = margin * 10 + o
+        itemView.layoutParams = layoutParams
+        binding.gridLayout.addView(itemView)
+
+        /**
+         * Render actions only the top card.
+         */
+        if (position != 0) return
+
+        val imageView = itemView.findViewById<ImageView>(R.id.cardPreview)
+        imageView.setOnTouchListener { v, e ->
+            val result = gestureListener.onTouchEvent(gestureDetector, v, e)
+            if (result != OnGestureListener.NONE) {
+                when (result) {
+                    OnGestureListener.UTD -> {
+                        if (currentCarouselPositions[lane] > 0) {
+                            currentCarouselPositions[lane] = currentCarouselPositions[lane] - 1
+                            placeCardItems()
+                        }
+                    }
+                    OnGestureListener.DTU -> {
+                        if (currentCarouselPositions[lane] < cardsByLane[lane].size - 1) {
+                            currentCarouselPositions[lane] = currentCarouselPositions[lane] + 1
+                            placeCardItems()
+                        }
+                    }
+                    OnGestureListener.LTR -> {
+                        if (lane < 2) {
+                            val cardToMove = cardsByLane[lane][currentCarouselPositions[lane]]
+                            if (lane == 1) {
+                                cardToMove.doneDate = Date()
+                            }
+
+                            cardToMove.lane = cardToMove.lane + 1
+                            cardsByLane[lane].removeAt(currentCarouselPositions[lane])
+                            cardsByLane[lane + 1].add(cardToMove)
+                            presenter.saveLocal(this, cardToMove)
+
+                            currentCarouselPositions[lane] = 0
+                            currentCarouselPositions[lane + 1] = 0
+                        }
+
+                        placeCardItems()
+                    }
+                    OnGestureListener.RTL -> {
+                        if (lane > 0) {
+                            val cardToMove = cardsByLane[lane][currentCarouselPositions[lane]]
+                            cardToMove.lane = cardToMove.lane - 1
+                            cardToMove.doneDate = null
+                            cardsByLane[lane].removeAt(currentCarouselPositions[lane])
+                            cardsByLane[lane - 1].add(cardToMove)
+                            presenter.saveLocal(this, cardToMove)
+
+                            currentCarouselPositions[lane] = 0
+                            currentCarouselPositions[lane - 1] = 0
+                        }
+
+                        placeCardItems()
+                    }
+                }
+            }
+            v.performClick()
+            true
+        }
+
+        val editButton = itemView.findViewById<ImageView>(R.id.editButton)
+        editButton.visibility = View.VISIBLE
+        editButton.setOnClickListener { v ->
+            binding.titleLayout.visibility = View.INVISIBLE
+            binding.gridLayout.visibility = View.INVISIBLE
+            binding.drawLayout.visibility = View.VISIBLE
+
+            editedCard = DeepCopy.deepCopy(cardsByLane[lane][currentCarouselPositions[lane]])
+            clearSurface()
+            touchHelper.setRawDrawingEnabled(true)
+        }
+
+        val settingsButton = itemView.findViewById<ImageView>(R.id.settingsButton)
+        settingsButton.visibility = View.VISIBLE
+        settingsButton.setOnClickListener { v -> showDateTimePicker(lane) }
     }
 
     /**
@@ -180,46 +342,52 @@ class MainFragment @Inject constructor(
     fun renderLoad(cardItems: MutableMap<UUID, CardItem>) {
         cardsById.clear()
         cardsById.putAll(cardItems)
-        defaultCardItems()
+        cardsById.values.forEach { cardsByLane[it.lane].add(it) }
 
-        cardViewsById.clear()
-        binding.gridLayout.removeAllViews()
-        cardsById.values.forEach { createCard(it) }
+        placeCardItems()
+
+        /**
+         * Add a blank card item if there is no saved cards.
+         */
+        if (cardsById.isEmpty()) addNewCardItem()
     }
 
     /**
-     * Default card items.
+     * Place card items to the carousel view.
      */
-    fun defaultCardItems() {
-        addCardItem(CardItem(UUID.randomUUID(), 1, 1, -4, mutableListOf()))
-        addCardItem(CardItem(UUID.randomUUID(), 1, 1, -3, mutableListOf()))
-        addCardItem(CardItem(UUID.randomUUID(), 1, 1, -2, mutableListOf()))
-        addCardItem(CardItem(UUID.randomUUID(), 1, 1, -1, mutableListOf()))
-        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 0, mutableListOf()))
-        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 1, mutableListOf()))
-        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 2, mutableListOf()))
-        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 3, mutableListOf()))
-        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 4, mutableListOf()))
+    private fun placeCardItems() {
+        laneTitles[0].text = getString(R.string.kanban_planner_lane_dueSoonBacklogTitle, cardsByLane[0].size)
+        laneTitles[1].text = getString(R.string.kanban_planner_lane_plannedTodayTitle, cardsByLane[1].size)
+        laneTitles[2].text = getString(R.string.kanban_planner_lane_doneTodayTitle, cardsByLane[2].size)
 
+        cardsByLane[0].sortBy { it.dueDate }
+        cardsByLane[1].sortBy { it.dueDate }
+        cardsByLane[2].sortBy { it.dueDate }
 
-        if (cardsById.isNotEmpty()) return
+        for (lane in 0..2) {
+            for (position in -4..4) {
+                val view = carouselCardViews[lane]!![position + 4]!!
+                view.visibility = View.INVISIBLE
+            }
+            Timber.i("Lane: $lane")
+            for (position in 0 until cardsByLane[lane].size) {
+                val currentCarouselPosition = position - currentCarouselPositions[lane]
+                Timber.i("Current carousel position: $currentCarouselPosition = $position - ${currentCarouselPositions[lane]}")
+                if (currentCarouselPosition in -4..4) {
+                    val view = carouselCardViews[lane]!![currentCarouselPosition + 4]!!
+                    view.visibility = View.VISIBLE
 
-        addCardItem(CardItem(UUID.randomUUID(), 1, 0, 0, mutableListOf()))
-        addCardItem(CardItem(UUID.randomUUID(), 1, 0, 1, mutableListOf()))
+                    val currentCard = cardsByLane[lane][position]
+                    drawStroke(currentCard, previewCanvas)
+                    val cardPreview = view.findViewById<ImageView>(R.id.cardPreview)
+                    cardPreview.setImageBitmap(previewBitmap.copy(previewBitmap.config, false))
+                    cardPreview.invalidate()
 
-        addCardItem(CardItem(UUID.randomUUID(), 1, 1, 0, mutableListOf()))
-
-        addCardItem(CardItem(UUID.randomUUID(), 1, 2, 0, mutableListOf()))
-        addCardItem(CardItem(UUID.randomUUID(), 1, 2, 1, mutableListOf()))
-    }
-
-    /**
-     * Add card item to the map.
-     *
-     * @param cardItem the card item
-     */
-    private fun addCardItem(cardItem: CardItem) {
-        cardsById[cardItem.id] = cardItem
+                    val dueDate = view.findViewById<TextView>(R.id.dueDateText)
+                    dueDate.text = SimpleDateFormat("yyyy-MM-dd HH:mm").format(currentCard.dueDate)
+                }
+            }
+        }
     }
 
     /**
@@ -317,18 +485,10 @@ class MainFragment @Inject constructor(
      */
     private fun clearSurface() {
         val lockerCanvas = surfaceView.holder.lockCanvas() ?: return
-
         EpdController.enablePost(surfaceView, 1)
-        val fillPaint = Paint()
-        fillPaint.style = Paint.Style.FILL
-        fillPaint.color = Color.WHITE
-        val rect = Rect(0, 0, surfaceView.width, surfaceView.height)
-        lockerCanvas.drawRect(rect, fillPaint)
-        editCanvas.drawRect(rect, fillPaint)
 
-        if (currentCard != null) {
-            drawStroke(currentCard!!, lockerCanvas)
-            editCanvas.drawRect(rect, fillPaint)
+        if (editedCard != null) {
+            drawStroke(editedCard!!, lockerCanvas)
         }
 
         surfaceView.holder.unlockCanvasAndPost(lockerCanvas)
@@ -346,6 +506,13 @@ class MainFragment @Inject constructor(
         linePaint.style = Paint.Style.STROKE
         linePaint.color = Color.BLACK
         linePaint.strokeWidth = 3.0f
+
+        val fillPaint = Paint()
+        fillPaint.style = Paint.Style.FILL
+        fillPaint.color = Color.WHITE
+        val rect = Rect(0, 0, surfaceView.width, surfaceView.height)
+        lockerCanvas.drawRect(rect, fillPaint)
+        editCanvas.drawRect(rect, fillPaint)
 
         for (stroke in cardItem.strokes) {
             val points = stroke.strokePoints
@@ -413,44 +580,26 @@ class MainFragment @Inject constructor(
             binding.titleLayout.visibility = View.VISIBLE
             touchHelper.setRawDrawingEnabled(false)
 
-            Timber.i("Current card: $currentCard")
-            if (currentCard != null) {
-                val itemView = cardViewsById[currentCard!!.id]
-                val cardPreview = itemView!!.findViewById<ImageView>(R.id.cardPreview)
-                drawStroke(currentCard!!, previewCanvas)
-                cardPreview.setImageBitmap(previewBitmap.copy(previewBitmap.config, false))
-                cardPreview.invalidate()
+            if (editedCard != null) {
+                val deepCardCopy = DeepCopy.deepCopy(editedCard!!)
 
-                cardsById[currentCard!!.id] = DeepCopy.deepCopy(currentCard!!)
-                presenter.saveLocal(this, currentCard!!)
+                val lane = deepCardCopy.lane
+                val currentCarouselPosition = currentCarouselPositions[lane]
+
+                cardsById[deepCardCopy.id] = deepCardCopy
+                cardsByLane[lane][currentCarouselPosition] = deepCardCopy
+
+                placeCardItems()
+
+                presenter.saveLocal(this, deepCardCopy)
             }
         }
 
         val eraseButton = itemEdit.findViewById<ImageView>(R.id.eraseButton)
         eraseButton.setOnClickListener { v ->
-            binding.drawLayout.visibility = View.INVISIBLE
-            binding.gridLayout.visibility = View.VISIBLE
-            binding.titleLayout.visibility = View.VISIBLE
-
-            touchHelper.setRawDrawingEnabled(false)
-
-            Timber.i("Current card: $currentCard")
-            if (currentCard != null) {
-                currentCard!!.strokes.clear()
-                val itemView = cardViewsById[currentCard!!.id]
-                val cardPreview = itemView!!.findViewById<ImageView>(R.id.cardPreview)
-
-                val fillPaint = Paint()
-                fillPaint.style = Paint.Style.FILL
-                fillPaint.color = Color.WHITE
-                val rect = Rect(0, 0, surfaceView.width, surfaceView.height)
-                previewCanvas.drawRect(rect, fillPaint)
-
-                cardPreview.setImageBitmap(previewBitmap.copy(previewBitmap.config, false))
-                cardPreview.invalidate()
-
-                cardsById[currentCard!!.id] = DeepCopy.deepCopy(currentCard!!)
-                presenter.saveLocal(this, currentCard!!)
+            if (editedCard != null) {
+                editedCard!!.strokes.clear()
+                clearSurface()
             }
         }
 
@@ -468,55 +617,6 @@ class MainFragment @Inject constructor(
     }
 
     /**
-     * Create card by item
-     *
-     * @param cardItem the card item
-     */
-    private fun createCard(cardItem: CardItem) {
-        val itemView = LayoutInflater.from(context).inflate(R.layout.card_kanban, binding.gridLayout, false) as CardView
-        itemView.id = View.generateViewId()
-        cardViewsById[cardItem.id] = itemView
-
-        val layoutParams = RelativeLayout.LayoutParams(
-            gridSize * 3 - 2 * margin,
-            gridSize * 2 - 2 * margin
-        )
-
-        Timber.i("Grid height: ${binding.gridLayout.height}")
-        layoutParams.leftMargin = 3 * cardItem.lane * gridSize + margin
-        layoutParams.topMargin = margin * 10 + cardItem.position * 2 * gridSize + margin
-        itemView.layoutParams = layoutParams
-        binding.gridLayout.addView(itemView)
-
-        val imageView = itemView.findViewById<ImageView>(R.id.cardPreview)
-        imageView.setOnTouchListener { v, e ->
-            val result = gestureListener.onTouchEvent(gestureDetector, v, e)
-            if (result != OnGestureListener.NONE) {
-                Timber.i("Swipe result: $result")
-            }
-            v.performClick()
-            true
-        }
-
-        val editButton = itemView.findViewById<ImageView>(R.id.editButton)
-        editButton.setOnClickListener { v ->
-            binding.titleLayout.visibility = View.INVISIBLE
-            binding.gridLayout.visibility = View.INVISIBLE
-            binding.drawLayout.visibility = View.VISIBLE
-
-            currentCard = DeepCopy.deepCopy(cardsById[cardItem.id])
-            clearSurface()
-            touchHelper.setRawDrawingEnabled(true)
-        }
-
-        itemView.post {
-            Timber.i("Draw cardItem: $cardItem")
-            drawStroke(cardItem, previewCanvas)
-            imageView.setImageBitmap(previewBitmap.copy(previewBitmap.config, false))
-        }
-    }
-
-    /**
      * Pen callback of the raw input callback.
      */
     private val penCallback = object : PenRawInputCallback.PenCallback {
@@ -525,7 +625,7 @@ class MainFragment @Inject constructor(
             for (stroke in strokes) {
                 offsetStrokes.add(StrokePoint(stroke.x - surfaceOffset.left, stroke.y - surfaceOffset.top, stroke.p))
             }
-            currentCard!!.strokes.add(Stroke(UUID.randomUUID(), UUID.randomUUID(), offsetStrokes))
+            editedCard?.strokes?.add(Stroke(UUID.randomUUID(), UUID.randomUUID(), offsetStrokes))
         }
     }
 
@@ -536,5 +636,38 @@ class MainFragment @Inject constructor(
         override fun removeStroke(strokeId: UUID) {
             Timber.i("Not implemented yet.")
         }
+    }
+
+    /**
+     * Show date and time picker.
+     *
+     * @param lane the lane of the settings
+     */
+    private fun showDateTimePicker(lane: Int) {
+        val cal = Calendar.getInstance()
+        cal.clear()
+        cal.time = cardsByLane[lane][currentCarouselPositions[lane]].dueDate
+
+        DatePickerDialog(requireContext(), { dv, year, month, dayOfMonth ->
+            TimePickerDialog(context, { tv, hourOfDay, minute ->
+                val newCal = Calendar.getInstance()
+                newCal.clear()
+                newCal.set(Calendar.YEAR, year)
+                newCal.set(Calendar.MONTH, month)
+                newCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                newCal.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                newCal.set(Calendar.MINUTE, minute)
+
+                val card = cardsByLane[lane][currentCarouselPositions[lane]]
+                card.dueDate = newCal.time
+
+                cardsById[card.id] = card
+                cardsByLane[lane][currentCarouselPositions[lane]] = card
+
+                presenter.saveLocal(this, card)
+
+                placeCardItems()
+            }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
+        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
     }
 }
