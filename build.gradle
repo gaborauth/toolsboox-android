@@ -1,7 +1,7 @@
 ext {
     applicationName = 'toolboox'
-    parentVersionCode = 1_02_00_00
-    parentVersionName = '1.2.0-00'
+    parentVersionCode = 1_02_00_01
+    parentVersionName = '1.2.0-01'
 }
 
 buildscript {
@@ -13,7 +13,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.30"
         classpath 'com.android.tools.build:gradle:4.0.2'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
         classpath 'com.google.firebase:perf-plugin:1.3.4'

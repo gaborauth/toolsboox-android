@@ -166,7 +166,7 @@ class MainFragment @Inject constructor(
         laneTitles.add(TextView(requireContext()))
         laneTitles.add(TextView(requireContext()))
 
-        binding.root.post {
+        binding.gridLayout.post {
             width = resources.displayMetrics.widthPixels
             height = resources.displayMetrics.heightPixels
             margin = (4 * resources.displayMetrics.density).toInt()
