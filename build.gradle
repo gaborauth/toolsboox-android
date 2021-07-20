@@ -1,23 +1,23 @@
 ext {
     applicationName = 'toolboox'
-    parentVersionCode = 1_02_00_01
-    parentVersionName = '1.2.0-01'
+    parentVersionCode = 1_02_00_02
+    parentVersionName = '1.2.0-02'
 }
 
 buildscript {
     repositories {
         mavenLocal()
         maven { url 'https://nexus.iotguru.dev/content/groups/public/' }
-        maven { url 'https://maven.google.com' }
-        jcenter()
         google()
+
+        jcenter()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.30"
-        classpath 'com.android.tools.build:gradle:4.0.2'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
-        classpath 'com.google.firebase:perf-plugin:1.3.4'
-        classpath 'com.google.gms:google-services:4.3.5'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21"
+        classpath 'com.android.tools.build:gradle:4.1.3'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+        classpath 'com.google.firebase:perf-plugin:1.4.0'
+        classpath 'com.google.gms:google-services:4.3.8'
     }
 }
 
@@ -26,7 +26,7 @@ allprojects {
         google()
         jcenter()
 
-        maven { url "http://dl.bintray.com/onyx-intl/maven" }
+        maven { url "https://dl.bintray.com/onyx-intl/maven" }
         maven { url "https://jitpack.io" }
     }
 }
