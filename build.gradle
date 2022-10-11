@@ -26,7 +26,7 @@ allprojects {
         google()
         jcenter()
 
-        maven { url "https://dl.bintray.com/onyx-intl/maven" }
+        maven { url "http://repo.boox.com/repository/maven-public/" }
         maven { url "https://jitpack.io" }
     }
 }

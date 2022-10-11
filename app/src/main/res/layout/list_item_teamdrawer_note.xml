@@ -14,7 +14,7 @@
             cardView:cardCornerRadius="4dp"
             cardView:cardElevation="4dp">
 
-        <online.toolboox.ot.SquareLinearLayout
+        <com.toolsboox.ot.SquareLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -46,7 +46,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="12sp"/>
 
-        </online.toolboox.ot.SquareLinearLayout>
+        </com.toolsboox.ot.SquareLinearLayout>
 
     </androidx.cardview.widget.CardView>
 

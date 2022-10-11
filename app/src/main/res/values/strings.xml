@@ -4,7 +4,7 @@
     <string name="fab_add_item">Add item</string>
     <string name="something_happened_error">Something happened&#8230; please check your network status. :(</string>
     <string name="something_happened_action">Okay</string>
-    <string name="logo_content_description">ToolBoox logo</string>
+    <string name="logo_content_description">Tools for Boox logo</string>
 
     <string name="validation_field_required">This field is required</string>
     <plurals name="validation_field_too_long">
@@ -52,7 +52,7 @@
     <!-- Strings related to dashboard fragment -->
     <string name="dashboard_title">Dashboard</string>
     <string name="dashboard_new_version_title">New version</string>
-    <string name="dashboard_new_version_message">There is a new version of ToolBoox available, please upgrade it unless some functions may not work.</string>
+    <string name="dashboard_new_version_message">There is a new version of \'Tools for Boox\' available, please upgrade it unless some functions may not work.</string>
     <string name="dashboard_item_cancel_alt">Cancel</string>
     <string name="dashboard_item_delete_alt">Delete</string>
     <string name="dashboard_item_edit_alt">Edit</string>

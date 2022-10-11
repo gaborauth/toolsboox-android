@@ -17,7 +17,7 @@
 
 -dontobfuscate
 
--keep class online.toolboox.** { *; }
+-keep class com.toolsboox.** { *; }
 
 -keep class com.google.android.gms.** { *; }
 -dontnote com.google.android.gms.**

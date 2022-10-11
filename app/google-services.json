@@ -7,6 +7,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1042846930616:android:e98f641f0081accbe5864d",
+        "android_client_info": {
+          "package_name": "com.toolsboox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1042846930616-54n0s40lkpalhdcdue3ig511g7k4ij89.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOey-zo59Ijz1jxdNF84SDnLq7DHT6dZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1042846930616-54n0s40lkpalhdcdue3ig511g7k4ij89.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1042846930616:android:dcd2c6a96ffedccee5864d",
         "android_client_info": {
           "package_name": "online.toolboox.v1"
