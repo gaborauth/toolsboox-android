@@ -63,7 +63,7 @@ android {
     signingConfigs {
         release {
             storeFile file("../keystore.jks")
-            storePassword System.getenv("KEYSTORE_PASSWORD") project.property('toolBooxStorePassword').toString()
+            storePassword project.property('toolBooxStorePassword').toString()
             keyAlias "key0"
             keyPassword project.property('toolBooxKeyPassword').toString()
         }
