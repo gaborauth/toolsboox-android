@@ -20,9 +20,9 @@ Experimental personal Kanban cards with calendar support. Extremely experimental
 
 ## URLS
 
-Web page: https://toolsboox.com
-Facebook page: https://www.facebook.com/toolbooxapp
-Translations: https://poeditor.com/join/project?hash=dbYOuWr2UB
-Patreon: https://www.patreon.com/toolboox
-GitHub: https://github.com/gaborauth/toolsboox-android
+* Web page: https://toolsboox.com
+* Facebook page: https://www.facebook.com/toolbooxapp
+* Translations: https://poeditor.com/join/project?hash=dbYOuWr2UB
+* Patreon: https://www.patreon.com/toolboox
+* GitHub: https://github.com/gaborauth/toolsboox-android
 
