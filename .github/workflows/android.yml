@@ -9,9 +9,11 @@ on:
 
 jobs:
   build:
-    environment: Prod
     runs-on: ubuntu-latest
-
+    environment: Prod
+    env:
+      KEYSTORE_PASSWORD: KEYSTORE_PASSWORD
+      KEY_PASSWORD: KEY_PASSWORD
     steps:
     - uses: actions/checkout@v3
     - name: set up JDK 11
