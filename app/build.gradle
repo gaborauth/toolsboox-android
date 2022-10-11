@@ -91,6 +91,10 @@ android {
         }
     }
 
+    lintOptions{
+        disable 'MissingTranslation'
+    }
+
     packagingOptions {
         jniLibs {
             pickFirsts += [

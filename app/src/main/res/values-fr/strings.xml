@@ -10,6 +10,7 @@
     <plurals name="validation_field_too_long">
         <item quantity="one">"Trop long : %d caractère max"</item>
         <item quantity="other">"Trop long : %d caractères max"</item>
+        <item quantity="many">"Trop long : %d caractères max"</item>
     </plurals>
     <string name="validation_field_value_too_small">"Valeur trop petite : le minimum est %d"</string>
 
