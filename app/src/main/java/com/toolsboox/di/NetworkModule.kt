@@ -55,7 +55,7 @@ object NetworkModule {
             if (response.isSuccessful) return@Interceptor response
 
             for (tryCount in 1..3) {
-                Timber.i("Request is not successful ${response.code()}: retry attempt ($tryCount/3)")
+                Timber.i("Request is not successful ${response.code}: retry attempt ($tryCount/3)")
                 response = chain.proceed(request)
 
                 if (response.isSuccessful) return@Interceptor response
