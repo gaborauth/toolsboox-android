@@ -8,7 +8,7 @@ import online.toolboox.ui.plugin.ScreenFragment
 /**
  * Kanban plugin.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class KanbanPlugin(private val router: Router) : Plugin {
 

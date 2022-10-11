@@ -6,7 +6,7 @@ import java.util.*
 /**
  * The 'room' repository.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class RoomRepository {
 

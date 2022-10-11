@@ -17,7 +17,7 @@ import online.toolboox.da.SquareItem
  * @param squareItems the square items
  * @param clickListener the click listener callback
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 internal class SquareItemAdapter(
     private val context: Context,

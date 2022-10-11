@@ -17,7 +17,7 @@ import javax.inject.Inject
 /**
  * Templates 'boxed week's calendar' fragment.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class BoxedWeeksCalendarFragment @Inject constructor(
     private val presenter: BoxedWeeksCalendarPresenter,

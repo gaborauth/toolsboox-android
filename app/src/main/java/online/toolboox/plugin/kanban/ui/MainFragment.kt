@@ -33,7 +33,7 @@ import kotlin.math.sign
 /**
  * Kanban planner main fragment.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class MainFragment @Inject constructor(
     private val presenter: MainPresenter,
@@ -202,7 +202,7 @@ class MainFragment @Inject constructor(
         c.add(Calendar.DATE, 1)
 
         val newCard = CardItem(UUID.randomUUID(), 1, 0, c.time, null, mutableListOf())
-        cardsById.put(newCard.id, newCard)
+        cardsById[newCard.id] = newCard
         cardsByLane[0].add(newCard)
         presenter.saveLocal(this, newCard)
         placeCardItems()

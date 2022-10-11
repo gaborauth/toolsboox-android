@@ -3,7 +3,7 @@ package online.toolboox.plugin.templates.da
 /**
  * Community template data class.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 data class CommunityTemplate(
     val name: String,

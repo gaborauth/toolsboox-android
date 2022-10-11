@@ -10,7 +10,7 @@ import javax.inject.Inject
 /**
  * Team drawer presenter.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class PagePresenter @Inject constructor(
     private val pageService: PageService,

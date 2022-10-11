@@ -11,7 +11,7 @@ import android.widget.LinearLayout
  * @param attrs the attributes
  * @param defStyle the default style
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class SquareLinearLayout @JvmOverloads constructor(
     context: Context,

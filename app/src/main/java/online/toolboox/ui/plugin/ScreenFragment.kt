@@ -19,7 +19,7 @@ import timber.log.Timber
 /**
  * The fragment base class.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 abstract class ScreenFragment : Fragment() {
     companion object {

@@ -8,7 +8,7 @@ import javax.inject.Singleton
 /**
  * Templates plugin module.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
 class TemplatesModule(private val plugin: TemplatesPlugin, private val router: Router) {

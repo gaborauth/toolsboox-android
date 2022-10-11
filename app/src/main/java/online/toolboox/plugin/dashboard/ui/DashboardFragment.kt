@@ -19,7 +19,7 @@ import javax.inject.Inject
 /**
  * Dashboard main fragment.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class DashboardFragment @Inject constructor(
     private val presenter: DashboardPresenter,
@@ -118,7 +118,7 @@ class DashboardFragment @Inject constructor(
                 .setMessage(R.string.dashboard_new_version_message)
                 .setPositiveButton( R.string.main_update
                 ) { _, _ ->
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://toolboox.online/changelog"))
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://toolsboox.com/changelog"))
                     this.startActivity(intent)
                 }
                 .setNegativeButton( R.string.main_update_not_now

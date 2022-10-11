@@ -9,7 +9,7 @@ import online.toolboox.ui.plugin.ScreenFragment
 /**
  * Dashboard plugin.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class DashboardPlugin(private val router: Router) : Plugin {
 

@@ -35,7 +35,7 @@ import kotlin.math.sqrt
 /**
  * Team drawer main fragment.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class PageFragment @Inject constructor(
     private val presenter: PagePresenter,

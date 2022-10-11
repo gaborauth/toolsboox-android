@@ -3,7 +3,7 @@ package online.toolboox.ui.plugin
 /**
  * The router interface.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 interface Router {
     /**

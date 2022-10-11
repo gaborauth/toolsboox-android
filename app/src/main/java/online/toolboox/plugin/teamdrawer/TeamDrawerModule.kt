@@ -8,7 +8,7 @@ import javax.inject.Singleton
 /**
  * Team drawer plugin module.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
 class TeamDrawerModule(private val plugin: TeamDrawerPlugin, private val router: Router) {

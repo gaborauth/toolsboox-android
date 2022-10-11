@@ -23,7 +23,7 @@ import javax.inject.Inject
 /**
  * Team drawer note fragment.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class NoteFragment @Inject constructor(
     private val presenter: NotePresenter,

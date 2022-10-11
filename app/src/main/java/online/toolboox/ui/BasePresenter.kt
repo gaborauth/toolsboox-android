@@ -15,7 +15,7 @@ import online.toolboox.ui.main.MainPresenter
  * @property view the view the presenter is based on
  * @constructor Injects the required dependencies
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 abstract class BasePresenter<out V : BaseView>(private val view: V) {
 

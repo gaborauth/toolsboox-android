@@ -5,13 +5,13 @@ import com.google.gson.Gson
 /**
  * Gson based deep copy.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class DeepCopy {
     companion object {
 
         /**
-         * Deep copy of the object (object - JSON - object coversion).
+         * Deep copy of the object (object - JSON - object conversion).
          *
          * @param t the object
          * @return the deep copied object

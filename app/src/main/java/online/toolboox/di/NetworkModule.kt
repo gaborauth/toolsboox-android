@@ -22,7 +22,7 @@ import javax.inject.Singleton
 /**
  * Retrofit DI module of network services.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
 object NetworkModule {
@@ -30,7 +30,7 @@ object NetworkModule {
     /**
      * Base URL of the service.
      */
-    private const val SERVICE_BASE_URL = "https://api.toolboox.online/"
+    private const val SERVICE_BASE_URL = "https://api.toolsboox.com/"
 
     /**
      * Base URL of GitHub raw.

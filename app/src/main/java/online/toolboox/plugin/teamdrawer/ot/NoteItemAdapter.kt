@@ -15,7 +15,7 @@ import java.time.Instant
 /**
  * Note item adapter.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 internal class NoteItemAdapter(
     private val context: Context,

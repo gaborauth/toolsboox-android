@@ -7,7 +7,7 @@ import javax.inject.Inject
 /**
  * Calendar main presenter.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class MainPresenter @Inject constructor(
     private val calendarService: CalendarService

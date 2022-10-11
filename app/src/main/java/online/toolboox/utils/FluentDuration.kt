@@ -7,7 +7,7 @@ import java.util.*
 /**
  * Convert duration to fluent duration.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class FluentDuration {
 

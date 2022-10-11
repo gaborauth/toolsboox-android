@@ -8,7 +8,7 @@ import javax.inject.Singleton
 /**
  * Dashboard plugin module.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
 class DashboardModule(private val plugin: DashboardPlugin, private val router: Router) {

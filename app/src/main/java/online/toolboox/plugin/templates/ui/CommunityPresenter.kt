@@ -8,7 +8,7 @@ import javax.inject.Inject
 /**
  * Templates 'community' presenter.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class CommunityPresenter @Inject constructor(
     private val templatesService: TemplatesService

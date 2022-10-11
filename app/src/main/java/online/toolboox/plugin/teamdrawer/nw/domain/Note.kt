@@ -5,7 +5,7 @@ import java.util.*
 /**
  * Note data class.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 data class Note(
     val roomId: UUID,

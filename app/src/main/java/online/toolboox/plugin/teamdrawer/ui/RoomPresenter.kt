@@ -7,7 +7,7 @@ import javax.inject.Inject
 /**
  * Team drawer room presenter.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class RoomPresenter @Inject constructor(
     private val roomService: RoomService

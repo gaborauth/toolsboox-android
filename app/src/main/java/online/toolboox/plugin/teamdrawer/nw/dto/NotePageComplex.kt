@@ -6,7 +6,7 @@ import online.toolboox.plugin.teamdrawer.nw.domain.Page
 /**
  * Note-page complex response data class.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 data class NotePageComplex(
     val note: Note,

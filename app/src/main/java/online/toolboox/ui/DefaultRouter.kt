@@ -16,7 +16,7 @@ import online.toolboox.ui.plugin.Router
 /**
  * Default fragment router.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class DefaultRouter(private val main: MainActivity, private val view: View) : Router {
 

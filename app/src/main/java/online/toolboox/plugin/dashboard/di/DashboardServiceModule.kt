@@ -9,7 +9,7 @@ import retrofit2.Retrofit
 /**
  * Dashboard service module, provides services.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
 object DashboardServiceModule {

@@ -8,7 +8,7 @@ import javax.inject.Singleton
 /**
  * Kanban planner plugin component.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Singleton
 @Component(

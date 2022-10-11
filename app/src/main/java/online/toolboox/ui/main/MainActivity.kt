@@ -34,7 +34,7 @@ import java.util.*
 /**
  * A dashboard screen that offers the main menu.
  *
- * @author <a href="mailto:gabor.auth@toolboox.online">Gábor AUTH</a>
+ * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class MainActivity : BaseActivity<MainPresenter>(), MainView {
 
@@ -129,11 +129,11 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
                 R.id.drawer_item_dashboard -> router.dispatch("/", true)
 
                 R.id.drawer_item_website -> {
-                    intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://toolboox.online"))
+                    intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://toolsboox.com"))
                     this.startActivity(intent)
                 }
                 R.id.drawer_item_forum -> {
-                    intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forum.toolboox.online"))
+                    intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forum.toolsboox.com"))
                     this.startActivity(intent)
                 }
                 R.id.drawer_item_facebook -> {
