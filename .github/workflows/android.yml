@@ -9,9 +9,11 @@ on:
 
 jobs:
   build:
-    environment: Prod
     runs-on: ubuntu-latest
-
+    environment: Prod
+    env:
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
     steps:
     - uses: actions/checkout@v3
     - name: set up JDK 11
@@ -20,8 +22,12 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew bundleDebug
+      run: ./gradlew build
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: toolboox-prod-release-latest.apk
+        path: app/build/outputs/apk/prod/release/toolboox-prod-release-*.apk
