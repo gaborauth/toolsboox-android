@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: Prod
     env:
-      KEYSTORE_PASSWORD: KEYSTORE_PASSWORD
-      KEY_PASSWORD: KEY_PASSWORD
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
     steps:
     - uses: actions/checkout@v3
     - name: set up JDK 11
@@ -22,7 +22,6 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
