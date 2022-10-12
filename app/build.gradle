@@ -131,7 +131,7 @@ dependencies {
     compileOnly "org.glassfish:javax.annotation:3.1.1"
 
     // Onyx SDK
-    implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.32'
+    implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.34'
     implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.9'
     implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.1'
 
