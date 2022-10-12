@@ -12,7 +12,7 @@
 
 ### Calendar
 
-Customizable calendar tempate generator.
+Customizable calendar template generator.
 
 ![image](https://user-images.githubusercontent.com/16724720/195287157-421d4dd0-0459-42d6-a57e-4b0098d75f24.png)
 

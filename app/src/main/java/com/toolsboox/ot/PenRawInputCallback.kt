@@ -14,8 +14,8 @@ import kotlin.math.sqrt
 /**
  * The raw input callback of Onyx's pen library.
  *
- * @param penCallback the pen callback
- * @param eraseCallback the erase callback
+ * @param penCallback pen callback
+ * @param eraseCallback erase callback
  */
 class PenRawInputCallback(val penCallback: PenCallback?, val eraseCallback: EraseCallback?) : RawInputCallback() {
 
