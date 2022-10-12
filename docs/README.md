@@ -4,7 +4,7 @@
 
 ## Latest release
 
-https://github.com/gaborauth/toolsboox-android/releases/latest
+[https://github.com/gaborauth/toolsboox-android/releases/latest](https://github.com/gaborauth/toolsboox-android/releases/latest)
 
 ![image](https://user-images.githubusercontent.com/16724720/195287594-ae43d5be-73f7-43a7-aa69-faa826889a15.png)
 
@@ -34,9 +34,8 @@ Experimental personal Kanban cards with calendar support. Extremely experimental
 
 ## URLS
 
-* Web page: https://toolsboox.com
-* Facebook page: https://www.facebook.com/toolbooxapp
-* Translations: https://poeditor.com/join/project?hash=dbYOuWr2UB
-* Patreon: https://www.patreon.com/toolboox
-* GitHub: https://github.com/gaborauth/toolsboox-android
-
+* Web page: [https://toolsboox.com](https://toolsboox.com)
+* Facebook page: [https://www.facebook.com/toolbooxapp](https://www.facebook.com/toolbooxapp)
+* Translations: [https://poeditor.com/join/project?hash=dbYOuWr2UB](https://poeditor.com/join/project?hash=dbYOuWr2UB)
+* Patreon: [https://www.patreon.com/toolboox](https://www.patreon.com/toolboox)
+* GitHub: [https://github.com/gaborauth/toolsboox-android](https://github.com/gaborauth/toolsboox-android)
