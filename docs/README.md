@@ -2,11 +2,11 @@
 
 – an Android application for Onyx Boox readers –
 
-![image](https://user-images.githubusercontent.com/16724720/195287594-ae43d5be-73f7-43a7-aa69-faa826889a15.png)
-
 ## Latest release
 
 https://github.com/gaborauth/toolsboox-android/releases/latest
+
+![image](https://user-images.githubusercontent.com/16724720/195287594-ae43d5be-73f7-43a7-aa69-faa826889a15.png)
 
 ## Calendar
 
