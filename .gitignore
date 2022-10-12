@@ -3,4 +3,5 @@
 .idea
 app/build
 build
+README.md
 local.properties
