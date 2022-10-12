@@ -14,6 +14,8 @@ Customizable calendar tempate generator.
 
 Categorized (community based) templates.
 
+Coming soon! :)
+
 ## Team drawer
 
 You draw, we see. We draw, you see. From anywhere to anywhere.
@@ -23,6 +25,8 @@ You draw, we see. We draw, you see. From anywhere to anywhere.
 ## Kanban board
 
 Experimental personal Kanban cards with calendar support. Extremely experimental.
+
+![image](https://user-images.githubusercontent.com/16724720/195289872-834565a0-835f-4cf9-8ee8-d7a30c21bf6a.png)
 
 ## URLS
 
