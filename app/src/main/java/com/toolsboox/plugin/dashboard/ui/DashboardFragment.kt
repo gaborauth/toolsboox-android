@@ -118,7 +118,7 @@ class DashboardFragment @Inject constructor(
                 .setMessage(R.string.dashboard_new_version_message)
                 .setPositiveButton( R.string.main_update
                 ) { _, _ ->
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://toolsboox.com/changelog"))
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/gaborauth/toolsboox-android/releases/latest"))
                     this.startActivity(intent)
                 }
                 .setNegativeButton( R.string.main_update_not_now
