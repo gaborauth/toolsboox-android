@@ -6,6 +6,10 @@
 
 [https://github.com/gaborauth/toolsboox-android/releases/latest](https://github.com/gaborauth/toolsboox-android/releases/latest)
 
+## How to install?
+
+[That's easy as pie! Follow the steps... :)](https://gaborauth.github.io/toolsboox-android/INSTALL.html)
+
 ## Available tools
 
 ![image](https://user-images.githubusercontent.com/16724720/195287594-ae43d5be-73f7-43a7-aa69-faa826889a15.png)
