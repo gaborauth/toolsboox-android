@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
 
               android:layout_width="match_parent"
@@ -79,6 +80,46 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:id="@+id/fragmentEmptyPlaceholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:visibility="visible">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                    <TextView
+                            style="@style/App.Text.Headline6"
+                            android:id="@+id/fragmentEmptyMessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/list_loading"
+                            android:textAlignment="center"/>
+
+                </LinearLayout>
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:id="@+id/fragmentSwipeContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:visibility="gone">
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:scrollbars="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -89,6 +130,7 @@
 
             <ImageView
                     android:id="@+id/preview"
+                    app:srcCompat="@mipmap/image_not_found"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/templates_boxed_days_calendar_preview_description"/>

@@ -18,6 +18,11 @@
     <string name="router_not_implemented_yet">Sorry guys, this feature is not yet implemented! (%s)</string>
     <string name="router_not_implemented_yet_action">Okay</string>
 
+    <!-- Common messages -->
+    <string name="list_loading">Loading the list…</string>
+    <string name="list_empty">Empty list…</string>
+    <string name="export_message">Exported as %s</string>
+
     <!-- Strings related to toolbar and drawer menu -->
     <string name="drawer_menu_dashboard">Dashboard</string>
     <string name="drawer_menu_website">Our website</string>
@@ -123,6 +128,9 @@
 
     <!-- Strings related to templates 'community' fragment -->
     <string name="templates_community_title">Community templates</string>
+    <string name="templates_community_list_thumbnail">Community thumbnail</string>
+    <string name="templates_community_list_icon_star">Star</string>
+    <string name="templates_community_list_icon_starred">Starred</string>
 
     <!-- Strings related to templates 'flat week's calendar' fragment -->
     <string name="templates_flat_weeks_calendar_title">Flat weeks of year calendar template</string>

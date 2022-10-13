@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_list_row"
+        android:paddingTop="@dimen/padding_list_row"
+        android:paddingStart="?listPreferredItemPaddingLeft"
+
+        android:paddingEnd="?listPreferredItemPaddingRight"
+        android:background="@drawable/bg_list_row"
+        android:clickable="true"
+        android:focusable="true">
+
+    <ImageView
+            android:id="@+id/thumbnail"
+            android:contentDescription="@string/templates_community_list_thumbnail"
+            app:srcCompat="@mipmap/image_not_found"
+            android:scaleType="centerCrop"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            android:layout_width="70dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="8dp"/>
+
+    <ImageView
+            android:id="@+id/icon_star"
+            android:contentDescription="@string/templates_community_list_icon_star"
+            app:srcCompat="@drawable/ic_star"
+            app:tint="@color/starColor"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:layout_width="@dimen/item_icon_star"
+            android:layout_height="@dimen/item_icon_star"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"/>
+
+    <ImageView
+            android:id="@+id/icon_starred"
+            android:contentDescription="@string/templates_community_list_icon_starred"
+            app:srcCompat="@drawable/ic_starred"
+            app:tint="@color/starColor"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:layout_width="@dimen/item_icon_star"
+            android:layout_height="@dimen/item_icon_star"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+
+            android:visibility="invisible"/>
+
+    <TextView
+            android:id="@+id/name"
+            tools:text="Grid 24x32"
+
+            android:ellipsize="end"
+            android:lines="1"
+
+            android:textColor="@color/item_text_primary"
+            android:textSize="@dimen/item_text_primary"
+            android:textStyle="bold"
+
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+
+            app:layout_constraintStart_toEndOf="@+id/thumbnail"
+            app:layout_constraintEnd_toStartOf="@+id/icon_star"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+            android:id="@+id/description"
+            tools:text="Description of grid 24x32"
+
+            android:ellipsize="end"
+            android:lines="1"
+
+            android:textColor="@color/item_text_secondary"
+            android:textSize="@dimen/item_text_secondary"
+            android:textStyle="bold"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+
+            app:layout_constraintStart_toEndOf="@+id/thumbnail"
+            app:layout_constraintEnd_toStartOf="@+id/icon_star"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:layout_constraintBottom_toTopOf="@+id/category"/>
+
+    <TextView
+            android:id="@+id/category"
+            tools:text="grid"
+
+            android:ellipsize="end"
+            android:lines="1"
+
+            android:textColor="@color/item_text_tertiary"
+            android:textSize="@dimen/item_text_tertiary"
+            android:textStyle="bold"
+            android:textAlignment="viewEnd"
+
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            app:layout_constraintStart_toEndOf="@+id/thumbnail"
+            app:layout_constraintEnd_toStartOf="@+id/icon_star"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.0"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

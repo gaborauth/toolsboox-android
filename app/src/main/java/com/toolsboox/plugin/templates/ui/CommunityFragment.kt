@@ -1,13 +1,26 @@
 package com.toolsboox.plugin.templates.ui
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesCommunityBinding
+import com.toolsboox.di.NetworkModule
 import com.toolsboox.plugin.templates.da.CommunityTemplate
+import com.toolsboox.plugin.templates.nw.CommunityTemplatesRepository
+import com.toolsboox.plugin.templates.ot.CommunityTemplatesItemAdapter
 import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.InputStream
+import java.net.URL
 import javax.inject.Inject
 
 /**
@@ -17,6 +30,7 @@ import javax.inject.Inject
  */
 class CommunityFragment @Inject constructor(
     private val presenter: CommunityPresenter,
+    private val communityTemplatesRepository: CommunityTemplatesRepository,
     private val router: Router
 ) : ScreenFragment() {
 
@@ -29,6 +43,11 @@ class CommunityFragment @Inject constructor(
      * The view binding.
      */
     private lateinit var binding: FragmentTemplatesCommunityBinding
+
+    /**
+     * The selected item.
+     */
+    private var selectedItem: CommunityTemplate? = null
 
     /**
      * OnViewCreated hook.
@@ -47,7 +66,8 @@ class CommunityFragment @Inject constructor(
             binding.previewPane.visibility = View.GONE
             binding.exportPane.visibility = View.GONE
 
-            presenter.list(this, binding)
+            presenter.list(this)
+            renderList(communityTemplatesRepository.list())
         }
         binding.buttonPreview.setOnClickListener {
             binding.listPane.visibility = View.GONE
@@ -59,12 +79,31 @@ class CommunityFragment @Inject constructor(
             binding.previewPane.visibility = View.GONE
             binding.exportPane.visibility = View.VISIBLE
 
-            presenter.export(this, binding)
+            if (selectedItem != null) presenter.export(this, binding, selectedItem!!)
         }
 
-        binding.preview.post {
-            presenter.list(this, binding)
+        binding.recyclerView.layoutManager = LinearLayoutManager(view.context)
+        binding.recyclerView.itemAnimator = DefaultItemAnimator()
+        binding.recyclerView.addItemDecoration(DividerItemDecoration(view.context, DividerItemDecoration.HORIZONTAL))
+
+        binding.recyclerView.adapter = CommunityTemplatesItemAdapter(context, listOf()) {
+            selectedItem = it
+            binding.preview.setImageResource(R.mipmap.image_not_found)
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    val url = URL(NetworkModule.GITHUB_BASE_URL + "communityTemplates/" + it.templateUri)
+                    val bitmap = BitmapFactory.decodeStream(url.content as InputStream)
+                    withContext(Dispatchers.Main) {
+                        binding.preview.setImageBitmap(bitmap)
+                    }
+                } catch (t: Throwable) {
+                    Timber.e(t)
+                }
+            }
+            binding.buttonPreview.performClick()
         }
+
+        binding.buttonList.performClick()
     }
 
     /**
@@ -83,7 +122,19 @@ class CommunityFragment @Inject constructor(
      * @param list list of community templates
      */
     fun renderList(list: List<CommunityTemplate>) {
-        Timber.i("$list")
+        Timber.i("List: $list")
+        if (list.isEmpty()) {
+            binding.fragmentSwipeContainer.visibility = View.GONE
+            binding.fragmentEmptyPlaceholder.visibility = View.VISIBLE
+
+            binding.fragmentEmptyMessage.text = getString(R.string.list_empty)
+        } else {
+            binding.fragmentSwipeContainer.visibility = View.VISIBLE
+            binding.fragmentEmptyPlaceholder.visibility = View.GONE
+        }
+        (binding.recyclerView.adapter as CommunityTemplatesItemAdapter).update(list.sortedBy { item -> item.name })
+
+        communityTemplatesRepository.updateList(list)
     }
 
     /**

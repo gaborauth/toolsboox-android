@@ -35,7 +35,7 @@ object NetworkModule {
     /**
      * Base URL of GitHub raw.
      */
-    private const val GITHUB_BASE_URL = "https://raw.githubusercontent.com/gaborauth/toolboox/main/"
+    const val GITHUB_BASE_URL = "https://gaborauth.github.io/toolsboox/"
 
     /**
      * Provides the OkHttpClient.

@@ -7,8 +7,9 @@ package com.toolsboox.plugin.templates.da
  */
 data class CommunityTemplate(
     val name: String,
+    val description: String,
     val category: String,
-    val descriptorUrl: String,
-    val templateUrl: String,
-    val thumbnailUrl: String,
+    val descriptorUri: String,
+    val templateUri: String,
+    val thumbnailUri: String,
 )

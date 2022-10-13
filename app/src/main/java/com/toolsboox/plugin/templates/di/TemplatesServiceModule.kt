@@ -1,9 +1,10 @@
 package com.toolsboox.plugin.templates.di
 
+import com.toolsboox.plugin.templates.nw.CommunityTemplatesRepository
+import com.toolsboox.plugin.templates.nw.TemplatesService
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import com.toolsboox.plugin.templates.nw.TemplatesService
 import retrofit2.Retrofit
 import javax.inject.Named
 
@@ -24,5 +25,16 @@ object TemplatesServiceModule {
     @Reusable
     fun provideTemplatesService(@Named("gitHubRaw") retrofit: Retrofit): TemplatesService {
         return retrofit.create(TemplatesService::class.java)
+    }
+
+    /**
+     * Provides the repository.
+     *
+     * @return the repository
+     */
+    @Provides
+    @Reusable
+    fun provideRepository(): CommunityTemplatesRepository {
+        return CommunityTemplatesRepository()
     }
 }
