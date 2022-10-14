@@ -7,7 +7,6 @@ import android.view.View
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesBoxedWeeksCalendarBinding
 import com.toolsboox.plugin.templates.ot.BoxedWeekCalendarCreator
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import java.time.LocalDate
 import java.time.temporal.WeekFields
@@ -19,10 +18,10 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class BoxedWeeksCalendarFragment @Inject constructor(
-    private val presenter: BoxedWeeksCalendarPresenter,
-    private val router: Router
-) : ScreenFragment() {
+class BoxedWeeksCalendarFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var presenter: BoxedWeeksCalendarPresenter
 
     /**
      * The inflated layout.

@@ -7,7 +7,6 @@ import android.view.View
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesBoxedDaysCalendarBinding
 import com.toolsboox.plugin.templates.ot.BoxedDayCalendarCreator
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import java.time.LocalDate
 import javax.inject.Inject
@@ -17,10 +16,10 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class BoxedDaysCalendarFragment @Inject constructor(
-    private val presenter: BoxedDaysCalendarPresenter,
-    private val router: Router
-) : ScreenFragment() {
+class BoxedDaysCalendarFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var presenter: BoxedDaysCalendarPresenter
 
     /**
      * The inflated layout.

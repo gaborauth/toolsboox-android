@@ -8,26 +8,24 @@ import android.provider.MediaStore
 import android.view.SurfaceHolder
 import android.view.View
 import com.onyx.android.sdk.api.device.epd.EpdController
+import com.onyx.android.sdk.data.note.TouchPoint
 import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.pen.TouchHelper
-import com.onyx.android.sdk.data.note.TouchPoint
 import com.onyx.android.sdk.pen.data.TouchPointList
-import kotlinx.coroutines.*
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTeamdrawerPageBinding
 import com.toolsboox.plugin.teamdrawer.nw.NoteRepository
-import com.toolsboox.plugin.teamdrawer.nw.RoomRepository
 import com.toolsboox.plugin.teamdrawer.nw.domain.Note
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import com.toolsboox.plugin.teamdrawer.nw.dto.NotePageComplex
 import com.toolsboox.ui.plugin.ScreenFragment
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.time.Instant
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
@@ -37,11 +35,13 @@ import kotlin.math.sqrt
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class PageFragment @Inject constructor(
-    private val presenter: PagePresenter,
-    private val noteRepository: NoteRepository,
-    private val roomRepository: RoomRepository
-) : ScreenFragment() {
+class PageFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var presenter: PagePresenter
+
+    @Inject
+    lateinit var noteRepository: NoteRepository
 
     /**
      * The inflated layout.

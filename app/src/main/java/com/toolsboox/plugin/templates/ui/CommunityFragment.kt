@@ -12,7 +12,6 @@ import com.toolsboox.di.NetworkModule
 import com.toolsboox.plugin.templates.da.CommunityTemplate
 import com.toolsboox.plugin.templates.nw.CommunityTemplatesRepository
 import com.toolsboox.plugin.templates.ot.CommunityTemplatesItemAdapter
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,11 +27,13 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CommunityFragment @Inject constructor(
-    private val presenter: CommunityPresenter,
-    private val communityTemplatesRepository: CommunityTemplatesRepository,
-    private val router: Router
-) : ScreenFragment() {
+class CommunityFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var presenter: CommunityPresenter
+
+    @Inject
+    lateinit var communityTemplatesRepository: CommunityTemplatesRepository
 
     /**
      * The inflated layout.
