@@ -6,7 +6,6 @@ import android.text.InputType
 import android.view.View
 import android.widget.EditText
 import androidx.recyclerview.widget.GridLayoutManager
-import kotlinx.coroutines.*
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTeamdrawerRoomBinding
 import com.toolsboox.plugin.teamdrawer.da.RoomItem
@@ -15,6 +14,7 @@ import com.toolsboox.plugin.teamdrawer.nw.domain.Room
 import com.toolsboox.plugin.teamdrawer.ot.RoomItemAdapter
 import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
+import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,11 +23,16 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class RoomFragment @Inject constructor(
-    private val presenter: RoomPresenter,
-    private val roomRepository: RoomRepository,
-    private val router: Router
-) : ScreenFragment() {
+class RoomFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var presenter: RoomPresenter
+
+    @Inject
+    lateinit var roomRepository: RoomRepository
+
+    @Inject
+    lateinit var router: Router
 
     /**
      * The inflated layout.

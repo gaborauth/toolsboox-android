@@ -7,7 +7,6 @@ import android.view.View
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesFlatWeeksCalendarBinding
 import com.toolsboox.plugin.templates.ot.FlatWeekCalendarCreator
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import java.time.LocalDate
 import java.time.temporal.WeekFields
@@ -19,10 +18,10 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class FlatWeeksCalendarFragment @Inject constructor(
-    private val presenter: FlatWeeksCalendarPresenter,
-    private val router: Router
-) : ScreenFragment() {
+class FlatWeeksCalendarFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var presenter: FlatWeeksCalendarPresenter
 
     /**
      * The inflated layout.

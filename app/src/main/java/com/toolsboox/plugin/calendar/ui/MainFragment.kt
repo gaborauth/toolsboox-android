@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarMainBinding
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import javax.inject.Inject
 
@@ -13,10 +12,7 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class MainFragment @Inject constructor(
-    private val presenter: MainPresenter,
-    private val router: Router
-) : ScreenFragment() {
+class MainFragment @Inject constructor() : ScreenFragment() {
 
     /**
      * The inflated layout.

@@ -20,7 +20,6 @@ import com.toolsboox.ot.PenRawInputCallback
 import com.toolsboox.plugin.kanban.da.CardItem
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -35,10 +34,10 @@ import kotlin.math.sign
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class MainFragment @Inject constructor(
-    private val presenter: MainPresenter,
-    private val router: Router
-) : ScreenFragment() {
+class MainFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var presenter: MainPresenter
 
     /**
      * The inflated layout.
@@ -272,12 +271,14 @@ class MainFragment @Inject constructor(
                             placeCardItems()
                         }
                     }
+
                     OnGestureListener.DTU -> {
                         if (currentCarouselPositions[lane] < cardsByLane[lane].size - 1) {
                             currentCarouselPositions[lane] = currentCarouselPositions[lane] + 1
                             placeCardItems()
                         }
                     }
+
                     OnGestureListener.LTR -> {
                         if (lane < 2) {
                             val cardToMove = cardsByLane[lane][currentCarouselPositions[lane]]
@@ -296,6 +297,7 @@ class MainFragment @Inject constructor(
 
                         placeCardItems()
                     }
+
                     OnGestureListener.RTL -> {
                         if (lane > 0) {
                             val cardToMove = cardsByLane[lane][currentCarouselPositions[lane]]

@@ -8,8 +8,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
-import com.toolsboox.databinding.FragmentDashboardBinding
 import com.toolsboox.da.SquareItem
+import com.toolsboox.databinding.FragmentDashboardBinding
 import com.toolsboox.ot.SquareItemAdapter
 import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
@@ -21,10 +21,13 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class DashboardFragment @Inject constructor(
-    private val presenter: DashboardPresenter,
-    private val router: Router
-) : ScreenFragment() {
+class DashboardFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var presenter: DashboardPresenter
+
+    @Inject
+    lateinit var router: Router
 
     /**
      * The inflated layout.
@@ -116,12 +119,17 @@ class DashboardFragment @Inject constructor(
             val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
             builder.setTitle(R.string.dashboard_new_version_title)
                 .setMessage(R.string.dashboard_new_version_message)
-                .setPositiveButton( R.string.main_update
+                .setPositiveButton(
+                    R.string.main_update
                 ) { _, _ ->
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/gaborauth/toolsboox-android/releases/latest"))
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/gaborauth/toolsboox-android/releases/latest/download/toolboox-prod-release-1.3.1-00.apk")
+                    )
                     this.startActivity(intent)
                 }
-                .setNegativeButton( R.string.main_update_not_now
+                .setNegativeButton(
+                    R.string.main_update_not_now
                 ) { dialog, _ ->
                     dialog.cancel()
                 }

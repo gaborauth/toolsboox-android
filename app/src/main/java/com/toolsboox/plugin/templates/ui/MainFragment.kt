@@ -17,10 +17,10 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class MainFragment @Inject constructor(
-    private val presenter: MainPresenter,
-    private val router: Router
-) : ScreenFragment() {
+class MainFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var router: Router
 
     /**
      * The inflated layout.
