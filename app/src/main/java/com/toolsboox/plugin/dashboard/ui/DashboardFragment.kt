@@ -11,6 +11,7 @@ import com.toolsboox.R
 import com.toolsboox.da.SquareItem
 import com.toolsboox.databinding.FragmentDashboardBinding
 import com.toolsboox.ot.SquareItemAdapter
+import com.toolsboox.plugin.dashboard.da.Version
 import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import timber.log.Timber
@@ -43,6 +44,11 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      * The dashboard item adapter.
      */
     private lateinit var adapter: SquareItemAdapter
+
+    /**
+     * User already notified about new version.
+     */
+    private var notifiedAboutNewVersion: Boolean = false
 
     /**
      * OnViewCreated hook.
@@ -114,18 +120,18 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      *
      * @param version the version code
      */
-    fun versionResult(version: Int) {
-        if (BuildConfig.VERSION_CODE < version) {
+    fun versionResult(version: Version) {
+        if (BuildConfig.VERSION_CODE >= version.versionCode && !notifiedAboutNewVersion) {
+            notifiedAboutNewVersion = true
+
+            val filename = "toolboox-prod-release-${version.versionName}.apk"
+            val url = "https://github.com/gaborauth/toolsboox-android/releases/latest/download/$filename"
+
             val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
             builder.setTitle(R.string.dashboard_new_version_title)
                 .setMessage(R.string.dashboard_new_version_message)
-                .setPositiveButton(
-                    R.string.main_update
-                ) { _, _ ->
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/gaborauth/toolsboox-android/releases/latest/download/toolboox-prod-release-1.3.1-00.apk")
-                    )
+                .setPositiveButton(R.string.main_update) { _, _ ->
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                     this.startActivity(intent)
                 }
                 .setNegativeButton(
