@@ -121,7 +121,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      * @param version the version code
      */
     fun versionResult(version: Version) {
-        if (BuildConfig.VERSION_CODE >= version.versionCode && !notifiedAboutNewVersion) {
+        if (BuildConfig.VERSION_CODE < version.versionCode && !notifiedAboutNewVersion) {
             notifiedAboutNewVersion = true
 
             val filename = "toolboox-prod-release-${version.versionName}.apk"
