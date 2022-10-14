@@ -45,8 +45,8 @@ abstract class BasePresenter<out V : BaseView>(private val view: V) {
     protected fun <T> coroutinesCallHelper(
         call: () -> Deferred<T>,
         onSuccess: (response: T) -> Unit
-    ) = coroutinesCallHelper(call, onSuccess,
-        { t -> view.somethingHappened(t) })
+    ) = coroutinesCallHelper(call, onSuccess
+    ) { t -> view.somethingHappened(t) }
 
 
     /**

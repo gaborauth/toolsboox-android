@@ -24,7 +24,7 @@ abstract class FragmentPresenter {
         fragment: ScreenFragment,
         call: () -> Deferred<Response<T>>,
         onSuccess: (response: Response<T>) -> Unit
-    ) = coroutinesCallHelper(fragment, call, onSuccess, { t -> fragment.somethingHappened(t) })
+    ) = coroutinesCallHelper(fragment, call, onSuccess) { t -> fragment.somethingHappened(t) }
 
     /**
      * Coroutines based call helper.

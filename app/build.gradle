@@ -13,6 +13,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kapt {
         javacOptions {
             option("-source", "8")
@@ -93,6 +94,7 @@ android {
 
     lintOptions{
         disable 'MissingTranslation'
+        disable 'MissingQuantity'
     }
 
     packagingOptions {

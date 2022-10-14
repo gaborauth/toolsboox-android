@@ -17,10 +17,10 @@ import kotlin.math.sqrt
  * @param penCallback pen callback
  * @param eraseCallback erase callback
  */
-class PenRawInputCallback(val penCallback: PenCallback?, val eraseCallback: EraseCallback?) : RawInputCallback() {
+class PenRawInputCallback(private val penCallback: PenCallback?, private val eraseCallback: EraseCallback?) : RawInputCallback() {
 
-    var lastPoint: TouchPoint? = null
-    var strokes: List<Stroke> = mutableListOf()
+    private var lastPoint: TouchPoint? = null
+    private var strokes: List<Stroke> = mutableListOf()
 
     private fun epsilon(touchPoint: TouchPoint, lastPoint: TouchPoint, epsilon: Float): Boolean {
         return epsilon(touchPoint.x, touchPoint.y, lastPoint.x, lastPoint.y, epsilon)
