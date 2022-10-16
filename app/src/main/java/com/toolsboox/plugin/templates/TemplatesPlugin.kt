@@ -15,7 +15,7 @@ class TemplatesPlugin @Inject constructor() : Plugin {
 
     override fun getRoute(url: String): ScreenFragment? {
         Router.getParameters("/templates", url).let {
-            if (it is Router.Parameters.Match) return MainFragment().setParameters(it.parameters)
+            if (it is Router.Parameters.Match) return TemplatesMainFragment().setParameters(it.parameters)
         }
         Router.getParameters("/templates/boxedDaysCalendar", url).let {
             if (it is Router.Parameters.Match) return BoxedDaysCalendarFragment().setParameters(it.parameters)

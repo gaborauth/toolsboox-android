@@ -8,4 +8,4 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class MainPresenter @Inject constructor() : FragmentPresenter()
+class TemplatesMainPresenter @Inject constructor() : FragmentPresenter()

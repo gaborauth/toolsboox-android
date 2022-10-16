@@ -29,7 +29,7 @@ abstract class TemplatesModule {
     abstract fun bindFlatWeeksCalendarPresenter(flatWeeksCalendarPresenter: FlatWeeksCalendarPresenter): FragmentPresenter
 
     @Binds
-    abstract fun bindMainPresenter(mainPresenter: MainPresenter): FragmentPresenter
+    abstract fun bindTemplatesMainPresenter(templatesMainPresenter: TemplatesMainPresenter): FragmentPresenter
 
     @Binds
     abstract fun bindThisWeeksCalendarPresenter(thisWeeksCalendarPresenter: ThisWeeksCalendarPresenter): FragmentPresenter

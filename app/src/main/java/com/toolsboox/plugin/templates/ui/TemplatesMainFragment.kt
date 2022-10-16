@@ -19,13 +19,13 @@ import javax.inject.Inject
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @AndroidEntryPoint
-class MainFragment @Inject constructor() : ScreenFragment() {
+class TemplatesMainFragment @Inject constructor() : ScreenFragment() {
 
     @Inject
     lateinit var router: Router
 
     @Inject
-    lateinit var presenter: MainPresenter
+    lateinit var presenter: TemplatesMainPresenter
 
     /**
      * The inflated layout.
@@ -54,7 +54,7 @@ class MainFragment @Inject constructor() : ScreenFragment() {
         binding = FragmentTemplatesMainBinding.bind(view)
 
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(this@MainFragment.requireContext(), 4)
+            layoutManager = GridLayoutManager(this@TemplatesMainFragment.requireContext(), 4)
         }
 
         val squareItems = mutableListOf<SquareItem>()
