@@ -1,6 +1,6 @@
 package com.toolsboox.plugin.calendar
 
-import com.toolsboox.plugin.calendar.ui.MainPresenter
+import com.toolsboox.plugin.calendar.ui.CalendarMainPresenter
 import com.toolsboox.ui.plugin.FragmentPresenter
 import dagger.Binds
 import dagger.Module
@@ -17,5 +17,5 @@ import dagger.hilt.android.components.ActivityComponent
 abstract class CalendarModule {
 
     @Binds
-    abstract fun bindMainPresenter(mainPresenter: MainPresenter): FragmentPresenter
+    abstract fun bindCalendarMainPresenter(calendarMainPresenter: CalendarMainPresenter): FragmentPresenter
 }

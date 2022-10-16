@@ -14,10 +14,10 @@ import javax.inject.Inject
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @AndroidEntryPoint
-class MainFragment @Inject constructor() : ScreenFragment() {
+class CalendarMainFragment @Inject constructor() : ScreenFragment() {
 
     @Inject
-    lateinit var presenter: MainPresenter
+    lateinit var presenter: CalendarMainPresenter
 
     /**
      * The inflated layout.

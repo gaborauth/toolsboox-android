@@ -7,7 +7,6 @@ import com.toolsboox.R
 import com.toolsboox.da.SquareItem
 import com.toolsboox.databinding.FragmentTemplatesMainBinding
 import com.toolsboox.ot.SquareItemAdapter
-import com.toolsboox.plugin.calendar.ui.MainPresenter
 import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint

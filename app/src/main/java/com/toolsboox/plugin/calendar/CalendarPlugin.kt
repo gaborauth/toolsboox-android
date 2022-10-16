@@ -1,6 +1,6 @@
 package com.toolsboox.plugin.calendar
 
-import com.toolsboox.plugin.calendar.ui.MainFragment
+import com.toolsboox.plugin.calendar.ui.CalendarMainFragment
 import com.toolsboox.ui.plugin.Plugin
 import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
@@ -15,7 +15,7 @@ class CalendarPlugin @Inject constructor() : Plugin {
 
     override fun getRoute(url: String): ScreenFragment? {
         Router.getParameters("/calendar", url).let {
-            if (it is Router.Parameters.Match) return MainFragment().setParameters(it.parameters)
+            if (it is Router.Parameters.Match) return CalendarMainFragment().setParameters(it.parameters)
         }
 
         return null
