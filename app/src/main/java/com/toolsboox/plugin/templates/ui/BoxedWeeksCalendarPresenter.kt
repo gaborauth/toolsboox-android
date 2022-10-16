@@ -3,16 +3,15 @@ package com.toolsboox.plugin.templates.ui
 import android.Manifest
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
+import com.toolsboox.R
+import com.toolsboox.databinding.FragmentTemplatesBoxedWeeksCalendarBinding
+import com.toolsboox.plugin.templates.ot.BoxedWeekCalendarCreator
+import com.toolsboox.ui.plugin.FragmentPresenter
+import com.toolsboox.ui.plugin.ScreenFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.toolsboox.R
-import com.toolsboox.databinding.FragmentTemplatesBoxedWeeksCalendarBinding
-import com.toolsboox.plugin.templates.nw.TemplatesService
-import com.toolsboox.plugin.templates.ot.BoxedWeekCalendarCreator
-import com.toolsboox.ui.plugin.FragmentPresenter
-import com.toolsboox.ui.plugin.ScreenFragment
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDate
@@ -23,9 +22,7 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class BoxedWeeksCalendarPresenter @Inject constructor(
-    private val templatesService: TemplatesService
-) : FragmentPresenter() {
+class BoxedWeeksCalendarPresenter @Inject constructor() : FragmentPresenter() {
     /**
      * Export the calendar as PDF.
      *
