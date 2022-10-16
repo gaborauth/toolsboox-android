@@ -1,7 +1,7 @@
 package com.toolsboox.ot
 
-import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.data.note.TouchPoint
+import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.pen.data.TouchPointList
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint

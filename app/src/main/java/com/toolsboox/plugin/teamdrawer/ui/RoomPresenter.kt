@@ -9,9 +9,10 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class RoomPresenter @Inject constructor(
-    private val roomService: RoomService
-) : FragmentPresenter() {
+class RoomPresenter @Inject constructor() : FragmentPresenter() {
+
+    @Inject
+    lateinit var roomService: RoomService
 
     /**
      * Add room.
@@ -33,6 +34,7 @@ class RoomPresenter @Inject constructor(
                             fragment.addResult(body)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }
@@ -58,6 +60,7 @@ class RoomPresenter @Inject constructor(
                             fragment.listResult(body)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }

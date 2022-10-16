@@ -1,9 +1,11 @@
 package com.toolsboox.plugin.templates
 
+import com.toolsboox.plugin.templates.ui.*
+import com.toolsboox.ui.plugin.FragmentPresenter
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import com.toolsboox.ui.plugin.Router
-import javax.inject.Singleton
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
 /**
  * Templates plugin module.
@@ -11,12 +13,24 @@ import javax.inject.Singleton
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
-class TemplatesModule(private val plugin: TemplatesPlugin, private val router: Router) {
-    @Provides
-    @Singleton
-    fun providePlugin() = plugin
+@InstallIn(ActivityComponent::class)
+abstract class TemplatesModule {
 
-    @Provides
-    @Singleton
-    fun provideRouter(): Router = router
+    @Binds
+    abstract fun bindBoxedDaysCalendarPresenter(boxedDaysCalendarPresenter: BoxedDaysCalendarPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindBoxedWeeksCalendarPresenter(boxedWeeksCalendarPresenter: BoxedWeeksCalendarPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindCommunityPresenter(communityPresenter: CommunityPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindFlatWeeksCalendarPresenter(flatWeeksCalendarPresenter: FlatWeeksCalendarPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindMainPresenter(mainPresenter: MainPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindThisWeeksCalendarPresenter(thisWeeksCalendarPresenter: ThisWeeksCalendarPresenter): FragmentPresenter
 }

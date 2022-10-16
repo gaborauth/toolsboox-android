@@ -10,9 +10,10 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class NotePresenter @Inject constructor(
-    private val noteService: NoteService
-) : FragmentPresenter() {
+class NotePresenter @Inject constructor() : FragmentPresenter() {
+
+    @Inject
+    lateinit var noteService: NoteService
 
     /**
      * Add a new note.
@@ -35,6 +36,7 @@ class NotePresenter @Inject constructor(
                             fragment.addResult(body)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }
@@ -61,6 +63,7 @@ class NotePresenter @Inject constructor(
                             fragment.listResult(body)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }

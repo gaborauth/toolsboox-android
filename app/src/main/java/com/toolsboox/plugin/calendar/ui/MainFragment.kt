@@ -5,6 +5,7 @@ import android.view.View
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarMainBinding
 import com.toolsboox.ui.plugin.ScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
@@ -12,7 +13,11 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@AndroidEntryPoint
 class MainFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var presenter: MainPresenter
 
     /**
      * The inflated layout.

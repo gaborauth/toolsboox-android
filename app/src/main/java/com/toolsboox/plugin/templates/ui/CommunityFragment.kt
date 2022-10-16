@@ -13,6 +13,7 @@ import com.toolsboox.plugin.templates.da.CommunityTemplate
 import com.toolsboox.plugin.templates.nw.CommunityTemplatesRepository
 import com.toolsboox.plugin.templates.ot.CommunityTemplatesItemAdapter
 import com.toolsboox.ui.plugin.ScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,6 +28,7 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@AndroidEntryPoint
 class CommunityFragment @Inject constructor() : ScreenFragment() {
 
     @Inject

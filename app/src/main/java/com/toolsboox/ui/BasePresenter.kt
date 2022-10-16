@@ -4,9 +4,6 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import com.toolsboox.di.NetworkModule
-import com.toolsboox.di.MainSharedPreferencesModule
-import com.toolsboox.ui.main.MainPresenter
 
 /**
  * Base presenter, provides initial injections and required methods.
@@ -18,24 +15,6 @@ import com.toolsboox.ui.main.MainPresenter
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 abstract class BasePresenter<out V : BaseView>(private val view: V) {
-
-    /**
-     * The injector used to inject required dependencies.
-     */
-    private val injector: PresenterInjector = DaggerPresenterInjector
-        .builder()
-        .baseView(view)
-        .networkModule(NetworkModule)
-        .mainSharedPreferencesModule(MainSharedPreferencesModule)
-        .build()
-
-    /**
-     * Inject.
-     */
-    init {
-        inject()
-    }
-
     /**
      * Coroutines based call helper with default onError.
      *
@@ -80,13 +59,4 @@ abstract class BasePresenter<out V : BaseView>(private val view: V) {
      * This method may be called when the presenter view is destroyed.
      */
     open fun onViewDestroyed() {}
-
-    /**
-     * Injects the required dependencies.
-     */
-    private fun inject() {
-        when (this) {
-            is MainPresenter -> injector.inject(this)
-        }
-    }
 }

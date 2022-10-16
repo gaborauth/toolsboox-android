@@ -1,9 +1,11 @@
 package com.toolsboox.plugin.dashboard
 
+import com.toolsboox.plugin.dashboard.ui.DashboardPresenter
+import com.toolsboox.ui.plugin.FragmentPresenter
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import com.toolsboox.ui.plugin.Router
-import javax.inject.Singleton
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
 /**
  * Dashboard plugin module.
@@ -11,12 +13,9 @@ import javax.inject.Singleton
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
-class DashboardModule(private val plugin: DashboardPlugin, private val router: Router) {
-    @Provides
-    @Singleton
-    fun providePlugin() = plugin
+@InstallIn(ActivityComponent::class)
+abstract class DashboardModule {
 
-    @Provides
-    @Singleton
-    fun provideRouter(): Router = router
+    @Binds
+    abstract fun bindDashboardPresenter(dashboardPresenter: DashboardPresenter): FragmentPresenter
 }

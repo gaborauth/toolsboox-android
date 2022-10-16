@@ -1,7 +1,7 @@
 package com.toolsboox.plugin.templates.nw
 
-import kotlinx.coroutines.Deferred
 import com.toolsboox.plugin.templates.da.CommunityTemplate
+import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.GET
 

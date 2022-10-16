@@ -1,9 +1,11 @@
 package com.toolsboox.plugin.teamdrawer.di
 
+import com.toolsboox.plugin.teamdrawer.nw.*
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import com.toolsboox.plugin.teamdrawer.nw.*
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 
 /**
@@ -12,6 +14,7 @@ import retrofit2.Retrofit
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
+@InstallIn(SingletonComponent::class)
 object TeamDrawerServiceModule {
 
     /**

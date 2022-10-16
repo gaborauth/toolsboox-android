@@ -9,9 +9,11 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class DashboardPresenter @Inject constructor(
-    private val dashboardService: DashboardService
-) : FragmentPresenter() {
+class DashboardPresenter @Inject constructor() : FragmentPresenter() {
+
+    @Inject
+    lateinit var dashboardService: DashboardService
+
     /**
      * Get the server API version.
      *
@@ -32,6 +34,7 @@ class DashboardPresenter @Inject constructor(
                             fragment.versionResult(body)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }

@@ -14,6 +14,7 @@ import com.toolsboox.plugin.teamdrawer.nw.domain.Room
 import com.toolsboox.plugin.teamdrawer.ot.RoomItemAdapter
 import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -23,16 +24,17 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@AndroidEntryPoint
 class RoomFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var router: Router
 
     @Inject
     lateinit var presenter: RoomPresenter
 
     @Inject
     lateinit var roomRepository: RoomRepository
-
-    @Inject
-    lateinit var router: Router
 
     /**
      * The inflated layout.

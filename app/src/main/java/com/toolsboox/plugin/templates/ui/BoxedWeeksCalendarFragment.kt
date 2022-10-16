@@ -8,6 +8,7 @@ import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesBoxedWeeksCalendarBinding
 import com.toolsboox.plugin.templates.ot.BoxedWeekCalendarCreator
 import com.toolsboox.ui.plugin.ScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.temporal.WeekFields
 import java.util.*
@@ -18,6 +19,7 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@AndroidEntryPoint
 class BoxedWeeksCalendarFragment @Inject constructor() : ScreenFragment() {
 
     @Inject

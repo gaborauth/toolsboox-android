@@ -20,18 +20,25 @@ import com.toolsboox.R
 import com.toolsboox.databinding.ActivityMainBinding
 import com.toolsboox.di.MainSharedPreferencesModule
 import com.toolsboox.ui.BaseActivity
-import com.toolsboox.ui.DefaultRouter
+import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import com.toolsboox.utils.ReleaseTree
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 /**
  * A dashboard screen that offers the main menu.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+
+@AndroidEntryPoint
 class MainActivity : BaseActivity<MainPresenter>(), MainView {
+
+    @Inject
+    lateinit var router: Router
 
     /**
      * The Firebase analytics.
@@ -83,7 +90,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         /**
          * The route instance.
          */
-        val router = DefaultRouter(this, binding.mainContentFrame)
         val routingUrl = intent.getStringExtra("routingUrl")
         if (routingUrl == null) {
             router.dispatch("/", true)
@@ -99,13 +105,16 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
                     intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://toolsboox.com"))
                     this.startActivity(intent)
                 }
+
                 R.id.drawer_item_forum -> {
                     intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forum.toolsboox.com"))
                     this.startActivity(intent)
                 }
+
                 R.id.drawer_item_facebook -> {
                     Timber.i("Not implemented yet...")
                 }
+
                 R.id.drawer_item_twitter -> {
                     Timber.i("Not implemented yet...")
                 }
@@ -147,6 +156,18 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     }
 
     /**
+     * Show 'route not implemented yet' message.
+     *
+     * @param url the URL
+     */
+    fun showRouterNotImplemented(url: String) {
+        val message = getString(R.string.router_not_implemented_yet).format(url)
+        Snackbar.make(binding.fragmentContent, message, Snackbar.LENGTH_INDEFINITE)
+            .setAction(R.string.router_not_implemented_yet_action) {}
+            .show()
+    }
+
+    /**
      * Show progress and hide login form.
      */
     override fun showLoading() {
@@ -176,6 +197,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
                 binding.drawerLayout.openDrawer(GravityCompat.START)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

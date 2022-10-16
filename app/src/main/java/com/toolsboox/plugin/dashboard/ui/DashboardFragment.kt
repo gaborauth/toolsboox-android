@@ -14,6 +14,7 @@ import com.toolsboox.ot.SquareItemAdapter
 import com.toolsboox.plugin.dashboard.da.Version
 import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,13 +23,15 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@AndroidEntryPoint
 class DashboardFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var router: Router
 
     @Inject
     lateinit var presenter: DashboardPresenter
 
-    @Inject
-    lateinit var router: Router
 
     /**
      * The inflated layout.

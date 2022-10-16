@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+            android:name=".ui.BaseApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
@@ -19,7 +20,7 @@
                 android:value="false"/>
 
         <activity tools:ignore="LockedOrientationActivity"
-                android:name="com.toolsboox.ui.main.MainActivity"
+                android:name=".ui.main.MainActivity"
                 android:screenOrientation="sensorPortrait"
                 android:configChanges="orientation"
                 android:exported="true">

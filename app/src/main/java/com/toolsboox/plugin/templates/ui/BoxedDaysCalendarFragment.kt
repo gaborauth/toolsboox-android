@@ -8,6 +8,7 @@ import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesBoxedDaysCalendarBinding
 import com.toolsboox.plugin.templates.ot.BoxedDayCalendarCreator
 import com.toolsboox.ui.plugin.ScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -16,6 +17,7 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@AndroidEntryPoint
 class BoxedDaysCalendarFragment @Inject constructor() : ScreenFragment() {
 
     @Inject

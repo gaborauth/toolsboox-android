@@ -5,6 +5,8 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.toolsboox.BuildConfig
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -17,7 +19,6 @@ import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
-import javax.inject.Singleton
 
 /**
  * Retrofit DI module of network services.
@@ -25,6 +26,7 @@ import javax.inject.Singleton
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
+@InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     /**
@@ -79,7 +81,6 @@ object NetworkModule {
      * @return the instance
      */
     @Provides
-    @Singleton
     fun provideGson(): Gson {
         val gsonBuilder = GsonBuilder()
         gsonBuilder.registerTypeAdapter(
@@ -98,7 +99,6 @@ object NetworkModule {
      * @return the instance
      */
     @Provides
-    @Singleton
     @Named("plain")
     fun providePlainRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
@@ -116,7 +116,6 @@ object NetworkModule {
      * @return the instance
      */
     @Provides
-    @Singleton
     @Named("gitHubRaw")
     fun provideGitHubRawRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
@@ -134,7 +133,6 @@ object NetworkModule {
      * @return the instance
      */
     @Provides
-    @Singleton
     fun provideGsonRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))

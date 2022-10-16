@@ -1,9 +1,11 @@
 package com.toolsboox.plugin.calendar
 
+import com.toolsboox.plugin.calendar.ui.MainPresenter
+import com.toolsboox.ui.plugin.FragmentPresenter
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import com.toolsboox.ui.plugin.Router
-import javax.inject.Singleton
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
 /**
  * Calendar plugin module.
@@ -11,12 +13,9 @@ import javax.inject.Singleton
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
-class CalendarModule(private val plugin: CalendarPlugin, private val router: Router) {
-    @Provides
-    @Singleton
-    fun providePlugin() = plugin
+@InstallIn(ActivityComponent::class)
+abstract class CalendarModule {
 
-    @Provides
-    @Singleton
-    fun provideRouter(): Router = router
+    @Binds
+    abstract fun bindMainPresenter(mainPresenter: MainPresenter): FragmentPresenter
 }

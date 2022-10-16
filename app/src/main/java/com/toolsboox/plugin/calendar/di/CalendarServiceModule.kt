@@ -1,9 +1,11 @@
 package com.toolsboox.plugin.calendar.di
 
+import com.toolsboox.plugin.calendar.nw.CalendarService
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import com.toolsboox.plugin.calendar.nw.CalendarService
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import retrofit2.Retrofit
 
 /**
@@ -12,6 +14,7 @@ import retrofit2.Retrofit
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
+@InstallIn(ActivityComponent::class)
 object CalendarServiceModule {
     /**
      * Provides the calendar service.

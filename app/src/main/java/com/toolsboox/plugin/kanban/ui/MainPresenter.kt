@@ -1,13 +1,13 @@
 package com.toolsboox.plugin.kanban.ui
 
 import com.google.gson.Gson
+import com.toolsboox.R
+import com.toolsboox.plugin.kanban.da.CardItem
+import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.toolsboox.R
-import com.toolsboox.plugin.kanban.da.CardItem
-import com.toolsboox.ui.plugin.FragmentPresenter
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -19,9 +19,10 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class MainPresenter @Inject constructor(
-    private val gson: Gson
-) : FragmentPresenter() {
+class MainPresenter @Inject constructor() : FragmentPresenter() {
+
+    @Inject
+    lateinit var gson: Gson
 
     /**
      * Load card items from local storage.

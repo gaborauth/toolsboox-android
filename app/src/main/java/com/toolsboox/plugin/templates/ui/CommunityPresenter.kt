@@ -26,9 +26,11 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CommunityPresenter @Inject constructor(
-    private val templatesService: TemplatesService
-) : FragmentPresenter() {
+class CommunityPresenter @Inject constructor() : FragmentPresenter() {
+
+    @Inject
+    lateinit var templatesService: TemplatesService
+
     /**
      * Export the community template.
      *

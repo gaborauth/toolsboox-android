@@ -12,10 +12,13 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class PagePresenter @Inject constructor(
-    private val pageService: PageService,
-    private val strokeService: StrokeService
-) : FragmentPresenter() {
+class PagePresenter @Inject constructor() : FragmentPresenter() {
+
+    @Inject
+    lateinit var pageService: PageService
+
+    @Inject
+    lateinit var strokeService: StrokeService
 
     /**
      * Add stroke.
@@ -40,6 +43,7 @@ class PagePresenter @Inject constructor(
                             fragment.addResult(body)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }
@@ -67,6 +71,7 @@ class PagePresenter @Inject constructor(
                             fragment.addPageResult(body)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }
@@ -95,6 +100,7 @@ class PagePresenter @Inject constructor(
                             fragment.delResult(body)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }
@@ -124,6 +130,7 @@ class PagePresenter @Inject constructor(
                             fragment.delResult(body)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }
@@ -153,6 +160,7 @@ class PagePresenter @Inject constructor(
                             fragment.lastResult(body, clearPage)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }
@@ -182,6 +190,7 @@ class PagePresenter @Inject constructor(
                             fragment.listResult(body, clearPage)
                         }
                     }
+
                     else -> fragment.somethingHappened()
                 }
             }

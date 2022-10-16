@@ -21,6 +21,7 @@ import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import com.toolsboox.plugin.teamdrawer.nw.dto.NotePageComplex
 import com.toolsboox.ui.plugin.ScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.time.Instant
@@ -35,6 +36,7 @@ import kotlin.math.sqrt
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@AndroidEntryPoint
 class PageFragment @Inject constructor() : ScreenFragment() {
 
     @Inject

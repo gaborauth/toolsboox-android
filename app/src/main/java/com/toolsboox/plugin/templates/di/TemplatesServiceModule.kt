@@ -5,6 +5,8 @@ import com.toolsboox.plugin.templates.nw.TemplatesService
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import javax.inject.Named
 
@@ -14,6 +16,7 @@ import javax.inject.Named
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
+@InstallIn(SingletonComponent::class)
 object TemplatesServiceModule {
     /**
      * Provides the templates service.

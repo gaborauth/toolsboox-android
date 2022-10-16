@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
 /**
  * Provide main shared preferences.
@@ -12,6 +14,7 @@ import dagger.Reusable
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
+@InstallIn(ActivityComponent::class)
 object MainSharedPreferencesModule {
 
     /**

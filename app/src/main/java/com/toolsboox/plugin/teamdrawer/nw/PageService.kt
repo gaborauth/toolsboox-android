@@ -1,7 +1,7 @@
 package com.toolsboox.plugin.teamdrawer.nw
 
-import kotlinx.coroutines.Deferred
 import com.toolsboox.plugin.teamdrawer.nw.dto.NotePageComplex
+import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.POST
 import retrofit2.http.Path

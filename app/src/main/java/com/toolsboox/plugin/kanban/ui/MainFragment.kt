@@ -21,6 +21,7 @@ import com.toolsboox.plugin.kanban.da.CardItem
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import com.toolsboox.ui.plugin.ScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,6 +35,7 @@ import kotlin.math.sign
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@AndroidEntryPoint
 class MainFragment @Inject constructor() : ScreenFragment() {
 
     @Inject

@@ -15,6 +15,7 @@ import com.toolsboox.plugin.teamdrawer.nw.domain.Note
 import com.toolsboox.plugin.teamdrawer.ot.NoteItemAdapter
 import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
@@ -25,7 +26,11 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@AndroidEntryPoint
 class NoteFragment @Inject constructor() : ScreenFragment() {
+
+    @Inject
+    lateinit var router: Router
 
     @Inject
     lateinit var presenter: NotePresenter
@@ -35,9 +40,6 @@ class NoteFragment @Inject constructor() : ScreenFragment() {
 
     @Inject
     lateinit var roomRepository: RoomRepository
-
-    @Inject
-    lateinit var router: Router
 
     /**
      * The inflated layout.

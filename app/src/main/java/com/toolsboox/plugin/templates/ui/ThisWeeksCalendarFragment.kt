@@ -8,6 +8,7 @@ import android.view.View
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesThisWeeksCalendarBinding
 import com.toolsboox.ui.plugin.ScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.io.FileOutputStream
 import java.io.IOException
@@ -23,6 +24,7 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@AndroidEntryPoint
 class ThisWeeksCalendarFragment @Inject constructor() : ScreenFragment() {
 
     /**
