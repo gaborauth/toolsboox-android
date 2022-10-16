@@ -19,7 +19,7 @@ import javax.inject.Inject
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class MainPresenter @Inject constructor() : FragmentPresenter() {
+class KanbanMainPresenter @Inject constructor() : FragmentPresenter() {
 
     @Inject
     lateinit var gson: Gson
@@ -29,7 +29,7 @@ class MainPresenter @Inject constructor() : FragmentPresenter() {
      *
      * @param fragment the fragment
      */
-    fun loadLocal(fragment: MainFragment) {
+    fun loadLocal(fragment: KanbanMainFragment) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
@@ -71,7 +71,7 @@ class MainPresenter @Inject constructor() : FragmentPresenter() {
      * @param fragment the fragment
      * @param cardItem the card item to save
      */
-    fun saveLocal(fragment: MainFragment, cardItem: CardItem) {
+    fun saveLocal(fragment: KanbanMainFragment, cardItem: CardItem) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }

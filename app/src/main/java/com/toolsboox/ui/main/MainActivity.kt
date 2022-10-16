@@ -220,7 +220,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      * @param fragment the fragment
      */
     private fun orientateFragment(fragment: Fragment?) {
-        if (fragment is com.toolsboox.plugin.kanban.ui.MainFragment) {
+        if (fragment is com.toolsboox.plugin.kanban.ui.KanbanMainFragment) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             Timber.i("Sensor landscape: ${fragment.javaClass.name}")
             return
