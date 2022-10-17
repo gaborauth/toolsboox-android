@@ -45,6 +45,9 @@
     <string name="main_version">%s&#8211;%s</string>
     <string name="main_update_not_now">Now now</string>
     <string name="main_update">Update</string>
+    <string name="main_internet_permission_title">Internet</string>
+    <string name="main_internet_permission_message">Access of internet is needed to download templates</string>
+    <string name="main_internet_permission_missing">Missing permission of internet&#8230;</string>
     <string name="main_read_external_storage_permission_title">Read storage</string>
     <string name="main_read_external_storage_permission_message">Read of storage is needed to export content</string>
     <string name="main_read_external_storage_permission_missing">Missing permission of read external storage&#8230;</string>

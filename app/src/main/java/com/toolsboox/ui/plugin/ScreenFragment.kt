@@ -1,5 +1,6 @@
 package com.toolsboox.ui.plugin
 
+import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +24,11 @@ import timber.log.Timber
  */
 abstract class ScreenFragment : Fragment() {
     companion object {
+
+        /**
+         * Result code of INTERNET permission.
+         */
+        const val REQUEST_PERMISSION_INTERNET = 12344
 
         /**
          * Result code of READ_EXTERNAL_STORAGE permission.
@@ -147,6 +153,8 @@ abstract class ScreenFragment : Fragment() {
      */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
+            REQUEST_PERMISSION_INTERNET,
+            REQUEST_PERMISSION_READ_EXTERNAL_STORAGE,
             REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this.context, "Permission Granted!", Toast.LENGTH_SHORT).show()
@@ -155,6 +163,30 @@ abstract class ScreenFragment : Fragment() {
                 }
             }
         }
+    }
+
+    /**
+     * Check if permission granted or start the request process.
+     */
+    fun askAppPermissions() {
+        checkPermissionGranted(
+            Manifest.permission.INTERNET,
+            REQUEST_PERMISSION_INTERNET,
+            getString(R.string.main_internet_permission_title),
+            getString(R.string.main_internet_permission_message)
+        )
+        checkPermissionGranted(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            REQUEST_PERMISSION_READ_EXTERNAL_STORAGE,
+            getString(R.string.main_read_external_storage_permission_title),
+            getString(R.string.main_read_external_storage_permission_message)
+        )
+        checkPermissionGranted(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE,
+            getString(R.string.main_write_external_storage_permission_title),
+            getString(R.string.main_write_external_storage_permission_message)
+        )
     }
 
     /**
