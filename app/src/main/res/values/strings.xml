@@ -19,6 +19,7 @@
     <string name="router_not_implemented_yet_action">Okay</string>
 
     <!-- Common messages -->
+    <string name="ok">OK</string>
     <string name="list_loading">Loading the list…</string>
     <string name="list_empty">Empty list…</string>
     <string name="export_message">Exported as %s</string>
@@ -59,6 +60,8 @@
     <string name="dashboard_title">Dashboard</string>
     <string name="dashboard_new_version_title">New version</string>
     <string name="dashboard_new_version_message">There is a new version of \'Tools for Boox\' available, please upgrade it unless some functions may not work.</string>
+    <string name="dashboard_device_mismatch_title">Device mismatch</string>
+    <string name="dashboard_device_mismatch_message">The \'Tools for Boox\' application is developed to Onyx Boox devices, your device doesn\'t look like an Onxy Boox (%s - %s), there may be bugs and crashes.</string>
     <string name="dashboard_item_cancel_alt">Cancel</string>
     <string name="dashboard_item_delete_alt">Delete</string>
     <string name="dashboard_item_edit_alt">Edit</string>

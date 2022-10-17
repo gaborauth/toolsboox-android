@@ -49,6 +49,11 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
     private lateinit var adapter: SquareItemAdapter
 
     /**
+     * User already notified about device mismatch.
+     */
+    private var notifiedAboutDeviceMismatch: Boolean = false
+
+    /**
      * User already notified about new version.
      */
     private var notifiedAboutNewVersion: Boolean = false
@@ -116,6 +121,30 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
 
         toolBar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.dashboard_title))
+
+        deviceCheck()
+    }
+
+    /**
+     * Render the result of brand mismatch dialog.
+     */
+    private fun deviceCheck() {
+        val brand = android.os.Build.BRAND.lowercase().contains("onyx")
+        val device = android.os.Build.DEVICE.lowercase().contains("onyx")
+        val manufacturer = android.os.Build.MANUFACTURER.lowercase().contains("onyx")
+        if (brand || device || manufacturer) return
+
+        val message = getString(R.string.dashboard_device_mismatch_message)
+            .format(android.os.Build.BRAND, android.os.Build.DEVICE)
+
+        notifiedAboutDeviceMismatch = true
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+        builder.setTitle(R.string.dashboard_device_mismatch_title)
+            .setMessage(message)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                dialog.cancel()
+            }
+        builder.create().show()
     }
 
     /**
