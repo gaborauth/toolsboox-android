@@ -118,7 +118,7 @@ class CalendarMainFragment @Inject constructor() : SurfaceFragment() {
             File("$rootPath/toolsBoox/").mkdirs()
 
             val filename = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(currentDate)
-            val path = "$rootPath/toolsBoox/$filename.json"
+            val path = "$rootPath/toolsBoox/daily-$filename.json"
             try {
                 PrintWriter(FileWriter(File(path))).use {
                     it.write(GsonBuilder().create().toJson(calendarDay).toString())
@@ -204,7 +204,7 @@ class CalendarMainFragment @Inject constructor() : SurfaceFragment() {
             File("$rootPath/toolsBoox/").mkdirs()
 
             val filename = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(currentDate)
-            val path = "$rootPath/toolsBoox/$filename.json"
+            val path = "$rootPath/toolsBoox/daily-$filename.json"
             if (File(path).exists()) {
                 FileReader(File(path)).use {
                     calendarDay = GsonBuilder().create().fromJson(it, CalendarDay::class.java)
