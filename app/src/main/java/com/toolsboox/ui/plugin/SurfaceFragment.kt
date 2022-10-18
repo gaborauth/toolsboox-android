@@ -1,6 +1,8 @@
 package com.toolsboox.ui.plugin
 
+import android.Manifest
 import android.graphics.*
+import android.provider.MediaStore
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.onyx.android.sdk.api.device.epd.EpdController
@@ -8,9 +10,11 @@ import com.onyx.android.sdk.data.note.TouchPoint
 import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.pen.data.TouchPointList
+import com.toolsboox.R
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import timber.log.Timber
+import java.time.Instant
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -26,32 +30,32 @@ abstract class SurfaceFragment : ScreenFragment() {
     /**
      * The paint in the bitmap.
      */
-    protected var paint = Paint()
+    private var paint = Paint()
 
     /**
      * TouchHelper of the Onyx's pen.
      */
-    protected lateinit var touchHelper: TouchHelper
+    private lateinit var touchHelper: TouchHelper
 
     /**
      * The bitmap of the canvas.
      */
-    protected lateinit var bitmap: Bitmap
+    private lateinit var bitmap: Bitmap
 
     /**
      * The canvas of the surface view.
      */
-    protected lateinit var canvas: Canvas
+    private lateinit var canvas: Canvas
 
     /**
      * The callback of the surface holder.
      */
-    protected var surfaceCallback: SurfaceHolder.Callback? = null
+    private var surfaceCallback: SurfaceHolder.Callback? = null
 
     /**
      * The list of strokes.
      */
-    protected var strokes: List<Stroke> = mutableListOf()
+    private var strokes: List<Stroke> = mutableListOf()
 
     /**
      * SurfaceView provide method.
@@ -75,9 +79,69 @@ abstract class SurfaceFragment : ScreenFragment() {
     abstract fun delStroke(strokeId: UUID)
 
     /**
-     * Initialize the surface view of Onyx's drawing.
+     * OnResume hook.
      */
-    fun initializeSurface() {
+    override fun onResume() {
+        super.onResume()
+
+        initializeSurface()
+        touchHelper.setRawDrawingEnabled(true)
+    }
+
+    /**
+     * OnPause hook.
+     */
+    override fun onPause() {
+        super.onPause()
+
+        touchHelper.setRawDrawingEnabled(false)
+    }
+
+    /**
+     * OnDestroy hook.
+     */
+    override fun onDestroy() {
+        super.onDestroy()
+
+        touchHelper.closeRawDrawing()
+        bitmap.recycle()
+    }
+
+    /**
+     * Export bitmap to the external storage.
+     */
+    fun exportBitmap() {
+        val permissionGranted = checkPermissionGranted(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE,
+            getString(R.string.main_write_external_storage_permission_title),
+            getString(R.string.main_write_external_storage_permission_message)
+        )
+
+        if (permissionGranted) {
+            val title = "export-${Instant.now().epochSecond}"
+            MediaStore.Images.Media.insertImage(
+                this@SurfaceFragment.requireActivity().contentResolver,
+                bitmap,
+                title,
+                title
+            )
+            showMessage(getString(R.string.team_drawer_page_export_message).format(title), provideSurfaceView())
+        }
+    }
+
+    /**
+     * Initialize the surface view of Onyx's drawing.
+     *
+     * @param first first initialization flag
+     */
+    fun initializeSurface(first: Boolean = false) {
+        if (first) {
+            touchHelper = TouchHelper.create(provideSurfaceView(), callback)
+            provideSurfaceView().setZOrderOnTop(true)
+            provideSurfaceView().holder.setFormat(PixelFormat.TRANSPARENT)
+        }
+
         paint.isAntiAlias = true
         paint.style = Paint.Style.STROKE
         paint.color = Color.BLACK
@@ -145,9 +209,63 @@ abstract class SurfaceFragment : ScreenFragment() {
     }
 
     /**
+     * Apply strokes on the surface.
+     *
+     * @param strokes the list of strokes
+     * @param clearPage the clear page flag
+     */
+    fun applyStrokes(strokes: List<Stroke>, clearPage: Boolean) {
+        if (clearPage) {
+            touchHelper.isRawDrawingRenderEnabled = false
+        }
+
+        this.strokes = strokes
+        Timber.e("Strokes: ${strokes.size}")
+        val lockCanvas = provideSurfaceView().holder.lockCanvas()
+
+        val fillPaint = Paint()
+        fillPaint.style = Paint.Style.FILL
+        fillPaint.color = Color.TRANSPARENT
+        val rect = Rect(0, 0, provideSurfaceView().width, provideSurfaceView().height)
+        lockCanvas.drawRect(rect, fillPaint)
+        lockCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+        if (clearPage) {
+            canvas.drawRect(rect, fillPaint)
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+        }
+
+        for (stroke in strokes) {
+            val points = stroke.strokePoints
+            if (points.isNotEmpty()) {
+                val path = Path()
+                val prePoint = PointF(points[0].x, points[0].y)
+                if (points.size == 1) {
+                    path.moveTo(prePoint.x - 1f, prePoint.y - 1f)
+                } else {
+                    path.moveTo(prePoint.x, prePoint.y)
+                }
+                for (point in points) {
+                    path.quadTo(prePoint.x, prePoint.y, point.x, point.y)
+                    prePoint.x = point.x
+                    prePoint.y = point.y
+                }
+
+                lockCanvas.drawPath(path, paint)
+                canvas.drawPath(path, paint)
+            }
+        }
+        provideSurfaceView().holder.unlockCanvasAndPost(lockCanvas)
+
+        if (clearPage) {
+            touchHelper.isRawDrawingRenderEnabled = true
+        }
+        touchHelper.setRawDrawingEnabled(true)
+    }
+
+    /**
      * The raw input callback of Onyx's pen library.
      */
-    val callback: RawInputCallback = object : RawInputCallback() {
+    private val callback: RawInputCallback = object : RawInputCallback() {
         var lastPoint: TouchPoint? = null
 
         private fun epsilon(touchPoint: TouchPoint, lastPoint: TouchPoint, epsilon: Float): Boolean {

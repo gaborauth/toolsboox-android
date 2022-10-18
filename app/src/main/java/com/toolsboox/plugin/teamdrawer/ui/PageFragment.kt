@@ -1,13 +1,9 @@
 package com.toolsboox.plugin.teamdrawer.ui
 
-import android.Manifest
 import android.app.AlertDialog
-import android.graphics.*
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.SurfaceView
 import android.view.View
-import com.onyx.android.sdk.pen.TouchHelper
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTeamdrawerPageBinding
@@ -19,7 +15,6 @@ import com.toolsboox.plugin.teamdrawer.nw.dto.NotePageComplex
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 
@@ -137,25 +132,7 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
         }
         pageId = UUID.fromString(parameters["pageId"])
 
-        binding.buttonExport.setOnClickListener {
-            val permissionGranted = checkPermissionGranted(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE,
-                getString(R.string.main_write_external_storage_permission_title),
-                getString(R.string.main_write_external_storage_permission_message)
-            )
-
-            if (permissionGranted) {
-                val title = "export-${Instant.now().epochSecond}"
-                MediaStore.Images.Media.insertImage(
-                    this@PageFragment.requireActivity().contentResolver,
-                    bitmap,
-                    title,
-                    title
-                )
-                showMessage(getString(R.string.team_drawer_page_export_message).format(title), binding.root)
-            }
-        }
+        binding.buttonExport.setOnClickListener { exportBitmap() }
 
         binding.buttonErase.setOnClickListener {
             presenter.del(this, roomId, noteId, pageId)
@@ -179,10 +156,7 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
             renderPage()
         }
 
-        touchHelper = TouchHelper.create(binding.surfaceView, callback)
-        binding.surfaceView.setZOrderOnTop(true)
-        binding.surfaceView.holder.setFormat(PixelFormat.TRANSPARENT)
-        initializeSurface()
+        initializeSurface(true)
     }
 
     /**
@@ -197,9 +171,6 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
 
         toolBar.toolbarPages.text = getString(R.string.toolbar_pages_template).format(1, pageNumbers)
         toolBar.toolbarPager.visibility = View.VISIBLE
-
-        initializeSurface()
-        touchHelper.setRawDrawingEnabled(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
@@ -217,20 +188,9 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
 
         toolBar.toolbarPager.visibility = View.GONE
 
-        touchHelper.setRawDrawingEnabled(false)
         last = 0
 
         timer.cancel()
-    }
-
-    /**
-     * OnDestroy hook.
-     */
-    override fun onDestroy() {
-        super.onDestroy()
-
-        touchHelper.closeRawDrawing()
-        bitmap.recycle()
     }
 
     /**
@@ -288,46 +248,7 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
      * @param clearPage clear the page
      */
     fun listResult(strokes: List<Stroke>, clearPage: Boolean) {
-        if (clearPage) {
-            touchHelper.isRawDrawingRenderEnabled = false
-        }
-
-        this.strokes = strokes
-        val lockCanvas = binding.surfaceView.holder.lockCanvas()
-
-        val fillPaint = Paint()
-        fillPaint.style = Paint.Style.FILL
-        fillPaint.color = Color.TRANSPARENT
-        val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
-        lockCanvas.drawRect(rect, fillPaint)
-        if (clearPage) canvas.drawRect(rect, fillPaint)
-
-        for (stroke in strokes) {
-            val points = stroke.strokePoints
-            if (points.isNotEmpty()) {
-                val path = Path()
-                val prePoint = PointF(points[0].x, points[0].y)
-                if (points.size == 1) {
-                    path.moveTo(prePoint.x - 1f, prePoint.y - 1f)
-                } else {
-                    path.moveTo(prePoint.x, prePoint.y)
-                }
-                for (point in points) {
-                    path.quadTo(prePoint.x, prePoint.y, point.x, point.y)
-                    prePoint.x = point.x
-                    prePoint.y = point.y
-                }
-
-                lockCanvas.drawPath(path, paint)
-                canvas.drawPath(path, paint)
-            }
-        }
-        binding.surfaceView.holder.unlockCanvasAndPost(lockCanvas)
-
-        if (clearPage) {
-            touchHelper.isRawDrawingRenderEnabled = true
-        }
-        touchHelper.setRawDrawingEnabled(true)
+        applyStrokes(strokes, clearPage)
     }
 
     /**
