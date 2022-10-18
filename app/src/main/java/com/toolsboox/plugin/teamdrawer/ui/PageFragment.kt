@@ -193,6 +193,8 @@ class PageFragment @Inject constructor() : ScreenFragment() {
         }
 
         touchHelper = TouchHelper.create(binding.surfaceView, callback)
+        binding.surfaceView.setZOrderOnTop(true)
+        binding.surfaceView.holder.setFormat(PixelFormat.TRANSPARENT)
         initializeSurface()
     }
 
@@ -308,7 +310,7 @@ class PageFragment @Inject constructor() : ScreenFragment() {
 
         val fillPaint = Paint()
         fillPaint.style = Paint.Style.FILL
-        fillPaint.color = Color.WHITE
+        fillPaint.color = Color.TRANSPARENT
         val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
         lockCanvas.drawRect(rect, fillPaint)
         if (clearPage) canvas.drawRect(rect, fillPaint)
@@ -403,7 +405,7 @@ class PageFragment @Inject constructor() : ScreenFragment() {
                         binding.surfaceView.height,
                         Bitmap.Config.ARGB_8888
                     )
-                    bitmap.eraseColor(Color.WHITE)
+                    bitmap.eraseColor(Color.TRANSPARENT)
                     canvas = Canvas(bitmap)
 
                     if (binding.surfaceView.holder == null) {
@@ -445,7 +447,7 @@ class PageFragment @Inject constructor() : ScreenFragment() {
         EpdController.enablePost(binding.surfaceView, 1)
         val paint = Paint()
         paint.style = Paint.Style.FILL
-        paint.color = Color.WHITE
+        paint.color = Color.TRANSPARENT
         val rect = Rect(0, 0, binding.surfaceView.width, binding.surfaceView.height)
         lockerCanvas.drawRect(rect, paint)
         binding.surfaceView.holder.unlockCanvasAndPost(lockerCanvas)
