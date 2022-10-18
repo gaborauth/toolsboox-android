@@ -153,7 +153,10 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      * @param version the version code
      */
     fun versionResult(version: Version) {
-        if (BuildConfig.VERSION_CODE < version.versionCode && !notifiedAboutNewVersion) {
+        val installer = requireContext().packageManager.getInstallerPackageName(requireContext().packageName)
+        Timber.e("Installer package: $installer")
+
+        if (installer == null && BuildConfig.VERSION_CODE < version.versionCode && !notifiedAboutNewVersion) {
             notifiedAboutNewVersion = true
 
             val filename = "toolboox-prod-release-${version.versionName}.apk"
