@@ -220,7 +220,6 @@ abstract class SurfaceFragment : ScreenFragment() {
         }
 
         this.strokes = strokes
-        Timber.e("Strokes: ${strokes.size}")
         val lockCanvas = provideSurfaceView().holder.lockCanvas()
 
         val fillPaint = Paint()
