@@ -104,6 +104,13 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
     }
 
     /**
+     * Stroke changed callback.
+     *
+     * @param strokes the actual strokes
+     */
+    override fun onStrokeChanged(strokes: MutableList<Stroke>) {}
+
+    /**
      * OnViewCreated hook.
      *
      * @param view the parent view

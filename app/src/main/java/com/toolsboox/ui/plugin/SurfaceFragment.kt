@@ -55,7 +55,7 @@ abstract class SurfaceFragment : ScreenFragment() {
     /**
      * The list of strokes.
      */
-    private var strokes: List<Stroke> = mutableListOf()
+    private var strokes: MutableList<Stroke> = mutableListOf()
 
     /**
      * SurfaceView provide method.
@@ -79,6 +79,13 @@ abstract class SurfaceFragment : ScreenFragment() {
     abstract fun delStroke(strokeId: UUID)
 
     /**
+     * Stroke changed callback.
+     *
+     * @param strokes the actual strokes
+     */
+    abstract fun onStrokeChanged(strokes: MutableList<Stroke>)
+
+    /**
      * OnResume hook.
      */
     override fun onResume() {
@@ -86,6 +93,7 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         initializeSurface()
         touchHelper.setRawDrawingEnabled(true)
+        touchHelper.isRawDrawingRenderEnabled = true
     }
 
     /**
@@ -95,6 +103,7 @@ abstract class SurfaceFragment : ScreenFragment() {
         super.onPause()
 
         touchHelper.setRawDrawingEnabled(false)
+        touchHelper.isRawDrawingRenderEnabled = false
     }
 
     /**
@@ -215,11 +224,7 @@ abstract class SurfaceFragment : ScreenFragment() {
      * @param clearPage the clear page flag
      */
     fun applyStrokes(strokes: List<Stroke>, clearPage: Boolean) {
-        if (clearPage) {
-            touchHelper.isRawDrawingRenderEnabled = false
-        }
-
-        this.strokes = strokes
+        this.strokes = strokes.toMutableList()
         val lockCanvas = provideSurfaceView().holder.lockCanvas()
 
         val fillPaint = Paint()
@@ -253,12 +258,12 @@ abstract class SurfaceFragment : ScreenFragment() {
                 canvas.drawPath(path, paint)
             }
         }
-        provideSurfaceView().holder.unlockCanvasAndPost(lockCanvas)
 
-        if (clearPage) {
-            touchHelper.isRawDrawingRenderEnabled = true
-        }
+        touchHelper.setRawDrawingEnabled(false)
+        touchHelper.isRawDrawingRenderEnabled = false
+        provideSurfaceView().holder.unlockCanvasAndPost(lockCanvas)
         touchHelper.setRawDrawingEnabled(true)
+        touchHelper.isRawDrawingRenderEnabled = true
     }
 
     /**
@@ -278,6 +283,17 @@ abstract class SurfaceFragment : ScreenFragment() {
             return d <= epsilon
         }
 
+        override fun onPenActive(touchPoint: TouchPoint) {
+            super.onPenActive(touchPoint)
+        }
+
+        override fun onPenUpRefresh(refreshRect: RectF) {
+            super.onPenUpRefresh(refreshRect)
+            Timber.e("onPenUpRefresh (${refreshRect.top}x${refreshRect.left}/${refreshRect.bottom}x${refreshRect.right} )")
+            applyStrokes(strokes, false)
+            onStrokeChanged(strokes)
+        }
+
         override fun onBeginRawDrawing(b: Boolean, touchPoint: TouchPoint) {
             Timber.i("onBeginRawDrawing (${touchPoint.x}/${touchPoint.y})")
             lastPoint = touchPoint
@@ -295,9 +311,9 @@ abstract class SurfaceFragment : ScreenFragment() {
         override fun onRawDrawingTouchPointListReceived(touchPointList: TouchPointList) {
             Timber.i("onRawDrawingTouchPointListReceived (${touchPointList.size()})")
 
-            val stroke: MutableList<StrokePoint> = mutableListOf()
+            val strokePoints: MutableList<StrokePoint> = mutableListOf()
             var prevPoint: TouchPoint = touchPointList[0]
-            stroke.add(
+            strokePoints.add(
                 StrokePoint(
                     (10 * prevPoint.x).roundToInt() / 10.0f,
                     (10 * prevPoint.y).roundToInt() / 10.0f,
@@ -307,7 +323,7 @@ abstract class SurfaceFragment : ScreenFragment() {
             for (tp in touchPointList) {
                 if (!epsilon(tp, prevPoint, 3.0f) and epsilon(tp, prevPoint, 30.0f)) {
                     prevPoint = tp
-                    stroke.add(
+                    strokePoints.add(
                         StrokePoint(
                             (10 * tp.x).roundToInt() / 10.0f,
                             (10 * tp.y).roundToInt() / 10.0f,
@@ -316,7 +332,9 @@ abstract class SurfaceFragment : ScreenFragment() {
                     )
                 }
             }
-            addStroke(stroke)
+            // TODO: multiple add of strokes
+            addStroke(strokePoints)
+            strokes.add(Stroke(UUID.randomUUID(), UUID.randomUUID(), strokePoints))
         }
 
         override fun onBeginRawErasing(b: Boolean, touchPoint: TouchPoint) {
@@ -345,16 +363,27 @@ abstract class SurfaceFragment : ScreenFragment() {
             }
 
             Timber.i("onRawErasingTouchPointListReceived ($eraserPoints)")
+
+            val strokesToRemove: MutableList<UUID> = mutableListOf()
             for (ep in eraserPoints) {
                 for (stroke in strokes) {
                     for (tp in stroke.strokePoints) {
                         if (epsilon(ep.x, ep.y, tp.x, tp.y, 10.0f)) {
-                            delStroke(stroke.strokeId)
-                            return
+                            strokesToRemove.add(stroke.strokeId)
                         }
                     }
                 }
             }
+
+            // TODO: multiple delete of strokes
+            val strokeId = strokesToRemove.firstOrNull()
+            if (strokeId != null) {
+                delStroke(strokeId)
+            }
+
+            strokesToRemove.forEach { strokes.removeIf { stroke -> stroke.strokeId == it } }
+            applyStrokes(strokes, true)
+            onStrokeChanged(strokes)
         }
     }
 }
