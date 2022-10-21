@@ -35,10 +35,6 @@ abstract class ScreenFragment : Fragment() {
         const val REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 12346
     }
 
-    init {
-        retainInstance = true
-    }
-
     /**
      * The toolbar of the parent activity
      */
