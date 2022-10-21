@@ -58,6 +58,11 @@ abstract class SurfaceFragment : ScreenFragment() {
     private var strokes: MutableList<Stroke> = mutableListOf()
 
     /**
+     * The actual size of the surface.
+     */
+    private var surfaceSize: Rect = Rect(0, 0, 0, 0)
+
+    /**
      * SurfaceView provide method.
      *
      * @return the actual surfaceView
@@ -183,7 +188,8 @@ abstract class SurfaceFragment : ScreenFragment() {
                 }
 
                 override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-                    Timber.i("surfaceChanged")
+                    Timber.i("surfaceChanged: ${width}x${height}")
+                    surfaceSize = Rect(0, 0, width, height)
                 }
 
                 override fun surfaceDestroyed(holder: SurfaceHolder) {
@@ -265,6 +271,13 @@ abstract class SurfaceFragment : ScreenFragment() {
         touchHelper.setRawDrawingEnabled(true)
         touchHelper.isRawDrawingRenderEnabled = true
     }
+
+    /**
+     * Get the size of the surface.
+     *
+     * @return the size of the surface
+     */
+    protected fun getSurfaceSize(): Rect = surfaceSize
 
     /**
      * The raw input callback of Onyx's pen library.
