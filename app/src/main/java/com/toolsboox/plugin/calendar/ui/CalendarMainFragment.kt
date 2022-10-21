@@ -84,20 +84,6 @@ class CalendarMainFragment @Inject constructor() : SurfaceFragment() {
     override fun provideSurfaceView(): SurfaceView = binding.surfaceView
 
     /**
-     * Add stroke callback.
-     *
-     * @param stroke list of stroke points
-     */
-    override fun addStroke(stroke: List<StrokePoint>) {}
-
-    /**
-     * Delete stroke callback.
-     *
-     * @param strokeId the UUID of the stroke
-     */
-    override fun delStroke(strokeId: UUID) {}
-
-    /**
      * Stroke changed callback.
      *
      * @param strokes the actual strokes

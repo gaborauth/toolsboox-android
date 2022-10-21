@@ -69,21 +69,21 @@ abstract class SurfaceFragment : ScreenFragment() {
      *
      * @param stroke list of stroke points
      */
-    abstract fun addStroke(stroke: List<StrokePoint>)
+    open fun onStrokeAdded(stroke: List<StrokePoint>) {}
 
     /**
      * Delete stroke callback.
      *
      * @param strokeId the UUID of the stroke
      */
-    abstract fun delStroke(strokeId: UUID)
+    open fun onStrokeDeleted(strokeId: UUID) {}
 
     /**
      * Stroke changed callback.
      *
      * @param strokes the actual strokes
      */
-    abstract fun onStrokeChanged(strokes: MutableList<Stroke>)
+    open fun onStrokeChanged(strokes: MutableList<Stroke>) {}
 
     /**
      * OnResume hook.
@@ -332,9 +332,8 @@ abstract class SurfaceFragment : ScreenFragment() {
                     )
                 }
             }
-            // TODO: multiple add of strokes
-            addStroke(strokePoints)
             strokes.add(Stroke(UUID.randomUUID(), UUID.randomUUID(), strokePoints))
+            onStrokeAdded(strokePoints)
         }
 
         override fun onBeginRawErasing(b: Boolean, touchPoint: TouchPoint) {
@@ -374,16 +373,15 @@ abstract class SurfaceFragment : ScreenFragment() {
                     }
                 }
             }
+            strokesToRemove.forEach { strokes.removeIf { stroke -> stroke.strokeId == it } }
 
             // TODO: multiple delete of strokes
-            val strokeId = strokesToRemove.firstOrNull()
-            if (strokeId != null) {
-                delStroke(strokeId)
+            if (strokesToRemove.firstOrNull() != null) {
+                onStrokeDeleted(strokesToRemove.firstOrNull()!!)
             }
 
-            strokesToRemove.forEach { strokes.removeIf { stroke -> stroke.strokeId == it } }
-            applyStrokes(strokes, true)
             onStrokeChanged(strokes)
+            applyStrokes(strokes, true)
         }
     }
 }

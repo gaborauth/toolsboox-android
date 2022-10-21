@@ -90,7 +90,7 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
      *
      * @param stroke list of stroke points
      */
-    override fun addStroke(stroke: List<StrokePoint>) {
+    override fun onStrokeAdded(stroke: List<StrokePoint>) {
         presenter.add(this@PageFragment, roomId, noteId, pageId, stroke)
     }
 
@@ -99,16 +99,9 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
      *
      * @param strokeId the UUID of the stroke
      */
-    override fun delStroke(strokeId: UUID) {
+    override fun onStrokeDeleted(strokeId: UUID) {
         presenter.del(this@PageFragment, roomId, noteId, pageId, strokeId)
     }
-
-    /**
-     * Stroke changed callback.
-     *
-     * @param strokes the actual strokes
-     */
-    override fun onStrokeChanged(strokes: MutableList<Stroke>) {}
 
     /**
      * OnViewCreated hook.
