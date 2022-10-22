@@ -119,11 +119,10 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
             presenter.load(this, binding, currentDate, getSurfaceSize())
         }
 
-        binding.buttonYearQuarter.setOnClickListener {
+        binding.buttonYear.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            val quarter = currentDate.format(DateTimeFormatter.ofPattern("q"))
-            Timber.i("Route to the '$year'/'$quarter' quarter calendar")
-            router.dispatch("/calendar/quarter/$year/$quarter", false)
+            Timber.i("Route to the '$year' year calendar")
+            router.dispatch("/calendar/year/$year", false)
         }
 
         binding.buttonMonth1.setOnClickListener {
@@ -182,7 +181,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         val pageTitle = getString(R.string.calendar_quarter_title).format(formattedDate)
         toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
-        binding.buttonYearQuarter.text = currentDate.format(DateTimeFormatter.ofPattern("yyyy 'Q'q"))
+        binding.buttonYear.text = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
 
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.DAY_OF_MONTH, 1)
