@@ -32,7 +32,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
     @Inject
     lateinit var presenter: DashboardPresenter
 
-
     /**
      * The inflated layout.
      */
@@ -132,7 +131,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         val brand = android.os.Build.BRAND.lowercase().contains("onyx")
         val device = android.os.Build.DEVICE.lowercase().contains("onyx")
         val manufacturer = android.os.Build.MANUFACTURER.lowercase().contains("onyx")
-        if (brand || device || manufacturer) return
+        if (brand || device || manufacturer || notifiedAboutDeviceMismatch) return
 
         val message = getString(R.string.dashboard_device_mismatch_message)
             .format(android.os.Build.BRAND, android.os.Build.DEVICE)
@@ -155,8 +154,10 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
     fun versionResult(version: Version) {
         val installer = requireContext().packageManager.getInstallerPackageName(requireContext().packageName)
         Timber.e("Installer package: $installer")
+        if (installer != null) return
+        if (notifiedAboutNewVersion) return
 
-        if (installer == null && BuildConfig.VERSION_CODE < version.versionCode && !notifiedAboutNewVersion) {
+        if (BuildConfig.VERSION_CODE < version.versionCode) {
             notifiedAboutNewVersion = true
 
             val filename = "toolboox-prod-release-${version.versionName}.apk"
