@@ -13,12 +13,11 @@ import kotlinx.coroutines.withContext
 import java.io.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoField
 import java.util.*
 import javax.inject.Inject
 
 /**
- * Calendar main presenter.
+ * Calendar year presenter.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
@@ -41,7 +40,7 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
-                val year = currentDate.get(ChronoField.YEAR)
+                val year = currentDate.year
                 var calendarYear = CalendarYear(year, Locale.getDefault(), mutableListOf())
 
                 val rootPath = Environment.getExternalStorageDirectory()

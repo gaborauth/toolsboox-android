@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoField
 import java.util.*
 import javax.inject.Inject
 
@@ -94,7 +93,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        val year = currentDate.get(ChronoField.YEAR)
+        val year = currentDate.year
         val locale = calendarYear.locale ?: Locale.getDefault()
 
         calendarYear = CalendarYear(year, locale, Calendar.listDeepCopy(strokes))
@@ -131,28 +130,28 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
 
         binding.buttonYear.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year' year calendar")
+            Timber.i("Route to the '$year' yearly calendar")
             router.dispatch("/calendar/year/$year", false)
         }
 
         binding.buttonQ1.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year'/'1' quarter calendar")
+            Timber.i("Route to the '$year'/'1' quarterly calendar")
             router.dispatch("/calendar/quarter/$year/1", false)
         }
         binding.buttonQ2.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year'/'2' quarter calendar")
+            Timber.i("Route to the '$year'/'2' quarterly calendar")
             router.dispatch("/calendar/quarter/$year/2", false)
         }
         binding.buttonQ3.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year'/'3' quarter calendar")
+            Timber.i("Route to the '$year'/'3' quarterly calendar")
             router.dispatch("/calendar/quarter/$year/3", false)
         }
         binding.buttonQ4.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year'/'4' quarter calendar")
+            Timber.i("Route to the '$year'/'4' quarterly calendar")
             router.dispatch("/calendar/quarter/$year/4", false)
         }
 
@@ -186,7 +185,6 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         super.onPause()
 
         toolBar.toolbarPager.visibility = View.GONE
-
         timer.cancel()
     }
 
@@ -207,11 +205,12 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      * Update navigator bar.
      */
     private fun updateNavigator() {
-        val formattedYear = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-        val pageTitle = getString(R.string.calendar_year_title).format(formattedYear)
+        val year = currentDate.year
+
+        val pageTitle = getString(R.string.calendar_year_title).format(year)
         toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
-        binding.buttonYear.text = formattedYear
+        binding.buttonYear.text = "$year"
     }
 
     /**
