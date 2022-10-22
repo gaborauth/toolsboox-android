@@ -27,6 +27,7 @@ interface Creator {
 
         val textDefaultBlack = Paint()
         val textDefaultBlackCenter = Paint()
+        val textDefaultBlackRight = Paint()
         val textDefaultWhite = Paint()
         val textDefaultWhiteCenter = Paint()
         val textSmallBlack = Paint()
@@ -63,6 +64,11 @@ interface Creator {
             textDefaultBlackCenter.textAlign = Paint.Align.CENTER
             textDefaultBlackCenter.textSize = 40.0f
             textDefaultBlackCenter.typeface = Typeface.DEFAULT_BOLD
+
+            textDefaultBlackRight.color = colorBlack
+            textDefaultBlackRight.textAlign = Paint.Align.RIGHT
+            textDefaultBlackRight.textSize = 40.0f
+            textDefaultBlackRight.typeface = Typeface.DEFAULT_BOLD
 
             textDefaultWhite.color = colorWhite
             textDefaultWhite.textSize = 40.0f
