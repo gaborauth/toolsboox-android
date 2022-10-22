@@ -109,13 +109,6 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         touchHelper.setRawDrawingEnabled(false)
         touchHelper.isRawDrawingRenderEnabled = false
-    }
-
-    /**
-     * OnDestroy hook.
-     */
-    override fun onDestroy() {
-        super.onDestroy()
 
         touchHelper.closeRawDrawing()
         bitmap.recycle()
@@ -302,7 +295,7 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         override fun onPenUpRefresh(refreshRect: RectF) {
             super.onPenUpRefresh(refreshRect)
-            Timber.e("onPenUpRefresh (${refreshRect.top}x${refreshRect.left}/${refreshRect.bottom}x${refreshRect.right} )")
+            Timber.i("onPenUpRefresh (${refreshRect.top}x${refreshRect.left}/${refreshRect.bottom}x${refreshRect.right} )")
             applyStrokes(strokes, false)
             onStrokeChanged(strokes)
         }
@@ -318,7 +311,7 @@ abstract class SurfaceFragment : ScreenFragment() {
         }
 
         override fun onRawDrawingTouchPointMoveReceived(touchPoint: TouchPoint) {
-            Timber.i("onRawDrawingTouchPointMoveReceived (${touchPoint.x}/${touchPoint.y} - ${touchPoint.pressure})")
+            Timber.d("onRawDrawingTouchPointMoveReceived (${touchPoint.x}/${touchPoint.y} - ${touchPoint.pressure})")
         }
 
         override fun onRawDrawingTouchPointListReceived(touchPointList: TouchPointList) {
