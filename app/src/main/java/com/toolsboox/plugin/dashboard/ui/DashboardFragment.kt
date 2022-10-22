@@ -109,6 +109,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
 
+        askAppPermissions()
         presenter.version(this)
     }
 
