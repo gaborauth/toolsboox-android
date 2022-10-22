@@ -89,7 +89,7 @@ class CalendarQuarterCreator : Creator {
                     DayOfWeek.SUNDAY.value -> DayOfWeek.SUNDAY.getDisplayName(TextStyle.NARROW, locale)
                     else -> "?"
                 }.let { dayOfWeekText ->
-                    canvas.drawText("${i}", lo + 10.0f, to + i * ceh - 15.0f, Creator.textSmallBlackLeft)
+                    canvas.drawText("${i}", lo + 10.0f, to + i * ceh - 15.0f, Creator.textSmallBlack)
                     canvas.drawText(dayOfWeekText, lo + 65.0f, to + i * ceh - 15.0f, Creator.textSmallBlackRight)
                 }
             }
