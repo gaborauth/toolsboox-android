@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.calendar.da
 
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
+import java.util.*
 
 /**
  * Calendar year data class.
@@ -9,7 +10,7 @@ import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
  */
 data class CalendarYear(
     val year: Int,
-    val startWithDay: Int,
+    val locale: Locale?,
 
     override val strokes: List<Stroke>
 ) : Calendar

@@ -7,6 +7,7 @@ import android.view.SurfaceView
 import android.view.View
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarYearBinding
+import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarYear
 import com.toolsboox.plugin.calendar.ot.CalendarYearCreator
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
@@ -20,6 +21,8 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoField
+import java.util.*
 import javax.inject.Inject
 
 
@@ -74,6 +77,11 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     private lateinit var templateBitmap: Bitmap
 
     /**
+     * The data class.
+     */
+    private lateinit var calendarYear: CalendarYear
+
+    /**
      * SurfaceView provide method.
      *
      * @return the actual surfaceView
@@ -86,7 +94,13 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        presenter.save(this, binding, strokes, currentDate, getSurfaceSize())
+        val year = currentDate.get(ChronoField.YEAR)
+        val locale = calendarYear.locale ?: Locale.getDefault()
+
+        calendarYear = CalendarYear(year, locale, Calendar.listDeepCopy(strokes))
+        calendarYear.normalizeStrokes(getSurfaceSize().width(), getSurfaceSize().height(), 1404, 1872)
+
+        presenter.save(this, binding, calendarYear, currentDate)
     }
 
     /**
@@ -143,6 +157,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         }
 
         toolBar.toolbarPager.visibility = View.GONE
+        updateNavigator()
 
         templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
         templateCanvas = Canvas(templateBitmap)
@@ -179,16 +194,24 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      * Reload the current page.
      */
     fun renderPage(calendarYear: CalendarYear) {
-        val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-        val pageTitle = getString(R.string.calendar_year_title).format(formattedDate)
-        toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
-
-        binding.buttonYear.text = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
+        this.calendarYear = calendarYear
+        updateNavigator()
 
         CalendarYearCreator.drawPage(this.requireContext(), templateCanvas, calendarYear)
         binding.templateImage.postInvalidate()
 
         applyStrokes(calendarYear.strokes.toMutableList(), true)
+    }
+
+    /**
+     * Update navigator bar.
+     */
+    private fun updateNavigator() {
+        val formattedYear = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
+        val pageTitle = getString(R.string.calendar_year_title).format(formattedYear)
+        toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
+
+        binding.buttonYear.text = formattedYear
     }
 
     /**
