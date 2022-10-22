@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.calendar
 
 import com.toolsboox.plugin.calendar.ui.CalendarMainPresenter
+import com.toolsboox.plugin.calendar.ui.CalendarQuarterPresenter
 import com.toolsboox.plugin.calendar.ui.CalendarYearPresenter
 import com.toolsboox.ui.plugin.FragmentPresenter
 import dagger.Binds
@@ -22,4 +23,7 @@ abstract class CalendarModule {
 
     @Binds
     abstract fun bindCalendarYearPresenter(calendarYearPresenter: CalendarYearPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindCalendarQuarterPresenter(calendarQuarterPresenter: CalendarQuarterPresenter): FragmentPresenter
 }

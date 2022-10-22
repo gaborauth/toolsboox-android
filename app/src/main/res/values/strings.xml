@@ -62,16 +62,22 @@
     <string name="calendar_navigator_prev_button_text">&lt;</string>
     <string name="calendar_navigator_next_button_text">&gt;</string>
     <string name="calendar_navigator_year_button_text">2022</string>
+    <string name="calendar_navigator_year_quarter_button_text">2022 Q4</string>
     <string name="calendar_navigator_q1_button_text">Q1</string>
     <string name="calendar_navigator_q2_button_text">Q2</string>
     <string name="calendar_navigator_q3_button_text">Q3</string>
     <string name="calendar_navigator_q4_button_text">Q4</string>
+    <string name="calendar_navigator_month_1_button_text">October</string>
+    <string name="calendar_navigator_month_2_button_text">November</string>
+    <string name="calendar_navigator_month_3_button_text">December</string>
     <string name="calendar_navigator_month_button_text">Oct</string>
     <string name="calendar_navigator_day_button_text">18</string>
     <string name="calendar_navigator_week_button_text">W41</string>
     <string name="calendar_navigator_day_of_week_button_text">Thu</string>
 
     <string name="calendar_year_title">Calendar of year %s</string>
+
+    <string name="calendar_quarter_title">Calendar of quarter %s</string>
 
     <string name="calendar_day_title">Daily panner of %s</string>
     <string name="calendar_day_schedules">Schedules</string>

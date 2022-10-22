@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
 import com.toolsboox.R
-import com.toolsboox.databinding.FragmentCalendarYearBinding
-import com.toolsboox.plugin.calendar.da.CalendarYear
-import com.toolsboox.plugin.calendar.ot.CalendarYearCreator
+import com.toolsboox.databinding.FragmentCalendarQuarterBinding
+import com.toolsboox.plugin.calendar.da.CalendarQuarter
+import com.toolsboox.plugin.calendar.ot.CalendarQuarterCreator
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.SurfaceFragment
@@ -20,16 +20,16 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
 
-
 /**
- * Calendar year view fragment.
+ * Calendar quarter view fragment.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @AndroidEntryPoint
-class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
+class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
 
     /**
      * The injected router.
@@ -41,17 +41,17 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      * The presenter of the fragment.
      */
     @Inject
-    lateinit var presenter: CalendarYearPresenter
+    lateinit var presenter: CalendarQuarterPresenter
 
     /**
      * The inflated layout.
      */
-    override val view = R.layout.fragment_calendar_year
+    override val view = R.layout.fragment_calendar_quarter
 
     /**
      * The view binding.
      */
-    private lateinit var binding: FragmentCalendarYearBinding
+    private lateinit var binding: FragmentCalendarQuarterBinding
 
     /**
      * The current date.
@@ -98,48 +98,48 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentCalendarYearBinding.bind(view)
+        binding = FragmentCalendarQuarterBinding.bind(view)
 
         currentDate = LocalDate.now()
-        parameters["year"]?.toIntOrNull()?.let {
-            Timber.i("Set year to '$it' from parameter")
-            currentDate = LocalDate.ofYearDay(it, 1)
+        parameters["year"]?.toIntOrNull()?.let { year ->
+            Timber.i("Set year to '$year' from parameter")
+            currentDate = LocalDate.ofYearDay(year, 1)
+            parameters["quarter"]?.toIntOrNull()?.let { quarter ->
+                Timber.i("Set year and quarter to '$year' - '$quarter' from parameter")
+                currentDate = LocalDate.of(year, (quarter - 1) * 3 + 1, 1)
+            }
         }
 
         binding.buttonPrev.setOnClickListener {
-            currentDate = currentDate.minusYears(1L)
+            currentDate = currentDate.minusMonths(3L)
             presenter.load(this, binding, currentDate, getSurfaceSize())
         }
         binding.buttonNext.setOnClickListener {
-            currentDate = currentDate.plusYears(1L)
+            currentDate = currentDate.plusMonths(3L)
             presenter.load(this, binding, currentDate, getSurfaceSize())
         }
 
-        binding.buttonYear.setOnClickListener {
+        binding.buttonYearQuarter.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year' year calendar")
-            router.dispatch("/calendar/year/$year", false)
+            val quarter = currentDate.format(DateTimeFormatter.ofPattern("q"))
+            Timber.i("Route to the '$year'/'$quarter' quarter calendar")
+            router.dispatch("/calendar/quarter/$year/$quarter", false)
         }
 
-        binding.buttonQ1.setOnClickListener {
-            val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year'/'1' quarter calendar")
-            router.dispatch("/calendar/quarter/$year/1", false)
+        binding.buttonMonth1.setOnClickListener {
+            // TODO
+            Timber.i("Route to daily (!) calendar")
+            router.dispatch("/calendar", false)
         }
-        binding.buttonQ2.setOnClickListener {
-            val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year'/'2' quarter calendar")
-            router.dispatch("/calendar/quarter/$year/2", false)
+        binding.buttonMonth2.setOnClickListener {
+            // TODO
+            Timber.i("Route to daily (!) calendar")
+            router.dispatch("/calendar", false)
         }
-        binding.buttonQ3.setOnClickListener {
-            val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year'/'3' quarter calendar")
-            router.dispatch("/calendar/quarter/$year/3", false)
-        }
-        binding.buttonQ4.setOnClickListener {
-            val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year'/'4' quarter calendar")
-            router.dispatch("/calendar/quarter/$year/4", false)
+        binding.buttonMonth3.setOnClickListener {
+            // TODO
+            Timber.i("Route to daily (!) calendar")
+            router.dispatch("/calendar", false)
         }
 
         toolBar.toolbarPager.visibility = View.GONE
@@ -160,7 +160,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         super.onResume()
 
         timer = GlobalScope.launch(Dispatchers.Main) {
-            presenter.load(this@CalendarYearFragment, binding, currentDate, getSurfaceSize())
+            presenter.load(this@CalendarQuarterFragment, binding, currentDate, getSurfaceSize())
         }
     }
 
@@ -171,24 +171,38 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         super.onPause()
 
         toolBar.toolbarPager.visibility = View.GONE
-
         timer.cancel()
     }
 
     /**
      * Reload the current page.
      */
-    fun renderPage(calendarYear: CalendarYear) {
-        val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-        val pageTitle = getString(R.string.calendar_year_title).format(formattedDate)
+    fun renderPage(calendarQuarter: CalendarQuarter) {
+        val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy 'Q'q"))
+        val pageTitle = getString(R.string.calendar_quarter_title).format(formattedDate)
         toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
-        binding.buttonYear.text = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
+        binding.buttonYearQuarter.text = currentDate.format(DateTimeFormatter.ofPattern("yyyy 'Q'q"))
 
-        CalendarYearCreator.drawPage(this.requireContext(), templateCanvas, calendarYear)
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.set(Calendar.MONTH, currentDate.monthValue - 1)
+        calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())?.let {
+            binding.buttonMonth1.text = it
+        }
+        calendar.set(Calendar.MONTH, currentDate.monthValue)
+        calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())?.let {
+            binding.buttonMonth2.text = it
+        }
+        calendar.set(Calendar.MONTH, currentDate.monthValue + 1)
+        calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())?.let {
+            binding.buttonMonth3.text = it
+        }
+
+        CalendarQuarterCreator.drawPage(this.requireContext(), templateCanvas, calendarQuarter)
         binding.templateImage.postInvalidate()
 
-        applyStrokes(calendarYear.strokes.toMutableList(), true)
+        applyStrokes(calendarQuarter.strokes.toMutableList(), true)
     }
 
     /**

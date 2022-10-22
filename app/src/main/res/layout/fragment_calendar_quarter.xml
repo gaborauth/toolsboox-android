@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:id="@+id/mainProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="-7dp"
+            android:indeterminate="true"
+            android:visibility="invisible"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            tools:visibility="visible"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/navigatorPanel"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            app:layout_constraintTop_toBottomOf="@id/mainProgress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+                android:id="@+id/button_prev"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:padding="0dp"
+                android:text="@string/calendar_navigator_prev_button_text"
+
+                app:layout_constraintWidth_percent="0.05"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_year_quarter"
+                android:layout_marginEnd="8dp"/>
+
+        <Button
+                android:id="@+id/button_year_quarter"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:padding="0dp"
+                android:text="@string/calendar_navigator_year_quarter_button_text"
+
+                app:layout_constraintWidth_percent="0.20"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_prev"
+                app:layout_constraintEnd_toStartOf="@id/button_month_1"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"/>
+
+        <Button
+                android:id="@+id/button_month_1"
+                android:ellipsize="marquee"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:padding="0dp"
+                android:text="@string/calendar_navigator_month_1_button_text"
+
+                app:layout_constraintWidth_percent="0.15"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_year_quarter"
+                app:layout_constraintEnd_toStartOf="@id/button_month_2"
+                app:iconPadding="0dp"/>
+
+        <Button
+                android:id="@+id/button_month_2"
+                android:ellipsize="marquee"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:padding="0dp"
+                android:text="@string/calendar_navigator_month_2_button_text"
+
+                app:layout_constraintWidth_percent="0.15"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_month_1"
+                app:layout_constraintEnd_toStartOf="@id/button_month_3"
+                app:iconPadding="0dp"/>
+
+        <Button
+                android:id="@+id/button_month_3"
+                android:ellipsize="marquee"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:padding="0dp"
+                android:text="@string/calendar_navigator_month_3_button_text"
+
+                app:layout_constraintWidth_percent="0.15"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_month_2"
+                app:layout_constraintEnd_toStartOf="@id/button_next"
+                app:iconPadding="0dp"/>
+
+        <Button
+                android:id="@+id/button_next"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:padding="0dp"
+                android:text="@string/calendar_navigator_next_button_text"
+
+                app:layout_constraintWidth_percent="0.05"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_month_3"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="16dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+
+            app:layout_constraintTop_toBottomOf="@id/navigatorPanel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+                android:id="@+id/templateImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/calendar_template_image"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        <SurfaceView
+                android:id="@+id/surfaceView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,17 +14,19 @@ import com.toolsboox.databinding.FragmentCalendarMainBinding
 import com.toolsboox.plugin.calendar.da.CalendarDay
 import com.toolsboox.plugin.calendar.ot.CalendarDayCreator
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
-import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
+import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
 import java.util.*
@@ -37,6 +39,12 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class CalendarMainFragment @Inject constructor() : SurfaceFragment() {
+
+    /**
+     * The injected router.
+     */
+    @Inject
+    lateinit var router: Router
 
     @Inject
     lateinit var presenter: CalendarMainPresenter
@@ -134,6 +142,12 @@ class CalendarMainFragment @Inject constructor() : SurfaceFragment() {
         binding.buttonNext.setOnClickListener {
             currentDate = Date.from(currentDate.toInstant().plus(1L, ChronoUnit.DAYS))
             renderPage()
+        }
+
+        binding.buttonYear.setOnClickListener {
+            val year = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(DateTimeFormatter.ofPattern("yyyy"))
+            Timber.i("Route to the '$year' year calendar")
+            router.dispatch("/calendar/year/$year", false)
         }
 
         toolBar.toolbarNext.setOnClickListener { renderPage() }
