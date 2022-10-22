@@ -76,7 +76,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         squareItems.add(
             SquareItem(
                 "Calendar", R.drawable.ic_dashboard_item_calendar,
-                "/calendar"
+                "/calendar/year"
             )
         )
         squareItems.add(
