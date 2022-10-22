@@ -44,7 +44,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/button_year"/>
+                app:layout_constraintEnd_toStartOf="@id/button_year"
+                android:layout_marginEnd="8dp"/>
 
         <Button
                 android:id="@+id/button_year"
@@ -53,68 +54,74 @@
                 android:padding="0dp"
                 android:text="@string/calendar_navigator_year_button_text"
 
-                app:layout_constraintWidth_percent="0.15"
+                app:layout_constraintWidth_percent="0.20"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/button_prev"
-                app:layout_constraintEnd_toStartOf="@id/button_month"/>
+                app:layout_constraintEnd_toStartOf="@id/button_q1"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"/>
 
         <Button
-                android:id="@+id/button_month"
+                android:id="@+id/button_q1"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:padding="0dp"
-                android:text="@string/calendar_navigator_month_button_text"
+                android:text="@string/calendar_navigator_q1_button_text"
 
-                app:layout_constraintWidth_percent="0.15"
+                app:layout_constraintWidth_percent="0.10"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/button_year"
-                app:layout_constraintEnd_toStartOf="@id/button_day"/>
+                app:layout_constraintEnd_toStartOf="@id/button_q2"
+                app:iconPadding="0dp"/>
 
         <Button
-                android:id="@+id/button_day"
+                android:id="@+id/button_q2"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:padding="0dp"
-                android:text="@string/calendar_navigator_day_button_text"
+                android:text="@string/calendar_navigator_q2_button_text"
 
-                app:layout_constraintWidth_percent="0.15"
+                app:layout_constraintWidth_percent="0.10"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/button_month"
-                app:layout_constraintEnd_toStartOf="@id/button_week"/>
+                app:layout_constraintStart_toEndOf="@id/button_q1"
+                app:layout_constraintEnd_toStartOf="@id/button_q3"
+                app:iconPadding="0dp"/>
 
         <Button
-                android:id="@+id/button_week"
+                android:id="@+id/button_q3"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:padding="0dp"
-                android:text="@string/calendar_navigator_week_button_text"
+                android:text="@string/calendar_navigator_q3_button_text"
 
-                app:layout_constraintWidth_percent="0.15"
+                app:layout_constraintWidth_percent="0.10"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/button_day"
-                app:layout_constraintEnd_toStartOf="@id/button_day_of_week"/>
+                app:layout_constraintStart_toEndOf="@id/button_q2"
+                app:layout_constraintEnd_toStartOf="@id/button_q4"
+                app:iconPadding="0dp"/>
 
         <Button
-                android:id="@+id/button_day_of_week"
+                android:id="@+id/button_q4"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:padding="0dp"
-                android:text="@string/calendar_navigator_day_of_week_button_text"
+                android:text="@string/calendar_navigator_q4_button_text"
 
-                app:layout_constraintWidth_percent="0.15"
+                app:layout_constraintWidth_percent="0.10"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/button_week"
-                app:layout_constraintEnd_toStartOf="@id/button_next"/>
+                app:layout_constraintStart_toEndOf="@id/button_q3"
+                app:layout_constraintEnd_toStartOf="@id/button_next"
+                app:iconPadding="0dp"/>
 
         <Button
                 android:id="@+id/button_next"
@@ -127,8 +134,9 @@
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/button_day_of_week"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintStart_toEndOf="@id/button_q4"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="16dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

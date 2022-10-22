@@ -3,15 +3,13 @@ package com.toolsboox.plugin.calendar.da
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 
 /**
- * Calendar day data class.
+ * Calendar year data class.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-data class CalendarDay(
-    val withTasks: Boolean,
-    val withNotes: Boolean,
-    val withHours: Boolean,
-    val startHours: Int,
+data class CalendarYear(
+    val year: Int,
+    val startWithDay: Int,
 
     override val strokes: List<Stroke>
 ) : Calendar
