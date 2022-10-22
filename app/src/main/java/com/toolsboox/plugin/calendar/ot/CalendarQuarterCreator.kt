@@ -59,11 +59,11 @@ class CalendarQuarterCreator : Creator {
          * @param canvas the canvas
          * @param lo the left offset
          * @param to the top offset
-         * @param year the year
-         * @param monthNumber the month as number
+         * @param year the current year
+         * @param month the current month
          */
-        private fun drawMonthGrid(canvas: Canvas, lo: Float, to: Float, year: Int, monthNumber: Int) {
-            val yearMonth = YearMonth.of(year, monthNumber)
+        private fun drawMonthGrid(canvas: Canvas, lo: Float, to: Float, year: Int, month: Int) {
+            val yearMonth = YearMonth.of(year, month)
             val days = yearMonth.month.length(yearMonth.isLeapYear)
 
             canvas.drawLine(lo, to, lo + cew, to, Creator.lineDefaultBlack)
@@ -71,7 +71,7 @@ class CalendarQuarterCreator : Creator {
 
             for (i in 1..days) {
                 canvas.drawLine(lo, to + i * ceh, lo + cew, to + i * ceh, Creator.lineDefaultGrey50)
-                val day = LocalDate.of(year, monthNumber, i)
+                val day = LocalDate.of(year, month, i)
 
                 val locale = Locale.getDefault()
                 val dayOfWeek = (day.dayOfWeek.value - 1) % 7 + 1
@@ -101,12 +101,12 @@ class CalendarQuarterCreator : Creator {
          * @param canvas the canvas
          * @param lo the left offset
          * @param to the top offset
-         * @param monthNumber the month as number
+         * @param month the current month
          */
-        private fun drawMonthName(canvas: Canvas, lo: Float, to: Float, monthNumber: Int) {
+        private fun drawMonthName(canvas: Canvas, lo: Float, to: Float, month: Int) {
             canvas.drawRect(lo, to - ceh, lo + cew, to, Creator.fillGrey80)
 
-            val monthName = Month.of(monthNumber).getDisplayName(TextStyle.FULL, Locale.getDefault())
+            val monthName = Month.of(month).getDisplayName(TextStyle.FULL, Locale.getDefault())
             canvas.drawText(monthName, lo + cew / 2.0f, to - 10.0f, Creator.textDefaultWhiteCenter)
         }
     }

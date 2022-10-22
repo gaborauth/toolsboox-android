@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.calendar
 
 import com.toolsboox.plugin.calendar.ui.CalendarMainFragment
+import com.toolsboox.plugin.calendar.ui.CalendarMonthFragment
 import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
 import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import com.toolsboox.ui.plugin.Plugin
@@ -28,6 +29,13 @@ class CalendarPlugin @Inject constructor() : Plugin {
         }
         Router.getParameters("/calendar/quarter", url).let {
             if (it is Router.Parameters.Match) return CalendarQuarterFragment().setParameters(it.parameters)
+        }
+
+        Router.getParameters("/calendar/month/(?<year>.*)/(?<month>.*)", url).let {
+            if (it is Router.Parameters.Match) return CalendarMonthFragment().setParameters(it.parameters)
+        }
+        Router.getParameters("/calendar/month", url).let {
+            if (it is Router.Parameters.Match) return CalendarMonthFragment().setParameters(it.parameters)
         }
 
         Router.getParameters("/calendar", url).let {

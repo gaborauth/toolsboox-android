@@ -70,14 +70,22 @@
     <string name="calendar_navigator_month_1_button_text">October</string>
     <string name="calendar_navigator_month_2_button_text">November</string>
     <string name="calendar_navigator_month_3_button_text">December</string>
+    <string name="calendar_navigator_week_1_button_text">W39</string>
+    <string name="calendar_navigator_week_2_button_text">W40</string>
+    <string name="calendar_navigator_week_3_button_text">W41</string>
+    <string name="calendar_navigator_week_4_button_text">W42</string>
+    <string name="calendar_navigator_week_5_button_text">W43</string>
+    <string name="calendar_navigator_week_6_button_text">W44</string>
     <string name="calendar_navigator_month_button_text">Oct</string>
     <string name="calendar_navigator_day_button_text">18</string>
     <string name="calendar_navigator_week_button_text">W41</string>
     <string name="calendar_navigator_day_of_week_button_text">Thu</string>
 
-    <string name="calendar_year_title">Calendar of year %s</string>
+    <string name="calendar_year_title">Year %s</string>
 
-    <string name="calendar_quarter_title">Calendar of quarter %s</string>
+    <string name="calendar_quarter_title">Quarter %s of year %s</string>
+
+    <string name="calendar_month_title">Month %s of year %s</string>
 
     <string name="calendar_day_title">Daily panner of %s</string>
     <string name="calendar_day_schedules">Schedules</string>
