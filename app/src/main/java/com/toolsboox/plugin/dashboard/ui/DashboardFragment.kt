@@ -1,8 +1,11 @@
 package com.toolsboox.plugin.dashboard.ui
 
+import android.content.Context
 import android.content.Intent
+import android.hardware.input.InputManager
 import android.net.Uri
 import android.os.Bundle
+import android.view.InputDevice
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
@@ -111,6 +114,15 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
 
         askAppPermissions()
         presenter.version(this)
+
+        val inputManager = requireContext().getSystemService(Context.INPUT_SERVICE) as InputManager?
+        val inputs = inputManager!!.inputDeviceIds
+        for (i in inputs.indices) {
+            val inputDevice = inputManager.getInputDevice(inputs[i])
+            if (inputDevice.supportsSource(InputDevice.SOURCE_STYLUS)) {
+                Timber.e("Input %s supports stylus input", inputDevice.name)
+            }
+        }
     }
 
     /**
