@@ -95,6 +95,7 @@
     <string name="calendar_month_title">Month %s of year %s</string>
 
     <string name="calendar_week_title">Week %s of year %s</string>
+    <string name="calendar_week_notes">Notes</string>
 
     <string name="calendar_day_title">Daily panner of %s</string>
     <string name="calendar_day_schedules">Schedules</string>
