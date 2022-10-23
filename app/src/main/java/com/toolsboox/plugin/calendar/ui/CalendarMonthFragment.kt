@@ -142,9 +142,46 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         }
 
         binding.buttonWeek1.setOnClickListener {
-            // TODO
-            Timber.i("Route to daily (!) calendar")
-            router.dispatch("/calendar", false)
+            val year = currentDate.year
+            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
+            val weekOfYearValue = currentDate.plusWeeks(0L).get(weekOfYear)
+            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
+            router.dispatch("/calendar/week/$year/$weekOfYearValue", false)
+        }
+        binding.buttonWeek2.setOnClickListener {
+            val year = currentDate.year
+            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
+            val weekOfYearValue = currentDate.plusWeeks(1L).get(weekOfYear)
+            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
+            router.dispatch("/calendar/week/$year/$weekOfYearValue", false)
+        }
+        binding.buttonWeek3.setOnClickListener {
+            val year = currentDate.year
+            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
+            val weekOfYearValue = currentDate.plusWeeks(2L).get(weekOfYear)
+            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
+            router.dispatch("/calendar/week/$year/$weekOfYearValue", false)
+        }
+        binding.buttonWeek4.setOnClickListener {
+            val year = currentDate.year
+            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
+            val weekOfYearValue = currentDate.plusWeeks(3L).get(weekOfYear)
+            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
+            router.dispatch("/calendar/week/$year/$weekOfYearValue", false)
+        }
+        binding.buttonWeek5.setOnClickListener {
+            val year = currentDate.year
+            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
+            val weekOfYearValue = currentDate.plusWeeks(4L).get(weekOfYear)
+            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
+            router.dispatch("/calendar/week/$year/$weekOfYearValue", false)
+        }
+        binding.buttonWeek6.setOnClickListener {
+            val year = currentDate.year
+            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
+            val weekOfYearValue = currentDate.plusWeeks(5L).get(weekOfYear)
+            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
+            router.dispatch("/calendar/week/$year/$weekOfYearValue", false)
         }
 
         toolBar.toolbarPager.visibility = View.GONE
@@ -198,6 +235,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
      */
     private fun updateNavigator(first: Boolean = false) {
         val locale = if (first) Locale.getDefault() else calendarMonth.locale ?: Locale.getDefault()
+
         val year = currentDate.year
         val month = currentDate.monthValue
         val quarter = (month - 1) / 3 + 1
