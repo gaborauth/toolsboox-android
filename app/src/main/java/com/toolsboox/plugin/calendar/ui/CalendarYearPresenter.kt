@@ -43,13 +43,9 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
                 val year = currentDate.year
                 var calendarYear = CalendarYear(year, Locale.getDefault(), mutableListOf())
 
-                val rootPath = Environment.getExternalStorageDirectory()
-                File("$rootPath/toolsBoox/").mkdirs()
-                val filename = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-                val path = "$rootPath/toolsBoox/year-$filename.json"
                 try {
-                    if (File(path).exists()) {
-                        FileReader(File(path)).use {
+                    if (File(createPath(currentDate)).exists()) {
+                        FileReader(File(createPath(currentDate))).use {
                             calendarYear = GsonBuilder().create().fromJson(it, CalendarYear::class.java)
                             calendarYear.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
                         }
@@ -83,12 +79,8 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
-                val rootPath = Environment.getExternalStorageDirectory()
-                File("$rootPath/toolsBoox/").mkdirs()
-                val filename = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-                val path = "$rootPath/toolsBoox/year-$filename.json"
                 try {
-                    PrintWriter(FileWriter(File(path))).use {
+                    PrintWriter(FileWriter(File(createPath(currentDate)))).use {
                         it.write(GsonBuilder().create().toJson(calendarYear).toString())
                     }
                 } catch (e: IOException) {
@@ -98,5 +90,19 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
             }
         }
+    }
+
+    /**
+     * Create path of the files.
+     *
+     * @param currentDate the current date
+     * @return the path on the filesystem
+     */
+    private fun createPath(currentDate: LocalDate): String {
+        val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
+
+        val rootPath = Environment.getExternalStorageDirectory()
+        File("$rootPath/toolsBoox/calendar/$year/").mkdirs()
+        return "$rootPath/toolsBoox/calendar/$year/year-$year.json"
     }
 }

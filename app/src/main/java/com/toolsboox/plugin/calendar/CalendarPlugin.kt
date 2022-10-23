@@ -42,8 +42,11 @@ class CalendarPlugin @Inject constructor() : Plugin {
             if (it is Router.Parameters.Match) return CalendarWeekFragment().setParameters(it.parameters)
         }
 
-        Router.getParameters("/calendar", url).let {
-            if (it is Router.Parameters.Match) return CalendarMainFragment().setParameters(it.parameters)
+        Router.getParameters("/calendar/day/(?<year>.*)/(?<month>.*)/(?<day>.*)", url).let {
+            if (it is Router.Parameters.Match) return CalendarDayFragment().setParameters(it.parameters)
+        }
+        Router.getParameters("/calendar/day", url).let {
+            if (it is Router.Parameters.Match) return CalendarDayFragment().setParameters(it.parameters)
         }
 
         return null

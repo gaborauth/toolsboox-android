@@ -145,39 +145,53 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         }
 
         binding.buttonDayOfWeek1.setOnClickListener {
-            // TODO
-            Timber.i("Route to daily (!) calendar")
-            router.dispatch("/calendar", false)
+            val year = currentDate.plusDays(0L).year
+            val month = currentDate.plusDays(0L).monthValue
+            val day = currentDate.plusDays(0L).dayOfMonth
+            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
+            router.dispatch("/calendar/day/$year/$month/$day", false)
         }
         binding.buttonDayOfWeek2.setOnClickListener {
-            // TODO
-            Timber.i("Route to daily (!) calendar")
-            router.dispatch("/calendar", false)
+            val year = currentDate.plusDays(1L).year
+            val month = currentDate.plusDays(1L).monthValue
+            val day = currentDate.plusDays(1L).dayOfMonth
+            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
+            router.dispatch("/calendar/day/$year/$month/$day", false)
         }
         binding.buttonDayOfWeek3.setOnClickListener {
-            // TODO
-            Timber.i("Route to daily (!) calendar")
-            router.dispatch("/calendar", false)
+            val year = currentDate.plusDays(2L).year
+            val month = currentDate.plusDays(2L).monthValue
+            val day = currentDate.plusDays(2L).dayOfMonth
+            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
+            router.dispatch("/calendar/day/$year/$month/$day", false)
         }
         binding.buttonDayOfWeek4.setOnClickListener {
-            // TODO
-            Timber.i("Route to daily (!) calendar")
-            router.dispatch("/calendar", false)
+            val year = currentDate.plusDays(3L).year
+            val month = currentDate.plusDays(3L).monthValue
+            val day = currentDate.plusDays(3L).dayOfMonth
+            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
+            router.dispatch("/calendar/day/$year/$month/$day", false)
         }
         binding.buttonDayOfWeek5.setOnClickListener {
-            // TODO
-            Timber.i("Route to daily (!) calendar")
-            router.dispatch("/calendar", false)
+            val year = currentDate.plusDays(4L).year
+            val month = currentDate.plusDays(4L).monthValue
+            val day = currentDate.plusDays(4L).dayOfMonth
+            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
+            router.dispatch("/calendar/day/$year/$month/$day", false)
         }
         binding.buttonDayOfWeek6.setOnClickListener {
-            // TODO
-            Timber.i("Route to daily (!) calendar")
-            router.dispatch("/calendar", false)
+            val year = currentDate.plusDays(5L).year
+            val month = currentDate.plusDays(5L).monthValue
+            val day = currentDate.plusDays(5L).dayOfMonth
+            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
+            router.dispatch("/calendar/day/$year/$month/$day", false)
         }
         binding.buttonDayOfWeek7.setOnClickListener {
-            // TODO
-            Timber.i("Route to daily (!) calendar")
-            router.dispatch("/calendar", false)
+            val year = currentDate.plusDays(6L).year
+            val month = currentDate.plusDays(6L).monthValue
+            val day = currentDate.plusDays(6L).dayOfMonth
+            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
+            router.dispatch("/calendar/day/$year/$month/$day", false)
         }
 
         toolBar.toolbarPager.visibility = View.GONE

@@ -3,8 +3,8 @@ package com.toolsboox.plugin.calendar.ui
 import android.graphics.Rect
 import android.os.Environment
 import com.google.gson.GsonBuilder
-import com.toolsboox.databinding.FragmentCalendarQuarterBinding
-import com.toolsboox.plugin.calendar.da.CalendarQuarter
+import com.toolsboox.databinding.FragmentCalendarDayBinding
+import com.toolsboox.plugin.calendar.da.CalendarDay
 import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -17,21 +17,22 @@ import java.util.*
 import javax.inject.Inject
 
 /**
- * Calendar quarter presenter.
+ * Calendar day presenter.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
+class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
     /**
-     * Load the quarter if available.
+     * Load the day if available.
      *
      * @param fragment the fragment
      * @param binding the data binding
      * @param currentDate the current date
      * @param surfaceSize the actual size of surface view
+     * @param locale the locale
      */
     fun load(
-        fragment: CalendarQuarterFragment, binding: FragmentCalendarQuarterBinding,
+        fragment: CalendarDayFragment, binding: FragmentCalendarDayBinding,
         currentDate: LocalDate, surfaceSize: Rect
     ) {
         if (!checkPermissions(fragment, binding.root)) return
@@ -41,21 +42,23 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
                 val year = currentDate.year
-                val quarter = (currentDate.monthValue - 1) / 3 + 1
-                var calendarQuarter = CalendarQuarter(year, quarter, Locale.getDefault(), mutableListOf())
+                val month = currentDate.monthValue
+                val day = currentDate.dayOfMonth
+                var calendarDay = CalendarDay(year, month, day, Locale.getDefault(), mutableListOf())
 
                 try {
                     if (File(createPath(currentDate)).exists()) {
                         FileReader(File(createPath(currentDate))).use {
-                            calendarQuarter = GsonBuilder().create().fromJson(it, CalendarQuarter::class.java)
-                            calendarQuarter.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
+                            calendarDay = GsonBuilder().create().fromJson(it, CalendarDay::class.java)
+                            calendarDay.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
                         }
                     }
+
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }
 
-                withContext(Dispatchers.Main) { fragment.renderPage(calendarQuarter) }
+                withContext(Dispatchers.Main) { fragment.renderPage(calendarDay) }
             } finally {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
             }
@@ -63,16 +66,16 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
     }
 
     /**
-     * Save the quarter to the storage.
+     * Save the day to the storage.
      *
      * @param fragment the fragment
      * @param binding the data binding
-     * @param calendarQuarter the data class
+     * @param calendarDay the data class
      * @param currentDate the current date
      */
     fun save(
-        fragment: CalendarQuarterFragment, binding: FragmentCalendarQuarterBinding,
-        calendarQuarter: CalendarQuarter, currentDate: LocalDate
+        fragment: CalendarDayFragment, binding: FragmentCalendarDayBinding,
+        calendarDay: CalendarDay, currentDate: LocalDate
     ) {
         if (!checkPermissions(fragment, binding.root)) return
 
@@ -82,7 +85,7 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
 
                 try {
                     PrintWriter(FileWriter(File(createPath(currentDate)))).use {
-                        it.write(GsonBuilder().create().toJson(calendarQuarter).toString())
+                        it.write(GsonBuilder().create().toJson(calendarDay).toString())
                     }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
@@ -101,10 +104,11 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
      */
     private fun createPath(currentDate: LocalDate): String {
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-        val quarter = currentDate.format(DateTimeFormatter.ofPattern("QQ"))
+        val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
+        val day = currentDate.format(DateTimeFormatter.ofPattern("dd"))
 
         val rootPath = Environment.getExternalStorageDirectory()
-        File("$rootPath/toolsBoox/calendar/$year/").mkdirs()
-        return "$rootPath/toolsBoox/calendar/$year/quarter-$year-$quarter.json"
+        File("$rootPath/toolsBoox/calendar/$year/$month/").mkdirs()
+        return "$rootPath/toolsBoox/calendar/$year/$month/day-$year-$month-$day.json"
     }
 }

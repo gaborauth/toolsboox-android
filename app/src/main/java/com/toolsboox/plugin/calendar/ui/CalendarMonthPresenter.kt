@@ -42,17 +42,11 @@ class CalendarMonthPresenter @Inject constructor() : FragmentPresenter() {
 
                 val year = currentDate.year
                 val month = currentDate.monthValue
-                var calendarMonth = CalendarMonth(
-                    year, month, Locale.getDefault(), mutableListOf()
-                )
+                var calendarMonth = CalendarMonth(year, month, Locale.getDefault(), mutableListOf())
 
-                val rootPath = Environment.getExternalStorageDirectory()
-                File("$rootPath/toolsBoox/").mkdirs()
-                val filename = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM"))
-                val path = "$rootPath/toolsBoox/month-$filename.json"
                 try {
-                    if (File(path).exists()) {
-                        FileReader(File(path)).use {
+                    if (File(createPath(currentDate)).exists()) {
+                        FileReader(File(createPath(currentDate))).use {
                             calendarMonth = GsonBuilder().create().fromJson(it, CalendarMonth::class.java)
                             calendarMonth.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
                         }
@@ -86,12 +80,8 @@ class CalendarMonthPresenter @Inject constructor() : FragmentPresenter() {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
-                val rootPath = Environment.getExternalStorageDirectory()
-                File("$rootPath/toolsBoox/").mkdirs()
-                val filename = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM"))
-                val path = "$rootPath/toolsBoox/month-$filename.json"
                 try {
-                    PrintWriter(FileWriter(File(path))).use {
+                    PrintWriter(FileWriter(File(createPath(currentDate)))).use {
                         it.write(GsonBuilder().create().toJson(calendarMonth).toString())
                     }
                 } catch (e: IOException) {
@@ -101,5 +91,20 @@ class CalendarMonthPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
             }
         }
+    }
+
+    /**
+     * Create path of the files.
+     *
+     * @param currentDate the current date
+     * @return the path on the filesystem
+     */
+    private fun createPath(currentDate: LocalDate): String {
+        val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
+        val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
+
+        val rootPath = Environment.getExternalStorageDirectory()
+        File("$rootPath/toolsBoox/calendar/$year/$month/").mkdirs()
+        return "$rootPath/toolsBoox/calendar/$year/$month/month-$year-$month.json"
     }
 }

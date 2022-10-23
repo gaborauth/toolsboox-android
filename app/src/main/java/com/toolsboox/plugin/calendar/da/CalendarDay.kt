@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.calendar.da
 
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
+import java.util.*
 
 /**
  * Calendar day data class.
@@ -8,10 +9,10 @@ import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 data class CalendarDay(
-    val withTasks: Boolean,
-    val withNotes: Boolean,
-    val withHours: Boolean,
-    val startHours: Int,
+    val year: Int,
+    val month: Int,
+    val day: Int,
+    val locale: Locale?,
 
     override val strokes: List<Stroke>
 ) : Calendar
