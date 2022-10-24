@@ -34,11 +34,7 @@
     <string name="main_version">"%s–%s"</string>
     <string name="main_update_not_now">"Pas maintenant"</string>
     <string name="main_update">"Mise à jour"</string>
-    <string name="main_read_external_storage_permission_title">"Lecture périph."</string>
-    <string name="main_read_external_storage_permission_message">"Accès lecture au périph. nécessaire"</string>
     <string name="main_read_external_storage_permission_missing">"Permission de lecture manquante"</string>
-    <string name="main_write_external_storage_permission_title">"Ecriture périph."</string>
-    <string name="main_write_external_storage_permission_message">"Accès écriture au périph. nécessaire"</string>
     <string name="main_write_external_storage_permission_missing">"Permission d'écriture manquante"</string>
 
     <!-- Strings related to calendar plugin -->
