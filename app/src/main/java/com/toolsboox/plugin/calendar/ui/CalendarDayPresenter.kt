@@ -3,6 +3,8 @@ package com.toolsboox.plugin.calendar.ui
 import android.Manifest
 import android.graphics.Rect
 import android.os.Environment
+import android.provider.CalendarContract
+import androidx.core.database.getStringOrNull
 import com.google.gson.GsonBuilder
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarDayBinding
@@ -12,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -37,6 +40,11 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
         fragment: CalendarDayFragment, binding: FragmentCalendarDayBinding,
         currentDate: LocalDate, surfaceSize: Rect
     ) {
+        if (!fragment.checkPermission(Manifest.permission.READ_CALENDAR)) {
+            fragment.showError(null, R.string.main_read_calendar_permission_missing, binding.root)
+            return
+        }
+
         if (!fragment.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             fragment.showError(null, R.string.main_read_external_storage_permission_missing, binding.root)
             return
@@ -102,6 +110,32 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                 }
             } finally {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
+            }
+        }
+    }
+
+    /**
+     * Load calendars of the user.
+     *
+     * @param fragment the calendar fragment
+     */
+    fun loadCalendar(fragment: CalendarDayFragment) {
+        if (!fragment.checkPermission(Manifest.permission.READ_CALENDAR)) return
+
+        val uri = CalendarContract.Calendars.CONTENT_URI
+        val contentResolver = fragment.requireActivity().contentResolver
+        val fields = arrayOf(
+            CalendarContract.Calendars._ID, CalendarContract.Calendars.ACCOUNT_NAME,
+            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, CalendarContract.Calendars.OWNER_ACCOUNT
+        )
+
+        contentResolver.query(uri, fields, null, null, null)?.use { cursor ->
+            while (cursor.moveToNext()) {
+                val id = cursor.getStringOrNull(0)
+                val accountName = cursor.getStringOrNull(1)
+                val calendarDisplayName = cursor.getStringOrNull(2)
+                val ownerAccount = cursor.getStringOrNull(3)
+                Timber.i("Calendar[$id] of $accountName($ownerAccount): $calendarDisplayName")
             }
         }
     }

@@ -182,6 +182,8 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     override fun onResume() {
         super.onResume()
 
+        presenter.loadCalendar(this)
+
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarDayFragment, binding, currentDate, getSurfaceSize())
         }
