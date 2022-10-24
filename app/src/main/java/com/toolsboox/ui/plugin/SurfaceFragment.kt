@@ -225,7 +225,8 @@ abstract class SurfaceFragment : ScreenFragment() {
      */
     fun applyStrokes(strokes: List<Stroke>, clearPage: Boolean) {
         this.strokes = strokes.toMutableList()
-        val lockCanvas = provideSurfaceView().holder.lockCanvas()
+        // TODO: render page when onSurfaceCreated
+        val lockCanvas = provideSurfaceView().holder.lockCanvas() ?: return
 
         val fillPaint = Paint()
         fillPaint.style = Paint.Style.FILL
