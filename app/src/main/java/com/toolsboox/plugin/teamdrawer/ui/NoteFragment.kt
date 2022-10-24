@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.widget.EditText
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTeamdrawerNoteBinding
@@ -13,7 +15,6 @@ import com.toolsboox.plugin.teamdrawer.nw.NoteRepository
 import com.toolsboox.plugin.teamdrawer.nw.RoomRepository
 import com.toolsboox.plugin.teamdrawer.nw.domain.Note
 import com.toolsboox.plugin.teamdrawer.ot.NoteItemAdapter
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -28,9 +29,6 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class NoteFragment @Inject constructor() : ScreenFragment() {
-
-    @Inject
-    lateinit var router: Router
 
     @Inject
     lateinit var presenter: NotePresenter
@@ -86,11 +84,11 @@ class NoteFragment @Inject constructor() : ScreenFragment() {
             layoutManager = GridLayoutManager(this@NoteFragment.requireContext(), 4)
         }
 
-        if (parameters["roomId"] == null) {
+        if (arguments?.getString("roomId") == null) {
             somethingHappened()
             return
         }
-        roomId = UUID.fromString(parameters["roomId"])
+        roomId = UUID.fromString(arguments?.getString("roomId")!!)
 
         binding.fabAddItem.setOnClickListener {
             val builder = AlertDialog.Builder(this.requireContext())
@@ -115,7 +113,11 @@ class NoteFragment @Inject constructor() : ScreenFragment() {
             override fun onItemClicked(noteItem: NoteItem) {
                 val routeUrl = "/teamDrawer/$roomId/${noteItem.noteId}/${noteItem.pages[0]}"
                 Timber.i("Route to $routeUrl")
-                router.dispatch(routeUrl, false)
+                val bundle = bundleOf()
+                bundle.putString("roomId", noteItem.roomId.toString())
+                bundle.putString("noteId", noteItem.noteId.toString())
+                bundle.putString("pageId", noteItem.pages[0].toString())
+                findNavController().navigate(R.id.action_to_teamdrawer_page, bundle)
             }
         }
 
@@ -132,7 +134,7 @@ class NoteFragment @Inject constructor() : ScreenFragment() {
 
         val roomName = roomRepository.getRoom(roomId)!!.name
         val noteTitle = getString(R.string.team_drawer_note_title).format(roomName)
-        toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.team_drawer_title), noteTitle)
+        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.team_drawer_title), noteTitle)
 
         listResult(noteRepository.getNotesList(roomId))
         timer = GlobalScope.launch(Dispatchers.Main) {
@@ -155,12 +157,16 @@ class NoteFragment @Inject constructor() : ScreenFragment() {
     /**
      * Render the result of 'add' service call.
      *
-     * @param note the saved room
+     * @param noteItem the saved note
      */
-    fun addResult(note: Note) {
-        val routeUrl = "/teamDrawer/${roomId}/${note.noteId}/${note.pages[0]}"
+    fun addResult(noteItem: Note) {
+        val routeUrl = "/teamDrawer/${roomId}/${noteItem.noteId}/${noteItem.pages[0]}"
         Timber.i("Route to $routeUrl")
-        router.dispatch(routeUrl, false)
+        val bundle = bundleOf()
+        bundle.putString("roomId", noteItem.roomId.toString())
+        bundle.putString("noteId", noteItem.noteId.toString())
+        bundle.putString("pageId", noteItem.pages[0].toString())
+        findNavController().navigate(R.id.action_to_teamdrawer_page, bundle)
     }
 
     /**

@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.InputDevice
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
@@ -15,7 +17,6 @@ import com.toolsboox.da.SquareItem
 import com.toolsboox.databinding.FragmentDashboardBinding
 import com.toolsboox.ot.SquareItemAdapter
 import com.toolsboox.plugin.dashboard.da.Version
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -40,12 +41,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
          */
         private var notifiedAboutNewVersion: Boolean = false
     }
-
-    /**
-     * The injected router.
-     */
-    @Inject
-    lateinit var router: Router
 
     /**
      * The injected presenter.
@@ -87,32 +82,32 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         squareItems.add(
             SquareItem(
                 "Calendar", R.drawable.ic_dashboard_item_calendar,
-                "/calendar/year"
+                R.id.action_to_calendar_year, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
                 "Templates", R.drawable.ic_dashboard_item_templates,
-                "/templates"
+                R.id.action_to_templates_main, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
                 "TeamDrawer", R.drawable.ic_dashboard_item_teamdrawer,
-                "/teamDrawer"
+                R.id.action_to_teamdrawer_room, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
                 "Kanban\nplanner", R.drawable.ic_dashboard_item_kanban,
-                "/kanbanPlanner"
+                R.id.action_to_kanban_main, bundleOf()
             )
         )
 
         val clickListener = object : SquareItemAdapter.OnItemClickListener {
             override fun onItemClicked(squareItem: SquareItem) {
-                Timber.i("Route to ${squareItem.routeUrl}")
-                router.dispatch(squareItem.routeUrl, false)
+                Timber.i("Route to ${squareItem.title}")
+                findNavController().navigate(squareItem.actionId, squareItem.bundle)
             }
         }
 
@@ -138,7 +133,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
     override fun onResume() {
         super.onResume()
 
-        toolBar.root.title = getString(R.string.drawer_title)
+        toolbar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.dashboard_title))
 
         askAppPermissions()

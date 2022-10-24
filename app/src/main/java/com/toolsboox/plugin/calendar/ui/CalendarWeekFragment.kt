@@ -5,13 +5,14 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarWeekBinding
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarWeek
 import com.toolsboox.plugin.calendar.ot.CalendarWeekCreator
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -32,12 +33,6 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
-
-    /**
-     * The injected router.
-     */
-    @Inject
-    lateinit var router: Router
 
     /**
      * The presenter of the fragment.
@@ -116,10 +111,10 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         binding = FragmentCalendarWeekBinding.bind(view)
 
         currentDate = LocalDate.now()
-        parameters["year"]?.toIntOrNull()?.let { year ->
+        arguments?.getString("year")?.toIntOrNull()?.let { year ->
             Timber.i("Set year to '$year' from parameter")
             currentDate = LocalDate.of(year, 1, 1)
-            parameters["week"]?.toIntOrNull()?.let { week ->
+            arguments?.getString("week")?.toIntOrNull()?.let { week ->
                 val weekFields = WeekFields.of(Locale.getDefault())
                 Timber.i("Set year and week to '$year'/'$week' from parameter")
                 currentDate = LocalDate.ofYearDay(year, 1)
@@ -141,7 +136,10 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
             val year = currentDate.year
             val month = currentDate.monthValue
             Timber.i("Route to the '$year'/'$month' monthly calendar")
-            router.dispatch("/calendar/month/$year/$month", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            findNavController().navigate(R.id.action_to_calendar_month, bundle)
         }
 
         binding.buttonDayOfWeek1.setOnClickListener {
@@ -149,52 +147,80 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
             val month = currentDate.plusDays(0L).monthValue
             val day = currentDate.plusDays(0L).dayOfMonth
             Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            router.dispatch("/calendar/day/$year/$month/$day", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            bundle.putString("day", "$day")
+            findNavController().navigate(R.id.action_to_calendar_day, bundle)
         }
         binding.buttonDayOfWeek2.setOnClickListener {
             val year = currentDate.plusDays(1L).year
             val month = currentDate.plusDays(1L).monthValue
             val day = currentDate.plusDays(1L).dayOfMonth
             Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            router.dispatch("/calendar/day/$year/$month/$day", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            bundle.putString("day", "$day")
+            findNavController().navigate(R.id.action_to_calendar_day, bundle)
         }
         binding.buttonDayOfWeek3.setOnClickListener {
             val year = currentDate.plusDays(2L).year
             val month = currentDate.plusDays(2L).monthValue
             val day = currentDate.plusDays(2L).dayOfMonth
             Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            router.dispatch("/calendar/day/$year/$month/$day", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            bundle.putString("day", "$day")
+            findNavController().navigate(R.id.action_to_calendar_day, bundle)
         }
         binding.buttonDayOfWeek4.setOnClickListener {
             val year = currentDate.plusDays(3L).year
             val month = currentDate.plusDays(3L).monthValue
             val day = currentDate.plusDays(3L).dayOfMonth
             Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            router.dispatch("/calendar/day/$year/$month/$day", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            bundle.putString("day", "$day")
+            findNavController().navigate(R.id.action_to_calendar_day, bundle)
         }
         binding.buttonDayOfWeek5.setOnClickListener {
             val year = currentDate.plusDays(4L).year
             val month = currentDate.plusDays(4L).monthValue
             val day = currentDate.plusDays(4L).dayOfMonth
             Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            router.dispatch("/calendar/day/$year/$month/$day", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            bundle.putString("day", "$day")
+            findNavController().navigate(R.id.action_to_calendar_day, bundle)
         }
         binding.buttonDayOfWeek6.setOnClickListener {
             val year = currentDate.plusDays(5L).year
             val month = currentDate.plusDays(5L).monthValue
             val day = currentDate.plusDays(5L).dayOfMonth
             Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            router.dispatch("/calendar/day/$year/$month/$day", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            bundle.putString("day", "$day")
+            findNavController().navigate(R.id.action_to_calendar_day, bundle)
         }
         binding.buttonDayOfWeek7.setOnClickListener {
             val year = currentDate.plusDays(6L).year
             val month = currentDate.plusDays(6L).monthValue
             val day = currentDate.plusDays(6L).dayOfMonth
             Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            router.dispatch("/calendar/day/$year/$month/$day", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            bundle.putString("day", "$day")
+            findNavController().navigate(R.id.action_to_calendar_day, bundle)
         }
 
-        toolBar.toolbarPager.visibility = View.GONE
+        toolbar.toolbarPager.visibility = View.GONE
         updateNavigator(true)
 
         templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
@@ -223,7 +249,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
     override fun onPause() {
         super.onPause()
 
-        toolBar.toolbarPager.visibility = View.GONE
+        toolbar.toolbarPager.visibility = View.GONE
         timer.cancel()
     }
 
@@ -252,7 +278,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         val week = "W${currentDate.plusWeeks(0L).get(weekOfYear)}"
 
         val pageTitle = getString(R.string.calendar_week_title).format(week, year)
-        toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
+        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
         binding.buttonMonth.text = "$year $monthName"
 

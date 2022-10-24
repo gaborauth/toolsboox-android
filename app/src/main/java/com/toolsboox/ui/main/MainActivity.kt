@@ -6,11 +6,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBar
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -18,15 +20,13 @@ import com.google.firebase.ktx.Firebase
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
 import com.toolsboox.databinding.ActivityMainBinding
+import com.toolsboox.databinding.ToolbarBinding
 import com.toolsboox.di.MainSharedPreferencesModule
 import com.toolsboox.ui.BaseActivity
-import com.toolsboox.ui.plugin.Router
-import com.toolsboox.ui.plugin.ScreenFragment
 import com.toolsboox.utils.ReleaseTree
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.*
-import javax.inject.Inject
 
 /**
  * A dashboard screen that offers the main menu.
@@ -37,8 +37,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : BaseActivity<MainPresenter>(), MainView {
 
-    @Inject
-    lateinit var router: Router
+    /**
+     * The view model.
+     */
+    private val viewModel by viewModels<MainViewModel>()
 
     /**
      * The Firebase analytics.
@@ -87,19 +89,12 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         val preferences = MainSharedPreferencesModule.provideSharedPreferences(this)
         preferences.edit().putLong("lastTimestamp", Date().time).apply()
 
-        /**
-         * The route instance.
-         */
-        val routingUrl = intent.getStringExtra("routingUrl")
-        if (routingUrl == null) {
-            router.dispatch("/", true)
-        } else {
-            router.dispatch(routingUrl, true)
-        }
-
         binding.navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.drawer_item_dashboard -> router.dispatch("/", true)
+                R.id.drawer_item_dashboard -> {
+                    val bundle = bundleOf()
+                    binding.fragmentContent.findNavController().navigate(R.id.action_to_dashboard, bundle)
+                }
 
                 R.id.drawer_item_website -> {
                     intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://toolsboox.com"))
@@ -137,6 +132,13 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     }
 
     /**
+     * Get the main toolbar.
+     *
+     * @return the toolbar
+     */
+    fun getToolbar(): ToolbarBinding = binding.mainToolbar
+
+    /**
      * Displays an error in the view.
      *
      * @param t the optional throwable
@@ -153,18 +155,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      */
     override fun showMessage(@StringRes messageResId: Int) {
         Snackbar.make(binding.mainToolbar.root, messageResId, Snackbar.LENGTH_LONG).show()
-    }
-
-    /**
-     * Show 'route not implemented yet' message.
-     *
-     * @param url the URL
-     */
-    fun showRouterNotImplemented(url: String) {
-        val message = getString(R.string.router_not_implemented_yet).format(url)
-        Snackbar.make(binding.fragmentContent, message, Snackbar.LENGTH_INDEFINITE)
-            .setAction(R.string.router_not_implemented_yet_action) {}
-            .show()
     }
 
     /**
@@ -220,44 +210,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      * @param fragment the fragment
      */
     private fun orientateFragment(fragment: Fragment?) {
-        if (fragment is com.toolsboox.plugin.kanban.ui.KanbanMainFragment) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-            Timber.i("Sensor landscape: ${fragment.javaClass.name}")
-            return
-        }
-
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
         Timber.i("Sensor portrait: ${fragment?.javaClass?.name}")
-    }
-
-    /**
-     * Replace the fragment on the dashboard content.
-     *
-     * @param fragment the fragment
-     */
-    fun addFragment(fragment: Fragment?, replace: Boolean = true) {
-        if (fragment == null) {
-            return
-        }
-
-        (fragment as ScreenFragment).toolBar = binding.mainToolbar
-
-        val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, fragment.javaClass.name)
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "fragment")
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
-
-        val transaction = supportFragmentManager.beginTransaction()
-        if (replace) {
-            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            transaction.replace(R.id.fragmentContent, fragment)
-        } else {
-            transaction.replace(R.id.fragmentContent, fragment)
-            transaction.addToBackStack(fragment.javaClass.simpleName)
-        }
-        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-        transaction.commit()
-
-        orientateFragment(fragment)
     }
 }

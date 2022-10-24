@@ -5,13 +5,14 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarQuarterBinding
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarQuarter
 import com.toolsboox.plugin.calendar.ot.CalendarQuarterCreator
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 import javax.inject.Inject
@@ -31,12 +33,6 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
-
-    /**
-     * The injected router.
-     */
-    @Inject
-    lateinit var router: Router
 
     /**
      * The presenter of the fragment.
@@ -114,10 +110,10 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         binding = FragmentCalendarQuarterBinding.bind(view)
 
         currentDate = LocalDate.now()
-        parameters["year"]?.toIntOrNull()?.let { year ->
+        arguments?.getString("year")?.toIntOrNull()?.let { year ->
             Timber.i("Set year to '$year' from parameter")
             currentDate = LocalDate.of(year, 1, 1)
-            parameters["quarter"]?.toIntOrNull()?.let { quarter ->
+            arguments?.getString("quarter")?.toIntOrNull()?.let { quarter ->
                 Timber.i("Set year and quarter to '$year'/'$quarter' from parameter")
                 currentDate = LocalDate.of(year, (quarter - 1) * 3 + 1, 1)
             }
@@ -133,31 +129,42 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         }
 
         binding.buttonYear.setOnClickListener {
-            val year = currentDate.year
+            val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
             Timber.i("Route to the '$year' yearly calendar")
-            router.dispatch("/calendar/year/$year", false)
+            val bundle = bundleOf()
+            bundle.putString("year", year)
+            findNavController().navigate(R.id.action_to_calendar_year, bundle)
         }
 
         binding.buttonMonth1.setOnClickListener {
             val year = currentDate.year
             val month = currentDate.plusMonths(0L).monthValue
             Timber.i("Route to the '$year'/'$month' monthly calendar")
-            router.dispatch("/calendar/month/$year/$month", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            findNavController().navigate(R.id.action_to_calendar_month, bundle)
         }
         binding.buttonMonth2.setOnClickListener {
             val year = currentDate.year
             val month = currentDate.plusMonths(1L).monthValue
             Timber.i("Route to the '$year'/'$month' monthly calendar")
-            router.dispatch("/calendar/month/$year/$month", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            findNavController().navigate(R.id.action_to_calendar_month, bundle)
         }
         binding.buttonMonth3.setOnClickListener {
             val year = currentDate.year
             val month = currentDate.plusMonths(2L).monthValue
             Timber.i("Route to the '$year'/'$month' monthly calendar")
-            router.dispatch("/calendar/month/$year/$month", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            findNavController().navigate(R.id.action_to_calendar_month, bundle)
         }
 
-        toolBar.toolbarPager.visibility = View.GONE
+        toolbar.toolbarPager.visibility = View.GONE
         updateNavigator()
 
         templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
@@ -186,7 +193,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
     override fun onPause() {
         super.onPause()
 
-        toolBar.toolbarPager.visibility = View.GONE
+        toolbar.toolbarPager.visibility = View.GONE
         timer.cancel()
     }
 
@@ -211,7 +218,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         val quarter = (currentDate.monthValue - 1) / 3 + 1
 
         val pageTitle = getString(R.string.calendar_quarter_title).format(quarter, year)
-        toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
+        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
         binding.buttonYear.text = "$year"
 

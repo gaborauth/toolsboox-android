@@ -90,7 +90,7 @@ class BoxedWeeksCalendarFragment @Inject constructor() : ScreenFragment() {
     override fun onResume() {
         super.onResume()
 
-        toolBar.root.title = getString(R.string.drawer_title)
+        toolbar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.templates_boxed_weeks_calendar_title))
     }
 

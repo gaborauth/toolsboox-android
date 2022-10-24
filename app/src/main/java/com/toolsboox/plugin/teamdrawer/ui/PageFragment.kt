@@ -114,23 +114,23 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
 
         binding = FragmentTeamdrawerPageBinding.bind(view)
 
-        if (parameters["roomId"] == null) {
+        if (arguments?.getString("roomId") == null) {
             somethingHappened()
             return
         }
-        roomId = UUID.fromString(parameters["roomId"])
+        roomId = UUID.fromString(arguments?.getString("roomId")!!)
 
-        if (parameters["noteId"] == null) {
+        if (arguments?.getString("noteId") == null) {
             somethingHappened()
             return
         }
-        noteId = UUID.fromString(parameters["noteId"])
+        noteId = UUID.fromString(arguments?.getString("noteId")!!)
 
-        if (parameters["pageId"] == null) {
+        if (arguments?.getString("pageId") == null) {
             somethingHappened()
             return
         }
-        pageId = UUID.fromString(parameters["pageId"])
+        pageId = UUID.fromString(arguments?.getString("pageId")!!)
 
         binding.buttonExport.setOnClickListener { exportBitmap() }
 
@@ -141,7 +141,7 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
         note = noteRepository.getNote(roomId, noteId)!!
         pageNumbers = note.pages.size
 
-        toolBar.toolbarNext.setOnClickListener {
+        toolbar.toolbarNext.setOnClickListener {
             if (pageNumber < pageNumbers) {
                 pageNumber++
             } else {
@@ -149,7 +149,7 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
             }
             renderPage()
         }
-        toolBar.toolbarPrevious.setOnClickListener {
+        toolbar.toolbarPrevious.setOnClickListener {
             if (pageNumber > 1) {
                 pageNumber--
             }
@@ -167,10 +167,10 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
 
         val note = noteRepository.getNote(roomId, noteId)!!
         val pageTitle = getString(R.string.team_drawer_page_title).format(note.title)
-        toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.team_drawer_title), pageTitle)
+        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.team_drawer_title), pageTitle)
 
-        toolBar.toolbarPages.text = getString(R.string.toolbar_pages_template).format(1, pageNumbers)
-        toolBar.toolbarPager.visibility = View.VISIBLE
+        toolbar.toolbarPages.text = getString(R.string.toolbar_pages_template).format(1, pageNumbers)
+        toolbar.toolbarPager.visibility = View.VISIBLE
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             while (true) {
@@ -186,7 +186,7 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
     override fun onPause() {
         super.onPause()
 
-        toolBar.toolbarPager.visibility = View.GONE
+        toolbar.toolbarPager.visibility = View.GONE
 
         last = 0
 
@@ -259,7 +259,7 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
         pageId = note.pages[pageNumber - 1]
         last = 0
         presenter.last(this, roomId, noteId, pageId, true)
-        toolBar.toolbarPages.text = getString(R.string.toolbar_pages_template).format(pageNumber, pageNumbers)
+        toolbar.toolbarPages.text = getString(R.string.toolbar_pages_template).format(pageNumber, pageNumbers)
     }
 
     /**

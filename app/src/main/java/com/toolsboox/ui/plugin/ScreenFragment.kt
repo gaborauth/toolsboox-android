@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.toolsboox.R
 import com.toolsboox.databinding.ToolbarBinding
+import com.toolsboox.ui.main.MainActivity
 import timber.log.Timber
 
 /**
@@ -37,9 +38,9 @@ abstract class ScreenFragment : Fragment() {
     }
 
     /**
-     * The toolbar of the parent activity
+     * The toolbar of the parent activity.
      */
-    lateinit var toolBar: ToolbarBinding
+    lateinit var toolbar: ToolbarBinding
 
     /**
      * The view resource.
@@ -47,27 +48,12 @@ abstract class ScreenFragment : Fragment() {
     protected open val view: Int? = null
 
     /**
-     * Map of parameters.
-     */
-    protected var parameters: Map<String, String> = mapOf()
-
-    /**
      * OnCreateView hook.
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return view?.let { inflater.inflate(it, container, false) }
-    }
-
-    /**
-     * Consume parameters from the URL.
-     *
-     * @param parameters the parameter map
-     * @return returns with the fragment
-     */
-    open fun setParameters(parameters: Map<String, String>): ScreenFragment {
-        this.parameters = parameters
-
-        return this
+        val createdView = view?.let { inflater.inflate(it, container, false) }
+        toolbar = (requireActivity() as MainActivity).getToolbar()
+        return createdView
     }
 
     /**
@@ -92,8 +78,9 @@ abstract class ScreenFragment : Fragment() {
     open fun showError(t: Throwable?, @StringRes errorResId: Int, parentView: View? = null) {
         t?.let { Timber.e(it, getString(errorResId)) }
 
-        val snackbar =
-            Snackbar.make(parentView?.let { parentView } ?: toolBar.root, errorResId, Snackbar.LENGTH_INDEFINITE)
+        val snackbar = Snackbar.make(
+            parentView?.let { parentView } ?: toolbar.root, errorResId, Snackbar.LENGTH_INDEFINITE
+        )
         snackbar.setAction(R.string.something_happened_action) {}
         snackbar.show()
     }
@@ -105,7 +92,7 @@ abstract class ScreenFragment : Fragment() {
      * @param parentView the optional parent view of the snackbar
      */
     open fun showMessage(message: String, parentView: View? = null) {
-        Snackbar.make(parentView?.let { parentView } ?: toolBar.root, message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(parentView?.let { parentView } ?: toolbar.root, message, Snackbar.LENGTH_LONG).show()
     }
 
     /**

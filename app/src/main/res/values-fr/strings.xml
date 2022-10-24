@@ -13,10 +13,6 @@
     </plurals>
     <string name="validation_field_value_too_small">"Valeur trop petite : le minimum est %d"</string>
 
-    <!-- Strings related to router -->
-    <string name="router_not_implemented_yet">"Désolé, la fonctionnalité n'existe pas encore (%s)"</string>
-    <string name="router_not_implemented_yet_action">"Compris"</string>
-
     <!-- Strings related to toolbar and drawer menu -->
     <string name="drawer_menu_dashboard">"Tableau de bord"</string>
     <string name="drawer_menu_website">"Site web"</string>

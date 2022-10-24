@@ -5,13 +5,14 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarYearBinding
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarYear
 import com.toolsboox.plugin.calendar.ot.CalendarYearCreator
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -32,12 +33,6 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
-
-    /**
-     * The injected router.
-     */
-    @Inject
-    lateinit var router: Router
 
     /**
      * The presenter of the fragment.
@@ -114,7 +109,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         binding = FragmentCalendarYearBinding.bind(view)
 
         currentDate = LocalDate.now()
-        parameters["year"]?.toIntOrNull()?.let {
+        arguments?.getString("year")?.toIntOrNull()?.let {
             Timber.i("Set year to '$it' from parameter")
             currentDate = LocalDate.ofYearDay(it, 1)
         }
@@ -131,31 +126,45 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         binding.buttonYear.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
             Timber.i("Route to the '$year' yearly calendar")
-            router.dispatch("/calendar/year/$year", false)
+            val bundle = bundleOf()
+            bundle.putString("year", year)
+            findNavController().navigate(R.id.action_to_calendar_year, bundle)
         }
 
         binding.buttonQ1.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
             Timber.i("Route to the '$year'/'1' quarterly calendar")
-            router.dispatch("/calendar/quarter/$year/1", false)
+            val bundle = bundleOf()
+            bundle.putString("year", year)
+            bundle.putString("quarter", "1")
+            findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
         }
         binding.buttonQ2.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
             Timber.i("Route to the '$year'/'2' quarterly calendar")
-            router.dispatch("/calendar/quarter/$year/2", false)
+            val bundle = bundleOf()
+            bundle.putString("year", year)
+            bundle.putString("quarter", "2")
+            findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
         }
         binding.buttonQ3.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
             Timber.i("Route to the '$year'/'3' quarterly calendar")
-            router.dispatch("/calendar/quarter/$year/3", false)
+            val bundle = bundleOf()
+            bundle.putString("year", year)
+            bundle.putString("quarter", "3")
+            findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
         }
         binding.buttonQ4.setOnClickListener {
             val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
             Timber.i("Route to the '$year'/'4' quarterly calendar")
-            router.dispatch("/calendar/quarter/$year/4", false)
+            val bundle = bundleOf()
+            bundle.putString("year", year)
+            bundle.putString("quarter", "4")
+            findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
         }
 
-        toolBar.toolbarPager.visibility = View.GONE
+        toolbar.toolbarPager.visibility = View.GONE
         updateNavigator()
 
         templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
@@ -184,7 +193,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     override fun onPause() {
         super.onPause()
 
-        toolBar.toolbarPager.visibility = View.GONE
+        toolbar.toolbarPager.visibility = View.GONE
         timer.cancel()
     }
 
@@ -208,7 +217,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         val year = currentDate.year
 
         val pageTitle = getString(R.string.calendar_year_title).format(year)
-        toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
+        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
         binding.buttonYear.text = "$year"
     }

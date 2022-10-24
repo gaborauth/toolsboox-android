@@ -5,13 +5,14 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarDayBinding
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarDay
 import com.toolsboox.plugin.calendar.ot.CalendarDayCreator
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -32,12 +33,6 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
-
-    /**
-     * The injected router.
-     */
-    @Inject
-    lateinit var router: Router
 
     /**
      * The presenter of the fragment.
@@ -116,13 +111,13 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         binding = FragmentCalendarDayBinding.bind(view)
 
         currentDate = LocalDate.now()
-        parameters["year"]?.toIntOrNull()?.let { year ->
+        arguments?.getString("year")?.toIntOrNull()?.let { year ->
             Timber.i("Set year to '$year' from parameter")
             currentDate = LocalDate.of(year, 1, 1)
-            parameters["month"]?.toIntOrNull()?.let { month ->
+            arguments?.getString("month")?.toIntOrNull()?.let { month ->
                 Timber.i("Set year and month to '$year'/'$month' from parameter")
                 currentDate = LocalDate.of(year, month, 1)
-                parameters["day"]?.toIntOrNull()?.let { day ->
+                arguments?.getString("day")?.toIntOrNull()?.let { day ->
                     Timber.i("Set year, month and day to '$year'/'$month'/'$day' from parameter")
                     currentDate = LocalDate.of(year, month, day)
                 }
@@ -141,14 +136,19 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         binding.buttonYear.setOnClickListener {
             val year = currentDate.year
             Timber.i("Route to the '$year' yearly calendar")
-            router.dispatch("/calendar/year/$year", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            findNavController().navigate(R.id.action_to_calendar_year, bundle)
         }
 
         binding.buttonMonth.setOnClickListener {
             val year = currentDate.year
             val month = currentDate.monthValue
             Timber.i("Route to the '$year'/'$month' monthly calendar")
-            router.dispatch("/calendar/month/$year/$month", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            findNavController().navigate(R.id.action_to_calendar_month, bundle)
         }
 
         binding.buttonDay.setOnClickListener {
@@ -156,7 +156,11 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
             val month = currentDate.monthValue
             val day = currentDate.dayOfMonth
             Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            router.dispatch("/calendar/day/$year/$month/$day", false)
+            val bundle = bundleOf()
+            bundle.putString("year", "$year")
+            bundle.putString("month", "$month")
+            bundle.putString("day", "$day")
+            findNavController().navigate(R.id.action_to_calendar_day, bundle)
         }
 
         binding.buttonWeek.setOnClickListener {
@@ -164,7 +168,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         binding.buttonDayOfWeek.setOnClickListener {
         }
 
-        toolBar.toolbarPager.visibility = View.GONE
+        toolbar.toolbarPager.visibility = View.GONE
         updateNavigator(true)
 
         templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
@@ -195,7 +199,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     override fun onPause() {
         super.onPause()
 
-        toolBar.toolbarPager.visibility = View.GONE
+        toolbar.toolbarPager.visibility = View.GONE
         timer.cancel()
     }
 
@@ -225,7 +229,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         val dayOfWeek = currentDate.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
 
         val pageTitle = getString(R.string.calendar_day_title).format("$year $monthName $day")
-        toolBar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
+        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
         binding.buttonYear.text = "$year"
         binding.buttonMonth.text = monthName

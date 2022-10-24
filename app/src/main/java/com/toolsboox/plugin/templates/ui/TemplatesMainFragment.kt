@@ -2,12 +2,13 @@ package com.toolsboox.plugin.templates.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.toolsboox.R
 import com.toolsboox.da.SquareItem
 import com.toolsboox.databinding.FragmentTemplatesMainBinding
 import com.toolsboox.ot.SquareItemAdapter
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -20,9 +21,6 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class TemplatesMainFragment @Inject constructor() : ScreenFragment() {
-
-    @Inject
-    lateinit var router: Router
 
     @Inject
     lateinit var presenter: TemplatesMainPresenter
@@ -61,38 +59,38 @@ class TemplatesMainFragment @Inject constructor() : ScreenFragment() {
         squareItems.add(
             SquareItem(
                 "Boxed days\ncalendar", R.drawable.ic_dashboard_item_calendar,
-                "/templates/boxedDaysCalendar"
+                R.id.action_to_templates_boxed_days_calendar, bundleOf() //"/templates/boxedDaysCalendar"
             )
         )
         squareItems.add(
             SquareItem(
                 "Boxed weeks\ncalendar", R.drawable.ic_dashboard_item_calendar,
-                "/templates/boxedWeeksCalendar"
+                R.id.action_to_templates_boxed_weeks_calendar, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
                 "Community\ntemplates", R.drawable.ic_community_templates,
-                "/templates/community"
+                R.id.action_to_templates_community, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
                 "Flat weeks\ncalendar", R.drawable.ic_dashboard_item_calendar,
-                "/templates/flatWeeksCalendar"
+                R.id.action_to_templates_flat_weeks_calendar, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
                 "This week's\ncalendar", R.drawable.ic_dashboard_item_calendar,
-                "/templates/thisWeeksCalendar"
+                R.id.action_to_templates_this_weeks_calendar, bundleOf()
             )
         )
 
         val clickListener = object : SquareItemAdapter.OnItemClickListener {
             override fun onItemClicked(squareItem: SquareItem) {
-                Timber.i("Route to ${squareItem.routeUrl}")
-                router.dispatch(squareItem.routeUrl, false)
+                Timber.i("Route to ${squareItem.title}")
+                findNavController().navigate(squareItem.actionId, squareItem.bundle)
             }
         }
 
@@ -107,7 +105,7 @@ class TemplatesMainFragment @Inject constructor() : ScreenFragment() {
     override fun onResume() {
         super.onResume()
 
-        toolBar.root.title = getString(R.string.drawer_title)
+        toolbar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.templates_main_title))
     }
 

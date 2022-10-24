@@ -14,10 +14,6 @@
     </plurals>
     <string name="validation_field_value_too_small">The value is too small, the smallest value can be %d</string>
 
-    <!-- Strings related to router -->
-    <string name="router_not_implemented_yet">Sorry guys, this feature is not yet implemented! (%s)</string>
-    <string name="router_not_implemented_yet_action">Okay</string>
-
     <!-- Common messages -->
     <string name="ok">OK</string>
     <string name="list_loading">Loading the list…</string>

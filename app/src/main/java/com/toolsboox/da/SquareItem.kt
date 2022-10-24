@@ -1,5 +1,7 @@
 package com.toolsboox.da
 
+import android.os.Bundle
+
 /**
  * Square item data class.
  *
@@ -8,5 +10,6 @@ package com.toolsboox.da
 data class SquareItem(
     val title: String,
     val imageRes: Int,
-    val routeUrl: String
+    val actionId: Int = 0,
+    val bundle: Bundle
 )

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+
+            android:id="@+id/navigation_main"
+            app:startDestination="@id/DashboardFragment">
+
+    <fragment
+            android:id="@+id/DashboardFragment"
+            android:name="com.toolsboox.plugin.dashboard.ui.DashboardFragment"
+            android:label="DashboardFragment"
+            tools:layout="@layout/fragment_dashboard">
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_year"
+                app:destination="@id/CalendarYearFragment"/>
+        <action
+                android:id="@+id/action_to_kanban_main"
+                app:destination="@id/KanbanMainFragment"/>
+        <action
+                android:id="@+id/action_to_teamdrawer_room"
+                app:destination="@id/TeamDrawerRoomFragment"/>
+        <action
+                android:id="@+id/action_to_templates_main"
+                app:destination="@id/TemplatesMainFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/CalendarYearFragment"
+            android:name="com.toolsboox.plugin.calendar.ui.CalendarYearFragment"
+            android:label="CalendarYearFragment"
+            tools:layout="@layout/fragment_calendar_year">
+
+        <argument
+                android:name="year"
+                app:argType="string"
+                app:nullable="true"/>
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_year"
+                app:destination="@id/CalendarYearFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_quarter"
+                app:destination="@id/CalendarQuarterFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/CalendarQuarterFragment"
+            android:name="com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment"
+            android:label="CalendarQuarterFragment"
+            tools:layout="@layout/fragment_calendar_quarter">
+
+        <argument
+                android:name="year"
+                app:argType="string"
+                app:nullable="true"/>
+        <argument
+                android:name="quarter"
+                app:argType="string"
+                app:nullable="true"/>
+
+        <action
+                android:id="@+id/action_to_calendar_year"
+                app:destination="@id/CalendarYearFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_quarter"
+                app:destination="@id/CalendarQuarterFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/CalendarMonthFragment"
+            android:name="com.toolsboox.plugin.calendar.ui.CalendarMonthFragment"
+            android:label="CalendarMonthFragment"
+            tools:layout="@layout/fragment_calendar_month">
+
+        <argument
+                android:name="year"
+                app:argType="string"
+                app:nullable="true"/>
+        <argument
+                android:name="month"
+                app:argType="string"
+                app:nullable="true"/>
+
+        <action
+                android:id="@+id/action_to_calendar_quarter"
+                app:destination="@id/CalendarQuarterFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_week"
+                app:destination="@id/CalendarWeekFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/CalendarWeekFragment"
+            android:name="com.toolsboox.plugin.calendar.ui.CalendarWeekFragment"
+            android:label="CalendarWeekFragment"
+            tools:layout="@layout/fragment_calendar_week">
+
+        <argument
+                android:name="year"
+                app:argType="string"
+                app:nullable="true"/>
+        <argument
+                android:name="weekOfYear"
+                app:argType="string"
+                app:nullable="true"/>
+
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_week"
+                app:destination="@id/CalendarWeekFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_day"
+                app:destination="@id/CalendarDayFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/CalendarDayFragment"
+            android:name="com.toolsboox.plugin.calendar.ui.CalendarDayFragment"
+            android:label="CalendarDayFragment"
+            tools:layout="@layout/fragment_calendar_day">
+
+        <argument
+                android:name="year"
+                app:argType="string"
+                app:nullable="true"/>
+        <argument
+                android:name="month"
+                app:argType="string"
+                app:nullable="true"/>
+        <argument
+                android:name="day"
+                app:argType="string"
+                app:nullable="true"/>
+
+        <action
+                android:id="@+id/action_to_calendar_year"
+                app:destination="@id/CalendarYearFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_quarter"
+                app:destination="@id/CalendarQuarterFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_week"
+                app:destination="@id/CalendarWeekFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_day"
+                app:destination="@id/CalendarDayFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/KanbanMainFragment"
+            android:name="com.toolsboox.plugin.kanban.ui.KanbanMainFragment"
+            android:label="KanbanMainFragment"
+            tools:layout="@layout/fragment_kanban_main">
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+        <action
+                android:id="@+id/action_to_kanban_main"
+                app:destination="@id/KanbanMainFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/TeamDrawerRoomFragment"
+            android:name="com.toolsboox.plugin.teamdrawer.ui.RoomFragment"
+            android:label="TeamDrawerRoomFragment"
+            tools:layout="@layout/fragment_teamdrawer_room">
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+        <action
+                android:id="@+id/action_to_teamdrawer_room"
+                app:destination="@id/TeamDrawerRoomFragment"/>
+        <action
+                android:id="@+id/action_to_teamdrawer_note"
+                app:destination="@id/TeamDrawerNoteFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/TeamDrawerNoteFragment"
+            android:name="com.toolsboox.plugin.teamdrawer.ui.NoteFragment"
+            android:label="TeamDrawerNoteFragment"
+            tools:layout="@layout/fragment_teamdrawer_note">
+
+        <action
+                android:id="@+id/action_to_teamdrawer_room"
+                app:destination="@id/TeamDrawerRoomFragment"/>
+        <action
+                android:id="@+id/action_to_teamdrawer_note"
+                app:destination="@id/TeamDrawerNoteFragment"/>
+        <action
+                android:id="@+id/action_to_teamdrawer_page"
+                app:destination="@id/TeamDrawerPageFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/TeamDrawerPageFragment"
+            android:name="com.toolsboox.plugin.teamdrawer.ui.PageFragment"
+            android:label="TeamDrawerPageFragment"
+            tools:layout="@layout/fragment_teamdrawer_page">
+
+        <action
+                android:id="@+id/action_to_teamdrawer_note"
+                app:destination="@id/TeamDrawerNoteFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/TemplatesMainFragment"
+            android:name="com.toolsboox.plugin.templates.ui.TemplatesMainFragment"
+            android:label="TemplatesMainFragment"
+            tools:layout="@layout/fragment_templates_main">
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+        <action
+                android:id="@+id/action_to_templates_boxed_days_calendar"
+                app:destination="@id/TemplatesBoxedDaysCalendarFragment"/>
+        <action
+                android:id="@+id/action_to_templates_boxed_weeks_calendar"
+                app:destination="@id/TemplatesBoxedWeeksCalendarFragment"/>
+        <action
+                android:id="@+id/action_to_templates_community"
+                app:destination="@id/TemplatesCommunityFragment"/>
+        <action
+                android:id="@+id/action_to_templates_flat_weeks_calendar"
+                app:destination="@id/TemplatesFlatWeeksCalendarFragment"/>
+        <action
+                android:id="@+id/action_to_templates_this_weeks_calendar"
+                app:destination="@id/TemplatesThisWeeksCalendarFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/TemplatesBoxedDaysCalendarFragment"
+            android:name="com.toolsboox.plugin.templates.ui.BoxedDaysCalendarFragment"
+            android:label="TemplatesBoxedDaysCalendarFragment"
+            tools:layout="@layout/fragment_templates_boxed_days_calendar">
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/TemplatesBoxedWeeksCalendarFragment"
+            android:name="com.toolsboox.plugin.templates.ui.BoxedWeeksCalendarFragment"
+            android:label="TemplatesBoxedWeeksCalendarFragment"
+            tools:layout="@layout/fragment_templates_boxed_weeks_calendar">
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/TemplatesCommunityFragment"
+            android:name="com.toolsboox.plugin.templates.ui.CommunityFragment"
+            android:label="TemplatesCommunityFragment"
+            tools:layout="@layout/fragment_templates_community">
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/TemplatesFlatWeeksCalendarFragment"
+            android:name="com.toolsboox.plugin.templates.ui.FlatWeeksCalendarFragment"
+            android:label="TemplatesFlatWeeksCalendarFragment"
+            tools:layout="@layout/fragment_templates_flat_weeks_calendar">
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/TemplatesThisWeeksCalendarFragment"
+            android:name="com.toolsboox.plugin.templates.ui.ThisWeeksCalendarFragment"
+            android:label="TemplatesThisWeeksCalendarFragment"
+            tools:layout="@layout/fragment_templates_this_weeks_calendar">
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+    </fragment>
+</navigation>

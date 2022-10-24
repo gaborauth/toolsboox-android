@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.widget.EditText
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTeamdrawerRoomBinding
@@ -12,7 +14,6 @@ import com.toolsboox.plugin.teamdrawer.da.RoomItem
 import com.toolsboox.plugin.teamdrawer.nw.RoomRepository
 import com.toolsboox.plugin.teamdrawer.nw.domain.Room
 import com.toolsboox.plugin.teamdrawer.ot.RoomItemAdapter
-import com.toolsboox.ui.plugin.Router
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -26,9 +27,6 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class RoomFragment @Inject constructor() : ScreenFragment() {
-
-    @Inject
-    lateinit var router: Router
 
     @Inject
     lateinit var presenter: RoomPresenter
@@ -99,7 +97,9 @@ class RoomFragment @Inject constructor() : ScreenFragment() {
             override fun onItemClicked(roomItem: RoomItem) {
                 val routeUrl = "/teamDrawer/${roomItem.roomId}"
                 Timber.i("Route to $routeUrl")
-                router.dispatch(routeUrl, false)
+                val bundle = bundleOf()
+                bundle.putString("roomId", roomItem.roomId.toString())
+                findNavController().navigate(R.id.action_to_teamdrawer_note, bundle)
             }
         }
 
@@ -114,7 +114,7 @@ class RoomFragment @Inject constructor() : ScreenFragment() {
     override fun onResume() {
         super.onResume()
 
-        toolBar.root.title = getString(R.string.drawer_title)
+        toolbar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.team_drawer_room_title))
 
         listResult(roomRepository.getRoomList())
@@ -138,12 +138,14 @@ class RoomFragment @Inject constructor() : ScreenFragment() {
     /**
      * Render the result of 'add' service call.
      *
-     * @param room the saved room
+     * @param roomItem the saved room
      */
-    fun addResult(room: Room) {
-        val routeUrl = "/teamDrawer/${room.roomId}"
+    fun addResult(roomItem: Room) {
+        val routeUrl = "/teamDrawer/${roomItem.roomId}"
         Timber.i("Route to $routeUrl")
-        router.dispatch(routeUrl, false)
+        val bundle = bundleOf()
+        bundle.putString("roomId", roomItem.roomId.toString())
+        findNavController().navigate(R.id.action_to_teamdrawer_note, bundle)
     }
 
     /**
