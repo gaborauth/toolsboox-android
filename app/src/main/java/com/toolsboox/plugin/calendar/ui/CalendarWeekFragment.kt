@@ -114,11 +114,11 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         arguments?.getString("year")?.toIntOrNull()?.let { year ->
             Timber.i("Set year to '$year' from parameter")
             currentDate = LocalDate.of(year, 1, 1)
-            arguments?.getString("week")?.toIntOrNull()?.let { week ->
+            arguments?.getString("weekOfYear")?.toIntOrNull()?.let { weekOfYear ->
                 val weekFields = WeekFields.of(Locale.getDefault())
-                Timber.i("Set year and week to '$year'/'$week' from parameter")
+                Timber.i("Set year and week to '$year'/'$weekOfYear' from parameter")
                 currentDate = LocalDate.ofYearDay(year, 1)
-                    .with(weekFields.weekOfYear(), week.toLong())
+                    .with(weekFields.weekOfYear(), weekOfYear.toLong())
                     .with(weekFields.dayOfWeek(), 1)
             }
         }
