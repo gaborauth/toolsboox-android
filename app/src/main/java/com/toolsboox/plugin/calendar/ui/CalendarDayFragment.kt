@@ -5,10 +5,9 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
-import androidx.core.os.bundleOf
-import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarDayBinding
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarDay
 import com.toolsboox.plugin.calendar.ot.CalendarDayCreator
@@ -134,38 +133,22 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         }
 
         binding.buttonYear.setOnClickListener {
-            val year = currentDate.year
-            Timber.i("Route to the '$year' yearly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            findNavController().navigate(R.id.action_to_calendar_year, bundle)
+            CalendarNavigator.toYear(this, currentDate)
         }
 
         binding.buttonMonth.setOnClickListener {
-            val year = currentDate.year
-            val month = currentDate.monthValue
-            Timber.i("Route to the '$year'/'$month' monthly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            findNavController().navigate(R.id.action_to_calendar_month, bundle)
+            CalendarNavigator.toMonth(this, currentDate)
         }
 
         binding.buttonDay.setOnClickListener {
-            val year = currentDate.year
-            val month = currentDate.monthValue
-            val day = currentDate.dayOfMonth
-            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            bundle.putString("day", "$day")
-            findNavController().navigate(R.id.action_to_calendar_day, bundle)
+            CalendarNavigator.toDay(this, currentDate)
         }
 
         binding.buttonWeek.setOnClickListener {
+            CalendarNavigator.toWeek(this, currentDate, calendarDay.locale)
         }
         binding.buttonDayOfWeek.setOnClickListener {
+            CalendarNavigator.toWeek(this, currentDate, calendarDay.locale)
         }
 
         toolbar.toolbarPager.visibility = View.GONE

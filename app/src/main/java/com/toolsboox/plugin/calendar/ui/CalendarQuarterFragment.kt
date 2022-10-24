@@ -5,10 +5,9 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
-import androidx.core.os.bundleOf
-import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarQuarterBinding
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarQuarter
 import com.toolsboox.plugin.calendar.ot.CalendarQuarterCreator
@@ -21,7 +20,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 import javax.inject.Inject
@@ -109,7 +107,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
 
         binding = FragmentCalendarQuarterBinding.bind(view)
 
-        currentDate = LocalDate.now()
+        currentDate = LocalDate.ofYearDay(LocalDate.now().year, 1)
         arguments?.getString("year")?.toIntOrNull()?.let { year ->
             Timber.i("Set year to '$year' from parameter")
             currentDate = LocalDate.of(year, 1, 1)
@@ -129,39 +127,17 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         }
 
         binding.buttonYear.setOnClickListener {
-            val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
-            Timber.i("Route to the '$year' yearly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", year)
-            findNavController().navigate(R.id.action_to_calendar_year, bundle)
+            CalendarNavigator.toYear(this, currentDate)
         }
 
         binding.buttonMonth1.setOnClickListener {
-            val year = currentDate.year
-            val month = currentDate.plusMonths(0L).monthValue
-            Timber.i("Route to the '$year'/'$month' monthly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            findNavController().navigate(R.id.action_to_calendar_month, bundle)
+            CalendarNavigator.toMonth(this, currentDate.plusMonths(0L))
         }
         binding.buttonMonth2.setOnClickListener {
-            val year = currentDate.year
-            val month = currentDate.plusMonths(1L).monthValue
-            Timber.i("Route to the '$year'/'$month' monthly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            findNavController().navigate(R.id.action_to_calendar_month, bundle)
+            CalendarNavigator.toMonth(this, currentDate.plusMonths(1L))
         }
         binding.buttonMonth3.setOnClickListener {
-            val year = currentDate.year
-            val month = currentDate.plusMonths(2L).monthValue
-            Timber.i("Route to the '$year'/'$month' monthly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            findNavController().navigate(R.id.action_to_calendar_month, bundle)
+            CalendarNavigator.toMonth(this, currentDate.plusMonths(2L))
         }
 
         toolbar.toolbarPager.visibility = View.GONE

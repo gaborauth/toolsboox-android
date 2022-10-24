@@ -5,10 +5,9 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
-import androidx.core.os.bundleOf
-import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarWeekBinding
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarWeek
 import com.toolsboox.plugin.calendar.ot.CalendarWeekCreator
@@ -110,7 +109,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
 
         binding = FragmentCalendarWeekBinding.bind(view)
 
-        currentDate = LocalDate.now()
+        currentDate = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
         arguments?.getString("year")?.toIntOrNull()?.let { year ->
             Timber.i("Set year to '$year' from parameter")
             currentDate = LocalDate.of(year, 1, 1)
@@ -133,91 +132,29 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         }
 
         binding.buttonMonth.setOnClickListener {
-            val year = currentDate.year
-            val month = currentDate.monthValue
-            Timber.i("Route to the '$year'/'$month' monthly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            findNavController().navigate(R.id.action_to_calendar_month, bundle)
+            CalendarNavigator.toMonth(this, currentDate)
         }
 
         binding.buttonDayOfWeek1.setOnClickListener {
-            val year = currentDate.plusDays(0L).year
-            val month = currentDate.plusDays(0L).monthValue
-            val day = currentDate.plusDays(0L).dayOfMonth
-            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            bundle.putString("day", "$day")
-            findNavController().navigate(R.id.action_to_calendar_day, bundle)
+            CalendarNavigator.toDay(this, currentDate.plusDays(0L))
         }
         binding.buttonDayOfWeek2.setOnClickListener {
-            val year = currentDate.plusDays(1L).year
-            val month = currentDate.plusDays(1L).monthValue
-            val day = currentDate.plusDays(1L).dayOfMonth
-            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            bundle.putString("day", "$day")
-            findNavController().navigate(R.id.action_to_calendar_day, bundle)
+            CalendarNavigator.toDay(this, currentDate.plusDays(1L))
         }
         binding.buttonDayOfWeek3.setOnClickListener {
-            val year = currentDate.plusDays(2L).year
-            val month = currentDate.plusDays(2L).monthValue
-            val day = currentDate.plusDays(2L).dayOfMonth
-            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            bundle.putString("day", "$day")
-            findNavController().navigate(R.id.action_to_calendar_day, bundle)
+            CalendarNavigator.toDay(this, currentDate.plusDays(2L))
         }
         binding.buttonDayOfWeek4.setOnClickListener {
-            val year = currentDate.plusDays(3L).year
-            val month = currentDate.plusDays(3L).monthValue
-            val day = currentDate.plusDays(3L).dayOfMonth
-            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            bundle.putString("day", "$day")
-            findNavController().navigate(R.id.action_to_calendar_day, bundle)
+            CalendarNavigator.toDay(this, currentDate.plusDays(3L))
         }
         binding.buttonDayOfWeek5.setOnClickListener {
-            val year = currentDate.plusDays(4L).year
-            val month = currentDate.plusDays(4L).monthValue
-            val day = currentDate.plusDays(4L).dayOfMonth
-            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            bundle.putString("day", "$day")
-            findNavController().navigate(R.id.action_to_calendar_day, bundle)
+            CalendarNavigator.toDay(this, currentDate.plusDays(4L))
         }
         binding.buttonDayOfWeek6.setOnClickListener {
-            val year = currentDate.plusDays(5L).year
-            val month = currentDate.plusDays(5L).monthValue
-            val day = currentDate.plusDays(5L).dayOfMonth
-            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            bundle.putString("day", "$day")
-            findNavController().navigate(R.id.action_to_calendar_day, bundle)
+            CalendarNavigator.toDay(this, currentDate.plusDays(5L))
         }
         binding.buttonDayOfWeek7.setOnClickListener {
-            val year = currentDate.plusDays(6L).year
-            val month = currentDate.plusDays(6L).monthValue
-            val day = currentDate.plusDays(6L).dayOfMonth
-            Timber.i("Route to the '$year'/'$month'/'$day' daily calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("month", "$month")
-            bundle.putString("day", "$day")
-            findNavController().navigate(R.id.action_to_calendar_day, bundle)
+            CalendarNavigator.toDay(this, currentDate.plusDays(6L))
         }
 
         toolbar.toolbarPager.visibility = View.GONE

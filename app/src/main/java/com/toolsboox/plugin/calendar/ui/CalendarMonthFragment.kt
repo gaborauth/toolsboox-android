@@ -5,10 +5,9 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
-import androidx.core.os.bundleOf
-import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarMonthBinding
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarMonth
 import com.toolsboox.plugin.calendar.ot.CalendarMonthCreator
@@ -109,7 +108,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
 
         binding = FragmentCalendarMonthBinding.bind(view)
 
-        currentDate = LocalDate.now()
+        currentDate = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
         arguments?.getString("year")?.toIntOrNull()?.let { year ->
             Timber.i("Set year to '$year' from parameter")
             currentDate = LocalDate.of(year, 1, 1)
@@ -129,75 +128,26 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         }
 
         binding.buttonYearQuarter.setOnClickListener {
-            val year = currentDate.year
-            val month = currentDate.monthValue
-            val quarter = (month - 1) / 3 + 1
-            Timber.i("Route to the '$year'/'$quarter' quarterly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("quarter", "$quarter")
-            findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
+            CalendarNavigator.toQuarter(this, currentDate)
         }
 
         binding.buttonWeek1.setOnClickListener {
-            val year = currentDate.year
-            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
-            val weekOfYearValue = currentDate.plusWeeks(0L).get(weekOfYear)
-            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("weekOfYear", "$weekOfYearValue")
-            findNavController().navigate(R.id.action_to_calendar_week, bundle)
+            CalendarNavigator.toWeek(this, currentDate.plusWeeks(0L), calendarMonth.locale)
         }
         binding.buttonWeek2.setOnClickListener {
-            val year = currentDate.year
-            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
-            val weekOfYearValue = currentDate.plusWeeks(1L).get(weekOfYear)
-            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("weekOfYear", "$weekOfYearValue")
-            findNavController().navigate(R.id.action_to_calendar_week, bundle)
+            CalendarNavigator.toWeek(this, currentDate.plusWeeks(1L), calendarMonth.locale)
         }
         binding.buttonWeek3.setOnClickListener {
-            val year = currentDate.year
-            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
-            val weekOfYearValue = currentDate.plusWeeks(2L).get(weekOfYear)
-            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("weekOfYear", "$weekOfYearValue")
-            findNavController().navigate(R.id.action_to_calendar_week, bundle)
+            CalendarNavigator.toWeek(this, currentDate.plusWeeks(2L), calendarMonth.locale)
         }
         binding.buttonWeek4.setOnClickListener {
-            val year = currentDate.year
-            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
-            val weekOfYearValue = currentDate.plusWeeks(3L).get(weekOfYear)
-            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("weekOfYear", "$weekOfYearValue")
-            findNavController().navigate(R.id.action_to_calendar_week, bundle)
+            CalendarNavigator.toWeek(this, currentDate.plusWeeks(3L), calendarMonth.locale)
         }
         binding.buttonWeek5.setOnClickListener {
-            val year = currentDate.year
-            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
-            val weekOfYearValue = currentDate.plusWeeks(4L).get(weekOfYear)
-            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("weekOfYear", "$weekOfYearValue")
-            findNavController().navigate(R.id.action_to_calendar_week, bundle)
+            CalendarNavigator.toWeek(this, currentDate.plusWeeks(4L), calendarMonth.locale)
         }
         binding.buttonWeek6.setOnClickListener {
-            val year = currentDate.year
-            val weekOfYear = WeekFields.of(calendarMonth.locale).weekOfWeekBasedYear()
-            val weekOfYearValue = currentDate.plusWeeks(5L).get(weekOfYear)
-            Timber.i("Route to the '$year'/'$weekOfYearValue' weekly calendar")
-            val bundle = bundleOf()
-            bundle.putString("year", "$year")
-            bundle.putString("weekOfYear", "$weekOfYearValue")
-            findNavController().navigate(R.id.action_to_calendar_week, bundle)
+            CalendarNavigator.toWeek(this, currentDate.plusWeeks(5L), calendarMonth.locale)
         }
 
         toolbar.toolbarPager.visibility = View.GONE
