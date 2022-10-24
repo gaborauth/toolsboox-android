@@ -141,6 +141,7 @@ class RoomFragment @Inject constructor() : ScreenFragment() {
      * @param roomItem the saved room
      */
     fun addResult(roomItem: Room) {
+        roomRepository.updateRoom(roomItem)
         val routeUrl = "/teamDrawer/${roomItem.roomId}"
         Timber.i("Route to $routeUrl")
         val bundle = bundleOf()

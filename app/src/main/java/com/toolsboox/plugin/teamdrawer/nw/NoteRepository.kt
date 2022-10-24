@@ -2,13 +2,14 @@ package com.toolsboox.plugin.teamdrawer.nw
 
 import com.toolsboox.plugin.teamdrawer.nw.domain.Note
 import java.util.*
+import javax.inject.Inject
 
 /**
  * The 'note' repository.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class NoteRepository {
+class NoteRepository @Inject constructor() {
 
     companion object {
         /**

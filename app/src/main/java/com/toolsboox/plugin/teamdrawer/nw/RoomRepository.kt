@@ -2,13 +2,14 @@ package com.toolsboox.plugin.teamdrawer.nw
 
 import com.toolsboox.plugin.teamdrawer.nw.domain.Room
 import java.util.*
+import javax.inject.Inject
 
 /**
  * The 'room' repository.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class RoomRepository {
+class RoomRepository @Inject constructor() {
 
     companion object {
         /**

@@ -160,6 +160,7 @@ class NoteFragment @Inject constructor() : ScreenFragment() {
      * @param noteItem the saved note
      */
     fun addResult(noteItem: Note) {
+        noteRepository.updateNote(noteItem.roomId, noteItem)
         val routeUrl = "/teamDrawer/${roomId}/${noteItem.noteId}/${noteItem.pages[0]}"
         Timber.i("Route to $routeUrl")
         val bundle = bundleOf()
