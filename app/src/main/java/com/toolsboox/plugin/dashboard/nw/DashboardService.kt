@@ -17,6 +17,6 @@ interface DashboardService {
      *
      * @return the server API version
      */
-    @GET(value = "dashboard/v2/version")
+    @GET(value = "version.json")
     fun versionAsync(): Deferred<Response<Version>>
 }
