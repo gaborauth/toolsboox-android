@@ -8,7 +8,9 @@
 
 ## How to install?
 
-[That's easy as pie! Follow the steps... :)](https://gaborauth.github.io/toolsboox-android/INSTALL.html)
+From Google Play: https://play.google.com/store/apps/details?id=com.toolsboox
+
+From Github: [That's easy as pie! Follow the steps... :)](https://gaborauth.github.io/toolsboox-android/INSTALL.html)
 
 ## Available tools
 
@@ -16,11 +18,17 @@
 
 ### Calendar
 
+Hand writable calendars with yearly, quarterly, monthly, weekly and daily view.
+
+![image](https://user-images.githubusercontent.com/16724720/197599107-5bab6506-d856-42d8-aab6-10947cdec1b6.png)
+
+### Calendar template generator
+
 Customizable calendar template generator.
 
 ![image](https://user-images.githubusercontent.com/16724720/195287157-421d4dd0-0459-42d6-a57e-4b0098d75f24.png)
 
-### Templates
+### Community templates
 
 Categorized (community based) templates.
 
