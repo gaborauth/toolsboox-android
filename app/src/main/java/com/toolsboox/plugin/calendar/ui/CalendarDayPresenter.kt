@@ -1,8 +1,10 @@
 package com.toolsboox.plugin.calendar.ui
 
+import android.Manifest
 import android.graphics.Rect
 import android.os.Environment
 import com.google.gson.GsonBuilder
+import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarDayBinding
 import com.toolsboox.plugin.calendar.da.CalendarDay
 import com.toolsboox.ui.plugin.FragmentPresenter
@@ -35,7 +37,15 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
         fragment: CalendarDayFragment, binding: FragmentCalendarDayBinding,
         currentDate: LocalDate, surfaceSize: Rect
     ) {
-        if (!checkPermissions(fragment, binding.root)) return
+        if (!fragment.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            fragment.showError(null, R.string.main_read_external_storage_permission_missing, binding.root)
+            return
+        }
+
+        if (!fragment.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            fragment.showError(null, R.string.main_write_external_storage_permission_missing, binding.root)
+            return
+        }
 
         GlobalScope.launch(Dispatchers.IO) {
             try {

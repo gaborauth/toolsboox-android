@@ -118,23 +118,24 @@ abstract class SurfaceFragment : ScreenFragment() {
      * Export bitmap to the external storage.
      */
     fun exportBitmap() {
-        val permissionGranted = checkPermissionGranted(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE,
-            getString(R.string.main_write_external_storage_permission_title),
-            getString(R.string.main_write_external_storage_permission_message)
-        )
-
-        if (permissionGranted) {
-            val title = "export-${Instant.now().epochSecond}"
-            MediaStore.Images.Media.insertImage(
-                this@SurfaceFragment.requireActivity().contentResolver,
-                bitmap,
-                title,
-                title
-            )
-            showMessage(getString(R.string.team_drawer_page_export_message).format(title), provideSurfaceView())
+        if (!checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            showError(null, R.string.main_read_external_storage_permission_missing, provideSurfaceView())
+            return
         }
+
+        if (!checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            showError(null, R.string.main_write_external_storage_permission_missing, provideSurfaceView())
+            return
+        }
+
+        val title = "export-${Instant.now().epochSecond}"
+        MediaStore.Images.Media.insertImage(
+            this@SurfaceFragment.requireActivity().contentResolver,
+            bitmap,
+            title,
+            title
+        )
+        showMessage(getString(R.string.team_drawer_page_export_message).format(title), provideSurfaceView())
     }
 
     /**

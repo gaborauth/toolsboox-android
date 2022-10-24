@@ -3,7 +3,6 @@ package com.toolsboox.ui.plugin
 import android.Manifest
 import android.view.View
 import com.toolsboox.R
-import com.toolsboox.databinding.FragmentCalendarYearBinding
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -24,24 +23,12 @@ abstract class FragmentPresenter {
      * @return the common permissions state
      */
     protected fun checkPermissions(fragment: ScreenFragment, view: View): Boolean {
-        val readPermissionGranted = fragment.checkPermissionGranted(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            ScreenFragment.REQUEST_PERMISSION_READ_EXTERNAL_STORAGE,
-            fragment.getString(R.string.main_read_external_storage_permission_title),
-            fragment.getString(R.string.main_read_external_storage_permission_message)
-        )
-        if (!readPermissionGranted) {
+        if (!fragment.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             fragment.showError(null, R.string.main_read_external_storage_permission_missing, view)
             return false
         }
 
-        val writePermissionGranted = fragment.checkPermissionGranted(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            ScreenFragment.REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE,
-            fragment.getString(R.string.main_write_external_storage_permission_title),
-            fragment.getString(R.string.main_write_external_storage_permission_message)
-        )
-        if (!writePermissionGranted) {
+        if (!fragment.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             fragment.showError(null, R.string.main_write_external_storage_permission_missing, view)
             return false
         }

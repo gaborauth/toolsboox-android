@@ -59,36 +59,32 @@ class ThisWeeksCalendarFragment @Inject constructor() : ScreenFragment() {
         binding = FragmentTemplatesThisWeeksCalendarBinding.bind(view)
 
         binding.buttonExport.setOnClickListener {
-            val permissionGranted = checkPermissionGranted(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                REQUEST_PERMISSION_READ_EXTERNAL_STORAGE,
-                getString(R.string.main_read_external_storage_permission_title),
-                getString(R.string.main_read_external_storage_permission_message)
-            ) and checkPermissionGranted(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE,
-                getString(R.string.main_write_external_storage_permission_title),
-                getString(R.string.main_write_external_storage_permission_message)
-            )
-
-            if (permissionGranted) {
-                val localDate = LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1)
-                val weekOfYear = localDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
-
-                val rootPath = Environment.getExternalStorageDirectory()
-                val title = "calendar-${localDate.year}-$weekOfYear.png"
-                val filename = "$rootPath/noteTemplate/$title"
-                Timber.i("Save to $filename")
-                try {
-                    FileOutputStream(filename).use { out -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) }
-                } catch (e: IOException) {
-                    Timber.e(e.toString(), e)
-                }
-                showMessage(
-                    getString(R.string.templates_this_weeks_calendar_preview_export_message, title),
-                    binding.root
-                )
+            if (!checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                showError(null, R.string.main_read_external_storage_permission_missing, binding.root)
+                return@setOnClickListener
             }
+
+            if (!checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                showError(null, R.string.main_write_external_storage_permission_missing, binding.root)
+                return@setOnClickListener
+            }
+
+            val localDate = LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1)
+            val weekOfYear = localDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
+
+            val rootPath = Environment.getExternalStorageDirectory()
+            val title = "calendar-${localDate.year}-$weekOfYear.png"
+            val filename = "$rootPath/noteTemplate/$title"
+            Timber.i("Save to $filename")
+            try {
+                FileOutputStream(filename).use { out -> bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) }
+            } catch (e: IOException) {
+                Timber.e(e.toString(), e)
+            }
+            showMessage(
+                getString(R.string.templates_this_weeks_calendar_preview_export_message, title),
+                binding.root
+            )
         }
 
         binding.preview.post {

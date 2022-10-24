@@ -7,7 +7,6 @@ import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesFlatWeeksCalendarBinding
 import com.toolsboox.plugin.templates.ot.FlatWeekCalendarCreator
 import com.toolsboox.ui.plugin.FragmentPresenter
-import com.toolsboox.ui.plugin.ScreenFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,24 +29,12 @@ class FlatWeeksCalendarPresenter @Inject constructor() : FragmentPresenter() {
      * @param binding the data binding
      */
     fun export(fragment: FlatWeeksCalendarFragment, binding: FragmentTemplatesFlatWeeksCalendarBinding) {
-        val readPermissionGranted = fragment.checkPermissionGranted(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            ScreenFragment.REQUEST_PERMISSION_READ_EXTERNAL_STORAGE,
-            fragment.getString(R.string.main_read_external_storage_permission_title),
-            fragment.getString(R.string.main_read_external_storage_permission_message)
-        )
-        val writePermissionGranted = fragment.checkPermissionGranted(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            ScreenFragment.REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE,
-            fragment.getString(R.string.main_write_external_storage_permission_title),
-            fragment.getString(R.string.main_write_external_storage_permission_message)
-        )
-
-        if (!readPermissionGranted) {
+        if (!fragment.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             fragment.showError(null, R.string.main_read_external_storage_permission_missing, binding.root)
             return
         }
-        if (!writePermissionGranted) {
+
+        if (!fragment.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             fragment.showError(null, R.string.main_write_external_storage_permission_missing, binding.root)
             return
         }

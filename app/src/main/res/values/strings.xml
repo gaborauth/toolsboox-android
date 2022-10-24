@@ -45,14 +45,14 @@
     <string name="main_version">%s&#8211;%s</string>
     <string name="main_update_not_now">Now now</string>
     <string name="main_update">Update</string>
-    <string name="main_internet_permission_title">Internet</string>
-    <string name="main_internet_permission_message">Access of internet is needed to download templates</string>
+    <string name="main_all_granted_message">All asked permissions granted! Have a nice day!</string>
+    <string name="main_some_granted_message">Some asked permissions granted, denying permissions may cause feature loss!</string>
+    <string name="main_all_denied_message">All asked permissions denied, denying permissions may cause feature loss!</string>
+    <string name="main_ask_permissions_title">Ask for permissions</string>
+    <string name="main_ask_permissions_message">You need to grant access to %s.</string>
     <string name="main_internet_permission_missing">Missing permission of internet&#8230;</string>
-    <string name="main_read_external_storage_permission_title">Read storage</string>
-    <string name="main_read_external_storage_permission_message">Read of storage is needed to export content</string>
+    <string name="main_read_calendar_permission_missing">Missing permission of read calendar&#8230;</string>
     <string name="main_read_external_storage_permission_missing">Missing permission of read external storage&#8230;</string>
-    <string name="main_write_external_storage_permission_title">Write storage</string>
-    <string name="main_write_external_storage_permission_message">Write storage is needed to export content</string>
     <string name="main_write_external_storage_permission_missing">Missing permission of write external storage&#8230;</string>
 
     <!-- Strings related to calendar plugin -->

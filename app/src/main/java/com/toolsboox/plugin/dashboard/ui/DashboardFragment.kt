@@ -29,9 +29,27 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DashboardFragment @Inject constructor() : ScreenFragment() {
 
+    companion object {
+        /**
+         * User already notified about device mismatch.
+         */
+        private var notifiedAboutDeviceMismatch: Boolean = false
+
+        /**
+         * User already notified about new version.
+         */
+        private var notifiedAboutNewVersion: Boolean = false
+    }
+
+    /**
+     * The injected router.
+     */
     @Inject
     lateinit var router: Router
 
+    /**
+     * The injected presenter.
+     */
     @Inject
     lateinit var presenter: DashboardPresenter
 
@@ -49,16 +67,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      * The dashboard item adapter.
      */
     private lateinit var adapter: SquareItemAdapter
-
-    /**
-     * User already notified about device mismatch.
-     */
-    private var notifiedAboutDeviceMismatch: Boolean = false
-
-    /**
-     * User already notified about new version.
-     */
-    private var notifiedAboutNewVersion: Boolean = false
 
     /**
      * OnViewCreated hook.
@@ -112,7 +120,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
 
-        askAppPermissions()
         presenter.version(this)
 
         val inputManager = requireContext().getSystemService(Context.INPUT_SERVICE) as InputManager?
@@ -134,6 +141,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         toolBar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.dashboard_title))
 
+        askAppPermissions()
         deviceCheck()
     }
 

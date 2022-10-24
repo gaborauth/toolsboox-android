@@ -26,19 +26,14 @@ abstract class ScreenFragment : Fragment() {
     companion object {
 
         /**
-         * Result code of INTERNET permission.
+         * Result code of ask permissions.
          */
-        const val REQUEST_PERMISSION_INTERNET = 12344
+        const val REQUEST_PERMISSIONS = 12345
 
         /**
-         * Result code of READ_EXTERNAL_STORAGE permission.
+         * User already asked for permissions.
          */
-        const val REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 12345
-
-        /**
-         * Result code of WRITE_EXTERNAL_STORAGE permission.
-         */
-        const val REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 12346
+        private var askedForPermissions: Boolean = false
     }
 
     /**
@@ -149,15 +144,25 @@ abstract class ScreenFragment : Fragment() {
      */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
-            REQUEST_PERMISSION_INTERNET,
-            REQUEST_PERMISSION_READ_EXTERNAL_STORAGE,
-            REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this.context, "Permission Granted!", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this.context, "Permission Denied!", Toast.LENGTH_SHORT).show()
+            REQUEST_PERMISSIONS -> {
+                var allGranted: Boolean = true
+                var someGranted: Boolean = false
+                grantResults.forEach {
+                    allGranted = allGranted and (it == PackageManager.PERMISSION_GRANTED)
+                    someGranted = someGranted or (it == PackageManager.PERMISSION_GRANTED)
                 }
+                val message = if (allGranted) {
+                    R.string.main_all_granted_message
+                } else if (someGranted) {
+                    R.string.main_some_granted_message
+                } else {
+                    R.string.main_all_denied_message
+                }
+
+                Toast.makeText(this.context, message, Toast.LENGTH_LONG).show()
             }
+
+            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
 
@@ -165,81 +170,60 @@ abstract class ScreenFragment : Fragment() {
      * Check if permission granted or start the request process.
      */
     fun askAppPermissions() {
-        checkPermissionGranted(
-            Manifest.permission.INTERNET,
-            REQUEST_PERMISSION_INTERNET,
-            getString(R.string.main_internet_permission_title),
-            getString(R.string.main_internet_permission_message)
-        )
-        checkPermissionGranted(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            REQUEST_PERMISSION_READ_EXTERNAL_STORAGE,
-            getString(R.string.main_read_external_storage_permission_title),
-            getString(R.string.main_read_external_storage_permission_message)
-        )
-        checkPermissionGranted(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE,
-            getString(R.string.main_write_external_storage_permission_title),
-            getString(R.string.main_write_external_storage_permission_message)
-        )
-    }
+        if (askedForPermissions) return
+        askedForPermissions = true
 
-    /**
-     * Check if permission granted or start the request process.
-     *
-     * @param permissionName the name of the permission (Manifest.permission)
-     * @param permissionRequestCode the result code of the request Activity
-     * @param title the title of the request dialog
-     * @param message the message of the request dialog
-     * @return true, if the permission is granted
-     */
-    fun checkPermissionGranted(
-        permissionName: String,
-        permissionRequestCode: Int,
-        title: String,
-        message: String
-    ): Boolean {
-        val permission = ContextCompat.checkSelfPermission(this.requireContext(), permissionName)
+        val permissionsNeeded = mutableListOf<String>()
+        val permissionsList = mutableListOf<String>()
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this.requireActivity(), permissionName)) {
-                showExplanation(title, message, permissionName, permissionRequestCode)
-            } else {
-                requestPermission(permissionName, permissionRequestCode)
-            }
+        checkAndAddPermission(permissionsList, permissionsNeeded, Manifest.permission.INTERNET)
+        checkAndAddPermission(permissionsList, permissionsNeeded, Manifest.permission.READ_CALENDAR)
+        checkAndAddPermission(permissionsList, permissionsNeeded, Manifest.permission.READ_EXTERNAL_STORAGE)
+        checkAndAddPermission(permissionsList, permissionsNeeded, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-            return false
+        if (permissionsList.isEmpty()) return
+
+        if (permissionsNeeded.isEmpty()) {
+            requestPermissions(permissionsList.toTypedArray(), REQUEST_PERMISSIONS)
+        } else {
+            val message = getString(R.string.main_ask_permissions_message, permissionsNeeded.joinToString { it })
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+            builder.setTitle(R.string.main_ask_permissions_title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    requestPermissions(permissionsList.toTypedArray(), REQUEST_PERMISSIONS)
+                }
+            builder.create().show()
         }
-
-        return true
     }
 
     /**
-     * Show explanation of the permission request.
-     *
-     * @param title the title
-     * @param message the message
-     * @param permissionName the name of the permission (Manifest.permission)
-     * @param permissionRequestCode the request code of the dialog
-     */
-    private fun showExplanation(title: String, message: String, permissionName: String, permissionRequestCode: Int) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
-        builder.setTitle(title)
-            .setMessage(message)
-            .setPositiveButton(
-                android.R.string.ok
-            ) { _, _ -> requestPermission(permissionName, permissionRequestCode) }
-        builder.create().show()
-    }
-
-    /**
-     * Request a permission.
+     * Check permission.
      *
      * @param permissionName the name of the permission
-     * @param permissionRequestCode the request code of the dialog
+     * @return true, if granted
      */
-    private fun requestPermission(permissionName: String, permissionRequestCode: Int) {
-        ActivityCompat.requestPermissions(this.requireActivity(), arrayOf(permissionName), permissionRequestCode)
+    fun checkPermission(permissionName: String): Boolean {
+        return ContextCompat.checkSelfPermission(requireContext(), permissionName) == PackageManager.PERMISSION_GRANTED
+    }
+
+    /**
+     * Check and add permission to the lists.
+     *
+     * @param permissionsList the list of permissions to acquire
+     * @param permissionNeeded the list of permissions to ask about
+     * @param permissionName the name of the permission
+     */
+    private fun checkAndAddPermission(
+        permissionsList: MutableList<String>,
+        permissionNeeded: MutableList<String>,
+        permissionName: String
+    ) {
+        if (checkPermission(permissionName)) return
+
+        permissionsList.add(permissionName)
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this.requireActivity(), permissionName)) {
+            permissionNeeded.add(permissionName)
+        }
     }
 }
