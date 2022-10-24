@@ -178,6 +178,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
 
             val filename = "toolboox-prod-release-${version.versionName}.apk"
             val url = "https://github.com/gaborauth/toolsboox-android/releases/latest/download/$filename"
+            Timber.i("The update URL is '$url'")
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
             builder.setTitle(R.string.dashboard_new_version_title)
