@@ -67,6 +67,9 @@
                 app:nullable="true"/>
 
         <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+        <action
                 android:id="@+id/action_to_calendar_year"
                 app:destination="@id/CalendarYearFragment"/>
         <action
@@ -93,6 +96,9 @@
                 app:nullable="true"/>
 
         <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+        <action
                 android:id="@+id/action_to_calendar_quarter"
                 app:destination="@id/CalendarQuarterFragment"/>
         <action
@@ -118,6 +124,9 @@
                 app:argType="string"
                 app:nullable="true"/>
 
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
         <action
                 android:id="@+id/action_to_calendar_month"
                 app:destination="@id/CalendarMonthFragment"/>
@@ -148,6 +157,9 @@
                 app:argType="string"
                 app:nullable="true"/>
 
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
         <action
                 android:id="@+id/action_to_calendar_year"
                 app:destination="@id/CalendarYearFragment"/>
@@ -203,6 +215,9 @@
             tools:layout="@layout/fragment_teamdrawer_note">
 
         <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+        <action
                 android:id="@+id/action_to_teamdrawer_room"
                 app:destination="@id/TeamDrawerRoomFragment"/>
         <action
@@ -219,6 +234,9 @@
             android:label="TeamDrawerPageFragment"
             tools:layout="@layout/fragment_teamdrawer_page">
 
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
         <action
                 android:id="@+id/action_to_teamdrawer_note"
                 app:destination="@id/TeamDrawerNoteFragment"/>
