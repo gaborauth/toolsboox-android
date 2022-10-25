@@ -7,15 +7,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -50,25 +46,8 @@ object NetworkModule {
         loggerInterceptor.level =
             if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
 
-        val retryInterceptor = Interceptor { chain ->
-            val request: Request = chain.request()
-
-            var response: Response = chain.proceed(request)
-            if (response.isSuccessful) return@Interceptor response
-
-            for (tryCount in 1..3) {
-                Timber.i("Request is not successful ${response.code}: retry attempt ($tryCount/3)")
-                response = chain.proceed(request)
-
-                if (response.isSuccessful) return@Interceptor response
-            }
-
-            return@Interceptor response
-        }
-
         return OkHttpClient.Builder()
             .addInterceptor(loggerInterceptor)
-            .addInterceptor(retryInterceptor)
             .connectTimeout(10000, TimeUnit.MILLISECONDS)
             .writeTimeout(10000, TimeUnit.MILLISECONDS)
             .readTimeout(10000, TimeUnit.MILLISECONDS)
