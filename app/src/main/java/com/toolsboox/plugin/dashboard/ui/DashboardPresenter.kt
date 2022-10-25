@@ -1,5 +1,6 @@
 package com.toolsboox.plugin.dashboard.ui
 
+import com.toolsboox.BuildConfig
 import com.toolsboox.plugin.dashboard.nw.DashboardService
 import com.toolsboox.ui.plugin.FragmentPresenter
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class DashboardPresenter @Inject constructor() : FragmentPresenter() {
     fun version(fragment: DashboardFragment) {
         coroutinesCallHelper(
             fragment,
-            { dashboardService.versionAsync() },
+            { dashboardService.versionAsync("${BuildConfig.VERSION_CODE}") },
             { response ->
                 when (response.code()) {
                     200 -> {

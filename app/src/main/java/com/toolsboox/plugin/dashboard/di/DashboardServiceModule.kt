@@ -7,7 +7,6 @@ import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import retrofit2.Retrofit
-import javax.inject.Named
 
 /**
  * Dashboard service module, provides services.
@@ -25,7 +24,7 @@ object DashboardServiceModule {
      */
     @Provides
     @Reusable
-    fun provideDashboardService(@Named("gitHubRaw") retrofit: Retrofit): DashboardService {
+    fun provideDashboardService(retrofit: Retrofit): DashboardService {
         return retrofit.create(DashboardService::class.java)
     }
 }

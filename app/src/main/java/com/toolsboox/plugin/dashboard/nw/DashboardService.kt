@@ -4,6 +4,7 @@ import com.toolsboox.plugin.dashboard.da.Version
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 /**
  * Dashboard service interface.
@@ -17,6 +18,8 @@ interface DashboardService {
      *
      * @return the server API version
      */
-    @GET(value = "version.json")
-    fun versionAsync(): Deferred<Response<Version>>
+    @GET(value = "dashboard/v2/version/{currentVersion}")
+    fun versionAsync(
+        @Path("currentVersion") currentVersion: String
+    ): Deferred<Response<Version>>
 }
