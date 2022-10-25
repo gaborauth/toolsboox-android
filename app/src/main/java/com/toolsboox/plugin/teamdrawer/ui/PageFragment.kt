@@ -10,7 +10,6 @@ import com.toolsboox.databinding.FragmentTeamdrawerPageBinding
 import com.toolsboox.plugin.teamdrawer.nw.NoteRepository
 import com.toolsboox.plugin.teamdrawer.nw.domain.Note
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
-import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import com.toolsboox.plugin.teamdrawer.nw.dto.NotePageComplex
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -86,21 +85,21 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
     override fun provideSurfaceView(): SurfaceView = binding.surfaceView
 
     /**
-     * Add stroke callback.
+     * Add strokes callback.
      *
-     * @param stroke list of stroke points
+     * @param strokes list of strokes
      */
-    override fun onStrokeAdded(stroke: List<StrokePoint>) {
-        presenter.add(this@PageFragment, roomId, noteId, pageId, stroke)
+    override fun onStrokesAdded(strokes: List<Stroke>) {
+        presenter.add(this@PageFragment, roomId, noteId, pageId, strokes)
     }
 
     /**
-     * Delete stroke callback.
+     * Delete strokes callback.
      *
-     * @param strokeId the UUID of the stroke
+     * @param strokeIds the list UUID of the strokes
      */
-    override fun onStrokeDeleted(strokeId: UUID) {
-        presenter.del(this@PageFragment, roomId, noteId, pageId, strokeId)
+    override fun onStrokesDeleted(strokeIds: List<UUID>) {
+        presenter.del(this@PageFragment, roomId, noteId, pageId, strokeIds)
     }
 
     /**
@@ -196,9 +195,9 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
     /**
      * Render the result of 'add' service call.
      *
-     * @param stroke the saved stroke
+     * @param strokes the saved strokes
      */
-    fun addResult(stroke: Stroke) {
+    fun addResult(strokes: List<Stroke>) {
         presenter.last(this, roomId, noteId, pageId, false)
     }
 

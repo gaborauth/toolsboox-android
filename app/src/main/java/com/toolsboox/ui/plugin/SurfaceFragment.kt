@@ -58,6 +58,11 @@ abstract class SurfaceFragment : ScreenFragment() {
     private var strokes: MutableList<Stroke> = mutableListOf()
 
     /**
+     * The list of strokes to add.
+     */
+    private var strokesToAdd: MutableList<Stroke> = mutableListOf()
+
+    /**
      * The actual size of the surface.
      */
     private var surfaceSize: Rect = Rect(0, 0, 0, 0)
@@ -70,18 +75,18 @@ abstract class SurfaceFragment : ScreenFragment() {
     abstract fun provideSurfaceView(): SurfaceView
 
     /**
-     * Add stroke callback.
+     * Add strokes callback.
      *
-     * @param stroke list of stroke points
+     * @param strokes list of strokes
      */
-    open fun onStrokeAdded(stroke: List<StrokePoint>) {}
+    open fun onStrokesAdded(strokes: List<Stroke>) {}
 
     /**
-     * Delete stroke callback.
+     * Delete strokes callback.
      *
-     * @param strokeId the UUID of the stroke
+     * @param strokeIds the list UUID of the strokes
      */
-    open fun onStrokeDeleted(strokeId: UUID) {}
+    open fun onStrokesDeleted(strokeIds: List<UUID>) {}
 
     /**
      * Stroke changed callback.
@@ -298,6 +303,9 @@ abstract class SurfaceFragment : ScreenFragment() {
         override fun onPenUpRefresh(refreshRect: RectF) {
             super.onPenUpRefresh(refreshRect)
             Timber.i("onPenUpRefresh (${refreshRect.top}x${refreshRect.left}/${refreshRect.bottom}x${refreshRect.right} )")
+            onStrokesAdded(strokesToAdd.toList())
+            strokesToAdd.clear()
+
             applyStrokes(strokes, false)
             onStrokeChanged(strokes)
         }
@@ -340,8 +348,9 @@ abstract class SurfaceFragment : ScreenFragment() {
                     )
                 }
             }
-            strokes.add(Stroke(UUID.randomUUID(), UUID.randomUUID(), strokePoints))
-            onStrokeAdded(strokePoints)
+            val stroke = Stroke(UUID.randomUUID(), UUID.randomUUID(), strokePoints)
+            strokes.add(stroke)
+            strokesToAdd.add(stroke)
         }
 
         override fun onBeginRawErasing(b: Boolean, touchPoint: TouchPoint) {
@@ -371,7 +380,7 @@ abstract class SurfaceFragment : ScreenFragment() {
 
             Timber.i("onRawErasingTouchPointListReceived ($eraserPoints)")
 
-            val strokesToRemove: MutableList<UUID> = mutableListOf()
+            val strokesToRemove: MutableSet<UUID> = mutableSetOf()
             for (ep in eraserPoints) {
                 for (stroke in strokes) {
                     for (tp in stroke.strokePoints) {
@@ -382,14 +391,10 @@ abstract class SurfaceFragment : ScreenFragment() {
                 }
             }
             strokesToRemove.forEach { strokes.removeIf { stroke -> stroke.strokeId == it } }
+            onStrokesDeleted(strokesToRemove.toList())
 
-            // TODO: multiple delete of strokes
-            if (strokesToRemove.firstOrNull() != null) {
-                onStrokeDeleted(strokesToRemove.firstOrNull()!!)
-            }
-
-            onStrokeChanged(strokes)
             applyStrokes(strokes, true)
+            onStrokeChanged(strokes)
         }
     }
 }

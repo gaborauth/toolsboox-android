@@ -1,7 +1,6 @@
 package com.toolsboox.plugin.teamdrawer.nw
 
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
-import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.Body
@@ -26,13 +25,13 @@ interface StrokeService {
      * @param strokePoints the list of stroke points
      * @return the saved stroke
      */
-    @POST(value = "stroke/add/{roomId}/{noteId}/{pageId}")
+    @POST(value = "stroke/addStrokes/{roomId}/{noteId}/{pageId}")
     fun addAsync(
         @Path("roomId") roomId: UUID,
         @Path("noteId") noteId: UUID,
         @Path("pageId") pageId: UUID,
-        @Body strokePoints: List<StrokePoint>
-    ): Deferred<Response<Stroke>>
+        @Body strokes: List<Stroke>
+    ): Deferred<Response<List<Stroke>>>
 
     /**
      * Delete all strokes of the page.
@@ -55,15 +54,15 @@ interface StrokeService {
      * @param roomId       the room ID
      * @param noteId       the note ID
      * @param pageId   the page ID
-     * @param strokeId the stroke ID
+     * @param strokeIds the list of stroke ID
      * @return the strokes on the page
      */
-    @GET(value = "stroke/del/{roomId}/{noteId}/{pageId}/{strokeId}")
+    @POST(value = "stroke/delStrokes/{roomId}/{noteId}/{pageId}")
     fun delAsync(
         @Path("roomId") roomId: UUID,
         @Path("noteId") noteId: UUID,
         @Path("pageId") pageId: UUID,
-        @Path("strokeId") strokeId: UUID
+        @Body strokeIds: List<UUID>
     ): Deferred<Response<List<Stroke>>>
 
     /**

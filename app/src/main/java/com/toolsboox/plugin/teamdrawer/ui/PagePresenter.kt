@@ -2,7 +2,7 @@ package com.toolsboox.plugin.teamdrawer.ui
 
 import com.toolsboox.plugin.teamdrawer.nw.PageService
 import com.toolsboox.plugin.teamdrawer.nw.StrokeService
-import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
+import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.FragmentPresenter
 import java.util.*
 import javax.inject.Inject
@@ -27,12 +27,12 @@ class PagePresenter @Inject constructor() : FragmentPresenter() {
      * @param roomId the room ID
      * @param noteId the note ID
      * @param pageId the page ID
-     * @param stroke the stroke
+     * @param strokes the list of strokes
      */
-    fun add(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID, stroke: List<StrokePoint>) {
+    fun add(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID, strokes: List<Stroke>) {
         coroutinesCallHelper(
             fragment,
-            { strokeService.addAsync(roomId, noteId, pageId, stroke) },
+            { strokeService.addAsync(roomId, noteId, pageId, strokes) },
             { response ->
                 when (response.code()) {
                     200 -> {
@@ -108,18 +108,18 @@ class PagePresenter @Inject constructor() : FragmentPresenter() {
     }
 
     /**
-     * Delete a stroke of the page.
+     * Delete strokes on the page.
      *
      * @param fragment the fragment
      * @param roomId the room ID
      * @param noteId the note ID
      * @param pageId the page ID
-     * @param strokeId the stroke ID
+     * @param strokeIds the list of stroke ID
      */
-    fun del(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID, strokeId: UUID) {
+    fun del(fragment: PageFragment, roomId: UUID, noteId: UUID, pageId: UUID, strokeIds: List<UUID>) {
         coroutinesCallHelper(
             fragment,
-            { strokeService.delAsync(roomId, noteId, pageId, strokeId) },
+            { strokeService.delAsync(roomId, noteId, pageId, strokeIds) },
             { response ->
                 when (response.code()) {
                     200 -> {
