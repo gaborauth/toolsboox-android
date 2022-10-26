@@ -150,6 +150,10 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
             CalendarNavigator.toWeek(this, currentDate.plusWeeks(5L), calendarMonth.locale)
         }
 
+        binding.surfaceView.setOnTouchListener { view, motionEvent ->
+            CalendarMonthCreator.onTouchEvent(view, motionEvent, this@CalendarMonthFragment, calendarMonth)
+        }
+
         toolbar.toolbarPager.visibility = View.GONE
         updateNavigator(true)
 

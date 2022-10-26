@@ -2,9 +2,13 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.view.MotionEvent
+import android.view.View
 import com.toolsboox.R
 import com.toolsboox.ot.Creator
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarWeek
+import com.toolsboox.plugin.calendar.ui.CalendarWeekFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -30,6 +34,51 @@ class CalendarWeekCreator : Creator {
 
         // Top offset
         private const val to = (1872.0f - 4 * ceh - 150.0f) / 2.0f
+
+
+        /**
+         * Process touch event on the calendar page and navigate to the view of calendar.
+         *
+         * @param view the surface view
+         * @param motionEvent the motion event
+         * @param fragment the parent fragment
+         * @param calendarWeek the calendar data class
+         * @return true
+         */
+        fun onTouchEvent(
+            view: View, motionEvent: MotionEvent,
+            fragment: CalendarWeekFragment, calendarWeek: CalendarWeek
+        ): Boolean {
+            if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
+
+            val year = calendarWeek.year
+            val weekOfYear = calendarWeek.weekOfYear
+            val locale = calendarWeek.locale ?: Locale.getDefault()
+
+            val weekFields = WeekFields.of(locale)
+            val startWeekDate = LocalDate.ofYearDay(year, 1)
+                .with(weekFields.weekOfYear(), weekOfYear.toLong())
+                .with(weekFields.dayOfWeek(), 1)
+
+            when (motionEvent.action) {
+                MotionEvent.ACTION_UP -> {
+                    val px = motionEvent.x * 1404.0f / view.width
+                    val py = motionEvent.y * 1872.0f / view.height
+
+                    for (i in 0..7) {
+                        val xo = lo + (i % 2) * cew + (i % 2) * 50.0f
+                        val yo = to + (i / 2) * ceh + (i / 2) * 50.0f
+
+                        if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
+                            CalendarNavigator.toDay(fragment, startWeekDate.plusDays(i.toLong()))
+                            return true
+                        }
+                    }
+                }
+            }
+
+            return true
+        }
 
         /**
          * Draw weekly template of calendar plugin.

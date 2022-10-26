@@ -2,8 +2,12 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.view.MotionEvent
+import android.view.View
 import com.toolsboox.ot.Creator
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarMonth
+import com.toolsboox.plugin.calendar.ui.CalendarMonthFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -30,6 +34,70 @@ class CalendarMonthCreator : Creator {
 
         // Top offset
         private const val to = (1872.0f - 6 * ceh - 50.0f) / 2.0f
+
+        /**
+         * Process touch event on the calendar page and navigate to the view of calendar.
+         *
+         * @param view the surface view
+         * @param motionEvent the motion event
+         * @param fragment the parent fragment
+         * @param calendarMonth the calendar data class
+         * @return true
+         */
+        fun onTouchEvent(
+            view: View, motionEvent: MotionEvent,
+            fragment: CalendarMonthFragment, calendarMonth: CalendarMonth
+        ): Boolean {
+            if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
+
+            val year = calendarMonth.year
+            val month = calendarMonth.month
+            val locale = calendarMonth.locale ?: Locale.getDefault()
+            val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
+
+            val localDate = LocalDate.of(year, month, 1)
+            val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
+
+            when (motionEvent.action) {
+                MotionEvent.ACTION_UP -> {
+                    val px = motionEvent.x * 1404.0f / view.width
+                    val py = motionEvent.y * 1872.0f / view.height
+
+                    for (i in 0..5) {
+                        val xo = lo
+                        val yo = to + 50.0f + i * ceh
+
+                        if (px >= xo && px <= xo + 50.0f && py >= yo && py <= yo + ceh) {
+                            CalendarNavigator.toWeek(fragment, localDate.plusWeeks(i.toLong()), locale)
+                            return true
+                        }
+                    }
+
+                    val yearMonth = YearMonth.of(year, month)
+                    val dayValue: Int = LocalDate.of(year, month, 1).dayOfWeek.value
+                    var xOffset = (dayValue - firstDayOfWeek + 7) % 7
+                    var yOffset = 0
+
+                    for (day in 1..yearMonth.month.length(yearMonth.isLeapYear)) {
+                        val xo = lo + 50.0f + xOffset * cew
+                        val yo = to + 50.0f + yOffset * ceh
+
+                        if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
+                            CalendarNavigator.toDay(fragment, localDate.plusDays(day.toLong() - 1L))
+                            return true
+                        }
+
+                        xOffset++
+                        if (xOffset > 6) {
+                            xOffset = 0
+                            yOffset++
+                        }
+                    }
+                }
+            }
+
+            return true
+        }
 
         /**
          * Draw the monthly template of calendar plugin.

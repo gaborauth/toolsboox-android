@@ -2,8 +2,12 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.view.MotionEvent
+import android.view.View
 import com.toolsboox.ot.Creator
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarYear
+import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
@@ -32,6 +36,56 @@ class CalendarYearCreator : Creator {
 
         // Top offset
         private const val to = (1872.0f - 35 * ceh) / 2.0f
+
+        /**
+         * Process touch event on the calendar page and navigate to the view of calendar.
+         *
+         * @param view the surface view
+         * @param motionEvent the motion event
+         * @param fragment the parent fragment
+         * @param calendarYear the calendar data class
+         * @return true
+         */
+        fun onTouchEvent(
+            view: View, motionEvent: MotionEvent,
+            fragment: CalendarYearFragment, calendarYear: CalendarYear
+        ): Boolean {
+            if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
+
+            val year = calendarYear.year
+            val locale = calendarYear.locale ?: Locale.getDefault()
+
+            when (motionEvent.action) {
+                MotionEvent.ACTION_UP -> {
+                    val px = motionEvent.x * 1404.0f / view.width
+                    val py = motionEvent.y * 1872.0f / view.height
+
+                    for (x in 0..2) {
+                        for (y in 0..3) {
+                            val monthNumber = y * 3 + x + 1
+                            val quarterMonthNumber = y * 3 + 1
+
+                            val xo = lo + cew + x * 9 * cew
+                            val yo = to + y * 9 * ceh
+
+                            if (px >= xo - cew && px <= xo && py >= yo && py <= yo + 8 * ceh) {
+                                val localDate = LocalDate.of(year, quarterMonthNumber, 1)
+                                CalendarNavigator.toQuarter(fragment, localDate)
+                                return true
+                            }
+
+                            if (px >= xo && px <= xo + 8 * cew && py >= yo && py <= yo + 8 * ceh) {
+                                val localDate = LocalDate.of(year, monthNumber, 1)
+                                CalendarNavigator.toMonth(fragment, localDate)
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true
+        }
 
         /**
          * Draw the yearly template of calendar plugin.

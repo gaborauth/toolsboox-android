@@ -157,6 +157,10 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
             CalendarNavigator.toDay(this, currentDate.plusDays(6L))
         }
 
+        binding.surfaceView.setOnTouchListener { view, motionEvent ->
+            CalendarWeekCreator.onTouchEvent(view, motionEvent, this@CalendarWeekFragment, calendarWeek)
+        }
+
         toolbar.toolbarPager.visibility = View.GONE
         updateNavigator(true)
 

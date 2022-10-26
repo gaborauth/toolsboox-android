@@ -42,13 +42,20 @@
 
         <action
                 android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
+                app:destination="@id/DashboardFragment"
+                app:popUpTo="@id/DashboardFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_year"
-                app:destination="@id/CalendarYearFragment"/>
+                app:destination="@id/CalendarYearFragment"
+                app:popUpTo="@id/CalendarYearFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_quarter"
                 app:destination="@id/CalendarQuarterFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"/>
     </fragment>
 
     <fragment
@@ -68,16 +75,24 @@
 
         <action
                 android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
+                app:destination="@id/DashboardFragment"
+                app:popUpTo="@id/DashboardFragment"/>
         <action
                 android:id="@+id/action_to_calendar_year"
-                app:destination="@id/CalendarYearFragment"/>
+                app:destination="@id/CalendarYearFragment"
+                app:popUpTo="@id/CalendarYearFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_quarter"
-                app:destination="@id/CalendarQuarterFragment"/>
+                app:destination="@id/CalendarQuarterFragment"
+                app:popUpTo="@id/CalendarQuarterFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_month"
                 app:destination="@id/CalendarMonthFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_day"
+                app:destination="@id/CalendarDayFragment"/>
     </fragment>
 
     <fragment
@@ -97,16 +112,25 @@
 
         <action
                 android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
+                app:destination="@id/DashboardFragment"
+                app:popUpTo="@id/DashboardFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_quarter"
-                app:destination="@id/CalendarQuarterFragment"/>
+                app:destination="@id/CalendarQuarterFragment"
+                app:popUpTo="@id/CalendarQuarterFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_month"
-                app:destination="@id/CalendarMonthFragment"/>
+                app:destination="@id/CalendarMonthFragment"
+                app:popUpTo="@id/CalendarMonthFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_week"
                 app:destination="@id/CalendarWeekFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_day"
+                app:destination="@id/CalendarDayFragment"/>
     </fragment>
 
     <fragment
@@ -126,13 +150,19 @@
 
         <action
                 android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
+                app:destination="@id/DashboardFragment"
+                app:popUpTo="@id/DashboardFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_month"
-                app:destination="@id/CalendarMonthFragment"/>
+                app:destination="@id/CalendarMonthFragment"
+                app:popUpTo="@id/CalendarMonthFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_week"
-                app:destination="@id/CalendarWeekFragment"/>
+                app:destination="@id/CalendarWeekFragment"
+                app:popUpTo="@id/CalendarWeekFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_day"
                 app:destination="@id/CalendarDayFragment"/>
@@ -159,22 +189,34 @@
 
         <action
                 android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
+                app:destination="@id/DashboardFragment"
+                app:popUpTo="@id/DashboardFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_year"
-                app:destination="@id/CalendarYearFragment"/>
+                app:destination="@id/CalendarYearFragment"
+                app:popUpTo="@id/CalendarYearFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_quarter"
-                app:destination="@id/CalendarQuarterFragment"/>
+                app:destination="@id/CalendarQuarterFragment"
+                app:popUpTo="@id/CalendarQuarterFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_month"
-                app:destination="@id/CalendarMonthFragment"/>
+                app:destination="@id/CalendarMonthFragment"
+                app:popUpTo="@id/CalendarMonthFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_week"
-                app:destination="@id/CalendarWeekFragment"/>
+                app:destination="@id/CalendarWeekFragment"
+                app:popUpTo="@id/CalendarWeekFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_day"
-                app:destination="@id/CalendarDayFragment"/>
+                app:destination="@id/CalendarDayFragment"
+                app:popUpTo="@id/CalendarDayFragment"
+                app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment

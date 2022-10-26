@@ -2,8 +2,12 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.view.MotionEvent
+import android.view.View
 import com.toolsboox.ot.Creator
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarQuarter
+import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
@@ -31,6 +35,58 @@ class CalendarQuarterCreator : Creator {
 
         // Top offset
         private const val to = (1872.0f - 32 * ceh) / 2.0f
+
+        /**
+         * Process touch event on the calendar page and navigate to the view of calendar.
+         *
+         * @param view the surface view
+         * @param motionEvent the motion event
+         * @param fragment the parent fragment
+         * @param calendarQuarter the calendar data class
+         * @return true
+         */
+        fun onTouchEvent(
+            view: View, motionEvent: MotionEvent,
+            fragment: CalendarQuarterFragment, calendarQuarter: CalendarQuarter
+        ): Boolean {
+            if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
+
+            val year = calendarQuarter.year
+            val quarter = calendarQuarter.quarter
+            val locale = calendarQuarter.locale ?: Locale.getDefault()
+
+            when (motionEvent.action) {
+                MotionEvent.ACTION_UP -> {
+                    val px = motionEvent.x * 1404.0f / view.width
+                    val py = motionEvent.y * 1872.0f / view.height
+
+                    val startMonth = (quarter - 1) * 3 + 1
+                    for (i in 0..2) {
+                        val xo = lo + i * cew + i * 50.0f
+                        val yo = to
+
+                        if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
+                            val localDate = LocalDate.of(year, startMonth, 1)
+                            CalendarNavigator.toMonth(fragment, localDate)
+                            return true
+                        }
+
+                        val yearMonth = YearMonth.of(year, startMonth)
+                        val days = yearMonth.month.length(yearMonth.isLeapYear)
+                        for (day in 1..days) {
+                            val dyo = yo + day * ceh
+                            if (px >= xo && px <= xo + cew && py >= dyo && py <= dyo + ceh) {
+                                val localDate = LocalDate.of(year, startMonth, day)
+                                CalendarNavigator.toDay(fragment, localDate)
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true
+        }
 
         /**
          * Draw the quarterly template of calendar plugin.
