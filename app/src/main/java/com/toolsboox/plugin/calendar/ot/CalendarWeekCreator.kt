@@ -70,7 +70,12 @@ class CalendarWeekCreator : Creator {
                         val yo = to + (i / 2) * ceh + (i / 2) * 50.0f
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
-                            CalendarNavigator.toDay(fragment, startWeekDate.plusDays(i.toLong()))
+                            if (i == 7) {
+                                CalendarNavigator.toWeek(fragment, startWeekDate, locale)
+                            } else {
+                                CalendarNavigator.toDay(fragment, startWeekDate.plusDays(i.toLong()))
+                            }
+
                             return true
                         }
                     }
