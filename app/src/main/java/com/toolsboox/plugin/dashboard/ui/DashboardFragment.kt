@@ -169,13 +169,12 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      */
     fun versionResult(version: Version) {
         val installer = requireContext().packageManager.getInstallerPackageName(requireContext().packageName)
-        Timber.e("Installer package: $installer")
-        if (installer != null) return
+
+        if (BuildConfig.VERSION_CODE >= version.versionCode) return
         if (notifiedAboutNewVersion) return
+        notifiedAboutNewVersion = true
 
-        if (BuildConfig.VERSION_CODE < version.versionCode) {
-            notifiedAboutNewVersion = true
-
+        if (installer == null) {
             val filename = "toolboox-prod-release-${version.versionName}.apk"
             val url = "https://github.com/gaborauth/toolsboox-android/releases/latest/download/$filename"
             Timber.i("The update URL is '$url'")
@@ -187,11 +186,13 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                     this.startActivity(intent)
                 }
-                .setNegativeButton(
-                    R.string.main_update_not_now
-                ) { dialog, _ ->
-                    dialog.cancel()
-                }
+                .setNegativeButton(R.string.main_update_not_now) { dialog, _ -> dialog.cancel() }
+            builder.create().show()
+        } else {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+            builder.setTitle(R.string.dashboard_new_version_title)
+                .setMessage(R.string.dashboard_new_version_message)
+                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.cancel() }
             builder.create().show()
         }
     }
