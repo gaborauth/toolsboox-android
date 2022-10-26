@@ -121,6 +121,10 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
                     .with(weekFields.dayOfWeek(), 1)
             }
         }
+        val weekOfWeekBasedYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()
+        calendarWeek = CalendarWeek(
+            currentDate.year, currentDate.get(weekOfWeekBasedYear), Locale.getDefault(), mutableListOf()
+        )
 
         binding.buttonPrev.setOnClickListener {
             currentDate = currentDate.minusWeeks(1L)

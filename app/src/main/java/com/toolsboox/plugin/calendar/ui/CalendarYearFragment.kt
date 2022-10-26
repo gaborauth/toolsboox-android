@@ -111,6 +111,9 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
             Timber.i("Set year to '$it' from parameter")
             currentDate = LocalDate.ofYearDay(it, 1)
         }
+        calendarYear = CalendarYear(
+            currentDate.year, Locale.getDefault(), mutableListOf()
+        )
 
         binding.buttonPrev.setOnClickListener {
             currentDate = currentDate.minusYears(1L)

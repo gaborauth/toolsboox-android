@@ -116,6 +116,9 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
                 currentDate = LocalDate.of(year, (quarter - 1) * 3 + 1, 1)
             }
         }
+        calendarQuarter = CalendarQuarter(
+            currentDate.year, (currentDate.monthValue - 1 / 3) + 1, Locale.getDefault(), mutableListOf()
+        )
 
         binding.buttonPrev.setOnClickListener {
             currentDate = currentDate.minusMonths(3L)

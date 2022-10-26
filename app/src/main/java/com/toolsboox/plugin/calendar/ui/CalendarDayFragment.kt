@@ -122,6 +122,9 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
                 }
             }
         }
+        calendarDay = CalendarDay(
+            currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, Locale.getDefault(), mutableListOf()
+        )
 
         binding.buttonPrev.setOnClickListener {
             currentDate = currentDate.minusDays(1L)

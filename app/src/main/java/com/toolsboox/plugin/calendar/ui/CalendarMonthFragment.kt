@@ -117,6 +117,9 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
                 currentDate = LocalDate.of(year, month, 1)
             }
         }
+        calendarMonth = CalendarMonth(
+            currentDate.year, currentDate.monthValue, Locale.getDefault(), mutableListOf()
+        )
 
         binding.buttonPrev.setOnClickListener {
             currentDate = currentDate.minusMonths(1L)
