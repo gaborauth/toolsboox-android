@@ -66,7 +66,7 @@ class CalendarQuarterCreator : Creator {
                         val yo = to
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
-                            val localDate = LocalDate.of(year, startMonth, 1)
+                            val localDate = LocalDate.of(year, startMonth + i, 1)
                             CalendarNavigator.toMonth(fragment, localDate)
                             return true
                         }
