@@ -3,6 +3,7 @@ package com.toolsboox.ot
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.text.TextPaint
 
 /**
  * Creator interface, common drawing methods and constants.
@@ -25,15 +26,15 @@ interface Creator {
         val lineDefaultBlack: Paint = Paint()
         val lineDefaultGrey50: Paint = Paint()
 
-        val textDefaultBlack = Paint()
-        val textDefaultBlackCenter = Paint()
-        val textDefaultBlackRight = Paint()
-        val textDefaultWhite = Paint()
-        val textDefaultWhiteCenter = Paint()
-        val textDefaultWhiteRight = Paint()
-        val textSmallBlack = Paint()
-        val textSmallBlackCenter = Paint()
-        val textSmallBlackRight = Paint()
+        val textDefaultBlack = TextPaint()
+        val textDefaultBlackCenter = TextPaint()
+        val textDefaultBlackRight = TextPaint()
+        val textDefaultWhite = TextPaint()
+        val textDefaultWhiteCenter = TextPaint()
+        val textDefaultWhiteRight = TextPaint()
+        val textSmallBlack = TextPaint()
+        val textSmallBlackCenter = TextPaint()
+        val textSmallBlackRight = TextPaint()
 
 
         init {
@@ -89,7 +90,7 @@ interface Creator {
             textSmallBlack.color = colorBlack
             textSmallBlack.textAlign = Paint.Align.LEFT
             textSmallBlack.textSize = 25.0f
-            textSmallBlack.typeface = Typeface.DEFAULT_BOLD
+            textSmallBlack.typeface = Typeface.DEFAULT
 
             textSmallBlackCenter.color = colorBlack
             textSmallBlackCenter.textAlign = Paint.Align.CENTER
