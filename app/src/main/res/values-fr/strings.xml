@@ -49,6 +49,7 @@ Strings related to dashboard fragment -->
     <string name="team_drawer_page_title">"'%s' pages"</string>
     <string name="team_drawer_page_text">"Bienvenue dans votre dessin collaboratif"</string>
     <string name="team_drawer_page_button_export_text">"Exporter"</string>
+    <string name="team_drawer_page_button_erase_text">"Effacer"</string>
     <string name="team_drawer_page_export_message">"Exporter sous %s"</string>
     <string name="team_drawer_page_add_new_page_dialog_title">"Ajouter page"</string>
     <string name="team_drawer_page_add_new_page_dialog_message">"Ajouter une nouvelle page ?"</string>
