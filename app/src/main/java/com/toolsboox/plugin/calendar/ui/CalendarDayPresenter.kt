@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.calendar.ui
 
 import android.Manifest
+import android.content.ContentUris
 import android.graphics.Rect
 import android.os.Environment
 import android.provider.CalendarContract.Instances
@@ -137,26 +138,35 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
         if (!fragment.checkPermission(Manifest.permission.READ_CALENDAR)) return googleCalendarEvents
 
         val contentResolver = fragment.requireActivity().contentResolver
-        val startDate = currentDate.atStartOfDay(ZoneOffset.UTC).toEpochSecond() * 1000 + 1
-        val endDate = currentDate.plusDays(1L).atStartOfDay(ZoneOffset.UTC).toEpochSecond() * 1000 - 1
+        val startDate = currentDate.atStartOfDay(ZoneOffset.UTC).toEpochSecond() * 1000
+        val endDate = currentDate.plusDays(1L).atStartOfDay(ZoneOffset.UTC).toEpochSecond() * 1000
+
+        val uriBuilder = Instances.CONTENT_URI.buildUpon()
+        ContentUris.appendId(uriBuilder, startDate)
+        ContentUris.appendId(uriBuilder, endDate)
+        val uri = uriBuilder.build()
 
         val instanceFields = arrayOf(
             Instances._ID, Instances.TITLE, Instances.DESCRIPTION,
-            Instances.ALL_DAY, Instances.DTSTART, Instances.DTEND
+            Instances.ALL_DAY, Instances.BEGIN, Instances.END
         )
 
-        Instances.query(contentResolver, instanceFields, startDate, endDate)?.use { cursor ->
+        val selection = "((${Instances.BEGIN} >= $startDate) " +
+                "AND (${Instances.END} <= $endDate) " +
+                "AND (${Instances.VISIBLE} = 1))"
+
+        contentResolver.query(uri, instanceFields, selection, null, null)?.use { cursor ->
             while (cursor.moveToNext()) {
                 val id = cursor.getStringOrNull(0) ?: continue
                 val title = cursor.getStringOrNull(1) ?: continue
                 val description = cursor.getStringOrNull(2) ?: continue
-                val allDayInt = cursor.getIntOrNull(3) ?: continue
+                val allDay = cursor.getIntOrNull(3) ?: continue
                 val dtStart = cursor.getLongOrNull(4) ?: continue
                 val dtEnd = cursor.getLongOrNull(5) ?: continue
 
                 googleCalendarEvents.add(
                     GoogleCalendarEvent(
-                        id, title, description, allDayInt > 0,
+                        id, title, description, allDay > 0,
                         Instant.ofEpochMilli(dtStart).atZone(ZoneId.systemDefault()).toLocalDateTime(),
                         Instant.ofEpochMilli(dtEnd).atZone(ZoneId.systemDefault()).toLocalDateTime()
                     )
