@@ -2,9 +2,14 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.text.TextUtils
 import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.da.CalendarDay
+import com.toolsboox.plugin.calendar.da.GoogleCalendarEvent
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.*
 
 /**
@@ -33,11 +38,15 @@ class CalendarDayCreator {
          * @param context the context
          * @param canvas the canvas
          * @param calendarDay data class
+         * @param googleCalendarEvents the list of Google calendar events
          */
-        fun drawPage(context: Context, canvas: Canvas, calendarDay: CalendarDay) {
+        fun drawPage(
+            context: Context, canvas: Canvas, calendarDay: CalendarDay, googleCalendarEvents: List<GoogleCalendarEvent>
+        ) {
             val schedulesText = context.getString(R.string.calendar_day_schedules)
             val tasksText = context.getString(R.string.calendar_day_tasks)
             val notesText = context.getString(R.string.calendar_day_notes)
+            val allDayText = context.getString(R.string.calendar_day_all_day)
             val locale = calendarDay.locale ?: Locale.getDefault()
 
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)
@@ -120,6 +129,39 @@ class CalendarDayCreator {
                 lo + cew + 50.0f, to + 35 * ceh, lo + 2 * cew + 50.0f, to + 35 * ceh,
                 Creator.lineDefaultBlack
             )
+
+            // Google Calendar events
+            for (i in 0..7) {
+                if (i < googleCalendarEvents.size) {
+                    googleCalendarEvents[i].let { event ->
+                        val title = TextUtils.ellipsize(
+                            event.title, Creator.textDefaultBlack, cew, TextUtils.TruncateAt.END
+                        ).toString()
+                        canvas.drawText(
+                            title, lo + cew + 60.0f, to + (20 + i * 2) * ceh - 10.0f, Creator.textDefaultBlack
+                        )
+                        if (event.allDay) {
+                            canvas.drawText(
+                                allDayText, lo + cew + 60.0f, to + (21 + i * 2) * ceh - 10.0f,
+                                Creator.textSmallBlack
+                            )
+                        } else {
+                            val startDate = event.startDate.atZone(ZoneId.systemDefault())
+                                .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG))
+                            val endDate = event.endDate.atZone(ZoneId.systemDefault())
+                                .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.LONG))
+                            canvas.drawText(
+                                startDate, lo + cew + 60.0f, to + (21 + i * 2) * ceh - 10.0f,
+                                Creator.textSmallBlack
+                            )
+                            canvas.drawText(
+                                endDate, lo + cew + 40.0f + cew, to + (21 + i * 2) * ceh - 10.0f,
+                                Creator.textSmallBlackRight
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

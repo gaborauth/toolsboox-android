@@ -97,6 +97,7 @@
     <string name="calendar_day_schedules">Schedules</string>
     <string name="calendar_day_tasks">Tasks</string>
     <string name="calendar_day_notes">Notes &amp; Calendar events</string>
+    <string name="calendar_day_all_day">All day event</string>
 
     <!-- Strings related to dashboard plugin -->
     <!-- Strings related to dashboard fragment -->

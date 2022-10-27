@@ -1,22 +1,28 @@
 package com.toolsboox.plugin.calendar.ui
 
 import android.Manifest
+import android.content.ContentUris
 import android.graphics.Rect
 import android.os.Environment
-import android.provider.CalendarContract
+import android.provider.CalendarContract.Instances
+import androidx.core.database.getIntOrNull
+import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import com.google.gson.GsonBuilder
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarDayBinding
 import com.toolsboox.plugin.calendar.da.CalendarDay
+import com.toolsboox.plugin.calendar.da.GoogleCalendarEvent
 import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.io.*
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
@@ -76,7 +82,11 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }
 
-                withContext(Dispatchers.Main) { fragment.renderPage(calendarDay) }
+                withContext(Dispatchers.Main) {
+                    val googleCalendarEvents = loadGoogleCalendarEvents(fragment, currentDate)
+                    fragment.renderPage(calendarDay, googleCalendarEvents)
+
+                }
             } finally {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
             }
@@ -115,29 +125,50 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
     }
 
     /**
-     * Load calendars of the user.
+     * Load daily calendar events of the user.
      *
      * @param fragment the calendar fragment
+     * @param currentDate the current date
+     * @return the list of Google Calendar events
      */
-    fun loadCalendar(fragment: CalendarDayFragment) {
-        if (!fragment.checkPermission(Manifest.permission.READ_CALENDAR)) return
+    private fun loadGoogleCalendarEvents(
+        fragment: CalendarDayFragment, currentDate: LocalDate
+    ): List<GoogleCalendarEvent> {
+        if (!fragment.checkPermission(Manifest.permission.READ_CALENDAR)) return listOf()
 
-        val uri = CalendarContract.Calendars.CONTENT_URI
         val contentResolver = fragment.requireActivity().contentResolver
-        val fields = arrayOf(
-            CalendarContract.Calendars._ID, CalendarContract.Calendars.ACCOUNT_NAME,
-            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, CalendarContract.Calendars.OWNER_ACCOUNT
+        val startDate = currentDate.atStartOfDay(ZoneOffset.UTC).toEpochSecond() * 1000 + 1
+        val endDate = currentDate.plusDays(1L).atStartOfDay(ZoneOffset.UTC).toEpochSecond() * 1000 - 1
+
+        val instanceUri = Instances.CONTENT_URI.buildUpon()
+        ContentUris.appendId(instanceUri, startDate)
+        ContentUris.appendId(instanceUri, endDate)
+        val instanceFields = arrayOf(
+            Instances._ID, Instances.TITLE, Instances.DESCRIPTION,
+            Instances.ALL_DAY, Instances.DTSTART, Instances.DTEND
         )
 
-        contentResolver.query(uri, fields, null, null, null)?.use { cursor ->
+        val googleCalendarEvents = mutableListOf<GoogleCalendarEvent>()
+        contentResolver.query(instanceUri.build(), instanceFields, null, null, null)?.use { cursor ->
             while (cursor.moveToNext()) {
-                val id = cursor.getStringOrNull(0)
-                val accountName = cursor.getStringOrNull(1)
-                val calendarDisplayName = cursor.getStringOrNull(2)
-                val ownerAccount = cursor.getStringOrNull(3)
-                Timber.i("Calendar[$id] of $accountName($ownerAccount): $calendarDisplayName")
+                val id = cursor.getStringOrNull(0) ?: continue
+                val title = cursor.getStringOrNull(1) ?: continue
+                val description = cursor.getStringOrNull(2) ?: continue
+                val allDayInt = cursor.getIntOrNull(3) ?: continue
+                val dtStart = cursor.getLongOrNull(4) ?: continue
+                val dtEnd = cursor.getLongOrNull(5) ?: continue
+
+                googleCalendarEvents.add(
+                    GoogleCalendarEvent(
+                        id, title, description, allDayInt > 0,
+                        Instant.ofEpochMilli(dtStart).atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                        Instant.ofEpochMilli(dtEnd).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                    )
+                )
             }
         }
+
+        return googleCalendarEvents
     }
 
     /**

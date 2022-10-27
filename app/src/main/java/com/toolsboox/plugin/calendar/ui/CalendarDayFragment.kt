@@ -10,6 +10,7 @@ import com.toolsboox.databinding.FragmentCalendarDayBinding
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarDay
+import com.toolsboox.plugin.calendar.da.GoogleCalendarEvent
 import com.toolsboox.plugin.calendar.ot.CalendarDayCreator
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
@@ -172,8 +173,6 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     override fun onResume() {
         super.onResume()
 
-        presenter.loadCalendar(this)
-
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarDayFragment, binding, currentDate, getSurfaceSize())
         }
@@ -191,12 +190,15 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
 
     /**
      * Reload the current page.
+     *
+     * @param calendarDay the data class
+     * @param googleCalendarEvents the Google Calender events
      */
-    fun renderPage(calendarDay: CalendarDay) {
+    fun renderPage(calendarDay: CalendarDay, googleCalendarEvents: List<GoogleCalendarEvent>) {
         this.calendarDay = calendarDay
         updateNavigator()
 
-        CalendarDayCreator.drawPage(this.requireContext(), templateCanvas, calendarDay)
+        CalendarDayCreator.drawPage(this.requireContext(), templateCanvas, calendarDay, googleCalendarEvents)
         binding.templateImage.postInvalidate()
 
         applyStrokes(calendarDay.strokes.toMutableList(), true)
