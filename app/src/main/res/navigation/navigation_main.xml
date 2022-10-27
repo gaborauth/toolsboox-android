@@ -27,6 +27,9 @@
         <action
                 android:id="@+id/action_to_templates_main"
                 app:destination="@id/TemplatesMainFragment"/>
+        <action
+                android:id="@+id/action_to_about"
+                app:destination="@id/AboutFragment"/>
     </fragment>
 
     <fragment
@@ -363,5 +366,19 @@
         <action
                 android:id="@+id/action_to_dashboard"
                 app:destination="@id/DashboardFragment"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/AboutFragment"
+            android:name="com.toolsboox.plugin.about.ui.AboutFragment"
+            android:label="KanbanAboutFragment"
+            tools:layout="@layout/fragment_about">
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"/>
+        <action
+                android:id="@+id/action_to_about"
+                app:destination="@id/AboutFragment"/>
     </fragment>
 </navigation>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:id="@+id/mainProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="-7dp"
+            android:indeterminate="true"
+            android:visibility="invisible"
+
+            tools:visibility="visible"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/aboutMeTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="20sp"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_about_me_title"/>
+
+        <TextView
+                android:id="@+id/aboutMeMessage"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_about_me_message"/>
+
+        <TextView
+                android:id="@+id/aboutMeLink"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text=""/>
+
+        <TextView
+                android:id="@+id/projectHomeTitle"
+                android:layout_marginTop="20dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="20sp"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_project_home_title"/>
+
+        <TextView
+                android:id="@+id/projectHomeMessage"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_project_home_message"/>
+
+        <TextView
+                android:id="@+id/projectHomeLink"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text=""/>
+
+        <TextView
+                android:id="@+id/sponsorshipTitle"
+                android:layout_marginTop="20dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="20sp"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_sponsorship_title"/>
+
+        <TextView
+                android:id="@+id/sponsorshipMessage"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_sponsorship_message"/>
+
+        <TextView
+                android:id="@+id/sponsorshipLink"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text=""/>
+
+        <TextView
+                android:id="@+id/otherLinksTitle"
+                android:layout_marginTop="20dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="20sp"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_other_links_title"/>
+
+        <TextView
+                android:id="@+id/otherLinksTranslate"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_other_links_translate_link"/>
+
+        <TextView
+                android:id="@+id/otherLinksFacebook"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_other_links_facebook_link"/>
+
+    </LinearLayout>
+</FrameLayout>

@@ -103,6 +103,12 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
                 R.id.action_to_kanban_main, bundleOf()
             )
         )
+        squareItems.add(
+            SquareItem(
+                "About", R.drawable.ic_dashboard_item_about,
+                R.id.action_to_about, bundleOf()
+            )
+        )
 
         val clickListener = object : SquareItemAdapter.OnItemClickListener {
             override fun onItemClicked(squareItem: SquareItem) {
