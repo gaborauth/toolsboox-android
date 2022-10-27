@@ -1,7 +1,6 @@
 package com.toolsboox.plugin.calendar.ui
 
 import android.Manifest
-import android.content.ContentUris
 import android.graphics.Rect
 import android.os.Environment
 import android.provider.CalendarContract.Instances
@@ -82,8 +81,8 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }
 
+                val googleCalendarEvents = loadGoogleCalendarEvents(fragment, currentDate)
                 withContext(Dispatchers.Main) {
-                    val googleCalendarEvents = loadGoogleCalendarEvents(fragment, currentDate)
                     fragment.renderPage(calendarDay, googleCalendarEvents)
 
                 }
@@ -134,22 +133,19 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
     private fun loadGoogleCalendarEvents(
         fragment: CalendarDayFragment, currentDate: LocalDate
     ): List<GoogleCalendarEvent> {
-        if (!fragment.checkPermission(Manifest.permission.READ_CALENDAR)) return listOf()
+        val googleCalendarEvents = mutableListOf<GoogleCalendarEvent>()
+        if (!fragment.checkPermission(Manifest.permission.READ_CALENDAR)) return googleCalendarEvents
 
         val contentResolver = fragment.requireActivity().contentResolver
         val startDate = currentDate.atStartOfDay(ZoneOffset.UTC).toEpochSecond() * 1000 + 1
         val endDate = currentDate.plusDays(1L).atStartOfDay(ZoneOffset.UTC).toEpochSecond() * 1000 - 1
 
-        val instanceUri = Instances.CONTENT_URI.buildUpon()
-        ContentUris.appendId(instanceUri, startDate)
-        ContentUris.appendId(instanceUri, endDate)
         val instanceFields = arrayOf(
             Instances._ID, Instances.TITLE, Instances.DESCRIPTION,
             Instances.ALL_DAY, Instances.DTSTART, Instances.DTEND
         )
 
-        val googleCalendarEvents = mutableListOf<GoogleCalendarEvent>()
-        contentResolver.query(instanceUri.build(), instanceFields, null, null, null)?.use { cursor ->
+        Instances.query(contentResolver, instanceFields, startDate, endDate)?.use { cursor ->
             while (cursor.moveToNext()) {
                 val id = cursor.getStringOrNull(0) ?: continue
                 val title = cursor.getStringOrNull(1) ?: continue
