@@ -65,6 +65,7 @@
     <string name="about_other_links_title">Links</string>
     <string name="about_other_links_translate_link">Translate:</string>
     <string name="about_other_links_facebook_link">Facebook:</string>
+    <string name="about_other_links_discord_link">Discord:</string>
 
     <string name="calendar_main_title">Calendar</string>
     <string name="calendar_template_image">Calendar template image</string>
@@ -120,6 +121,8 @@
     <string name="dashboard_new_version_message">There is a new version of \'Tools for Boox\' available, please upgrade it unless some functions may not work.</string>
     <string name="dashboard_device_mismatch_title">Device mismatch</string>
     <string name="dashboard_device_mismatch_message">The \'Tools for Boox\' application is developed to Onyx Boox devices, your device doesn\'t look like an Onxy Boox (%s - %s), there may be bugs and crashes.</string>
+    <string name="dashboard_api_level_warning_title">Android version warning</string>
+    <string name="dashboard_api_level_warning_message">It looks like your device based on Android %s, which is restricts the usage of the external storage, so that the application cannot export note templates. Sorry… :(</string>
     <string name="dashboard_item_cancel_alt">Cancel</string>
     <string name="dashboard_item_delete_alt">Delete</string>
     <string name="dashboard_item_edit_alt">Edit</string>

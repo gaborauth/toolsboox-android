@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.view.View
+import android.widget.TextView
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentAboutBinding
 import com.toolsboox.ui.plugin.ScreenFragment
@@ -36,6 +37,20 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
     private lateinit var binding: FragmentAboutBinding
 
     /**
+     * Update textView content to clickable link.
+     *
+     * @param linkView the link holder textView
+     * @param link the link
+     */
+    private fun htmlLinks(linkView: TextView, link: String) {
+        val linkHtml = "<a href=\"$link\">$link</a>"
+        linkView.text = Html.fromHtml(linkHtml, Html.FROM_HTML_MODE_COMPACT)
+        linkView.setOnClickListener {
+            this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+        }
+    }
+
+    /**
      * OnViewCreated hook.
      *
      * @param view the parent view
@@ -46,42 +61,12 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
 
         binding = FragmentAboutBinding.bind(view)
 
-        val aboutMeLink = "https://github.com/gaborauth/"
-        val aboutMeLinkHtml = "<a href=\"$aboutMeLink\">$aboutMeLink</a>"
-        binding.aboutMeLink.text = Html.fromHtml(aboutMeLinkHtml, Html.FROM_HTML_MODE_COMPACT)
-        binding.aboutMeLink.setOnClickListener {
-            this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(aboutMeLink)))
-        }
-
-        val projectHomeLink = "https://github.com/gaborauth/toolsboox-android/"
-        val projectHomeLinkHtml = "<a href=\"$projectHomeLink\">$projectHomeLink</a>"
-        binding.projectHomeLink.text = Html.fromHtml(projectHomeLinkHtml, Html.FROM_HTML_MODE_COMPACT)
-        binding.projectHomeLink.setOnClickListener {
-            this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(projectHomeLink)))
-        }
-
-        val sponsorshipLink = "https://patreon.com/toolsboox"
-        val sponsorshipLinkHtml = "<a href=\"$sponsorshipLink\">$sponsorshipLink</a>"
-        binding.sponsorshipLink.text = Html.fromHtml(sponsorshipLinkHtml, Html.FROM_HTML_MODE_COMPACT)
-        binding.sponsorshipLink.setOnClickListener {
-            this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(sponsorshipLink)))
-        }
-
-        val translateLink = "https://poeditor.com/join/project?hash=dbYOuWr2UB"
-        val translateText = getString(R.string.about_other_links_translate_link)
-        val translateLinkHtml = "$translateText <a href=\"$translateLink\">$translateLink</a>"
-        binding.otherLinksTranslate.text = Html.fromHtml(translateLinkHtml, Html.FROM_HTML_MODE_COMPACT)
-        binding.otherLinksTranslate.setOnClickListener {
-            this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(translateLink)))
-        }
-
-        val facebookLink = "https://www.facebook.com/toolsboox"
-        val facebookText = getString(R.string.about_other_links_facebook_link)
-        val facebookLinkHtml = "$facebookText <a href=\"$facebookLink\">$facebookLink</a>"
-        binding.otherLinksFacebook.text = Html.fromHtml(facebookLinkHtml, Html.FROM_HTML_MODE_COMPACT)
-        binding.otherLinksFacebook.setOnClickListener {
-            this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(facebookLink)))
-        }
+        htmlLinks(binding.aboutMeLink, "https://github.com/gaborauth/")
+        htmlLinks(binding.projectHomeLink, "https://github.com/gaborauth/toolsboox-android/")
+        htmlLinks(binding.sponsorshipLink, "https://patreon.com/toolsboox")
+        htmlLinks(binding.otherLinksTranslate, "https://poeditor.com/join/project?hash=dbYOuWr2UB")
+        htmlLinks(binding.otherLinksFacebook, "https://www.facebook.com/toolsboox")
+        htmlLinks(binding.otherLinksDiscord, "https://discord.gg/S3sKsbmaSk")
     }
 
     /**

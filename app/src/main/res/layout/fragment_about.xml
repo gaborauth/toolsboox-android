@@ -145,5 +145,15 @@
                 android:singleLine="false"
                 android:text="@string/about_other_links_facebook_link"/>
 
+        <TextView
+                android:id="@+id/otherLinksDiscord"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_other_links_discord_link"/>
+
     </LinearLayout>
 </FrameLayout>
