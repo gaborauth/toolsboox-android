@@ -112,7 +112,7 @@
                 android:gravity="start"
                 android:maxLines="4"
                 android:singleLine="false"
-                android:text=""/>
+                android:text="@string/about_sponsorship_link"/>
 
         <TextView
                 android:id="@+id/otherLinksTitle"

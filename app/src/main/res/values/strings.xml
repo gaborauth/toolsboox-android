@@ -60,8 +60,8 @@
     <string name="about_project_home_message">The project is open source, you can find it in my GitHub repository:</string>
     <string name="about_project_home_link">link</string>
     <string name="about_sponsorship_title">Sponsorship</string>
-    <string name="about_sponsorship_message">This is a free software, so, it\'s free for you, but you can sponsor me:</string>
-    <string name="about_sponsorship_link">link</string>
+    <string name="about_sponsorship_message">This is a free software, so, it\'s free for you, but you can sponsor me through Patreon.</string>
+    <string name="about_sponsorship_link">Search for \'toolsboox\' page on Patreon (direct linking prohibited).</string>
     <string name="about_other_links_title">Links</string>
     <string name="about_other_links_translate_link">Translate:</string>
     <string name="about_other_links_facebook_link">Facebook:</string>

@@ -40,10 +40,12 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
      * Update textView content to clickable link.
      *
      * @param linkView the link holder textView
+     * @param messageResId the message resource id
      * @param link the link
      */
-    private fun htmlLinks(linkView: TextView, link: String) {
-        val linkHtml = "<a href=\"$link\">$link</a>"
+    private fun htmlLinks(linkView: TextView, messageResId: Int, link: String) {
+        val linkMessage = getString(messageResId)
+        val linkHtml = "$linkMessage <a href=\"$link\">$link</a>"
         linkView.text = Html.fromHtml(linkHtml, Html.FROM_HTML_MODE_COMPACT)
         linkView.setOnClickListener {
             this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
@@ -61,12 +63,26 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
 
         binding = FragmentAboutBinding.bind(view)
 
-        htmlLinks(binding.aboutMeLink, "https://github.com/gaborauth/")
-        htmlLinks(binding.projectHomeLink, "https://github.com/gaborauth/toolsboox-android/")
-        htmlLinks(binding.sponsorshipLink, "https://patreon.com/toolsboox")
-        htmlLinks(binding.otherLinksTranslate, "https://poeditor.com/join/project?hash=dbYOuWr2UB")
-        htmlLinks(binding.otherLinksFacebook, "https://www.facebook.com/toolsboox")
-        htmlLinks(binding.otherLinksDiscord, "https://discord.gg/S3sKsbmaSk")
+        htmlLinks(
+            binding.aboutMeLink, R.string.about_about_me_link,
+            "https://github.com/gaborauth/"
+        )
+        htmlLinks(
+            binding.projectHomeLink, R.string.about_project_home_link,
+            "https://github.com/gaborauth/toolsboox-android/"
+        )
+        htmlLinks(
+            binding.otherLinksTranslate, R.string.about_other_links_translate_link,
+            "https://poeditor.com/join/project?hash=dbYOuWr2UB"
+        )
+        htmlLinks(
+            binding.otherLinksFacebook, R.string.about_other_links_facebook_link,
+            "https://www.facebook.com/toolsboox"
+        )
+        htmlLinks(
+            binding.otherLinksDiscord, R.string.about_other_links_discord_link,
+            "https://discord.gg/S3sKsbmaSk"
+        )
     }
 
     /**
