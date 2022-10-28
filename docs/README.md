@@ -4,17 +4,25 @@
 
 ## Latest release
 
+[https://github.com/gaborauth/toolsboox-android/](https://github.com/gaborauth/toolsboox-android/)
+
 [https://github.com/gaborauth/toolsboox-android/releases/latest](https://github.com/gaborauth/toolsboox-android/releases/latest)
 
 ## How to install?
 
-From Google Play: https://play.google.com/store/apps/details?id=com.toolsboox
+From Google Play: [https://play.google.com/store/apps/details?id=com.toolsboox](https://play.google.com/store/apps/details?id=com.toolsboox)
 
-From Github: [That's easy as pie! Follow the steps... :)](https://gaborauth.github.io/toolsboox-android/INSTALL.html)
+From Github: [https://gaborauth.github.io/toolsboox-android/INSTALL.html](https://gaborauth.github.io/toolsboox-android/INSTALL.html)
 
 ## Available tools
 
 ![image](https://user-images.githubusercontent.com/16724720/195287594-ae43d5be-73f7-43a7-aa69-faa826889a15.png)
+
+- Personal Calendar
+- Calendar template generator
+- Community templates store
+- Team drawer tool
+- Kanban planner (experimental)
 
 ### Calendar
 
@@ -28,7 +36,7 @@ Customizable calendar template generator.
 
 ![image](https://user-images.githubusercontent.com/16724720/195287157-421d4dd0-0459-42d6-a57e-4b0098d75f24.png)
 
-### Community templates
+### Community templates store
 
 Categorized (community based) templates.
 
