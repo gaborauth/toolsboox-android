@@ -1,13 +1,17 @@
 package com.toolsboox.ui.plugin
 
 import android.Manifest
+import android.os.Build
+import android.os.Environment
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.toolsboox.R
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import java.io.File
 
 /**
  * Base class of fragment presenters.
@@ -74,6 +78,38 @@ abstract class FragmentPresenter {
         } finally {
             fragment.runOnActivity {
                 fragment.hideLoading()
+            }
+        }
+    }
+
+    /**
+     * Returns with the root path of the writable filesystem.
+     *
+     * @param fragment the fragment
+     * @param fallback the fallback path component
+     */
+    protected fun rootPath(fragment: Fragment, fallback: String): File {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            when (fallback) {
+                Environment.DIRECTORY_DOCUMENTS -> {
+                    fragment.requireContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!
+                }
+
+                else -> {
+                    val rootPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    File(rootPath, "toolsBoox")
+                }
+            }
+        } else {
+            when (fallback) {
+                Environment.DIRECTORY_DOCUMENTS -> {
+                    val rootPath = Environment.getExternalStorageDirectory()
+                    File(rootPath, "toolsBoox")
+                }
+
+                else -> {
+                    Environment.getExternalStorageDirectory()
+                }
             }
         }
     }

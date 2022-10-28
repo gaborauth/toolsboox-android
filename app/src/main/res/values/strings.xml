@@ -122,7 +122,7 @@
     <string name="dashboard_device_mismatch_title">Device mismatch</string>
     <string name="dashboard_device_mismatch_message">The \'Tools for Boox\' application is developed to Onyx Boox devices, your device doesn\'t look like an Onxy Boox (%s - %s), there may be bugs and crashes.</string>
     <string name="dashboard_api_level_warning_title">Android version warning</string>
-    <string name="dashboard_api_level_warning_message">It looks like your device based on Android %s, which is restricts the usage of the external storage, so that the application cannot export note templates. Sorry… :(</string>
+    <string name="dashboard_api_level_warning_message">It looks like your device based on Android %s, which is restricts the direct usage of the external storage, so that the application cannot export note templates directly to the noteTemplate folder.</string>
     <string name="dashboard_item_cancel_alt">Cancel</string>
     <string name="dashboard_item_delete_alt">Delete</string>
     <string name="dashboard_item_edit_alt">Edit</string>

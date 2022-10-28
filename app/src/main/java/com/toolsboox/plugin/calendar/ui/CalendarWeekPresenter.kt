@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder
 import com.toolsboox.databinding.FragmentCalendarWeekBinding
 import com.toolsboox.plugin.calendar.da.CalendarWeek
 import com.toolsboox.ui.plugin.FragmentPresenter
+import com.toolsboox.ui.plugin.ScreenFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,8 +49,8 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
                 var calendarWeek = CalendarWeek(year, week, locale, mutableListOf())
 
                 try {
-                    if (File(createPath(currentDate, locale)).exists()) {
-                        FileReader(File(createPath(currentDate, locale))).use {
+                    if (createPath(fragment, currentDate, locale).exists()) {
+                        FileReader(createPath(fragment, currentDate, locale)).use {
                             calendarWeek = GsonBuilder().create().fromJson(it, CalendarWeek::class.java)
                             calendarWeek.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
                         }
@@ -85,7 +86,7 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
                 try {
-                    PrintWriter(FileWriter(File(createPath(currentDate, locale)))).use {
+                    PrintWriter(FileWriter(createPath(fragment, currentDate, locale))).use {
                         it.write(GsonBuilder().create().toJson(calendarWeek).toString())
                     }
                 } catch (e: IOException) {
@@ -100,16 +101,19 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
     /**
      * Create path of the files.
      *
+     * @param fragment the fragment
      * @param currentDate the current date
      * @param locale the current locale
      * @return the path on the filesystem
      */
-    private fun createPath(currentDate: LocalDate, locale: Locale): String {
+    private fun createPath(fragment: ScreenFragment, currentDate: LocalDate, locale: Locale): File {
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
         val week = currentDate.format(DateTimeFormatter.ofPattern("ww", locale))
 
-        val rootPath = Environment.getExternalStorageDirectory()
-        File("$rootPath/toolsBoox/calendar/$year/").mkdirs()
-        return "$rootPath/toolsBoox/calendar/$year/week-$year-$week.json"
+        val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
+        val path = File(rootPath, "calendar/$year/")
+        path.mkdirs()
+
+        return File(path, "week-$year-$week.json")
     }
 }

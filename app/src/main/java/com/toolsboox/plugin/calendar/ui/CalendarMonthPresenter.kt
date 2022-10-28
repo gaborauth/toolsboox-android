@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder
 import com.toolsboox.databinding.FragmentCalendarMonthBinding
 import com.toolsboox.plugin.calendar.da.CalendarMonth
 import com.toolsboox.ui.plugin.FragmentPresenter
+import com.toolsboox.ui.plugin.ScreenFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -45,8 +46,8 @@ class CalendarMonthPresenter @Inject constructor() : FragmentPresenter() {
                 var calendarMonth = CalendarMonth(year, month, Locale.getDefault(), mutableListOf())
 
                 try {
-                    if (File(createPath(currentDate)).exists()) {
-                        FileReader(File(createPath(currentDate))).use {
+                    if (createPath(fragment, currentDate).exists()) {
+                        FileReader(createPath(fragment, currentDate)).use {
                             calendarMonth = GsonBuilder().create().fromJson(it, CalendarMonth::class.java)
                             calendarMonth.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
                         }
@@ -81,7 +82,7 @@ class CalendarMonthPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
                 try {
-                    PrintWriter(FileWriter(File(createPath(currentDate)))).use {
+                    PrintWriter(FileWriter(createPath(fragment, currentDate))).use {
                         it.write(GsonBuilder().create().toJson(calendarMonth).toString())
                     }
                 } catch (e: IOException) {
@@ -96,15 +97,18 @@ class CalendarMonthPresenter @Inject constructor() : FragmentPresenter() {
     /**
      * Create path of the files.
      *
+     * @param fragment the fragment
      * @param currentDate the current date
      * @return the path on the filesystem
      */
-    private fun createPath(currentDate: LocalDate): String {
+    private fun createPath(fragment: ScreenFragment, currentDate: LocalDate): File {
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
         val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
 
-        val rootPath = Environment.getExternalStorageDirectory()
-        File("$rootPath/toolsBoox/calendar/$year/$month/").mkdirs()
-        return "$rootPath/toolsBoox/calendar/$year/$month/month-$year-$month.json"
+        val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
+        val path = File(rootPath, "calendar/$year/$month/")
+        path.mkdirs()
+
+        return File(path, "month-$year-$month.json")
     }
 }

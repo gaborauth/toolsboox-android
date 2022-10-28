@@ -2,8 +2,10 @@ package com.toolsboox.plugin.dashboard.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.hardware.input.InputManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.InputDevice
 import android.view.View
@@ -41,6 +43,12 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
          */
         private var notifiedAboutNewVersion: Boolean = false
     }
+
+    /**
+     * The injected presenter.
+     */
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     /**
      * The injected presenter.
@@ -144,19 +152,47 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
 
         askAppPermissions()
         deviceCheck()
+        apiLevelCheck()
+    }
+
+    /**
+     * Render the result of API level check dialog.
+     */
+    private fun apiLevelCheck() {
+        val notifiedAboutApiLevelWarning = sharedPreferences.getBoolean("notifiedAboutApiLevelWarning", false)
+        if (notifiedAboutApiLevelWarning) return
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            sharedPreferences.edit().putBoolean("notifiedAboutApiLevelWarning", true).apply()
+
+            val androidVersion = when (Build.VERSION.SDK_INT) {
+                Build.VERSION_CODES.R -> "11"
+                Build.VERSION_CODES.S -> "12"
+                else -> "13+"
+            }
+
+            val message = getString(R.string.dashboard_api_level_warning_message).format(androidVersion)
+
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+            builder.setTitle(R.string.dashboard_api_level_warning_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok) { dialog, _ ->
+                    dialog.cancel()
+                }
+            builder.create().show()
+        }
     }
 
     /**
      * Render the result of brand mismatch dialog.
      */
     private fun deviceCheck() {
-        val brand = android.os.Build.BRAND.lowercase().contains("onyx")
-        val device = android.os.Build.DEVICE.lowercase().contains("onyx")
-        val manufacturer = android.os.Build.MANUFACTURER.lowercase().contains("onyx")
+        val brand = Build.BRAND.lowercase().contains("onyx")
+        val device = Build.DEVICE.lowercase().contains("onyx")
+        val manufacturer = Build.MANUFACTURER.lowercase().contains("onyx")
         if (brand || device || manufacturer || notifiedAboutDeviceMismatch) return
 
-        val message = getString(R.string.dashboard_device_mismatch_message)
-            .format(android.os.Build.BRAND, android.os.Build.DEVICE)
+        val message = getString(R.string.dashboard_device_mismatch_message).format(Build.BRAND, Build.DEVICE)
 
         notifiedAboutDeviceMismatch = true
         val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())

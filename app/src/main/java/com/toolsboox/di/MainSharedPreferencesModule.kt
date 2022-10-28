@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 /**
  * Provide main shared preferences.
@@ -22,7 +23,7 @@ object MainSharedPreferencesModule {
      */
     @Provides
     @Reusable
-    internal fun provideSharedPreferences(context: Context): SharedPreferences {
+    internal fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("MAIN", Context.MODE_PRIVATE)
     }
 }

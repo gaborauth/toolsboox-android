@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder
 import com.toolsboox.databinding.FragmentCalendarQuarterBinding
 import com.toolsboox.plugin.calendar.da.CalendarQuarter
 import com.toolsboox.ui.plugin.FragmentPresenter
+import com.toolsboox.ui.plugin.ScreenFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -45,8 +46,8 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
                 var calendarQuarter = CalendarQuarter(year, quarter, Locale.getDefault(), mutableListOf())
 
                 try {
-                    if (File(createPath(currentDate)).exists()) {
-                        FileReader(File(createPath(currentDate))).use {
+                    if (createPath(fragment, currentDate).exists()) {
+                        FileReader(createPath(fragment, currentDate)).use {
                             calendarQuarter = GsonBuilder().create().fromJson(it, CalendarQuarter::class.java)
                             calendarQuarter.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
                         }
@@ -81,7 +82,7 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
                 try {
-                    PrintWriter(FileWriter(File(createPath(currentDate)))).use {
+                    PrintWriter(FileWriter(createPath(fragment, currentDate))).use {
                         it.write(GsonBuilder().create().toJson(calendarQuarter).toString())
                     }
                 } catch (e: IOException) {
@@ -96,15 +97,18 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
     /**
      * Create path of the files.
      *
+     * @param fragment the fragment
      * @param currentDate the current date
      * @return the path on the filesystem
      */
-    private fun createPath(currentDate: LocalDate): String {
+    private fun createPath(fragment: ScreenFragment, currentDate: LocalDate): File {
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
         val quarter = currentDate.format(DateTimeFormatter.ofPattern("QQ"))
 
-        val rootPath = Environment.getExternalStorageDirectory()
-        File("$rootPath/toolsBoox/calendar/$year/").mkdirs()
-        return "$rootPath/toolsBoox/calendar/$year/quarter-$year-$quarter.json"
+        val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
+        val path = File(rootPath, "calendar/$year/")
+        path.mkdirs()
+
+        return File(path, "quarter-$year-$quarter.json")
     }
 }
