@@ -7,13 +7,16 @@ import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesFlatWeeksCalendarBinding
 import com.toolsboox.plugin.templates.ot.FlatWeekCalendarCreator
 import com.toolsboox.ui.plugin.FragmentPresenter
+import com.toolsboox.ui.plugin.ScreenFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 /**
@@ -57,14 +60,13 @@ class FlatWeeksCalendarPresenter @Inject constructor() : FragmentPresenter() {
                     doc.finishPage(page)
                 }
 
-                val rootPath = Environment.getExternalStorageDirectory()
-                val title = "flat-weeks-calendar-${LocalDate.now().year}.pdf"
-                val filename = "$rootPath/noteTemplate/$title"
                 try {
-                    FileOutputStream(filename).use { out -> doc.writeTo(out) }
+                    val file = createPath(fragment, LocalDate.now())
+                    FileOutputStream(file).use { out -> doc.writeTo(out) }
                     withContext(Dispatchers.Main) {
-                        binding.exportMessage.text =
-                            fragment.getString(R.string.templates_flat_weeks_calendar_preview_export_message, title)
+                        binding.exportMessage.text = fragment.getString(
+                            R.string.templates_flat_weeks_calendar_preview_export_message, file.absoluteFile
+                        )
                     }
                     doc.close()
                 } catch (e: IOException) {
@@ -75,5 +77,22 @@ class FlatWeeksCalendarPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
             }
         }
+    }
+
+    /**
+     * Create path of the files.
+     *
+     * @param fragment the fragment
+     * @param currentDate the current date
+     * @return the path on the filesystem
+     */
+    private fun createPath(fragment: ScreenFragment, currentDate: LocalDate): File {
+        val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
+
+        val rootPath = rootPath(fragment, Environment.DIRECTORY_DOWNLOADS)
+        val path = File(rootPath, "noteTemplate")
+        path.mkdirs()
+
+        return File(path, "flat-weeks-calendar-$year.pdf")
     }
 }

@@ -10,10 +10,12 @@ import com.toolsboox.di.NetworkModule
 import com.toolsboox.plugin.templates.da.CommunityTemplate
 import com.toolsboox.plugin.templates.nw.TemplatesService
 import com.toolsboox.ui.plugin.FragmentPresenter
+import com.toolsboox.ui.plugin.ScreenFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -51,14 +53,13 @@ class CommunityPresenter @Inject constructor() : FragmentPresenter() {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
-                val rootPath = Environment.getExternalStorageDirectory()
-                val filename = "$rootPath/noteTemplate/${item.templateUri}"
+                val file = createPath(fragment, item)
                 val url = URL(NetworkModule.GITHUB_BASE_URL + "communityTemplates/" + item.templateUri)
                 val bitmap = BitmapFactory.decodeStream(url.content as InputStream)
-                FileOutputStream(filename).use {
+                FileOutputStream(file).use {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
                     withContext(Dispatchers.Main) {
-                        binding.exportMessage.text = fragment.getString(R.string.export_message, item.templateUri)
+                        binding.exportMessage.text = fragment.getString(R.string.export_message, file.absoluteFile)
                     }
                 }
             } catch (e: IOException) {
@@ -95,5 +96,20 @@ class CommunityPresenter @Inject constructor() : FragmentPresenter() {
                 }
             }
         )
+    }
+
+    /**
+     * Create path of the files.
+     *
+     * @param fragment the fragment
+     * @param item the community template item
+     * @return the path on the filesystem
+     */
+    private fun createPath(fragment: ScreenFragment, item: CommunityTemplate): File {
+        val rootPath = rootPath(fragment, Environment.DIRECTORY_DOWNLOADS)
+        val path = File(rootPath, "noteTemplate")
+        path.mkdirs()
+
+        return File(path, item.templateUri)
     }
 }

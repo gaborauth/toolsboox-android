@@ -12,9 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.time.temporal.WeekFields
 import java.util.*
@@ -65,14 +67,13 @@ class BoxedDaysCalendarPresenter @Inject constructor() : FragmentPresenter() {
                     doc.finishPage(page)
                 }
 
-                val rootPath = Environment.getExternalStorageDirectory()
-                val title = "boxed-days-calendar-${LocalDate.now().year}-${LocalDate.now().month}.pdf"
-                val filename = "$rootPath/noteTemplate/$title"
                 try {
-                    FileOutputStream(filename).use { out -> doc.writeTo(out) }
+                    val file = createPath(fragment, LocalDate.now())
+                    FileOutputStream(file).use { out -> doc.writeTo(out) }
                     withContext(Dispatchers.Main) {
-                        binding.exportMessage.text =
-                            fragment.getString(R.string.templates_boxed_days_calendar_preview_export_message, title)
+                        binding.exportMessage.text = fragment.getString(
+                            R.string.templates_boxed_days_calendar_preview_export_message, file.absoluteFile
+                        )
                     }
                     doc.close()
                 } catch (e: IOException) {
@@ -83,5 +84,23 @@ class BoxedDaysCalendarPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
             }
         }
+    }
+
+    /**
+     * Create path of the files.
+     *
+     * @param fragment the fragment
+     * @param currentDate the current date
+     * @return the path on the filesystem
+     */
+    private fun createPath(fragment: ScreenFragment, currentDate: LocalDate): File {
+        val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
+        val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
+
+        val rootPath = rootPath(fragment, Environment.DIRECTORY_DOWNLOADS)
+        val path = File(rootPath, "noteTemplate")
+        path.mkdirs()
+
+        return File(path, "boxed-days-calendar-$year-$month.pdf")
     }
 }
