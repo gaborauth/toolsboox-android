@@ -175,6 +175,7 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
             }
         }
 
+        googleCalendarEvents.sortBy { it.startDate }
         return googleCalendarEvents
     }
 
