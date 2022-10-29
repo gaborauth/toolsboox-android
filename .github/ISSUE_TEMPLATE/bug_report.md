@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 **Device details:**
  - Device: [e.g. Note Air]
  - OS: [e.g. 3.2.4]
- - Version [e.g. 1.2.0-01]
+ - Version: [e.g. 1.5.4-01]
 
 **Additional context**
 Add any other context about the problem here.
