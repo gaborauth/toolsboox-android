@@ -196,35 +196,43 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
 
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-
             app:layout_constraintTop_toBottomOf="@id/navigatorPanel"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
+        <include
+                layout="@layout/toolbar_drawing"
+                android:id="@+id/toolbarDrawing"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/templateImage"/>
+
         <ImageView
                 android:id="@+id/templateImage"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
                 android:contentDescription="@string/calendar_template_image"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/toolbarDrawing"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
         <SurfaceView
                 android:id="@+id/surfaceView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintStart_toStartOf="@id/templateImage"
+                app:layout_constraintEnd_toEndOf="@id/templateImage"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

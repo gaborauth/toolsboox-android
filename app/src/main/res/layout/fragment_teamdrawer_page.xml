@@ -51,6 +51,14 @@
 
         </LinearLayout>
 
+        <include
+                layout="@layout/toolbar_drawing"
+                android:id="@+id/toolbarDrawing"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+
+                android:visibility="gone"/>
+
         <SurfaceView
                 android:id="@+id/surfaceView"
                 android:layout_width="match_parent"

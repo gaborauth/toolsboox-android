@@ -11,6 +11,7 @@ import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.pen.data.TouchPointList
 import com.toolsboox.R
+import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import timber.log.Timber
@@ -68,6 +69,11 @@ abstract class SurfaceFragment : ScreenFragment() {
     private var surfaceSize: Rect = Rect(0, 0, 0, 0)
 
     /**
+     * Pen or eraser state.
+     */
+    private var penState: Boolean = true
+
+    /**
      * The canvas of the template.
      */
     protected lateinit var templateCanvas: Canvas
@@ -83,6 +89,13 @@ abstract class SurfaceFragment : ScreenFragment() {
      * @return the actual surfaceView
      */
     abstract fun provideSurfaceView(): SurfaceView
+
+    /**
+     * Provide toolbar of drawing's bindings.
+     *
+     * @return the actual bindings of toolbar of drawings
+     */
+    abstract fun provideToolbarDrawing(): ToolbarDrawingBinding
 
     /**
      * Add strokes callback.
@@ -114,6 +127,22 @@ abstract class SurfaceFragment : ScreenFragment() {
         initializeSurface()
         touchHelper.setRawDrawingEnabled(true)
         touchHelper.isRawDrawingRenderEnabled = true
+
+        penState = true
+        provideToolbarDrawing().toolbarPen.background.setTint(Color.GRAY)
+        provideToolbarDrawing().toolbarEraser.background.setTint(Color.WHITE)
+
+        provideToolbarDrawing().toolbarPen.setOnClickListener {
+            penState = true
+            provideToolbarDrawing().toolbarPen.background.setTint(Color.GRAY)
+            provideToolbarDrawing().toolbarEraser.background.setTint(Color.WHITE)
+        }
+
+        provideToolbarDrawing().toolbarEraser.setOnClickListener {
+            penState = false
+            provideToolbarDrawing().toolbarEraser.background.setTint(Color.GRAY)
+            provideToolbarDrawing().toolbarPen.background.setTint(Color.WHITE)
+        }
 
         templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
         templateCanvas = Canvas(templateBitmap)
@@ -339,6 +368,11 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         override fun onRawDrawingTouchPointListReceived(touchPointList: TouchPointList) {
             Timber.i("onRawDrawingTouchPointListReceived (${touchPointList.size()})")
+
+            if (!penState) {
+                onRawErasingTouchPointListReceived(touchPointList)
+                return
+            }
 
             val strokePoints: MutableList<StrokePoint> = mutableListOf()
             var prevPoint: TouchPoint = touchPointList[0]

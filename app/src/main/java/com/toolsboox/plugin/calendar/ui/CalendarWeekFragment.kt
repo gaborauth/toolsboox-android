@@ -5,6 +5,7 @@ import android.view.SurfaceView
 import android.view.View
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarWeekBinding
+import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarWeek
@@ -68,6 +69,14 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
      * @return the actual surfaceView
      */
     override fun provideSurfaceView(): SurfaceView = binding.surfaceView
+
+
+    /**
+     * Provide toolbar of drawing's bindings.
+     *
+     * @return the actual bindings of toolbar of drawings
+     */
+    override fun provideToolbarDrawing(): ToolbarDrawingBinding = binding.toolbarDrawing
 
     /**
      * Stroke changed callback.

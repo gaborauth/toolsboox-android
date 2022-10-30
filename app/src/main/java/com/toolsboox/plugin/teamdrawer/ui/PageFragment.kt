@@ -7,6 +7,7 @@ import android.view.View
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTeamdrawerPageBinding
+import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.teamdrawer.nw.NoteRepository
 import com.toolsboox.plugin.teamdrawer.nw.domain.Note
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
@@ -83,6 +84,13 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
      * @return the actual surfaceView
      */
     override fun provideSurfaceView(): SurfaceView = binding.surfaceView
+
+    /**
+     * Provide toolbar of drawing's bindings.
+     *
+     * @return the actual bindings of toolbar of drawings
+     */
+    override fun provideToolbarDrawing(): ToolbarDrawingBinding = binding.toolbarDrawing
 
     /**
      * Add strokes callback.
