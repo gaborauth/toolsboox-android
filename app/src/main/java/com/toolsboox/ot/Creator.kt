@@ -1,9 +1,12 @@
 package com.toolsboox.ot
 
+import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.text.TextPaint
+import androidx.core.content.res.ResourcesCompat
 
 /**
  * Creator interface, common drawing methods and constants.
@@ -101,6 +104,27 @@ interface Creator {
             textSmallBlackRight.textAlign = Paint.Align.RIGHT
             textSmallBlackRight.textSize = 25.0f
             textSmallBlackRight.typeface = Typeface.DEFAULT
+        }
+
+        /**
+         * Draw a drawable in a canvas.
+         *
+         * @param context the context
+         * @param canvas the canvas
+         * @param drawable the drawable
+         * @param left the left point
+         * @param top the top point
+         * @param right the right point
+         * @param bottom the bottom point
+         */
+        fun drawable(
+            context: Context, canvas: Canvas, drawable: Int,
+            left: Float, top: Float, right: Float, bottom: Float
+        ) {
+            val d = ResourcesCompat.getDrawable(context.resources, drawable, context.theme) ?: return
+            d.setTint(Color.BLACK)
+            d.setBounds(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
+            d.draw(canvas)
         }
     }
 }
