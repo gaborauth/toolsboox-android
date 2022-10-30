@@ -72,6 +72,10 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
             "https://github.com/gaborauth/toolsboox-android/"
         )
         htmlLinks(
+            binding.otherLinksWebpage, R.string.about_other_links_webpage_link,
+            "https://toolsboox.com"
+        )
+        htmlLinks(
             binding.otherLinksTranslate, R.string.about_other_links_translate_link,
             "https://poeditor.com/join/project?hash=dbYOuWr2UB"
         )

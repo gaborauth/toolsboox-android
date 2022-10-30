@@ -85,36 +85,6 @@
                 android:text=""/>
 
         <TextView
-                android:id="@+id/sponsorshipTitle"
-                android:layout_marginTop="20dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textSize="20sp"
-                android:maxLines="4"
-                android:singleLine="false"
-                android:text="@string/about_sponsorship_title"/>
-
-        <TextView
-                android:id="@+id/sponsorshipMessage"
-                android:layout_marginTop="10dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:maxLines="4"
-                android:singleLine="false"
-                android:text="@string/about_sponsorship_message"/>
-
-        <TextView
-                android:id="@+id/sponsorshipLink"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:maxLines="4"
-                android:singleLine="false"
-                android:text="@string/about_sponsorship_link"/>
-
-        <TextView
                 android:id="@+id/otherLinksTitle"
                 android:layout_marginTop="20dp"
                 android:layout_width="fill_parent"
@@ -124,6 +94,16 @@
                 android:maxLines="4"
                 android:singleLine="false"
                 android:text="@string/about_other_links_title"/>
+
+        <TextView
+                android:id="@+id/otherLinksWebpage"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_other_links_webpage_link"/>
 
         <TextView
                 android:id="@+id/otherLinksTranslate"

@@ -55,14 +55,12 @@
     <string name="about_title">About</string>
     <string name="about_about_me_title">About me</string>
     <string name="about_about_me_message">My name is Gábor AUTH, I\'m an Android developer, and I\'m developing this application to the Onxy Boox devices! :)</string>
-    <string name="about_about_me_link">link</string>
+    <string name="about_about_me_link">Link:</string>
     <string name="about_project_home_title">Project home</string>
     <string name="about_project_home_message">The project is open source, you can find it in my GitHub repository:</string>
-    <string name="about_project_home_link">link</string>
-    <string name="about_sponsorship_title">Sponsorship</string>
-    <string name="about_sponsorship_message">This is a free software, so, it\'s free for you, but you can sponsor me through Patreon.</string>
-    <string name="about_sponsorship_link">Search for \'toolsboox\' page on Patreon (direct linking prohibited).</string>
+    <string name="about_project_home_link">Link:</string>
     <string name="about_other_links_title">Links</string>
+    <string name="about_other_links_webpage_link">Web page:</string>
     <string name="about_other_links_translate_link">Translate:</string>
     <string name="about_other_links_facebook_link">Facebook:</string>
     <string name="about_other_links_discord_link">Discord:</string>
