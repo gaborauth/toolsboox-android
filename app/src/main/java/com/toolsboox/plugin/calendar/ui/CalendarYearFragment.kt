@@ -1,7 +1,5 @@
 package com.toolsboox.plugin.calendar.ui
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
@@ -57,16 +55,6 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      * The timer job.
      */
     private lateinit var timer: Job
-
-    /**
-     * The canvas of the template.
-     */
-    private lateinit var templateCanvas: Canvas
-
-    /**
-     * The bitmap of the template.
-     */
-    private lateinit var templateBitmap: Bitmap
 
     /**
      * The data class.
@@ -148,12 +136,6 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         toolbar.toolbarPager.visibility = View.GONE
         updateNavigator()
 
-        templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
-        templateCanvas = Canvas(templateBitmap)
-
-        binding.templateImage.setImageBitmap(templateBitmap)
-        binding.templateImage.postInvalidate()
-
         initializeSurface(true)
     }
 
@@ -162,6 +144,9 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      */
     override fun onResume() {
         super.onResume()
+
+        binding.templateImage.setImageBitmap(templateBitmap)
+        binding.templateImage.postInvalidate()
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarYearFragment, binding, currentDate, getSurfaceSize())

@@ -68,6 +68,16 @@ abstract class SurfaceFragment : ScreenFragment() {
     private var surfaceSize: Rect = Rect(0, 0, 0, 0)
 
     /**
+     * The canvas of the template.
+     */
+    protected lateinit var templateCanvas: Canvas
+
+    /**
+     * The bitmap of the template.
+     */
+    protected lateinit var templateBitmap: Bitmap
+
+    /**
      * SurfaceView provide method.
      *
      * @return the actual surfaceView
@@ -104,6 +114,9 @@ abstract class SurfaceFragment : ScreenFragment() {
         initializeSurface()
         touchHelper.setRawDrawingEnabled(true)
         touchHelper.isRawDrawingRenderEnabled = true
+
+        templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
+        templateCanvas = Canvas(templateBitmap)
     }
 
     /**
