@@ -225,7 +225,7 @@ abstract class SurfaceFragment : ScreenFragment() {
                     touchHelper.setLimitRect(limit, ArrayList())
                         .setStrokeWidth(3.0f)
                         .openRawDrawing()
-                    touchHelper.setStrokeStyle(TouchHelper.STROKE_STYLE_BRUSH)
+                    touchHelper.setStrokeStyle(TouchHelper.STROKE_STYLE_NEO_BRUSH)
                 }
 
                 override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
