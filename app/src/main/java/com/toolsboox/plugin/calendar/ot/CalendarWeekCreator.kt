@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.R
 import com.toolsboox.ot.Creator
+import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarWeek
 import com.toolsboox.plugin.calendar.ui.CalendarWeekFragment
@@ -41,12 +42,13 @@ class CalendarWeekCreator : Creator {
          *
          * @param view the surface view
          * @param motionEvent the motion event
+         * @param gestureResult the gesture result
          * @param fragment the parent fragment
          * @param calendarWeek the calendar data class
          * @return true
          */
         fun onTouchEvent(
-            view: View, motionEvent: MotionEvent,
+            view: View, motionEvent: MotionEvent, gestureResult: Int,
             fragment: CalendarWeekFragment, calendarWeek: CalendarWeek
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
@@ -59,6 +61,27 @@ class CalendarWeekCreator : Creator {
             val startWeekDate = LocalDate.ofYearDay(year, 1)
                 .with(weekFields.weekOfYear(), weekOfYear.toLong())
                 .with(weekFields.dayOfWeek(), 1)
+
+            when (gestureResult) {
+                OnGestureListener.LTR -> {
+                    CalendarNavigator.toWeek(fragment, startWeekDate.minusWeeks(1L), locale)
+                    return true
+                }
+
+                OnGestureListener.RTL -> {
+                    CalendarNavigator.toWeek(fragment, startWeekDate.plusWeeks(1L), locale)
+                    return true
+                }
+
+                OnGestureListener.UTD -> {
+                    CalendarNavigator.toMonth(fragment, startWeekDate)
+                    return true
+                }
+
+                OnGestureListener.DTU -> {
+                    return true
+                }
+            }
 
             when (motionEvent.action) {
                 MotionEvent.ACTION_UP -> {

@@ -159,7 +159,10 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         }
 
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
-            CalendarWeekCreator.onTouchEvent(view, motionEvent, this@CalendarWeekFragment, calendarWeek)
+            val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
+            CalendarWeekCreator.onTouchEvent(
+                view, motionEvent, gestureResult, this@CalendarWeekFragment, calendarWeek
+            )
         }
 
         toolbar.toolbarPager.visibility = View.GONE

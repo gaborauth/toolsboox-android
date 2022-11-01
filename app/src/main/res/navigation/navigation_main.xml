@@ -16,8 +16,8 @@
                 android:id="@+id/action_to_dashboard"
                 app:destination="@id/DashboardFragment"/>
         <action
-                android:id="@+id/action_to_calendar_year"
-                app:destination="@id/CalendarYearFragment"/>
+                android:id="@+id/action_to_calendar_day"
+                app:destination="@id/CalendarDayFragment"/>
         <action
                 android:id="@+id/action_to_kanban_main"
                 app:destination="@id/KanbanMainFragment"/>

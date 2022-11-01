@@ -465,7 +465,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
                 touchHelper.closeRawDrawing()
                 touchHelper.setLimitRect(listOf(surfaceOffset), listOf())
                 touchHelper.setStrokeWidth(3.0f)
-                touchHelper.setStrokeStyle(TouchHelper.STROKE_STYLE_BRUSH)
+                touchHelper.setStrokeStyle(TouchHelper.STROKE_STYLE_NEO_BRUSH)
                 touchHelper.openRawDrawing()
             }
 
