@@ -141,7 +141,10 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         }
 
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
-            CalendarQuarterCreator.onTouchEvent(view, motionEvent, this@CalendarQuarterFragment, calendarQuarter)
+            val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
+            CalendarQuarterCreator.onTouchEvent(
+                view, motionEvent, gestureResult, this@CalendarQuarterFragment, calendarQuarter
+            )
         }
 
         toolbar.toolbarPager.visibility = View.GONE

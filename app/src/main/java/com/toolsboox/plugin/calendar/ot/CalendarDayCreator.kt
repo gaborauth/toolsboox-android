@@ -3,10 +3,16 @@ package com.toolsboox.plugin.calendar.ot
 import android.content.Context
 import android.graphics.Canvas
 import android.text.TextUtils
+import android.view.MotionEvent
+import android.view.View
 import com.toolsboox.R
 import com.toolsboox.ot.Creator
+import com.toolsboox.ot.OnGestureListener
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarDay
 import com.toolsboox.plugin.calendar.da.GoogleCalendarEvent
+import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -31,6 +37,53 @@ class CalendarDayCreator {
 
         // Top offset
         private const val to = (1872.0f - 35 * ceh) / 2.0f
+
+        /**
+         * Process touch event on the calendar page and navigate to the view of calendar.
+         *
+         * @param view the surface view
+         * @param motionEvent the motion event
+         * @param gestureResult the gesture result
+         * @param fragment the parent fragment
+         * @param calendarMonth the calendar data class
+         * @return true
+         */
+        fun onTouchEvent(
+            view: View, motionEvent: MotionEvent, gestureResult: Int,
+            fragment: CalendarDayFragment, calendarDay: CalendarDay
+        ): Boolean {
+            if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
+
+            val year = calendarDay.year
+            val month = calendarDay.month
+            val day = calendarDay.day
+            val locale = calendarDay.locale ?: Locale.getDefault()
+
+            val localDate = LocalDate.of(year, month, day)
+
+            when (gestureResult) {
+                OnGestureListener.LTR -> {
+                    CalendarNavigator.toDay(fragment, localDate.minusDays(1L))
+                    return true
+                }
+
+                OnGestureListener.RTL -> {
+                    CalendarNavigator.toDay(fragment, localDate.plusDays(1L))
+                    return true
+                }
+
+                OnGestureListener.UTD -> {
+                    CalendarNavigator.toWeek(fragment, localDate, locale)
+                    return true
+                }
+
+                OnGestureListener.DTU -> {
+                    return true
+                }
+            }
+
+            return true
+        }
 
         /**
          * Draw the daily template of calendar plugin.

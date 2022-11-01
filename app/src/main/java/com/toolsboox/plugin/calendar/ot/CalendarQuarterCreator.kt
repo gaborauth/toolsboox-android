@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.ot.Creator
+import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarQuarter
 import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
@@ -41,33 +42,55 @@ class CalendarQuarterCreator : Creator {
          *
          * @param view the surface view
          * @param motionEvent the motion event
+         * @param gestureResult the gesture result
          * @param fragment the parent fragment
          * @param calendarQuarter the calendar data class
          * @return true
          */
         fun onTouchEvent(
-            view: View, motionEvent: MotionEvent,
+            view: View, motionEvent: MotionEvent, gestureResult: Int,
             fragment: CalendarQuarterFragment, calendarQuarter: CalendarQuarter
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
 
             val year = calendarQuarter.year
             val quarter = calendarQuarter.quarter
-            val locale = calendarQuarter.locale ?: Locale.getDefault()
+            val startMonth = (quarter - 1) * 3 + 1
+
+            val localDate = LocalDate.of(year, startMonth, 1)
+
+            when (gestureResult) {
+                OnGestureListener.LTR -> {
+                    CalendarNavigator.toQuarter(fragment, localDate.minusMonths(3L))
+                    return true
+                }
+
+                OnGestureListener.RTL -> {
+                    CalendarNavigator.toQuarter(fragment, localDate.plusMonths(3L))
+                    return true
+                }
+
+                OnGestureListener.UTD -> {
+                    CalendarNavigator.toYear(fragment, localDate)
+                    return true
+                }
+
+                OnGestureListener.DTU -> {
+                    return true
+                }
+            }
 
             when (motionEvent.action) {
                 MotionEvent.ACTION_UP -> {
                     val px = motionEvent.x * 1404.0f / view.width
                     val py = motionEvent.y * 1872.0f / view.height
 
-                    val startMonth = (quarter - 1) * 3 + 1
                     for (i in 0..2) {
                         val xo = lo + i * cew + i * 50.0f
                         val yo = to
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
-                            val localDate = LocalDate.of(year, startMonth + i, 1)
-                            CalendarNavigator.toMonth(fragment, localDate)
+                            CalendarNavigator.toMonth(fragment, localDate.plusMonths(i.toLong()))
                             return true
                         }
 
@@ -76,8 +99,7 @@ class CalendarQuarterCreator : Creator {
                         for (day in 1..days) {
                             val dyo = yo + day * ceh
                             if (px >= xo && px <= xo + cew && py >= dyo && py <= dyo + ceh) {
-                                val localDate = LocalDate.of(year, startMonth, day)
-                                CalendarNavigator.toDay(fragment, localDate)
+                                CalendarNavigator.toDay(fragment, LocalDate.of(year, startMonth + i, day))
                                 return true
                             }
                         }

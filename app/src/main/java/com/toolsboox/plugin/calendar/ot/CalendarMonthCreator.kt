@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.ot.Creator
+import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarMonth
 import com.toolsboox.plugin.calendar.ui.CalendarMonthFragment
@@ -40,12 +41,13 @@ class CalendarMonthCreator : Creator {
          *
          * @param view the surface view
          * @param motionEvent the motion event
+         * @param gestureResult the gesture result
          * @param fragment the parent fragment
          * @param calendarMonth the calendar data class
          * @return true
          */
         fun onTouchEvent(
-            view: View, motionEvent: MotionEvent,
+            view: View, motionEvent: MotionEvent, gestureResult: Int,
             fragment: CalendarMonthFragment, calendarMonth: CalendarMonth
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
@@ -56,7 +58,27 @@ class CalendarMonthCreator : Creator {
             val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
 
             val localDate = LocalDate.of(year, month, 1)
-            val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
+
+            when (gestureResult) {
+                OnGestureListener.LTR -> {
+                    CalendarNavigator.toMonth(fragment, localDate.minusMonths(1L))
+                    return true
+                }
+
+                OnGestureListener.RTL -> {
+                    CalendarNavigator.toMonth(fragment, localDate.plusMonths(1L))
+                    return true
+                }
+
+                OnGestureListener.UTD -> {
+                    CalendarNavigator.toQuarter(fragment, localDate)
+                    return true
+                }
+
+                OnGestureListener.DTU -> {
+                    return true
+                }
+            }
 
             when (motionEvent.action) {
                 MotionEvent.ACTION_UP -> {

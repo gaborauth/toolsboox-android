@@ -4,6 +4,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.GestureDetectorCompat
+import kotlin.math.abs
 import kotlin.math.atan2
 
 class OnGestureListener : GestureDetector.SimpleOnGestureListener() {
@@ -42,7 +43,9 @@ class OnGestureListener : GestureDetector.SimpleOnGestureListener() {
     fun onTouchEvent(gd: GestureDetectorCompat, v: View, e: MotionEvent): Int {
         when (e.action) {
             MotionEvent.ACTION_DOWN -> swipeDirections.fill(0)
-            MotionEvent.ACTION_UP -> return swipeDirections.indexOf(swipeDirections.maxOrNull())
+            MotionEvent.ACTION_UP -> {
+                if (swipeDirections.max() > 0) return swipeDirections.indexOf(swipeDirections.maxOrNull())
+            }
         }
 
         gd.onTouchEvent(e)
@@ -50,6 +53,8 @@ class OnGestureListener : GestureDetector.SimpleOnGestureListener() {
     }
 
     override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        if (abs(distanceX) + abs(distanceY) < 10) return false
+
         val angle = Math.toDegrees(atan2((e1.y - e2.y).toDouble(), (e2.x - e1.x).toDouble())).toFloat()
         if (angle > -45 && angle <= 45) {
             swipeDirections[LTR]++

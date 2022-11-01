@@ -4,7 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
+import androidx.navigation.fragment.findNavController
+import com.toolsboox.R
 import com.toolsboox.ot.Creator
+import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarYear
 import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
@@ -42,18 +45,41 @@ class CalendarYearCreator : Creator {
          *
          * @param view the surface view
          * @param motionEvent the motion event
+         * @param gestureResult the gesture result
          * @param fragment the parent fragment
          * @param calendarYear the calendar data class
          * @return true
          */
         fun onTouchEvent(
-            view: View, motionEvent: MotionEvent,
+            view: View, motionEvent: MotionEvent, gestureResult: Int,
             fragment: CalendarYearFragment, calendarYear: CalendarYear
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
 
             val year = calendarYear.year
-            val locale = calendarYear.locale ?: Locale.getDefault()
+
+            when (gestureResult) {
+                OnGestureListener.LTR -> {
+                    val localDate = LocalDate.of(year, 1, 1)
+                    CalendarNavigator.toYear(fragment, localDate.minusYears(1L))
+                    return true
+                }
+
+                OnGestureListener.RTL -> {
+                    val localDate = LocalDate.of(year, 1, 1)
+                    CalendarNavigator.toYear(fragment, localDate.plusYears(1L))
+                    return true
+                }
+
+                OnGestureListener.UTD -> {
+                    fragment.findNavController().navigate(R.id.action_to_dashboard)
+                    return true
+                }
+
+                OnGestureListener.DTU -> {
+                    return true
+                }
+            }
 
             when (motionEvent.action) {
                 MotionEvent.ACTION_UP -> {

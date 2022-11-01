@@ -5,6 +5,7 @@ import android.graphics.*
 import android.provider.MediaStore
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.core.view.GestureDetectorCompat
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.data.note.TouchPoint
 import com.onyx.android.sdk.pen.RawInputCallback
@@ -12,6 +13,7 @@ import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.pen.data.TouchPointList
 import com.toolsboox.R
 import com.toolsboox.databinding.ToolbarDrawingBinding
+import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import timber.log.Timber
@@ -37,6 +39,16 @@ abstract class SurfaceFragment : ScreenFragment() {
      * TouchHelper of the Onyx's pen.
      */
     private lateinit var touchHelper: TouchHelper
+
+    /**
+     * The gesture detector
+     */
+    protected lateinit var gestureDetector: GestureDetectorCompat
+
+    /**
+     * The gesture listener
+     */
+    protected lateinit var gestureListener: OnGestureListener
 
     /**
      * The bitmap of the canvas.
@@ -146,6 +158,9 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
         templateCanvas = Canvas(templateBitmap)
+
+        gestureListener = OnGestureListener()
+        gestureDetector = GestureDetectorCompat(requireActivity(), gestureListener)
     }
 
     /**
