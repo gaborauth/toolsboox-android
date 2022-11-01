@@ -150,8 +150,8 @@ dependencies {
     implementation 'com.google.dagger:hilt-android:2.44'
 
     // Onyx SDK
-    implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.36'
-    implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.10'
+    implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.37'
+    implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.11'
     implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.2'
 
     // OkHttp, Retrofit and GSON
