@@ -21,17 +21,25 @@ object CalendarNavigator {
      *
      * @param fragment the fragment
      * @param localDate the local date
+     * @param extended navigate to the extended page
      */
-    fun toDay(fragment: ScreenFragment, localDate: LocalDate) {
+    fun toDay(fragment: ScreenFragment, localDate: LocalDate, extended: Boolean = false) {
         val year = localDate.year
         val month = localDate.monthValue
         val day = localDate.dayOfMonth
-        Timber.i("Navigate to the '$year-$month-$day' daily calendar")
+
         val bundle = bundleOf()
         bundle.putString("year", "$year")
         bundle.putString("month", "$month")
         bundle.putString("day", "$day")
-        fragment.findNavController().navigate(R.id.action_to_calendar_day, bundle)
+
+        if (extended) {
+            Timber.i("Navigate to the '$year-$month-$day' daily extended calendar")
+            fragment.findNavController().navigate(R.id.action_to_calendar_extended_day, bundle)
+        } else {
+            Timber.i("Navigate to the '$year-$month-$day' daily calendar")
+            fragment.findNavController().navigate(R.id.action_to_calendar_day, bundle)
+        }
     }
 
     /**
@@ -39,16 +47,23 @@ object CalendarNavigator {
      *
      * @param fragment the fragment
      * @param localDate the local date
+     * @param extended navigate to the extended page
      */
-    fun toMonth(fragment: ScreenFragment, localDate: LocalDate) {
+    fun toMonth(fragment: ScreenFragment, localDate: LocalDate, extended: Boolean = false) {
         val year = localDate.year
         val month = localDate.monthValue
 
-        Timber.i("Navigate to the '$year-$month' monthly calendar")
         val bundle = bundleOf()
         bundle.putString("year", "$year")
         bundle.putString("month", "$month")
-        fragment.findNavController().navigate(R.id.action_to_calendar_month, bundle)
+
+        if (extended) {
+            Timber.i("Navigate to the '$year-$month' monthly extended calendar")
+            fragment.findNavController().navigate(R.id.action_to_calendar_extended_month, bundle)
+        } else {
+            Timber.i("Navigate to the '$year-$month' monthly calendar")
+            fragment.findNavController().navigate(R.id.action_to_calendar_month, bundle)
+        }
     }
 
     /**
@@ -56,16 +71,24 @@ object CalendarNavigator {
      *
      * @param fragment the fragment
      * @param localDate the local date
+     * @param extended navigate to the extended page
      */
-    fun toQuarter(fragment: ScreenFragment, localDate: LocalDate) {
+    fun toQuarter(fragment: ScreenFragment, localDate: LocalDate, extended: Boolean = false) {
         val year = localDate.year
         val month = localDate.monthValue
         val quarter = (month - 1) / 3 + 1
-        Timber.i("Navigate to the '$year-$quarter' quarterly calendar")
+
         val bundle = bundleOf()
         bundle.putString("year", "$year")
         bundle.putString("quarter", "$quarter")
-        fragment.findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
+
+        if (extended) {
+            Timber.i("Navigate to the '$year-$quarter' quarterly extended calendar")
+            fragment.findNavController().navigate(R.id.action_to_calendar_extended_quarter, bundle)
+        } else {
+            Timber.i("Navigate to the '$year-$quarter' quarterly calendar")
+            fragment.findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
+        }
     }
 
     /**
@@ -73,16 +96,24 @@ object CalendarNavigator {
      *
      * @param fragment the fragment
      * @param localDate the local date
+     * @param extended navigate to the extended page
      */
-    fun toWeek(fragment: ScreenFragment, localDate: LocalDate, locale: Locale?) {
+    fun toWeek(fragment: ScreenFragment, localDate: LocalDate, locale: Locale?, extended: Boolean = false) {
         val year = localDate.year
         val weekOfWeekBasedYear = WeekFields.of(locale ?: Locale.getDefault()).weekOfWeekBasedYear()
         val weekOfYear = localDate.plusWeeks(0L).get(weekOfWeekBasedYear)
-        Timber.i("Navigate to the '$year-$weekOfYear' weekly calendar")
+
         val bundle = bundleOf()
         bundle.putString("year", "$year")
         bundle.putString("weekOfYear", "$weekOfYear")
-        fragment.findNavController().navigate(R.id.action_to_calendar_week, bundle)
+
+        if (extended) {
+            Timber.i("Navigate to the '$year-$weekOfYear' weekly extended calendar")
+            fragment.findNavController().navigate(R.id.action_to_calendar_extended_week, bundle)
+        } else {
+            Timber.i("Navigate to the '$year-$weekOfYear' weekly calendar")
+            fragment.findNavController().navigate(R.id.action_to_calendar_week, bundle)
+        }
     }
 
     /**
@@ -90,12 +121,20 @@ object CalendarNavigator {
      *
      * @param fragment the fragment
      * @param localDate the local date
+     * @param extended navigate to the extended page
      */
-    fun toYear(fragment: ScreenFragment, localDate: LocalDate) {
+    fun toYear(fragment: ScreenFragment, localDate: LocalDate, extended: Boolean = false) {
         val year = localDate.year
-        Timber.i("Navigate to the '$year' yearly calendar")
+
         val bundle = bundleOf()
         bundle.putString("year", "$year")
-        fragment.findNavController().navigate(R.id.action_to_calendar_year, bundle)
+
+        if (extended) {
+            Timber.i("Navigate to the '$year' yearly extended calendar")
+            fragment.findNavController().navigate(R.id.action_to_calendar_extended_year, bundle)
+        } else {
+            Timber.i("Navigate to the '$year' yearly calendar")
+            fragment.findNavController().navigate(R.id.action_to_calendar_year, bundle)
+        }
     }
 }

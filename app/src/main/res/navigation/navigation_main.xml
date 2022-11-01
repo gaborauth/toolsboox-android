@@ -54,6 +54,39 @@
                 app:popUpTo="@id/CalendarYearFragment"
                 app:popUpToInclusive="true"/>
         <action
+                android:id="@+id/action_to_calendar_extended_year"
+                app:destination="@id/CalendarExtendedYearFragment"
+                app:popUpTo="@id/CalendarExtendedYearFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_quarter"
+                app:destination="@id/CalendarQuarterFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/CalendarExtendedYearFragment"
+            android:name="com.toolsboox.plugin.calendar.ui.CalendarExtendedYearFragment"
+            android:label="CalendarExtendedYearFragment"
+            tools:layout="@layout/fragment_calendar_year">
+
+        <argument
+                android:name="year"
+                app:argType="string"
+                app:nullable="true"/>
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"
+                app:popUpTo="@id/DashboardFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_year"
+                app:destination="@id/CalendarYearFragment"
+                app:popUpTo="@id/CalendarYearFragment"
+                app:popUpToInclusive="true"/>
+        <action
                 android:id="@+id/action_to_calendar_quarter"
                 app:destination="@id/CalendarQuarterFragment"/>
         <action
@@ -91,6 +124,47 @@
                 app:popUpTo="@id/CalendarQuarterFragment"
                 app:popUpToInclusive="true"/>
         <action
+                android:id="@+id/action_to_calendar_extended_quarter"
+                app:destination="@id/CalendarExtendedQuarterFragment"
+                app:popUpTo="@id/CalendarExtendedQuarterFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_day"
+                app:destination="@id/CalendarDayFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/CalendarExtendedQuarterFragment"
+            android:name="com.toolsboox.plugin.calendar.ui.CalendarExtendedQuarterFragment"
+            android:label="CalendarExtendedQuarterFragment"
+            tools:layout="@layout/fragment_calendar_quarter">
+
+        <argument
+                android:name="year"
+                app:argType="string"
+                app:nullable="true"/>
+        <argument
+                android:name="quarter"
+                app:argType="string"
+                app:nullable="true"/>
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"
+                app:popUpTo="@id/DashboardFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_year"
+                app:destination="@id/CalendarYearFragment"
+                app:popUpTo="@id/CalendarYearFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_quarter"
+                app:destination="@id/CalendarQuarterFragment"
+                app:popUpTo="@id/CalendarQuarterFragment"
+                app:popUpToInclusive="true"/>
+        <action
                 android:id="@+id/action_to_calendar_month"
                 app:destination="@id/CalendarMonthFragment"/>
         <action
@@ -102,6 +176,48 @@
             android:id="@+id/CalendarMonthFragment"
             android:name="com.toolsboox.plugin.calendar.ui.CalendarMonthFragment"
             android:label="CalendarMonthFragment"
+            tools:layout="@layout/fragment_calendar_month">
+
+        <argument
+                android:name="year"
+                app:argType="string"
+                app:nullable="true"/>
+        <argument
+                android:name="month"
+                app:argType="string"
+                app:nullable="true"/>
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"
+                app:popUpTo="@id/DashboardFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_quarter"
+                app:destination="@id/CalendarQuarterFragment"
+                app:popUpTo="@id/CalendarQuarterFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"
+                app:popUpTo="@id/CalendarMonthFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_extended_month"
+                app:destination="@id/CalendarExtendedMonthFragment"
+                app:popUpTo="@id/CalendarExtendedMonthFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_week"
+                app:destination="@id/CalendarWeekFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_day"
+                app:destination="@id/CalendarDayFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/CalendarExtendedMonthFragment"
+            android:name="com.toolsboox.plugin.calendar.ui.CalendarExtendedMonthFragment"
+            android:label="CalendarExtendedMonthFragment"
             tools:layout="@layout/fragment_calendar_month">
 
         <argument
@@ -167,6 +283,45 @@
                 app:popUpTo="@id/CalendarWeekFragment"
                 app:popUpToInclusive="true"/>
         <action
+                android:id="@+id/action_to_calendar_extended_week"
+                app:destination="@id/CalendarExtendedWeekFragment"
+                app:popUpTo="@id/CalendarExtendedWeekFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_day"
+                app:destination="@id/CalendarDayFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/CalendarExtendedWeekFragment"
+            android:name="com.toolsboox.plugin.calendar.ui.CalendarExtendedWeekFragment"
+            android:label="CalendarExtendedWeekFragment"
+            tools:layout="@layout/fragment_calendar_week">
+
+        <argument
+                android:name="year"
+                app:argType="string"
+                app:nullable="true"/>
+        <argument
+                android:name="weekOfYear"
+                app:argType="string"
+                app:nullable="true"/>
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"
+                app:popUpTo="@id/DashboardFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"
+                app:popUpTo="@id/CalendarMonthFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_week"
+                app:destination="@id/CalendarWeekFragment"
+                app:popUpTo="@id/CalendarWeekFragment"
+                app:popUpToInclusive="true"/>
+        <action
                 android:id="@+id/action_to_calendar_day"
                 app:destination="@id/CalendarDayFragment"/>
     </fragment>
@@ -175,6 +330,61 @@
             android:id="@+id/CalendarDayFragment"
             android:name="com.toolsboox.plugin.calendar.ui.CalendarDayFragment"
             android:label="CalendarDayFragment"
+            tools:layout="@layout/fragment_calendar_day">
+
+        <argument
+                android:name="year"
+                app:argType="string"
+                app:nullable="true"/>
+        <argument
+                android:name="month"
+                app:argType="string"
+                app:nullable="true"/>
+        <argument
+                android:name="day"
+                app:argType="string"
+                app:nullable="true"/>
+
+        <action
+                android:id="@+id/action_to_dashboard"
+                app:destination="@id/DashboardFragment"
+                app:popUpTo="@id/DashboardFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_year"
+                app:destination="@id/CalendarYearFragment"
+                app:popUpTo="@id/CalendarYearFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_quarter"
+                app:destination="@id/CalendarQuarterFragment"
+                app:popUpTo="@id/CalendarQuarterFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"
+                app:popUpTo="@id/CalendarMonthFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_week"
+                app:destination="@id/CalendarWeekFragment"
+                app:popUpTo="@id/CalendarWeekFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_day"
+                app:destination="@id/CalendarDayFragment"
+                app:popUpTo="@id/CalendarDayFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_extended_day"
+                app:destination="@id/CalendarExtendedDayFragment"
+                app:popUpTo="@id/CalendarExtendedDayFragment"
+                app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+            android:id="@+id/CalendarExtendedDayFragment"
+            android:name="com.toolsboox.plugin.calendar.ui.CalendarExtendedDayFragment"
+            android:label="CalendarExtendedDayFragment"
             tools:layout="@layout/fragment_calendar_day">
 
         <argument

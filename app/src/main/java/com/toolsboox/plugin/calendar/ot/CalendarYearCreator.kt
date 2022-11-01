@@ -77,6 +77,8 @@ class CalendarYearCreator : Creator {
                 }
 
                 OnGestureListener.DTU -> {
+                    val localDate = LocalDate.of(year, 1, 1)
+                    CalendarNavigator.toYear(fragment, localDate, true)
                     return true
                 }
             }

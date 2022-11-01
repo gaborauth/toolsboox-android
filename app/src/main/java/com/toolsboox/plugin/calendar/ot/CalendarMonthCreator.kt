@@ -76,6 +76,7 @@ class CalendarMonthCreator : Creator {
                 }
 
                 OnGestureListener.DTU -> {
+                    CalendarNavigator.toMonth(fragment, localDate, true)
                     return true
                 }
             }

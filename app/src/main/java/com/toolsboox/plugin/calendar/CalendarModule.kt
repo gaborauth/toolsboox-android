@@ -17,17 +17,32 @@ import dagger.hilt.android.components.ActivityComponent
 abstract class CalendarModule {
 
     @Binds
-    abstract fun bindCalendarYearPresenter(calendarYearPresenter: CalendarYearPresenter): FragmentPresenter
+    abstract fun bindYearPresenter(presenter: CalendarYearPresenter): FragmentPresenter
 
     @Binds
-    abstract fun bindCalendarQuarterPresenter(calendarQuarterPresenter: CalendarQuarterPresenter): FragmentPresenter
+    abstract fun bindQuarterPresenter(presenter: CalendarQuarterPresenter): FragmentPresenter
 
     @Binds
-    abstract fun bindCalendarMonthPresenter(calendarMonthPresenter: CalendarMonthPresenter): FragmentPresenter
+    abstract fun bindMonthPresenter(presenter: CalendarMonthPresenter): FragmentPresenter
 
     @Binds
-    abstract fun bindCalendarWeekPresenter(calendarWeekPresenter: CalendarWeekPresenter): FragmentPresenter
+    abstract fun bindWeekPresenter(presenter: CalendarWeekPresenter): FragmentPresenter
 
     @Binds
-    abstract fun bindCalendarDayPresenter(calendarDayPresenter: CalendarDayPresenter): FragmentPresenter
+    abstract fun bindDayPresenter(presenter: CalendarDayPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindExtendedYearPresenter(presenter: CalendarExtendedYearPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindExtendedQuarterPresenter(presenter: CalendarExtendedQuarterPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindExtendedMonthPresenter(presenter: CalendarExtendedMonthPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindExtendedWeekPresenter(presenter: CalendarExtendedWeekPresenter): FragmentPresenter
+
+    @Binds
+    abstract fun bindExtendedDayPresenter(presenter: CalendarExtendedDayPresenter): FragmentPresenter
 }

@@ -76,6 +76,7 @@ class CalendarQuarterCreator : Creator {
                 }
 
                 OnGestureListener.DTU -> {
+                    CalendarNavigator.toQuarter(fragment, localDate, true)
                     return true
                 }
             }

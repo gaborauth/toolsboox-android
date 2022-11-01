@@ -79,6 +79,7 @@ class CalendarWeekCreator : Creator {
                 }
 
                 OnGestureListener.DTU -> {
+                    CalendarNavigator.toWeek(fragment, startWeekDate, locale, true)
                     return true
                 }
             }

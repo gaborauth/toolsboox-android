@@ -78,6 +78,7 @@ class CalendarDayCreator {
                 }
 
                 OnGestureListener.DTU -> {
+                    CalendarNavigator.toDay(fragment, localDate, true)
                     return true
                 }
             }
