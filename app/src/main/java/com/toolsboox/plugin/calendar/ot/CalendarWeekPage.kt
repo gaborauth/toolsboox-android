@@ -73,7 +73,7 @@ class CalendarWeekPage : Creator {
                 }
 
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toMonth(fragment, startWeekDate)
+                    CalendarNavigator.toMonth(fragment, startWeekDate, false)
                     return true
                 }
 
@@ -94,9 +94,9 @@ class CalendarWeekPage : Creator {
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
                             if (i == 7) {
-                                CalendarNavigator.toWeek(fragment, startWeekDate, locale)
+                                CalendarNavigator.toWeek(fragment, startWeekDate, locale, false)
                             } else {
-                                CalendarNavigator.toDay(fragment, startWeekDate.plusDays(i.toLong()))
+                                CalendarNavigator.toDay(fragment, startWeekDate.plusDays(i.toLong()), false)
                             }
 
                             return true

@@ -171,7 +171,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         binding.navigatorImageView.setImageBitmap(navigatorBitmap)
         binding.navigatorImageView.postInvalidate()
 
-        updateNavigator()
+        updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarDayFragment, binding, currentDate, getSurfaceSize())
@@ -211,8 +211,12 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
 
     /**
      * Update navigator bar.
+     *
+     * @param first flag of first start
      */
-    private fun updateNavigator() {
+    private fun updateNavigator(first: Boolean = false) {
+        if (first) return
+
         val year = currentDate.year
         val monthName = currentDate.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
         val day = currentDate.dayOfMonth

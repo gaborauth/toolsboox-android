@@ -71,7 +71,7 @@ class CalendarQuarterPage : Creator {
                 }
 
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toYear(fragment, localDate)
+                    CalendarNavigator.toYear(fragment, localDate, false)
                     return true
                 }
 
@@ -91,7 +91,7 @@ class CalendarQuarterPage : Creator {
                         val yo = to
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
-                            CalendarNavigator.toMonth(fragment, localDate.plusMonths(i.toLong()))
+                            CalendarNavigator.toMonth(fragment, localDate.plusMonths(i.toLong()), false)
                             return true
                         }
 
@@ -100,7 +100,7 @@ class CalendarQuarterPage : Creator {
                         for (day in 1..days) {
                             val dyo = yo + day * ceh
                             if (px >= xo && px <= xo + cew && py >= dyo && py <= dyo + ceh) {
-                                CalendarNavigator.toDay(fragment, LocalDate.of(year, startMonth + i, day))
+                                CalendarNavigator.toDay(fragment, LocalDate.of(year, startMonth + i, day), false)
                                 return true
                             }
                         }

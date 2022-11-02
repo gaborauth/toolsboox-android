@@ -71,7 +71,7 @@ class CalendarMonthPage : Creator {
                 }
 
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toQuarter(fragment, localDate)
+                    CalendarNavigator.toQuarter(fragment, localDate, false)
                     return true
                 }
 
@@ -91,7 +91,7 @@ class CalendarMonthPage : Creator {
                         val yo = to + 50.0f + i * ceh
 
                         if (px >= xo && px <= xo + 50.0f && py >= yo && py <= yo + ceh) {
-                            CalendarNavigator.toWeek(fragment, localDate.plusWeeks(i.toLong()), locale)
+                            CalendarNavigator.toWeek(fragment, localDate.plusWeeks(i.toLong()), locale, false)
                             return true
                         }
                     }
@@ -106,7 +106,7 @@ class CalendarMonthPage : Creator {
                         val yo = to + 50.0f + yOffset * ceh
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
-                            CalendarNavigator.toDay(fragment, localDate.plusDays(day.toLong() - 1L))
+                            CalendarNavigator.toDay(fragment, localDate.plusDays(day.toLong() - 1L), false)
                             return true
                         }
 

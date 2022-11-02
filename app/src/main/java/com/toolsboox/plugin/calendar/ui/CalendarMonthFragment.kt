@@ -166,7 +166,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         binding.navigatorImageView.setImageBitmap(navigatorBitmap)
         binding.navigatorImageView.postInvalidate()
 
-        updateNavigator()
+        updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarMonthFragment, binding, currentDate, getSurfaceSize())
@@ -203,8 +203,12 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
 
     /**
      * Update navigator bar.
+     *
+     * @param first flag of first start
      */
-    private fun updateNavigator() {
+    private fun updateNavigator(first: Boolean = false) {
+        if (first) return
+
         val year = currentDate.year
         val month = currentDate.monthValue
         val quarter = (month - 1) / 3 + 1

@@ -98,13 +98,13 @@ class CalendarYearPage : Creator {
 
                             if (px >= xo - cew && px <= xo && py >= yo && py <= yo + 8 * ceh) {
                                 val localDate = LocalDate.of(year, quarterMonthNumber, 1)
-                                CalendarNavigator.toQuarter(fragment, localDate)
+                                CalendarNavigator.toQuarter(fragment, localDate, false)
                                 return true
                             }
 
                             if (px >= xo && px <= xo + 8 * cew && py >= yo && py <= yo + 8 * ceh) {
                                 val localDate = LocalDate.of(year, monthNumber, 1)
-                                CalendarNavigator.toMonth(fragment, localDate)
+                                CalendarNavigator.toMonth(fragment, localDate, false)
                                 return true
                             }
                         }

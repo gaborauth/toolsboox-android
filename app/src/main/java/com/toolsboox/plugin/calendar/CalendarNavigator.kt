@@ -86,9 +86,9 @@ object CalendarNavigator {
      * @param localDate the local date
      * @param notes navigate to the notes page
      */
-    fun toWeek(fragment: ScreenFragment, localDate: LocalDate, locale: Locale?, notes: Boolean) {
+    fun toWeek(fragment: ScreenFragment, localDate: LocalDate, locale: Locale, notes: Boolean) {
         val year = localDate.year
-        val weekOfWeekBasedYear = WeekFields.of(locale ?: Locale.getDefault()).weekOfWeekBasedYear()
+        val weekOfWeekBasedYear = WeekFields.of(locale).weekOfWeekBasedYear()
         val weekOfYear = localDate.plusWeeks(0L).get(weekOfWeekBasedYear)
 
         val bundle = bundleOf()

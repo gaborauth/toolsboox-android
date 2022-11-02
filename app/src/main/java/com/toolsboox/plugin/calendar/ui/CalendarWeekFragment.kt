@@ -172,7 +172,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         binding.navigatorImageView.setImageBitmap(navigatorBitmap)
         binding.navigatorImageView.postInvalidate()
 
-        updateNavigator()
+        updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarWeekFragment, binding, currentDate, getSurfaceSize())
@@ -209,8 +209,12 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
 
     /**
      * Update navigator bar.
+     *
+     * @param first flag of first start
      */
-    private fun updateNavigator() {
+    private fun updateNavigator(first: Boolean = false) {
+        if (first) return
+
         val locale = calendarWeek.locale
         val year = currentDate.year
         val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()

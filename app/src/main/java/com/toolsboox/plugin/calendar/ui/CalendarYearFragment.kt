@@ -161,7 +161,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         binding.navigatorImageView.setImageBitmap(navigatorBitmap)
         binding.navigatorImageView.postInvalidate()
 
-        updateNavigator()
+        updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarYearFragment, binding, currentDate, getSurfaceSize())
@@ -198,8 +198,12 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
 
     /**
      * Update navigator bar.
+     *
+     * @param first flag of first start
      */
-    private fun updateNavigator() {
+    private fun updateNavigator(first: Boolean = false) {
+        if (first) return
+
         val year = currentDate.year
 
         val pageTitle = getString(R.string.calendar_year_title).format(year)

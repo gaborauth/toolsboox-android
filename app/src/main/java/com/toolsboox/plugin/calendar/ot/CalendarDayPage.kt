@@ -71,7 +71,7 @@ class CalendarDayPage {
                 }
 
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toWeek(fragment, localDate, locale)
+                    CalendarNavigator.toWeek(fragment, localDate, locale, false)
                     return true
                 }
 

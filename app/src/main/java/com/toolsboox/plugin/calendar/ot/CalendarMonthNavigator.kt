@@ -55,27 +55,27 @@ class CalendarMonthNavigator {
                     val py = motionEvent.y * 140.4f / view.height
 
                     if (px >= lo + 0 * cew && px <= lo + 1 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toMonth(fragment, localDate.minusMonths(1L))
+                        CalendarNavigator.toMonth(fragment, localDate.minusMonths(1L), false)
                         return true
                     }
                     if (px >= lo + 1 * cew && px <= lo + 3 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toDay(fragment, LocalDate.now())
+                        CalendarNavigator.toDay(fragment, LocalDate.now(), false)
                         return true
                     }
                     if (px >= lo + 9 * cew && px <= lo + 13 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toMonth(fragment, localDate)
+                        CalendarNavigator.toMonth(fragment, localDate, false)
                         return true
                     }
                     if (px >= lo + 13 * cew && px <= lo + 15 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toQuarter(fragment, localDate)
+                        CalendarNavigator.toQuarter(fragment, localDate, false)
                         return true
                     }
                     if (px >= lo + 15 * cew && px <= lo + 19 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toYear(fragment, localDate)
+                        CalendarNavigator.toYear(fragment, localDate, false)
                         return true
                     }
                     if (px >= lo + 19 * cew && px <= lo + 20 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toMonth(fragment, localDate.plusMonths(1L))
+                        CalendarNavigator.toMonth(fragment, localDate.plusMonths(1L), false)
                         return true
                     }
                 }
