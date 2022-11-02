@@ -13,11 +13,11 @@ import java.time.LocalDate
 import java.time.temporal.WeekFields
 
 /**
- * Create extended weekly template of calendar plugin.
+ * Create weekly template of calendar plugin notes.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarWeekPageExtended : Creator {
+class CalendarWeekPageNotes : Creator {
 
     companion object {
 
@@ -60,7 +60,7 @@ class CalendarWeekPageExtended : Creator {
 
             when (gestureResult) {
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate, locale)
+                    CalendarNavigator.toWeek(fragment, startWeekDate, locale, false)
                     return true
                 }
 
@@ -73,7 +73,7 @@ class CalendarWeekPageExtended : Creator {
         }
 
         /**
-         * Draw the extended weekly template of calendar plugin.
+         * Draw the weekly template of calendar plugin notes.
          *
          * @param context the context
          * @param canvas the canvas

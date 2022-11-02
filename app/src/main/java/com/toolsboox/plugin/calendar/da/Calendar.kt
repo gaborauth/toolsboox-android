@@ -12,7 +12,7 @@ import java.lang.reflect.Type
  */
 interface Calendar {
     val strokes: List<Stroke>
-    val extendedStrokes: List<Stroke>
+    val notesStrokes: List<Stroke>
 
     companion object {
         /**
@@ -61,6 +61,6 @@ interface Calendar {
      */
     fun normalizeStrokes(fromWidth: Int, fromHeight: Int, toWidth: Int, toHeight: Int) {
         normalizeStrokes(strokes, fromWidth, fromHeight, toWidth, toHeight)
-        normalizeStrokes(extendedStrokes, fromWidth, fromHeight, toWidth, toHeight)
+        normalizeStrokes(notesStrokes, fromWidth, fromHeight, toWidth, toHeight)
     }
 }

@@ -43,7 +43,7 @@
                 app:argType="string"
                 app:nullable="true"/>
         <argument
-                android:name="extended"
+                android:name="notes"
                 app:argType="string"
                 app:nullable="true"/>
 
@@ -83,7 +83,7 @@
                 app:argType="string"
                 app:nullable="true"/>
         <argument
-                android:name="extended"
+                android:name="notes"
                 app:argType="string"
                 app:nullable="true"/>
 
@@ -128,7 +128,7 @@
                 app:argType="string"
                 app:nullable="true"/>
         <argument
-                android:name="extended"
+                android:name="notes"
                 app:argType="string"
                 app:nullable="true"/>
 
@@ -175,7 +175,7 @@
                 app:argType="string"
                 app:nullable="true"/>
         <argument
-                android:name="extended"
+                android:name="notes"
                 app:argType="string"
                 app:nullable="true"/>
 
@@ -228,7 +228,7 @@
                 app:argType="string"
                 app:nullable="true"/>
         <argument
-                android:name="extended"
+                android:name="notes"
                 app:argType="string"
                 app:nullable="true"/>
 

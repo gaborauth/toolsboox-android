@@ -7,16 +7,16 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.CalendarDay
-import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
+import com.toolsboox.plugin.calendar.da.CalendarYear
+import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import java.time.LocalDate
 
 /**
- * Create extended daily template of calendar plugin.
+ * Create yearly template of calendar plugin notes.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarDayPageExtended : Creator {
+class CalendarYearPageNotes : Creator {
 
     companion object {
 
@@ -39,25 +39,21 @@ class CalendarDayPageExtended : Creator {
          * @param motionEvent the motion event
          * @param gestureResult the gesture result
          * @param fragment the parent fragment
-         * @param calendarDay the calendar data class
+         * @param calendarYear the calendar data class
          * @return true
          */
         fun onTouchEvent(
             view: View, motionEvent: MotionEvent, gestureResult: Int,
-            fragment: CalendarDayFragment, calendarDay: CalendarDay
+            fragment: CalendarYearFragment, calendarYear: CalendarYear
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
 
-            val year = calendarDay.year
-            val month = calendarDay.month
-            val day = calendarDay.day
-            val locale = calendarDay.locale
-
-            val localDate = LocalDate.of(year, month, day)
+            val year = calendarYear.year
 
             when (gestureResult) {
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toDay(fragment, localDate)
+                    val localDate = LocalDate.of(year, 1, 1)
+                    CalendarNavigator.toYear(fragment, localDate, false)
                     return true
                 }
 
@@ -70,13 +66,13 @@ class CalendarDayPageExtended : Creator {
         }
 
         /**
-         * Draw the extended daily template of calendar plugin.
+         * Draw the yearly template of calendar plugin notes.
          *
          * @param context the context
          * @param canvas the canvas
-         * @param calendarDay data class
+         * @param calendarYear data class
          */
-        fun drawPage(context: Context, canvas: Canvas, calendarDay: CalendarDay) {
+        fun drawPage(context: Context, canvas: Canvas, calendarYear: CalendarYear) {
             val text1 = "What do you want to write here?"
             val text2 = "Sketch a template and send it to me... :)"
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)

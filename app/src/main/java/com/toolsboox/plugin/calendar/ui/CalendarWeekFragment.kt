@@ -10,7 +10,7 @@ import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarWeek
 import com.toolsboox.plugin.calendar.ot.CalendarWeekNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarWeekPage
-import com.toolsboox.plugin.calendar.ot.CalendarWeekPageExtended
+import com.toolsboox.plugin.calendar.ot.CalendarWeekPageNotes
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,9 +54,9 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
     private var currentDate: LocalDate = LocalDate.now()
 
     /**
-     * Flag of extended view.
+     * Flag of notes view.
      */
-    private var extended: Boolean = false
+    private var notes: Boolean = false
 
     /**
      * The timer job.
@@ -94,7 +94,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
         val weekOfYearValue = currentDate.plusWeeks(0L).get(weekOfYear)
 
-        if (extended) {
+        if (notes) {
             calendarWeek = CalendarWeek(
                 year, weekOfYearValue, locale,
                 Calendar.listDeepCopy(calendarWeek.strokes), Calendar.listDeepCopy(strokes)
@@ -102,7 +102,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         } else {
             calendarWeek = CalendarWeek(
                 year, weekOfYearValue, locale,
-                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarWeek.extendedStrokes)
+                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarWeek.notesStrokes)
             )
         }
 
@@ -132,7 +132,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
                     .with(weekFields.dayOfWeek(), 1)
             }
         }
-        extended = arguments?.getString("extended")?.toBoolean() ?: false
+        notes = arguments?.getString("notes")?.toBoolean() ?: false
 
         val weekOfWeekBasedYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()
         calendarWeek = CalendarWeek(currentDate.year, currentDate.get(weekOfWeekBasedYear))
@@ -144,8 +144,8 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
 
-            if (extended) {
-                CalendarWeekPageExtended.onTouchEvent(
+            if (notes) {
+                CalendarWeekPageNotes.onTouchEvent(
                     view, motionEvent, gestureResult, this@CalendarWeekFragment, calendarWeek
                 )
             } else {
@@ -196,9 +196,9 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         this.calendarWeek = calendarWeek
         updateNavigator()
 
-        if (extended) {
-            CalendarWeekPageExtended.drawPage(this.requireContext(), templateCanvas, calendarWeek)
-            applyStrokes(calendarWeek.extendedStrokes.toMutableList(), true)
+        if (notes) {
+            CalendarWeekPageNotes.drawPage(this.requireContext(), templateCanvas, calendarWeek)
+            applyStrokes(calendarWeek.notesStrokes.toMutableList(), true)
         } else {
             CalendarWeekPage.drawPage(this.requireContext(), templateCanvas, calendarWeek)
             applyStrokes(calendarWeek.strokes.toMutableList(), true)

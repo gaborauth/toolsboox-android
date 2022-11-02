@@ -7,16 +7,16 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.CalendarQuarter
-import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
+import com.toolsboox.plugin.calendar.da.CalendarDay
+import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
 import java.time.LocalDate
 
 /**
- * Create extended quarterly template of calendar plugin.
+ * Create daily template of calendar plugin notes.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarQuarterPageExtended : Creator {
+class CalendarDayPageNotes : Creator {
 
     companion object {
 
@@ -39,24 +39,25 @@ class CalendarQuarterPageExtended : Creator {
          * @param motionEvent the motion event
          * @param gestureResult the gesture result
          * @param fragment the parent fragment
-         * @param calendarQuarter the calendar data class
+         * @param calendarDay the calendar data class
          * @return true
          */
         fun onTouchEvent(
             view: View, motionEvent: MotionEvent, gestureResult: Int,
-            fragment: CalendarQuarterFragment, calendarQuarter: CalendarQuarter
+            fragment: CalendarDayFragment, calendarDay: CalendarDay
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
 
-            val year = calendarQuarter.year
-            val quarter = calendarQuarter.quarter
-            val startMonth = (quarter - 1) * 3 + 1
+            val year = calendarDay.year
+            val month = calendarDay.month
+            val day = calendarDay.day
+            val locale = calendarDay.locale
 
-            val localDate = LocalDate.of(year, startMonth, 1)
+            val localDate = LocalDate.of(year, month, day)
 
             when (gestureResult) {
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toQuarter(fragment, localDate)
+                    CalendarNavigator.toDay(fragment, localDate, false)
                     return true
                 }
 
@@ -69,13 +70,13 @@ class CalendarQuarterPageExtended : Creator {
         }
 
         /**
-         * Draw the extended quarterly template of calendar plugin.
+         * Draw the daily template of calendar plugin notes.
          *
          * @param context the context
          * @param canvas the canvas
-         * @param calendarQuarter data class
+         * @param calendarDay data class
          */
-        fun drawPage(context: Context, canvas: Canvas, calendarQuarter: CalendarQuarter) {
+        fun drawPage(context: Context, canvas: Canvas, calendarDay: CalendarDay) {
             val text1 = "What do you want to write here?"
             val text2 = "Sketch a template and send it to me... :)"
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)

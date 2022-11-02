@@ -10,7 +10,7 @@ import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarMonth
 import com.toolsboox.plugin.calendar.ot.CalendarMonthNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarMonthPage
-import com.toolsboox.plugin.calendar.ot.CalendarMonthPageExtended
+import com.toolsboox.plugin.calendar.ot.CalendarMonthPageNotes
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,9 +54,9 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
     private var currentDate: LocalDate = LocalDate.now()
 
     /**
-     * Flag of extended view.
+     * Flag of notes view.
      */
-    private var extended: Boolean = false
+    private var notes: Boolean = false
 
     /**
      * The timer job.
@@ -92,7 +92,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         val month = currentDate.monthValue
         val locale = calendarMonth.locale
 
-        if (extended) {
+        if (notes) {
             calendarMonth = CalendarMonth(
                 year, month, locale,
                 Calendar.listDeepCopy(calendarMonth.strokes), Calendar.listDeepCopy(strokes)
@@ -100,7 +100,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         } else {
             calendarMonth = CalendarMonth(
                 year, month, locale,
-                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarMonth.extendedStrokes)
+                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarMonth.notesStrokes)
             )
         }
 
@@ -127,7 +127,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
                 currentDate = LocalDate.of(year, month, 1)
             }
         }
-        extended = arguments?.getString("extended")?.toBoolean() ?: false
+        notes = arguments?.getString("notes")?.toBoolean() ?: false
 
         calendarMonth = CalendarMonth(currentDate.year, currentDate.monthValue)
 
@@ -138,8 +138,8 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
 
-            if (extended) {
-                CalendarMonthPageExtended.onTouchEvent(
+            if (notes) {
+                CalendarMonthPageNotes.onTouchEvent(
                     view, motionEvent, gestureResult, this@CalendarMonthFragment, calendarMonth
                 )
             } else {
@@ -190,9 +190,9 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         this.calendarMonth = calendarMonth
         updateNavigator()
 
-        if (extended) {
-            CalendarMonthPageExtended.drawPage(this.requireContext(), templateCanvas, calendarMonth)
-            applyStrokes(calendarMonth.extendedStrokes.toMutableList(), true)
+        if (notes) {
+            CalendarMonthPageNotes.drawPage(this.requireContext(), templateCanvas, calendarMonth)
+            applyStrokes(calendarMonth.notesStrokes.toMutableList(), true)
         } else {
             CalendarMonthPage.drawPage(this.requireContext(), templateCanvas, calendarMonth)
             applyStrokes(calendarMonth.strokes.toMutableList(), true)

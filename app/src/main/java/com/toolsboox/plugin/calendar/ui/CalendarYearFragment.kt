@@ -10,7 +10,7 @@ import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarYear
 import com.toolsboox.plugin.calendar.ot.CalendarYearNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarYearPage
-import com.toolsboox.plugin.calendar.ot.CalendarYearPageExtended
+import com.toolsboox.plugin.calendar.ot.CalendarYearPageNotes
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,9 +53,9 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     private var currentDate: LocalDate = LocalDate.now()
 
     /**
-     * Flag of extended view.
+     * Flag of notes view.
      */
-    private var extended: Boolean = false
+    private var notes: Boolean = false
 
     /**
      * The timer job.
@@ -91,7 +91,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         val year = currentDate.year
         val locale = calendarYear.locale
 
-        if (extended) {
+        if (notes) {
             calendarYear = CalendarYear(
                 year, locale,
                 Calendar.listDeepCopy(calendarYear.strokes), Calendar.listDeepCopy(strokes)
@@ -99,7 +99,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         } else {
             calendarYear = CalendarYear(
                 year, locale,
-                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarYear.extendedStrokes)
+                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarYear.notesStrokes)
             )
         }
 
@@ -122,7 +122,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
             Timber.i("Set year to '$it' from parameter")
             currentDate = LocalDate.ofYearDay(it, 1)
         }
-        extended = arguments?.getString("extended")?.toBoolean() ?: false
+        notes = arguments?.getString("notes")?.toBoolean() ?: false
 
         calendarYear = CalendarYear(currentDate.year)
 
@@ -133,8 +133,8 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
 
-            if (extended) {
-                CalendarYearPageExtended.onTouchEvent(
+            if (notes) {
+                CalendarYearPageNotes.onTouchEvent(
                     view, motionEvent, gestureResult, this@CalendarYearFragment, calendarYear
                 )
             } else {
@@ -185,9 +185,9 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         this.calendarYear = calendarYear
         updateNavigator()
 
-        if (extended) {
-            CalendarYearPageExtended.drawPage(this.requireContext(), templateCanvas, calendarYear)
-            applyStrokes(calendarYear.extendedStrokes.toMutableList(), true)
+        if (notes) {
+            CalendarYearPageNotes.drawPage(this.requireContext(), templateCanvas, calendarYear)
+            applyStrokes(calendarYear.notesStrokes.toMutableList(), true)
         } else {
             CalendarYearPage.drawPage(this.requireContext(), templateCanvas, calendarYear)
             applyStrokes(calendarYear.strokes.toMutableList(), true)

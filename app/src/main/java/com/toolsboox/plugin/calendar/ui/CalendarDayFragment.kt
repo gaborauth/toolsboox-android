@@ -11,7 +11,7 @@ import com.toolsboox.plugin.calendar.da.CalendarDay
 import com.toolsboox.plugin.calendar.da.GoogleCalendarEvent
 import com.toolsboox.plugin.calendar.ot.CalendarDayNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarDayPage
-import com.toolsboox.plugin.calendar.ot.CalendarDayPageExtended
+import com.toolsboox.plugin.calendar.ot.CalendarDayPageNotes
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,9 +55,9 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     private var currentDate: LocalDate = LocalDate.now()
 
     /**
-     * Flag of extended view.
+     * Flag of notes view.
      */
-    private var extended: Boolean = false
+    private var notes: Boolean = false
 
     /**
      * The timer job.
@@ -94,7 +94,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         val day = currentDate.dayOfMonth
         val locale = calendarDay.locale
 
-        if (extended) {
+        if (notes) {
             calendarDay = CalendarDay(
                 year, month, day, locale,
                 Calendar.listDeepCopy(calendarDay.strokes), Calendar.listDeepCopy(strokes)
@@ -102,7 +102,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         } else {
             calendarDay = CalendarDay(
                 year, month, day, locale,
-                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarDay.extendedStrokes)
+                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarDay.notesStrokes)
             )
         }
 
@@ -133,7 +133,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
                 }
             }
         }
-        extended = arguments?.getString("extended")?.toBoolean() ?: false
+        notes = arguments?.getString("notes")?.toBoolean() ?: false
 
         calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
 
@@ -144,8 +144,8 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
 
-            if (extended)
-                CalendarDayPageExtended.onTouchEvent(
+            if (notes)
+                CalendarDayPageNotes.onTouchEvent(
                     view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay
                 )
             else
@@ -198,9 +198,9 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         this.calendarDay = calendarDay
         updateNavigator()
 
-        if (extended) {
-            CalendarDayPageExtended.drawPage(this.requireContext(), templateCanvas, calendarDay)
-            applyStrokes(calendarDay.extendedStrokes.toMutableList(), true)
+        if (notes) {
+            CalendarDayPageNotes.drawPage(this.requireContext(), templateCanvas, calendarDay)
+            applyStrokes(calendarDay.notesStrokes.toMutableList(), true)
         } else {
             CalendarDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, googleCalendarEvents)
             applyStrokes(calendarDay.strokes.toMutableList(), true)

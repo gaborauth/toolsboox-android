@@ -17,15 +17,15 @@ data class CalendarDay(
     val locale: Locale = Locale.getDefault(),
 
     override val strokes: List<Stroke> = listOf(),
-    override val extendedStrokes: List<Stroke> = listOf()
+    override val notesStrokes: List<Stroke> = listOf()
 ) : Calendar {
     /**
      * Deep copy of the calendar day data class
      */
     fun deepCopy(): CalendarDay {
         val strokes = Calendar.listDeepCopy(this.strokes)
-        val extendedStrokes = Calendar.listDeepCopy(this.extendedStrokes)
+        val notesStrokes = Calendar.listDeepCopy(this.notesStrokes)
 
-        return CalendarDay(this.year, this.month, this.day, this.locale, strokes, extendedStrokes)
+        return CalendarDay(this.year, this.month, this.day, this.locale, strokes, notesStrokes)
     }
 }
