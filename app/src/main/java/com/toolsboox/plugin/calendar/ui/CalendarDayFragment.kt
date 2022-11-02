@@ -133,7 +133,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
                 }
             }
         }
-        extended = arguments?.getBoolean("extended") ?: false
+        extended = arguments?.getString("extended")?.toBoolean() ?: false
 
         calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
 

@@ -2,8 +2,8 @@ package com.toolsboox.plugin.calendar.ui
 
 import android.graphics.Rect
 import android.os.Environment
-import com.google.gson.GsonBuilder
-import com.toolsboox.databinding.FragmentCalendarWeekBinding
+import com.squareup.moshi.Moshi
+import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.plugin.calendar.da.CalendarWeek
 import com.toolsboox.ui.plugin.FragmentPresenter
 import com.toolsboox.ui.plugin.ScreenFragment
@@ -24,6 +24,13 @@ import javax.inject.Inject
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
+
+    /**
+     * The Moshi instance.
+     */
+    @Inject
+    lateinit var moshi: Moshi
+
     /**
      * Load the week if available.
      *
@@ -31,11 +38,10 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
      * @param binding the data binding
      * @param currentDate the current date
      * @param surfaceSize the actual size of surface view
-     * @param locale the locale
      */
     fun load(
-        fragment: CalendarWeekFragment, binding: FragmentCalendarWeekBinding,
-        currentDate: LocalDate, surfaceSize: Rect, locale: Locale
+        fragment: CalendarWeekFragment, binding: FragmentCalendarBinding,
+        currentDate: LocalDate, surfaceSize: Rect
     ) {
         if (!checkPermissions(fragment, binding.root)) return
 
@@ -44,15 +50,18 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
                 val year = currentDate.year
-                val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
+                val weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()
                 val week = currentDate.plusWeeks(0L).get(weekOfYear)
-                var calendarWeek = CalendarWeek(year, week, locale, mutableListOf())
+                var calendarWeek = CalendarWeek(year, week)
 
                 try {
-                    if (createPath(fragment, currentDate, locale).exists()) {
-                        FileReader(createPath(fragment, currentDate, locale)).use {
-                            calendarWeek = GsonBuilder().create().fromJson(it, CalendarWeek::class.java)
-                            calendarWeek.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
+                    val adapter = moshi.adapter(CalendarWeek::class.java)
+                    if (createPath(fragment, currentDate, calendarWeek.locale).exists()) {
+                        FileReader(createPath(fragment, currentDate, calendarWeek.locale)).use { fileReader ->
+                            adapter.fromJson(fileReader.readText())?.let {
+                                it.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
+                                calendarWeek = it
+                            }
                         }
                     }
                 } catch (e: IOException) {
@@ -73,21 +82,25 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
      * @param binding the data binding
      * @param calendarWeek the data class
      * @param currentDate the current date
+     * @param surfaceSize the actual size of surface view
      */
     fun save(
-        fragment: CalendarWeekFragment, binding: FragmentCalendarWeekBinding,
-        calendarWeek: CalendarWeek, currentDate: LocalDate
+        fragment: CalendarWeekFragment, binding: FragmentCalendarBinding,
+        calendarWeek: CalendarWeek, currentDate: LocalDate, surfaceSize: Rect
     ) {
         if (!checkPermissions(fragment, binding.root)) return
 
-        val locale = calendarWeek.locale ?: Locale.getDefault()
+        val locale = calendarWeek.locale
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
+                val calendarWeekCopy = calendarWeek.deepCopy()
+                calendarWeekCopy.normalizeStrokes(surfaceSize.width(), surfaceSize.height(), 1404, 1872)
                 try {
+                    val adapter = moshi.adapter(CalendarWeek::class.java)
                     PrintWriter(FileWriter(createPath(fragment, currentDate, locale))).use {
-                        it.write(GsonBuilder().create().toJson(calendarWeek).toString())
+                        it.write(adapter.toJson(calendarWeekCopy))
                     }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }

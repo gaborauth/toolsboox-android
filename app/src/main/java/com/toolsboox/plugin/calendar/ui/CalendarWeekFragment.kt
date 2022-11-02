@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
 import com.toolsboox.R
-import com.toolsboox.databinding.FragmentCalendarWeekBinding
+import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
-import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarWeek
-import com.toolsboox.plugin.calendar.ot.CalendarWeekCreator
+import com.toolsboox.plugin.calendar.ot.CalendarWeekNavigator
+import com.toolsboox.plugin.calendar.ot.CalendarWeekPage
+import com.toolsboox.plugin.calendar.ot.CalendarWeekPageExtended
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
-import java.time.format.TextStyle
 import java.time.temporal.WeekFields
 import java.util.*
 import javax.inject.Inject
@@ -41,17 +41,22 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
     /**
      * The inflated layout.
      */
-    override val view = R.layout.fragment_calendar_week
+    override val view = R.layout.fragment_calendar
 
     /**
      * The view binding.
      */
-    private lateinit var binding: FragmentCalendarWeekBinding
+    private lateinit var binding: FragmentCalendarBinding
 
     /**
      * The current date.
      */
     private var currentDate: LocalDate = LocalDate.now()
+
+    /**
+     * Flag of extended view.
+     */
+    private var extended: Boolean = false
 
     /**
      * The timer job.
@@ -85,14 +90,23 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
         val year = currentDate.year
-        val locale = calendarWeek.locale ?: Locale.getDefault()
+        val locale = calendarWeek.locale
         val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
         val weekOfYearValue = currentDate.plusWeeks(0L).get(weekOfYear)
 
-        calendarWeek = CalendarWeek(year, weekOfYearValue, locale, Calendar.listDeepCopy(strokes))
-        calendarWeek.normalizeStrokes(getSurfaceSize().width(), getSurfaceSize().height(), 1404, 1872)
+        if (extended) {
+            calendarWeek = CalendarWeek(
+                year, weekOfYearValue, locale,
+                Calendar.listDeepCopy(calendarWeek.strokes), Calendar.listDeepCopy(strokes)
+            )
+        } else {
+            calendarWeek = CalendarWeek(
+                year, weekOfYearValue, locale,
+                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarWeek.extendedStrokes)
+            )
+        }
 
-        presenter.save(this, binding, calendarWeek, currentDate)
+        presenter.save(this, binding, calendarWeek, currentDate, getSurfaceSize())
     }
 
     /**
@@ -104,7 +118,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentCalendarWeekBinding.bind(view)
+        binding = FragmentCalendarBinding.bind(view)
 
         currentDate = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
         arguments?.getString("year")?.toIntOrNull()?.let { year ->
@@ -118,55 +132,30 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
                     .with(weekFields.dayOfWeek(), 1)
             }
         }
+        extended = arguments?.getString("extended")?.toBoolean() ?: false
+
         val weekOfWeekBasedYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()
-        calendarWeek = CalendarWeek(
-            currentDate.year, currentDate.get(weekOfWeekBasedYear), Locale.getDefault(), mutableListOf()
-        )
+        calendarWeek = CalendarWeek(currentDate.year, currentDate.get(weekOfWeekBasedYear))
 
-        binding.buttonPrev.setOnClickListener {
-            currentDate = currentDate.minusWeeks(1L)
-            presenter.load(this, binding, currentDate, getSurfaceSize(), calendarWeek.locale ?: Locale.getDefault())
-        }
-        binding.buttonNext.setOnClickListener {
-            currentDate = currentDate.plusWeeks(1L)
-            presenter.load(this, binding, currentDate, getSurfaceSize(), calendarWeek.locale ?: Locale.getDefault())
-        }
-
-        binding.buttonMonth.setOnClickListener {
-            CalendarNavigator.toMonth(this, currentDate)
-        }
-
-        binding.buttonDayOfWeek1.setOnClickListener {
-            CalendarNavigator.toDay(this, currentDate.plusDays(0L))
-        }
-        binding.buttonDayOfWeek2.setOnClickListener {
-            CalendarNavigator.toDay(this, currentDate.plusDays(1L))
-        }
-        binding.buttonDayOfWeek3.setOnClickListener {
-            CalendarNavigator.toDay(this, currentDate.plusDays(2L))
-        }
-        binding.buttonDayOfWeek4.setOnClickListener {
-            CalendarNavigator.toDay(this, currentDate.plusDays(3L))
-        }
-        binding.buttonDayOfWeek5.setOnClickListener {
-            CalendarNavigator.toDay(this, currentDate.plusDays(4L))
-        }
-        binding.buttonDayOfWeek6.setOnClickListener {
-            CalendarNavigator.toDay(this, currentDate.plusDays(5L))
-        }
-        binding.buttonDayOfWeek7.setOnClickListener {
-            CalendarNavigator.toDay(this, currentDate.plusDays(6L))
+        binding.navigatorImageView.setOnTouchListener { view, motionEvent ->
+            CalendarWeekNavigator.onTouchEvent(view, motionEvent, this@CalendarWeekFragment, calendarWeek)
         }
 
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
-            CalendarWeekCreator.onTouchEvent(
-                view, motionEvent, gestureResult, this@CalendarWeekFragment, calendarWeek
-            )
+
+            if (extended) {
+                CalendarWeekPageExtended.onTouchEvent(
+                    view, motionEvent, gestureResult, this@CalendarWeekFragment, calendarWeek
+                )
+            } else {
+                CalendarWeekPage.onTouchEvent(
+                    view, motionEvent, gestureResult, this@CalendarWeekFragment, calendarWeek
+                )
+            }
         }
 
         toolbar.toolbarPager.visibility = View.GONE
-        updateNavigator(true)
 
         initializeSurface(true)
     }
@@ -177,11 +166,16 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
     override fun onResume() {
         super.onResume()
 
-        binding.templateImage.setImageBitmap(templateBitmap)
-        binding.templateImage.postInvalidate()
+        binding.templateImageView.setImageBitmap(templateBitmap)
+        binding.templateImageView.postInvalidate()
+
+        binding.navigatorImageView.setImageBitmap(navigatorBitmap)
+        binding.navigatorImageView.postInvalidate()
+
+        updateNavigator()
 
         timer = GlobalScope.launch(Dispatchers.Main) {
-            presenter.load(this@CalendarWeekFragment, binding, currentDate, getSurfaceSize(), Locale.getDefault())
+            presenter.load(this@CalendarWeekFragment, binding, currentDate, getSurfaceSize())
         }
     }
 
@@ -202,49 +196,30 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         this.calendarWeek = calendarWeek
         updateNavigator()
 
-        CalendarWeekCreator.drawPage(this.requireContext(), templateCanvas, calendarWeek)
-        binding.templateImage.postInvalidate()
+        if (extended) {
+            CalendarWeekPageExtended.drawPage(this.requireContext(), templateCanvas, calendarWeek)
+            applyStrokes(calendarWeek.extendedStrokes.toMutableList(), true)
+        } else {
+            CalendarWeekPage.drawPage(this.requireContext(), templateCanvas, calendarWeek)
+            applyStrokes(calendarWeek.strokes.toMutableList(), true)
+        }
 
-        applyStrokes(calendarWeek.strokes.toMutableList(), true)
+        binding.templateImageView.postInvalidate()
     }
 
     /**
      * Update navigator bar.
      */
-    private fun updateNavigator(first: Boolean = false) {
-        val locale = if (first) Locale.getDefault() else calendarWeek.locale ?: Locale.getDefault()
-
+    private fun updateNavigator() {
+        val locale = calendarWeek.locale
         val year = currentDate.year
-        val monthName = currentDate.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
         val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
         val week = "W${currentDate.plusWeeks(0L).get(weekOfYear)}"
 
         val pageTitle = getString(R.string.calendar_week_title).format(week, year)
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
-        binding.buttonMonth.text = "$year $monthName"
-
-        currentDate.plusDays(0L).dayOfWeek.getDisplayName(TextStyle.NARROW, locale).let {
-            binding.buttonDayOfWeek1.text = it
-        }
-        currentDate.plusDays(1L).dayOfWeek.getDisplayName(TextStyle.NARROW, locale).let {
-            binding.buttonDayOfWeek2.text = it
-        }
-        currentDate.plusDays(2L).dayOfWeek.getDisplayName(TextStyle.NARROW, locale).let {
-            binding.buttonDayOfWeek3.text = it
-        }
-        currentDate.plusDays(3L).dayOfWeek.getDisplayName(TextStyle.NARROW, locale).let {
-            binding.buttonDayOfWeek4.text = it
-        }
-        currentDate.plusDays(4L).dayOfWeek.getDisplayName(TextStyle.NARROW, locale).let {
-            binding.buttonDayOfWeek5.text = it
-        }
-        currentDate.plusDays(5L).dayOfWeek.getDisplayName(TextStyle.NARROW, locale).let {
-            binding.buttonDayOfWeek6.text = it
-        }
-        currentDate.plusDays(6L).dayOfWeek.getDisplayName(TextStyle.NARROW, locale).let {
-            binding.buttonDayOfWeek7.text = it
-        }
+        CalendarWeekNavigator.draw(this.requireContext(), navigatorCanvas, calendarWeek)
     }
 
     /**

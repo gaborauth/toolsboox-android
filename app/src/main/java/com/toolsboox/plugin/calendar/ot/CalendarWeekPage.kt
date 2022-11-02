@@ -14,14 +14,13 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.time.temporal.WeekFields
-import java.util.*
 
 /**
  * Create weekly template of calendar plugin.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarWeekCreator : Creator {
+class CalendarWeekPage : Creator {
 
     companion object {
         // Cell width
@@ -55,7 +54,7 @@ class CalendarWeekCreator : Creator {
 
             val year = calendarWeek.year
             val weekOfYear = calendarWeek.weekOfYear
-            val locale = calendarWeek.locale ?: Locale.getDefault()
+            val locale = calendarWeek.locale
 
             val weekFields = WeekFields.of(locale)
             val startWeekDate = LocalDate.ofYearDay(year, 1)
@@ -64,12 +63,12 @@ class CalendarWeekCreator : Creator {
 
             when (gestureResult) {
                 OnGestureListener.LTR -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate.minusWeeks(1L), locale)
+                    CalendarNavigator.toWeek(fragment, startWeekDate.minusWeeks(1L), locale, false)
                     return true
                 }
 
                 OnGestureListener.RTL -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate.plusWeeks(1L), locale)
+                    CalendarNavigator.toWeek(fragment, startWeekDate.plusWeeks(1L), locale, false)
                     return true
                 }
 
@@ -119,7 +118,7 @@ class CalendarWeekCreator : Creator {
         fun drawPage(context: Context, canvas: Canvas, calendarWeek: CalendarWeek) {
             val year = calendarWeek.year
             val weekOfYear = calendarWeek.weekOfYear
-            val locale = calendarWeek.locale ?: Locale.getDefault()
+            val locale = calendarWeek.locale
 
             val weekFields = WeekFields.of(locale)
             val startWeekDate = LocalDate.ofYearDay(year, 1)

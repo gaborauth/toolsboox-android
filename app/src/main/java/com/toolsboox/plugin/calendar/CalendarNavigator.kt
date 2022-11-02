@@ -32,7 +32,7 @@ object CalendarNavigator {
         bundle.putString("year", "$year")
         bundle.putString("month", "$month")
         bundle.putString("day", "$day")
-        bundle.putBoolean("extended", extended)
+        bundle.putString("extended", "$extended")
 
         Timber.i("Navigate to the '$year-$month-$day' ($extended) daily calendar")
         fragment.findNavController().navigate(R.id.action_to_calendar_day, bundle)
@@ -102,14 +102,10 @@ object CalendarNavigator {
         val bundle = bundleOf()
         bundle.putString("year", "$year")
         bundle.putString("weekOfYear", "$weekOfYear")
+        bundle.putString("extended", "$extended")
 
-        if (extended) {
-            Timber.i("Navigate to the '$year-$weekOfYear' weekly extended calendar")
-            fragment.findNavController().navigate(R.id.action_to_calendar_extended_week, bundle)
-        } else {
-            Timber.i("Navigate to the '$year-$weekOfYear' weekly calendar")
-            fragment.findNavController().navigate(R.id.action_to_calendar_week, bundle)
-        }
+        Timber.i("Navigate to the '$year-$weekOfYear' ($extended) weekly calendar")
+        fragment.findNavController().navigate(R.id.action_to_calendar_week, bundle)
     }
 
     /**

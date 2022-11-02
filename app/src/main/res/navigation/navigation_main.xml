@@ -256,7 +256,7 @@
             android:id="@+id/CalendarWeekFragment"
             android:name="com.toolsboox.plugin.calendar.ui.CalendarWeekFragment"
             android:label="CalendarWeekFragment"
-            tools:layout="@layout/fragment_calendar_week">
+            tools:layout="@layout/fragment_calendar">
 
         <argument
                 android:name="year"
@@ -266,43 +266,8 @@
                 android:name="weekOfYear"
                 app:argType="string"
                 app:nullable="true"/>
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"
-                app:popUpTo="@id/DashboardFragment"
-                app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_month"
-                app:destination="@id/CalendarMonthFragment"
-                app:popUpTo="@id/CalendarMonthFragment"
-                app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_week"
-                app:destination="@id/CalendarWeekFragment"
-                app:popUpTo="@id/CalendarWeekFragment"
-                app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_extended_week"
-                app:destination="@id/CalendarExtendedWeekFragment"
-                app:popUpTo="@id/CalendarExtendedWeekFragment"
-                app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_day"
-                app:destination="@id/CalendarDayFragment"/>
-    </fragment>
-    <fragment
-            android:id="@+id/CalendarExtendedWeekFragment"
-            android:name="com.toolsboox.plugin.calendar.ui.CalendarExtendedWeekFragment"
-            android:label="CalendarExtendedWeekFragment"
-            tools:layout="@layout/fragment_calendar_week">
-
         <argument
-                android:name="year"
-                app:argType="string"
-                app:nullable="true"/>
-        <argument
-                android:name="weekOfYear"
+                android:name="extended"
                 app:argType="string"
                 app:nullable="true"/>
 
@@ -310,6 +275,16 @@
                 android:id="@+id/action_to_dashboard"
                 app:destination="@id/DashboardFragment"
                 app:popUpTo="@id/DashboardFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_year"
+                app:destination="@id/CalendarYearFragment"
+                app:popUpTo="@id/CalendarYearFragment"
+                app:popUpToInclusive="true"/>
+        <action
+                android:id="@+id/action_to_calendar_quarter"
+                app:destination="@id/CalendarQuarterFragment"
+                app:popUpTo="@id/CalendarQuarterFragment"
                 app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_month"
@@ -345,7 +320,7 @@
                 app:argType="string"
                 app:nullable="true"/>
         <argument
-                android:name="boolean"
+                android:name="extended"
                 app:argType="string"
                 app:nullable="true"/>
 
