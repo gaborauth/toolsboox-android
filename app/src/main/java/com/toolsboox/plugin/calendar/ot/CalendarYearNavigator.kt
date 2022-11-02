@@ -55,6 +55,10 @@ class CalendarYearNavigator {
                         CalendarNavigator.toMonth(fragment, localDate.minusYears(1L))
                         return true
                     }
+                    if (px >= lo + 1 * cew && px <= lo + 3 * cew && py >= to && py <= to + ceh) {
+                        CalendarNavigator.toDay(fragment, LocalDate.now())
+                        return true
+                    }
                     if (px >= lo + 15 * cew && px <= lo + 19 * cew && py >= to && py <= to + ceh) {
                         CalendarNavigator.toYear(fragment, localDate)
                         return true
@@ -88,7 +92,11 @@ class CalendarYearNavigator {
             canvas.drawRect(lo + 0 * cew, to + 0 * ceh, lo + 1 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
             canvas.drawText("<", lo + 0 * cew + cew / 2, to + 1 * ceh - 30.0f, Creator.textBigBlackCenter)
 
+            canvas.drawRect(lo + 1 * cew, to + 0 * ceh, lo + 3 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 1 * cew, to + 0 * ceh, lo + 3 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
+            Creator.drawEllipsizedText(
+                canvas, "⏎", Creator.textBigBlackCenter, lo + 1 * cew, to + 1 * ceh - 30.0f, 2 * cew
+            )
 
             canvas.drawRect(lo + 3 * cew, to + 0 * ceh, lo + 6 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
 

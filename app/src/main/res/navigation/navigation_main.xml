@@ -63,6 +63,9 @@
         <action
                 android:id="@+id/action_to_calendar_month"
                 app:destination="@id/CalendarMonthFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_day"
+                app:destination="@id/CalendarDayFragment"/>
     </fragment>
 
     <fragment
