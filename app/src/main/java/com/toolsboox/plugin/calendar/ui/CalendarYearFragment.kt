@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
 import com.toolsboox.R
-import com.toolsboox.databinding.FragmentCalendarYearBinding
+import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
-import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarYear
-import com.toolsboox.plugin.calendar.ot.CalendarYearCreator
+import com.toolsboox.plugin.calendar.ot.CalendarYearNavigator
+import com.toolsboox.plugin.calendar.ot.CalendarYearPage
+import com.toolsboox.plugin.calendar.ot.CalendarYearPageExtended
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
-import java.util.*
 import javax.inject.Inject
 
 
@@ -40,17 +40,22 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     /**
      * The inflated layout.
      */
-    override val view = R.layout.fragment_calendar_year
+    override val view = R.layout.fragment_calendar
 
     /**
      * The view binding.
      */
-    private lateinit var binding: FragmentCalendarYearBinding
+    private lateinit var binding: FragmentCalendarBinding
 
     /**
      * The current date.
      */
     private var currentDate: LocalDate = LocalDate.now()
+
+    /**
+     * Flag of extended view.
+     */
+    private var extended: Boolean = false
 
     /**
      * The timer job.
@@ -84,12 +89,21 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
         val year = currentDate.year
-        val locale = calendarYear.locale ?: Locale.getDefault()
+        val locale = calendarYear.locale
 
-        calendarYear = CalendarYear(year, locale, Calendar.listDeepCopy(strokes))
-        calendarYear.normalizeStrokes(getSurfaceSize().width(), getSurfaceSize().height(), 1404, 1872)
+        if (extended) {
+            calendarYear = CalendarYear(
+                year, locale,
+                Calendar.listDeepCopy(calendarYear.strokes), Calendar.listDeepCopy(strokes)
+            )
+        } else {
+            calendarYear = CalendarYear(
+                year, locale,
+                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarYear.extendedStrokes)
+            )
+        }
 
-        presenter.save(this, binding, calendarYear, currentDate)
+        presenter.save(this, binding, calendarYear, currentDate, getSurfaceSize())
     }
 
     /**
@@ -101,52 +115,36 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentCalendarYearBinding.bind(view)
+        binding = FragmentCalendarBinding.bind(view)
 
         currentDate = LocalDate.ofYearDay(LocalDate.now().year, 1)
         arguments?.getString("year")?.toIntOrNull()?.let {
             Timber.i("Set year to '$it' from parameter")
             currentDate = LocalDate.ofYearDay(it, 1)
         }
-        calendarYear = CalendarYear(
-            currentDate.year, Locale.getDefault(), mutableListOf()
-        )
+        extended = arguments?.getString("extended")?.toBoolean() ?: false
 
-        binding.buttonPrev.setOnClickListener {
-            currentDate = currentDate.minusYears(1L)
-            presenter.load(this, binding, currentDate, getSurfaceSize())
-        }
-        binding.buttonNext.setOnClickListener {
-            currentDate = currentDate.plusYears(1L)
-            presenter.load(this, binding, currentDate, getSurfaceSize())
-        }
+        calendarYear = CalendarYear(currentDate.year)
 
-        binding.buttonYear.setOnClickListener {
-            CalendarNavigator.toYear(this, currentDate)
-        }
-
-        binding.buttonQ1.setOnClickListener {
-            CalendarNavigator.toQuarter(this, currentDate.plusMonths(0L))
-        }
-        binding.buttonQ2.setOnClickListener {
-            CalendarNavigator.toQuarter(this, currentDate.plusMonths(3L))
-        }
-        binding.buttonQ3.setOnClickListener {
-            CalendarNavigator.toQuarter(this, currentDate.plusMonths(6L))
-        }
-        binding.buttonQ4.setOnClickListener {
-            CalendarNavigator.toQuarter(this, currentDate.plusMonths(9L))
+        binding.navigatorImageView.setOnTouchListener { view, motionEvent ->
+            CalendarYearNavigator.onTouchEvent(view, motionEvent, this@CalendarYearFragment, calendarYear)
         }
 
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
-            CalendarYearCreator.onTouchEvent(
-                view, motionEvent, gestureResult, this@CalendarYearFragment, calendarYear
-            )
+
+            if (extended) {
+                CalendarYearPageExtended.onTouchEvent(
+                    view, motionEvent, gestureResult, this@CalendarYearFragment, calendarYear
+                )
+            } else {
+                CalendarYearPage.onTouchEvent(
+                    view, motionEvent, gestureResult, this@CalendarYearFragment, calendarYear
+                )
+            }
         }
 
         toolbar.toolbarPager.visibility = View.GONE
-        updateNavigator()
 
         initializeSurface(true)
     }
@@ -157,8 +155,13 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     override fun onResume() {
         super.onResume()
 
-        binding.templateImage.setImageBitmap(templateBitmap)
-        binding.templateImage.postInvalidate()
+        binding.templateImageView.setImageBitmap(templateBitmap)
+        binding.templateImageView.postInvalidate()
+
+        binding.navigatorImageView.setImageBitmap(navigatorBitmap)
+        binding.navigatorImageView.postInvalidate()
+
+        updateNavigator()
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarYearFragment, binding, currentDate, getSurfaceSize())
@@ -182,10 +185,15 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         this.calendarYear = calendarYear
         updateNavigator()
 
-        CalendarYearCreator.drawPage(this.requireContext(), templateCanvas, calendarYear)
-        binding.templateImage.postInvalidate()
+        if (extended) {
+            CalendarYearPageExtended.drawPage(this.requireContext(), templateCanvas, calendarYear)
+            applyStrokes(calendarYear.extendedStrokes.toMutableList(), true)
+        } else {
+            CalendarYearPage.drawPage(this.requireContext(), templateCanvas, calendarYear)
+            applyStrokes(calendarYear.strokes.toMutableList(), true)
+        }
 
-        applyStrokes(calendarYear.strokes.toMutableList(), true)
+        binding.templateImageView.postInvalidate()
     }
 
     /**
@@ -197,7 +205,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         val pageTitle = getString(R.string.calendar_year_title).format(year)
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
-        binding.buttonYear.text = "$year"
+        CalendarYearNavigator.draw(this.requireContext(), navigatorCanvas, calendarYear)
     }
 
     /**

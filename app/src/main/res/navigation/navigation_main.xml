@@ -36,43 +36,14 @@
             android:id="@+id/CalendarYearFragment"
             android:name="com.toolsboox.plugin.calendar.ui.CalendarYearFragment"
             android:label="CalendarYearFragment"
-            tools:layout="@layout/fragment_calendar_year">
+            tools:layout="@layout/fragment_calendar">
 
         <argument
                 android:name="year"
                 app:argType="string"
                 app:nullable="true"/>
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"
-                app:popUpTo="@id/DashboardFragment"
-                app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_year"
-                app:destination="@id/CalendarYearFragment"
-                app:popUpTo="@id/CalendarYearFragment"
-                app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_extended_year"
-                app:destination="@id/CalendarExtendedYearFragment"
-                app:popUpTo="@id/CalendarExtendedYearFragment"
-                app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_quarter"
-                app:destination="@id/CalendarQuarterFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_month"
-                app:destination="@id/CalendarMonthFragment"/>
-    </fragment>
-    <fragment
-            android:id="@+id/CalendarExtendedYearFragment"
-            android:name="com.toolsboox.plugin.calendar.ui.CalendarExtendedYearFragment"
-            android:label="CalendarExtendedYearFragment"
-            tools:layout="@layout/fragment_calendar_year">
-
         <argument
-                android:name="year"
+                android:name="extended"
                 app:argType="string"
                 app:nullable="true"/>
 

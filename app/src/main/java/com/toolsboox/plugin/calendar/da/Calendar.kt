@@ -3,7 +3,6 @@ package com.toolsboox.plugin.calendar.da
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
-import timber.log.Timber
 import java.lang.reflect.Type
 
 /**
@@ -41,18 +40,13 @@ interface Calendar {
         private fun normalizeStrokes(
             strokes: List<Stroke>, fromWidth: Int, fromHeight: Int, toWidth: Int, toHeight: Int
         ) {
-            try {
-                val widthRatio = 1.0f * toWidth / fromWidth
-                val heightRatio = 1.0f * toHeight / fromHeight
-                for (stroke in strokes) {
-                    for (point in stroke.strokePoints) {
-                        point.x *= widthRatio
-                        point.y *= heightRatio
-                    }
+            val widthRatio = 1.0f * toWidth / fromWidth
+            val heightRatio = 1.0f * toHeight / fromHeight
+            for (stroke in strokes) {
+                for (point in stroke.strokePoints) {
+                    point.x *= widthRatio
+                    point.y *= heightRatio
                 }
-            } catch (e: NullPointerException) {
-                // TODO: remove when migrated to Moshi
-                Timber.e(e.toString())
             }
         }
     }

@@ -30,7 +30,4 @@ abstract class CalendarModule {
 
     @Binds
     abstract fun bindDayPresenter(presenter: CalendarDayPresenter): FragmentPresenter
-
-    @Binds
-    abstract fun bindExtendedYearPresenter(presenter: CalendarExtendedYearPresenter): FragmentPresenter
 }

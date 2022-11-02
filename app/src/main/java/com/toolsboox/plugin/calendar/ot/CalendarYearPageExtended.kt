@@ -8,7 +8,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarYear
-import com.toolsboox.plugin.calendar.ui.CalendarExtendedYearFragment
+import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import java.time.LocalDate
 
 /**
@@ -16,7 +16,7 @@ import java.time.LocalDate
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarExtendedYearCreator : Creator {
+class CalendarYearPageExtended : Creator {
 
     companion object {
 
@@ -44,7 +44,7 @@ class CalendarExtendedYearCreator : Creator {
          */
         fun onTouchEvent(
             view: View, motionEvent: MotionEvent, gestureResult: Int,
-            fragment: CalendarExtendedYearFragment, calendarYear: CalendarYear
+            fragment: CalendarYearFragment, calendarYear: CalendarYear
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
 
@@ -53,7 +53,7 @@ class CalendarExtendedYearCreator : Creator {
             when (gestureResult) {
                 OnGestureListener.UTD -> {
                     val localDate = LocalDate.of(year, 1, 1)
-                    CalendarNavigator.toYear(fragment, localDate)
+                    CalendarNavigator.toYear(fragment, localDate, false)
                     return true
                 }
 

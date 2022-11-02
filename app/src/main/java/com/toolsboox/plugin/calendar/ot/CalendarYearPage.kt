@@ -24,7 +24,7 @@ import java.util.*
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarYearCreator : Creator {
+class CalendarYearPage : Creator {
 
     companion object {
 
@@ -61,13 +61,13 @@ class CalendarYearCreator : Creator {
             when (gestureResult) {
                 OnGestureListener.LTR -> {
                     val localDate = LocalDate.of(year, 1, 1)
-                    CalendarNavigator.toYear(fragment, localDate.minusYears(1L))
+                    CalendarNavigator.toYear(fragment, localDate.minusYears(1L), false)
                     return true
                 }
 
                 OnGestureListener.RTL -> {
                     val localDate = LocalDate.of(year, 1, 1)
-                    CalendarNavigator.toYear(fragment, localDate.plusYears(1L))
+                    CalendarNavigator.toYear(fragment, localDate.plusYears(1L), false)
                     return true
                 }
 
@@ -124,7 +124,7 @@ class CalendarYearCreator : Creator {
          */
         fun drawPage(context: Context, canvas: Canvas, calendarYear: CalendarYear) {
             val year = calendarYear.year
-            val locale = calendarYear.locale ?: Locale.getDefault()
+            val locale = calendarYear.locale
             val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
 
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)

@@ -112,13 +112,9 @@ object CalendarNavigator {
 
         val bundle = bundleOf()
         bundle.putString("year", "$year")
+        bundle.putString("extended", "$extended")
 
-        if (extended) {
-            Timber.i("Navigate to the '$year' yearly extended calendar")
-            fragment.findNavController().navigate(R.id.action_to_calendar_extended_year, bundle)
-        } else {
-            Timber.i("Navigate to the '$year' yearly calendar")
-            fragment.findNavController().navigate(R.id.action_to_calendar_year, bundle)
-        }
+        Timber.i("Navigate to the '$year' ($extended) yearly calendar")
+        fragment.findNavController().navigate(R.id.action_to_calendar_year, bundle)
     }
 }

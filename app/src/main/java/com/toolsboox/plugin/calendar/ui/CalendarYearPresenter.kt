@@ -2,8 +2,8 @@ package com.toolsboox.plugin.calendar.ui
 
 import android.graphics.Rect
 import android.os.Environment
-import com.google.gson.GsonBuilder
-import com.toolsboox.databinding.FragmentCalendarYearBinding
+import com.squareup.moshi.Moshi
+import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.plugin.calendar.da.CalendarYear
 import com.toolsboox.ui.plugin.FragmentPresenter
 import com.toolsboox.ui.plugin.ScreenFragment
@@ -14,7 +14,6 @@ import kotlinx.coroutines.withContext
 import java.io.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -23,6 +22,13 @@ import javax.inject.Inject
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
+
+    /**
+     * The Moshi instance.
+     */
+    @Inject
+    lateinit var moshi: Moshi
+
     /**
      * Load the year if available.
      *
@@ -32,7 +38,7 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
      * @param surfaceSize the actual size of surface view
      */
     fun load(
-        fragment: CalendarYearFragment, binding: FragmentCalendarYearBinding,
+        fragment: CalendarYearFragment, binding: FragmentCalendarBinding,
         currentDate: LocalDate, surfaceSize: Rect
     ) {
         if (!checkPermissions(fragment, binding.root)) return
@@ -42,13 +48,16 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
                 val year = currentDate.year
-                var calendarYear = CalendarYear(year, Locale.getDefault(), mutableListOf())
+                var calendarYear = CalendarYear(year)
 
                 try {
+                    val adapter = moshi.adapter(CalendarYear::class.java)
                     if (createPath(fragment, currentDate).exists()) {
-                        FileReader(createPath(fragment, currentDate)).use {
-                            calendarYear = GsonBuilder().create().fromJson(it, CalendarYear::class.java)
-                            calendarYear.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
+                        FileReader(createPath(fragment, currentDate)).use { fileReader ->
+                            adapter.fromJson(fileReader.readText())?.let {
+                                it.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
+                                calendarYear = it
+                            }
                         }
                     }
                 } catch (e: IOException) {
@@ -69,10 +78,11 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
      * @param binding the data binding
      * @param calendarYear the data class
      * @param currentDate the current date
+     * @param surfaceSize the actual size of surface view
      */
     fun save(
-        fragment: CalendarYearFragment, binding: FragmentCalendarYearBinding,
-        calendarYear: CalendarYear, currentDate: LocalDate
+        fragment: CalendarYearFragment, binding: FragmentCalendarBinding,
+        calendarYear: CalendarYear, currentDate: LocalDate, surfaceSize: Rect
     ) {
         if (!checkPermissions(fragment, binding.root)) return
 
@@ -80,9 +90,13 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
+                val calendarYearCopy = calendarYear.deepCopy()
+                calendarYearCopy.normalizeStrokes(surfaceSize.width(), surfaceSize.height(), 1404, 1872)
+
                 try {
+                    val adapter = moshi.adapter(CalendarYear::class.java)
                     PrintWriter(FileWriter(createPath(fragment, currentDate))).use {
-                        it.write(GsonBuilder().create().toJson(calendarYear).toString())
+                        it.write(adapter.toJson(calendarYearCopy))
                     }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
