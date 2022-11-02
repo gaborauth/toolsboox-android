@@ -29,6 +29,8 @@ class LocaleJsonAdapter {
      */
     @FromJson
     fun fromJson(languageTag: String): Locale {
-        return Locale.forLanguageTag(languageTag)
+        val locale = Locale.forLanguageTag(languageTag)
+        if (locale.toLanguageTag() == "und") return Locale.getDefault()
+        return locale
     }
 }
