@@ -8,17 +8,16 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarMonth
-import com.toolsboox.plugin.calendar.ui.CalendarExtendedMonthFragment
+import com.toolsboox.plugin.calendar.ui.CalendarMonthFragment
 import java.time.LocalDate
 import java.time.temporal.WeekFields
-import java.util.*
 
 /**
  * Create extended monthly template of calendar plugin.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarExtendedMonthCreator : Creator {
+class CalendarMonthPageExtended : Creator {
 
     companion object {
 
@@ -46,13 +45,13 @@ class CalendarExtendedMonthCreator : Creator {
          */
         fun onTouchEvent(
             view: View, motionEvent: MotionEvent, gestureResult: Int,
-            fragment: CalendarExtendedMonthFragment, calendarMonth: CalendarMonth
+            fragment: CalendarMonthFragment, calendarMonth: CalendarMonth
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
 
             val year = calendarMonth.year
             val month = calendarMonth.month
-            val locale = calendarMonth.locale ?: Locale.getDefault()
+            val locale = calendarMonth.locale
             val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
 
             val localDate = LocalDate.of(year, month, 1)

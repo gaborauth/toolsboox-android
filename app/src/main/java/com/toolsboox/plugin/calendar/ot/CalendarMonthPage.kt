@@ -21,7 +21,7 @@ import java.util.*
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarMonthCreator : Creator {
+class CalendarMonthPage : Creator {
 
     companion object {
         // Cell width
@@ -54,19 +54,19 @@ class CalendarMonthCreator : Creator {
 
             val year = calendarMonth.year
             val month = calendarMonth.month
-            val locale = calendarMonth.locale ?: Locale.getDefault()
+            val locale = calendarMonth.locale
             val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
 
             val localDate = LocalDate.of(year, month, 1)
 
             when (gestureResult) {
                 OnGestureListener.LTR -> {
-                    CalendarNavigator.toMonth(fragment, localDate.minusMonths(1L))
+                    CalendarNavigator.toMonth(fragment, localDate.minusMonths(1L), false)
                     return true
                 }
 
                 OnGestureListener.RTL -> {
-                    CalendarNavigator.toMonth(fragment, localDate.plusMonths(1L))
+                    CalendarNavigator.toMonth(fragment, localDate.plusMonths(1L), false)
                     return true
                 }
 
@@ -132,7 +132,7 @@ class CalendarMonthCreator : Creator {
         fun drawPage(context: Context, canvas: Canvas, calendarMonth: CalendarMonth) {
             val year = calendarMonth.year
             val month = calendarMonth.month
-            val locale = calendarMonth.locale ?: Locale.getDefault()
+            val locale = calendarMonth.locale
             val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
 
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)

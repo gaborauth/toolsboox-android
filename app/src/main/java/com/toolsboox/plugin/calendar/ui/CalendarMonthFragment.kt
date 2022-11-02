@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
 import com.toolsboox.R
-import com.toolsboox.databinding.FragmentCalendarMonthBinding
+import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
-import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarMonth
-import com.toolsboox.plugin.calendar.ot.CalendarMonthCreator
+import com.toolsboox.plugin.calendar.ot.CalendarMonthNavigator
+import com.toolsboox.plugin.calendar.ot.CalendarMonthPage
+import com.toolsboox.plugin.calendar.ot.CalendarMonthPageExtended
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +21,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.TextStyle
-import java.time.temporal.WeekFields
 import java.util.*
 import javax.inject.Inject
 
@@ -41,17 +41,22 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
     /**
      * The inflated layout.
      */
-    override val view = R.layout.fragment_calendar_month
+    override val view = R.layout.fragment_calendar
 
     /**
      * The view binding.
      */
-    private lateinit var binding: FragmentCalendarMonthBinding
+    private lateinit var binding: FragmentCalendarBinding
 
     /**
      * The current date.
      */
     private var currentDate: LocalDate = LocalDate.now()
+
+    /**
+     * Flag of extended view.
+     */
+    private var extended: Boolean = false
 
     /**
      * The timer job.
@@ -85,12 +90,21 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
         val year = currentDate.year
         val month = currentDate.monthValue
-        val locale = calendarMonth.locale ?: Locale.getDefault()
+        val locale = calendarMonth.locale
 
-        calendarMonth = CalendarMonth(year, month, locale, Calendar.listDeepCopy(strokes))
-        calendarMonth.normalizeStrokes(getSurfaceSize().width(), getSurfaceSize().height(), 1404, 1872)
+        if (extended) {
+            calendarMonth = CalendarMonth(
+                year, month, locale,
+                Calendar.listDeepCopy(calendarMonth.strokes), Calendar.listDeepCopy(strokes)
+            )
+        } else {
+            calendarMonth = CalendarMonth(
+                year, month, locale,
+                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarMonth.extendedStrokes)
+            )
+        }
 
-        presenter.save(this, binding, calendarMonth, currentDate)
+        presenter.save(this, binding, calendarMonth, currentDate, getSurfaceSize())
     }
 
     /**
@@ -102,7 +116,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentCalendarMonthBinding.bind(view)
+        binding = FragmentCalendarBinding.bind(view)
 
         currentDate = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
         arguments?.getString("year")?.toIntOrNull()?.let { year ->
@@ -113,51 +127,29 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
                 currentDate = LocalDate.of(year, month, 1)
             }
         }
-        calendarMonth = CalendarMonth(
-            currentDate.year, currentDate.monthValue, Locale.getDefault(), mutableListOf()
-        )
+        extended = arguments?.getString("extended")?.toBoolean() ?: false
 
-        binding.buttonPrev.setOnClickListener {
-            currentDate = currentDate.minusMonths(1L)
-            presenter.load(this, binding, currentDate, getSurfaceSize())
-        }
-        binding.buttonNext.setOnClickListener {
-            currentDate = currentDate.plusMonths(1L)
-            presenter.load(this, binding, currentDate, getSurfaceSize())
-        }
+        calendarMonth = CalendarMonth(currentDate.year, currentDate.monthValue)
 
-        binding.buttonYearQuarter.setOnClickListener {
-            CalendarNavigator.toQuarter(this, currentDate)
-        }
-
-        binding.buttonWeek1.setOnClickListener {
-            CalendarNavigator.toWeek(this, currentDate.plusWeeks(0L), calendarMonth.locale)
-        }
-        binding.buttonWeek2.setOnClickListener {
-            CalendarNavigator.toWeek(this, currentDate.plusWeeks(1L), calendarMonth.locale)
-        }
-        binding.buttonWeek3.setOnClickListener {
-            CalendarNavigator.toWeek(this, currentDate.plusWeeks(2L), calendarMonth.locale)
-        }
-        binding.buttonWeek4.setOnClickListener {
-            CalendarNavigator.toWeek(this, currentDate.plusWeeks(3L), calendarMonth.locale)
-        }
-        binding.buttonWeek5.setOnClickListener {
-            CalendarNavigator.toWeek(this, currentDate.plusWeeks(4L), calendarMonth.locale)
-        }
-        binding.buttonWeek6.setOnClickListener {
-            CalendarNavigator.toWeek(this, currentDate.plusWeeks(5L), calendarMonth.locale)
+        binding.navigatorImageView.setOnTouchListener { view, motionEvent ->
+            CalendarMonthNavigator.onTouchEvent(view, motionEvent, this@CalendarMonthFragment, calendarMonth)
         }
 
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
-            CalendarMonthCreator.onTouchEvent(
-                view, motionEvent, gestureResult, this@CalendarMonthFragment, calendarMonth
-            )
+
+            if (extended) {
+                CalendarMonthPageExtended.onTouchEvent(
+                    view, motionEvent, gestureResult, this@CalendarMonthFragment, calendarMonth
+                )
+            } else {
+                CalendarMonthPage.onTouchEvent(
+                    view, motionEvent, gestureResult, this@CalendarMonthFragment, calendarMonth
+                )
+            }
         }
 
         toolbar.toolbarPager.visibility = View.GONE
-        updateNavigator(true)
 
         initializeSurface(true)
     }
@@ -168,8 +160,13 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
     override fun onResume() {
         super.onResume()
 
-        binding.templateImage.setImageBitmap(templateBitmap)
-        binding.templateImage.postInvalidate()
+        binding.templateImageView.setImageBitmap(templateBitmap)
+        binding.templateImageView.postInvalidate()
+
+        binding.navigatorImageView.setImageBitmap(navigatorBitmap)
+        binding.navigatorImageView.postInvalidate()
+
+        updateNavigator()
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarMonthFragment, binding, currentDate, getSurfaceSize())
@@ -193,18 +190,21 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         this.calendarMonth = calendarMonth
         updateNavigator()
 
-        CalendarMonthCreator.drawPage(this.requireContext(), templateCanvas, calendarMonth)
-        binding.templateImage.postInvalidate()
+        if (extended) {
+            CalendarMonthPageExtended.drawPage(this.requireContext(), templateCanvas, calendarMonth)
+            applyStrokes(calendarMonth.extendedStrokes.toMutableList(), true)
+        } else {
+            CalendarMonthPage.drawPage(this.requireContext(), templateCanvas, calendarMonth)
+            applyStrokes(calendarMonth.strokes.toMutableList(), true)
+        }
 
-        applyStrokes(calendarMonth.strokes.toMutableList(), true)
+        binding.templateImageView.postInvalidate()
     }
 
     /**
      * Update navigator bar.
      */
-    private fun updateNavigator(first: Boolean = false) {
-        val locale = if (first) Locale.getDefault() else calendarMonth.locale ?: Locale.getDefault()
-
+    private fun updateNavigator() {
         val year = currentDate.year
         val month = currentDate.monthValue
         val quarter = (month - 1) / 3 + 1
@@ -213,15 +213,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         val pageTitle = getString(R.string.calendar_month_title).format(monthName, year)
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
-        binding.buttonYearQuarter.text = "$year Q$quarter"
-
-        val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
-        binding.buttonWeek1.text = "W${currentDate.plusWeeks(0L).get(weekOfYear)}"
-        binding.buttonWeek2.text = "W${currentDate.plusWeeks(1L).get(weekOfYear)}"
-        binding.buttonWeek3.text = "W${currentDate.plusWeeks(2L).get(weekOfYear)}"
-        binding.buttonWeek4.text = "W${currentDate.plusWeeks(3L).get(weekOfYear)}"
-        binding.buttonWeek5.text = "W${currentDate.plusWeeks(4L).get(weekOfYear)}"
-        binding.buttonWeek6.text = "W${currentDate.plusWeeks(5L).get(weekOfYear)}"
+        CalendarMonthNavigator.draw(this.requireContext(), navigatorCanvas, calendarMonth)
     }
 
     /**
