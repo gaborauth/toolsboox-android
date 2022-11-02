@@ -8,16 +8,15 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarDay
-import com.toolsboox.plugin.calendar.ui.CalendarExtendedDayFragment
+import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
 import java.time.LocalDate
-import java.util.*
 
 /**
  * Create extended daily template of calendar plugin.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarExtendedDayCreator : Creator {
+class CalendarDayPageExtended : Creator {
 
     companion object {
 
@@ -45,14 +44,14 @@ class CalendarExtendedDayCreator : Creator {
          */
         fun onTouchEvent(
             view: View, motionEvent: MotionEvent, gestureResult: Int,
-            fragment: CalendarExtendedDayFragment, calendarDay: CalendarDay
+            fragment: CalendarDayFragment, calendarDay: CalendarDay
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
 
             val year = calendarDay.year
             val month = calendarDay.month
             val day = calendarDay.day
-            val locale = calendarDay.locale ?: Locale.getDefault()
+            val locale = calendarDay.locale
 
             val localDate = LocalDate.of(year, month, day)
 

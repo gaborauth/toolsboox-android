@@ -86,6 +86,16 @@ abstract class SurfaceFragment : ScreenFragment() {
     private var penState: Boolean = true
 
     /**
+     * The canvas of the navigator.
+     */
+    protected lateinit var navigatorCanvas: Canvas
+
+    /**
+     * The bitmap of the navigator.
+     */
+    protected lateinit var navigatorBitmap: Bitmap
+
+    /**
      * The canvas of the template.
      */
     protected lateinit var templateCanvas: Canvas
@@ -158,6 +168,9 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
         templateCanvas = Canvas(templateBitmap)
+
+        navigatorBitmap = Bitmap.createBitmap(1404, 140, Bitmap.Config.ARGB_8888)
+        navigatorCanvas = Canvas(navigatorBitmap)
 
         gestureListener = OnGestureListener()
         gestureDetector = GestureDetectorCompat(requireActivity(), gestureListener)

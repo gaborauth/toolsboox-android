@@ -32,14 +32,10 @@ object CalendarNavigator {
         bundle.putString("year", "$year")
         bundle.putString("month", "$month")
         bundle.putString("day", "$day")
+        bundle.putBoolean("extended", extended)
 
-        if (extended) {
-            Timber.i("Navigate to the '$year-$month-$day' daily extended calendar")
-            fragment.findNavController().navigate(R.id.action_to_calendar_extended_day, bundle)
-        } else {
-            Timber.i("Navigate to the '$year-$month-$day' daily calendar")
-            fragment.findNavController().navigate(R.id.action_to_calendar_day, bundle)
-        }
+        Timber.i("Navigate to the '$year-$month-$day' ($extended) daily calendar")
+        fragment.findNavController().navigate(R.id.action_to_calendar_day, bundle)
     }
 
     /**

@@ -11,7 +11,8 @@ import java.util.*
 data class CalendarQuarter(
     val year: Int,
     val quarter: Int,
-    val locale: Locale?,
+    val locale: Locale = Locale.getDefault(),
 
-    override val strokes: List<Stroke>
+    override val strokes: List<Stroke> = listOf(),
+    override val extendedStrokes: List<Stroke> = listOf()
 ) : Calendar

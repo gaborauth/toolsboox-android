@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
 import com.toolsboox.R
-import com.toolsboox.databinding.FragmentCalendarDayBinding
+import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
-import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.Calendar
 import com.toolsboox.plugin.calendar.da.CalendarDay
 import com.toolsboox.plugin.calendar.da.GoogleCalendarEvent
-import com.toolsboox.plugin.calendar.ot.CalendarDayCreator
+import com.toolsboox.plugin.calendar.ot.CalendarDayNavigator
+import com.toolsboox.plugin.calendar.ot.CalendarDayPage
+import com.toolsboox.plugin.calendar.ot.CalendarDayPageExtended
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +22,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.TextStyle
-import java.time.temporal.WeekFields
 import java.util.*
 import javax.inject.Inject
 
@@ -42,17 +42,22 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     /**
      * The inflated layout.
      */
-    override val view = R.layout.fragment_calendar_day
+    override val view = R.layout.fragment_calendar
 
     /**
      * The view binding.
      */
-    private lateinit var binding: FragmentCalendarDayBinding
+    private lateinit var binding: FragmentCalendarBinding
 
     /**
      * The current date.
      */
     private var currentDate: LocalDate = LocalDate.now()
+
+    /**
+     * Flag of extended view.
+     */
+    private var extended: Boolean = false
 
     /**
      * The timer job.
@@ -87,12 +92,21 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         val year = currentDate.year
         val month = currentDate.monthValue
         val day = currentDate.dayOfMonth
-        val locale = calendarDay.locale ?: Locale.getDefault()
+        val locale = calendarDay.locale
 
-        calendarDay = CalendarDay(year, month, day, locale, Calendar.listDeepCopy(strokes))
-        calendarDay.normalizeStrokes(getSurfaceSize().width(), getSurfaceSize().height(), 1404, 1872)
+        if (extended) {
+            calendarDay = CalendarDay(
+                year, month, day, locale,
+                Calendar.listDeepCopy(calendarDay.strokes), Calendar.listDeepCopy(strokes)
+            )
+        } else {
+            calendarDay = CalendarDay(
+                year, month, day, locale,
+                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarDay.extendedStrokes)
+            )
+        }
 
-        presenter.save(this, binding, calendarDay, currentDate)
+        presenter.save(this, binding, calendarDay, currentDate, getSurfaceSize())
     }
 
     /**
@@ -104,7 +118,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentCalendarDayBinding.bind(view)
+        binding = FragmentCalendarBinding.bind(view)
 
         currentDate = LocalDate.now()
         arguments?.getString("year")?.toIntOrNull()?.let { year ->
@@ -119,45 +133,28 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
                 }
             }
         }
-        calendarDay = CalendarDay(
-            currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, Locale.getDefault(), mutableListOf()
-        )
+        extended = arguments?.getBoolean("extended") ?: false
 
-        binding.buttonPrev.setOnClickListener {
-            currentDate = currentDate.minusDays(1L)
-            presenter.load(this, binding, currentDate, getSurfaceSize())
-        }
-        binding.buttonNext.setOnClickListener {
-            currentDate = currentDate.plusDays(1L)
-            presenter.load(this, binding, currentDate, getSurfaceSize())
-        }
+        calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
 
-        binding.buttonYear.setOnClickListener {
-            CalendarNavigator.toYear(this, currentDate)
-        }
-
-        binding.buttonMonth.setOnClickListener {
-            CalendarNavigator.toMonth(this, currentDate)
-        }
-
-        binding.buttonDay.setOnClickListener {
-            CalendarNavigator.toDay(this, currentDate)
-        }
-
-        binding.buttonWeek.setOnClickListener {
-            CalendarNavigator.toWeek(this, currentDate, calendarDay.locale)
-        }
-        binding.buttonDayOfWeek.setOnClickListener {
-            CalendarNavigator.toWeek(this, currentDate, calendarDay.locale)
+        binding.navigatorImageView.setOnTouchListener { view, motionEvent ->
+            CalendarDayNavigator.onTouchEvent(view, motionEvent, this@CalendarDayFragment, calendarDay)
         }
 
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
-            CalendarDayCreator.onTouchEvent(view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay)
+
+            if (extended)
+                CalendarDayPageExtended.onTouchEvent(
+                    view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay
+                )
+            else
+                CalendarDayPage.onTouchEvent(
+                    view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay
+                )
         }
 
         toolbar.toolbarPager.visibility = View.GONE
-        updateNavigator(true)
 
         initializeSurface(true)
     }
@@ -168,8 +165,13 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     override fun onResume() {
         super.onResume()
 
-        binding.templateImage.setImageBitmap(templateBitmap)
-        binding.templateImage.postInvalidate()
+        binding.templateImageView.setImageBitmap(templateBitmap)
+        binding.templateImageView.postInvalidate()
+
+        binding.navigatorImageView.setImageBitmap(navigatorBitmap)
+        binding.navigatorImageView.postInvalidate()
+
+        updateNavigator()
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarDayFragment, binding, currentDate, getSurfaceSize())
@@ -196,32 +198,29 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         this.calendarDay = calendarDay
         updateNavigator()
 
-        CalendarDayCreator.drawPage(this.requireContext(), templateCanvas, calendarDay, googleCalendarEvents)
-        binding.templateImage.postInvalidate()
+        if (extended) {
+            CalendarDayPageExtended.drawPage(this.requireContext(), templateCanvas, calendarDay)
+            applyStrokes(calendarDay.extendedStrokes.toMutableList(), true)
+        } else {
+            CalendarDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, googleCalendarEvents)
+            applyStrokes(calendarDay.strokes.toMutableList(), true)
+        }
 
-        applyStrokes(calendarDay.strokes.toMutableList(), true)
+        binding.templateImageView.postInvalidate()
     }
 
     /**
      * Update navigator bar.
      */
-    private fun updateNavigator(first: Boolean = false) {
-        val locale = if (first) Locale.getDefault() else calendarDay.locale ?: Locale.getDefault()
-
+    private fun updateNavigator() {
         val year = currentDate.year
         val monthName = currentDate.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
         val day = currentDate.dayOfMonth
-        val week = currentDate.plusWeeks(0L).get(WeekFields.of(locale).weekOfWeekBasedYear())
-        val dayOfWeek = currentDate.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
 
         val pageTitle = getString(R.string.calendar_day_title).format("$year $monthName $day")
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
-        binding.buttonYear.text = "$year"
-        binding.buttonMonth.text = monthName
-        binding.buttonDay.text = "$day"
-        binding.buttonWeek.text = "W$week"
-        binding.buttonDayOfWeek.text = dayOfWeek
+        CalendarDayNavigator.draw(this.requireContext(), navigatorCanvas, calendarDay)
     }
 
     /**

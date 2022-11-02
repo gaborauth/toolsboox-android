@@ -2,7 +2,6 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
-import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.R
@@ -16,14 +15,13 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.*
 
 /**
  * Create daily template of calendar plugin.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarDayCreator {
+class CalendarDayPage {
 
     companion object {
         // Cell width
@@ -45,7 +43,7 @@ class CalendarDayCreator {
          * @param motionEvent the motion event
          * @param gestureResult the gesture result
          * @param fragment the parent fragment
-         * @param calendarMonth the calendar data class
+         * @param calendarDay the calendar data class
          * @return true
          */
         fun onTouchEvent(
@@ -57,18 +55,18 @@ class CalendarDayCreator {
             val year = calendarDay.year
             val month = calendarDay.month
             val day = calendarDay.day
-            val locale = calendarDay.locale ?: Locale.getDefault()
+            val locale = calendarDay.locale
 
             val localDate = LocalDate.of(year, month, day)
 
             when (gestureResult) {
                 OnGestureListener.LTR -> {
-                    CalendarNavigator.toDay(fragment, localDate.minusDays(1L))
+                    CalendarNavigator.toDay(fragment, localDate.minusDays(1L), false)
                     return true
                 }
 
                 OnGestureListener.RTL -> {
-                    CalendarNavigator.toDay(fragment, localDate.plusDays(1L))
+                    CalendarNavigator.toDay(fragment, localDate.plusDays(1L), false)
                     return true
                 }
 
@@ -101,7 +99,7 @@ class CalendarDayCreator {
             val tasksText = context.getString(R.string.calendar_day_tasks)
             val notesText = context.getString(R.string.calendar_day_notes)
             val allDayText = context.getString(R.string.calendar_day_all_day)
-            val locale = calendarDay.locale ?: Locale.getDefault()
+            val locale = calendarDay.locale
 
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)
 
@@ -188,11 +186,9 @@ class CalendarDayCreator {
             for (i in 0..7) {
                 if (i < googleCalendarEvents.size) {
                     googleCalendarEvents[i].let { event ->
-                        val title = TextUtils.ellipsize(
-                            event.title, Creator.textDefaultBlack, cew, TextUtils.TruncateAt.END
-                        ).toString()
-                        canvas.drawText(
-                            title, lo + cew + 60.0f, to + (20 + i * 2) * ceh - 10.0f, Creator.textDefaultBlack
+                        Creator.drawEllipsizedText(
+                            canvas, event.title, Creator.textDefaultBlack,
+                            lo + cew + 60.0f, to + (20 + i * 2) * ceh - 10.0f, cew
                         )
                         if (event.allDay) {
                             canvas.drawText(

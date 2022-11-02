@@ -66,6 +66,7 @@
     <string name="about_other_links_discord_link">Discord:</string>
 
     <string name="calendar_main_title">Calendar</string>
+    <string name="calendar_navigator_image">Calendar navigator image</string>
     <string name="calendar_template_image">Calendar template image</string>
 
     <string name="calendar_navigator_prev_button_text">&lt;</string>
