@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.text.TextPaint
+import android.text.TextUtils
 import androidx.core.content.res.ResourcesCompat
 
 /**
@@ -29,6 +30,7 @@ interface Creator {
         val lineDefaultBlack: Paint = Paint()
         val lineDefaultGrey50: Paint = Paint()
 
+        val textBigBlackCenter = TextPaint()
         val textDefaultBlack = TextPaint()
         val textDefaultBlackCenter = TextPaint()
         val textDefaultBlackRight = TextPaint()
@@ -61,6 +63,11 @@ interface Creator {
             lineDefaultGrey50.style = Paint.Style.STROKE
 
             // Text styles
+            textBigBlackCenter.color = colorBlack
+            textBigBlackCenter.textAlign = Paint.Align.CENTER
+            textBigBlackCenter.textSize = 80.0f
+            textBigBlackCenter.typeface = Typeface.DEFAULT_BOLD
+
             textDefaultBlack.color = colorBlack
             textDefaultBlack.textSize = 40.0f
             textDefaultBlack.typeface = Typeface.DEFAULT_BOLD
@@ -125,6 +132,25 @@ interface Creator {
             d.setTint(Color.BLACK)
             d.setBounds(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
             d.draw(canvas)
+        }
+
+        /**
+         * Draw ellipsized text.
+         *
+         * @param canvas the canvas
+         * @param text the text
+         * @param style the text style
+         * @param x the X coordinate
+         * @param y the Y coordinate
+         * @param width the width of the space
+         */
+        fun drawEllipsizedText(canvas: Canvas, text: String, style: TextPaint, x: Float, y: Float, width: Float) {
+            val ellipsizedText = TextUtils.ellipsize(text, style, width, TextUtils.TruncateAt.END).toString()
+            if (style.textAlign == Paint.Align.CENTER) {
+                canvas.drawText(ellipsizedText, x + width / 2, y, style)
+            } else {
+                canvas.drawText(ellipsizedText, x, y, style)
+            }
         }
     }
 }
