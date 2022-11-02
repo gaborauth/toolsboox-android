@@ -73,14 +73,10 @@ object CalendarNavigator {
         val bundle = bundleOf()
         bundle.putString("year", "$year")
         bundle.putString("quarter", "$quarter")
+        bundle.putString("extended", "$extended")
 
-        if (extended) {
-            Timber.i("Navigate to the '$year-$quarter' quarterly extended calendar")
-            fragment.findNavController().navigate(R.id.action_to_calendar_extended_quarter, bundle)
-        } else {
-            Timber.i("Navigate to the '$year-$quarter' quarterly calendar")
-            fragment.findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
-        }
+        Timber.i("Navigate to the '$year-$quarter' ($extended) quarterly calendar")
+        fragment.findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
     }
 
     /**

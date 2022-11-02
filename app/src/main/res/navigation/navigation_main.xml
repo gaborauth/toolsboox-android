@@ -98,7 +98,7 @@
             android:id="@+id/CalendarQuarterFragment"
             android:name="com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment"
             android:label="CalendarQuarterFragment"
-            tools:layout="@layout/fragment_calendar_quarter">
+            tools:layout="@layout/fragment_calendar">
 
         <argument
                 android:name="year"
@@ -108,52 +108,16 @@
                 android:name="quarter"
                 app:argType="string"
                 app:nullable="true"/>
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"
-                app:popUpTo="@id/DashboardFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_year"
-                app:destination="@id/CalendarYearFragment"
-                app:popUpTo="@id/CalendarYearFragment"
-                app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_quarter"
-                app:destination="@id/CalendarQuarterFragment"
-                app:popUpTo="@id/CalendarQuarterFragment"
-                app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_extended_quarter"
-                app:destination="@id/CalendarExtendedQuarterFragment"
-                app:popUpTo="@id/CalendarExtendedQuarterFragment"
-                app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_month"
-                app:destination="@id/CalendarMonthFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_day"
-                app:destination="@id/CalendarDayFragment"/>
-    </fragment>
-    <fragment
-            android:id="@+id/CalendarExtendedQuarterFragment"
-            android:name="com.toolsboox.plugin.calendar.ui.CalendarExtendedQuarterFragment"
-            android:label="CalendarExtendedQuarterFragment"
-            tools:layout="@layout/fragment_calendar_quarter">
-
         <argument
-                android:name="year"
-                app:argType="string"
-                app:nullable="true"/>
-        <argument
-                android:name="quarter"
+                android:name="extended"
                 app:argType="string"
                 app:nullable="true"/>
 
         <action
                 android:id="@+id/action_to_dashboard"
                 app:destination="@id/DashboardFragment"
-                app:popUpTo="@id/DashboardFragment"/>
+                app:popUpTo="@id/DashboardFragment"
+                app:popUpToInclusive="true"/>
         <action
                 android:id="@+id/action_to_calendar_year"
                 app:destination="@id/CalendarYearFragment"
@@ -167,6 +131,9 @@
         <action
                 android:id="@+id/action_to_calendar_month"
                 app:destination="@id/CalendarMonthFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_week"
+                app:destination="@id/CalendarWeekFragment"/>
         <action
                 android:id="@+id/action_to_calendar_day"
                 app:destination="@id/CalendarDayFragment"/>

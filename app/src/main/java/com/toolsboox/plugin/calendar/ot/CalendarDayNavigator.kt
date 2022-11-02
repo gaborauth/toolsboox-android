@@ -101,6 +101,9 @@ class CalendarDayNavigator {
         fun draw(context: Context, canvas: Canvas, calendarDay: CalendarDay) {
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 140.4f, Creator.fillWhite)
 
+            canvas.drawLine(0.0f, 138.4f, 1404.0f, 138.4f, Creator.lineDefaultBlack)
+            canvas.drawLine(0.0f, 136.4f, 1404.0f, 136.4f, Creator.lineDefaultBlack)
+
             val currentDate = LocalDate.of(calendarDay.year, calendarDay.month, calendarDay.day)
             val locale = calendarDay.locale
 

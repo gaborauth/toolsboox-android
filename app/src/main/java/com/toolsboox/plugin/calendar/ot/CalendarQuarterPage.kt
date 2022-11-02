@@ -21,7 +21,7 @@ import java.util.*
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarQuarterCreator : Creator {
+class CalendarQuarterPage : Creator {
 
     companion object {
 
@@ -61,12 +61,12 @@ class CalendarQuarterCreator : Creator {
 
             when (gestureResult) {
                 OnGestureListener.LTR -> {
-                    CalendarNavigator.toQuarter(fragment, localDate.minusMonths(3L))
+                    CalendarNavigator.toQuarter(fragment, localDate.minusMonths(3L), false)
                     return true
                 }
 
                 OnGestureListener.RTL -> {
-                    CalendarNavigator.toQuarter(fragment, localDate.plusMonths(3L))
+                    CalendarNavigator.toQuarter(fragment, localDate.plusMonths(3L), false)
                     return true
                 }
 
@@ -121,7 +121,7 @@ class CalendarQuarterCreator : Creator {
         fun drawPage(context: Context, canvas: Canvas, calendarQuarter: CalendarQuarter) {
             val year = calendarQuarter.year
             val quarter = calendarQuarter.quarter
-            val locale = calendarQuarter.locale ?: Locale.getDefault()
+            val locale = calendarQuarter.locale
 
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)
 

@@ -6,18 +6,16 @@ import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.CalendarMonth
-import com.toolsboox.plugin.calendar.ui.CalendarMonthFragment
+import com.toolsboox.plugin.calendar.da.CalendarQuarter
+import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
 import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.*
 
 /**
- * Create navigator of monthly template of calendar plugin.
+ * Create navigator of quarterly template of calendar plugin.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarMonthNavigator {
+class CalendarQuarterNavigator {
 
     companion object {
         // Cell width
@@ -38,16 +36,17 @@ class CalendarMonthNavigator {
          * @param view the surface view
          * @param motionEvent the motion event
          * @param fragment the parent fragment
-         * @param calendarMonth the calendar data class
+         * @param calendarQuarter the calendar data class
          * @return true
          */
         fun onTouchEvent(
-            view: View, motionEvent: MotionEvent, fragment: CalendarMonthFragment, calendarMonth: CalendarMonth
+            view: View, motionEvent: MotionEvent, fragment: CalendarQuarterFragment, calendarQuarter: CalendarQuarter
         ): Boolean {
-            val year = calendarMonth.year
-            val month = calendarMonth.month
+            val year = calendarQuarter.year
+            val quarter = calendarQuarter.quarter
+            val startMonth = (quarter - 1) * 3 + 1
 
-            val localDate = LocalDate.of(year, month, 1)
+            val localDate = LocalDate.of(year, startMonth, 1)
 
             when (motionEvent.action) {
                 MotionEvent.ACTION_UP -> {
@@ -55,11 +54,7 @@ class CalendarMonthNavigator {
                     val py = motionEvent.y * 140.4f / view.height
 
                     if (px >= lo + 0 * cew && px <= lo + 1 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toMonth(fragment, localDate.minusMonths(1L))
-                        return true
-                    }
-                    if (px >= lo + 9 * cew && px <= lo + 13 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toMonth(fragment, localDate)
+                        CalendarNavigator.toMonth(fragment, localDate.minusMonths(3L))
                         return true
                     }
                     if (px >= lo + 13 * cew && px <= lo + 15 * cew && py >= to && py <= to + ceh) {
@@ -71,7 +66,7 @@ class CalendarMonthNavigator {
                         return true
                     }
                     if (px >= lo + 19 * cew && px <= lo + 20 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toMonth(fragment, localDate.plusMonths(1L))
+                        CalendarNavigator.toMonth(fragment, localDate.plusMonths(3L))
                         return true
                     }
                 }
@@ -81,25 +76,20 @@ class CalendarMonthNavigator {
         }
 
         /**
-         * Draw the navigator of monthly template of calendar plugin.
+         * Draw the navigator of quarterly template of calendar plugin.
          *
          * @param context the context
          * @param canvas the canvas
-         * @param calendarMonth data class
+         * @param calendarQuarter data class
          */
-        fun draw(context: Context, canvas: Canvas, calendarMonth: CalendarMonth) {
+        fun draw(context: Context, canvas: Canvas, calendarQuarter: CalendarQuarter) {
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 140.4f, Creator.fillWhite)
 
             canvas.drawLine(0.0f, 138.4f, 1404.0f, 138.4f, Creator.lineDefaultBlack)
             canvas.drawLine(0.0f, 136.4f, 1404.0f, 136.4f, Creator.lineDefaultBlack)
 
-            val year = calendarMonth.year
-            val month = calendarMonth.month
-
-            val localDate = LocalDate.of(year, month, 1)
-
-            val monthName = localDate.month.getDisplayName(TextStyle.SHORT, Locale.getDefault())
-            val quarter = (localDate.monthValue - 1) / 3 + 1
+            val year = calendarQuarter.year
+            val quarter = calendarQuarter.quarter
 
             canvas.drawRect(lo + 0 * cew, to + 0 * ceh, lo + 1 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 0 * cew, to + 0 * ceh, lo + 1 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
@@ -111,11 +101,7 @@ class CalendarMonthNavigator {
 
             canvas.drawRect(lo + 6 * cew, to + 0 * ceh, lo + 9 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
 
-            canvas.drawRect(lo + 9 * cew, to + 0 * ceh, lo + 13 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 9 * cew, to + 0 * ceh, lo + 13 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
-            Creator.drawEllipsizedText(
-                canvas, monthName, Creator.textBigBlackCenter, lo + 9 * cew, to + 1 * ceh - 30.0f, 4 * cew
-            )
 
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.lineDefaultBlack)

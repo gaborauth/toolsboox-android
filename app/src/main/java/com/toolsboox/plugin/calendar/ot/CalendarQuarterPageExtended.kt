@@ -8,7 +8,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarQuarter
-import com.toolsboox.plugin.calendar.ui.CalendarExtendedQuarterFragment
+import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
 import java.time.LocalDate
 
 /**
@@ -16,7 +16,7 @@ import java.time.LocalDate
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-class CalendarExtendedQuarterCreator : Creator {
+class CalendarQuarterPageExtended : Creator {
 
     companion object {
 
@@ -44,7 +44,7 @@ class CalendarExtendedQuarterCreator : Creator {
          */
         fun onTouchEvent(
             view: View, motionEvent: MotionEvent, gestureResult: Int,
-            fragment: CalendarExtendedQuarterFragment, calendarQuarter: CalendarQuarter
+            fragment: CalendarQuarterFragment, calendarQuarter: CalendarQuarter
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
 

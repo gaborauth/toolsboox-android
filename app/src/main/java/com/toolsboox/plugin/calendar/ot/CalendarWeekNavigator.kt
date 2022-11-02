@@ -99,6 +99,9 @@ class CalendarWeekNavigator {
         fun draw(context: Context, canvas: Canvas, calendarWeek: CalendarWeek) {
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 140.4f, Creator.fillWhite)
 
+            canvas.drawLine(0.0f, 138.4f, 1404.0f, 138.4f, Creator.lineDefaultBlack)
+            canvas.drawLine(0.0f, 136.4f, 1404.0f, 136.4f, Creator.lineDefaultBlack)
+
             val year = calendarWeek.year
             val weekOfYear = calendarWeek.weekOfYear
             val locale = calendarWeek.locale

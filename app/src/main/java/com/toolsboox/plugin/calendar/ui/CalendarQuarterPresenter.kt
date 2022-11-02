@@ -2,8 +2,8 @@ package com.toolsboox.plugin.calendar.ui
 
 import android.graphics.Rect
 import android.os.Environment
-import com.google.gson.GsonBuilder
-import com.toolsboox.databinding.FragmentCalendarQuarterBinding
+import com.squareup.moshi.Moshi
+import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.plugin.calendar.da.CalendarQuarter
 import com.toolsboox.ui.plugin.FragmentPresenter
 import com.toolsboox.ui.plugin.ScreenFragment
@@ -14,7 +14,6 @@ import kotlinx.coroutines.withContext
 import java.io.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -23,6 +22,13 @@ import javax.inject.Inject
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
+
+    /**
+     * The Moshi instance.
+     */
+    @Inject
+    lateinit var moshi: Moshi
+
     /**
      * Load the quarter if available.
      *
@@ -32,7 +38,7 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
      * @param surfaceSize the actual size of surface view
      */
     fun load(
-        fragment: CalendarQuarterFragment, binding: FragmentCalendarQuarterBinding,
+        fragment: CalendarQuarterFragment, binding: FragmentCalendarBinding,
         currentDate: LocalDate, surfaceSize: Rect
     ) {
         if (!checkPermissions(fragment, binding.root)) return
@@ -43,13 +49,16 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
 
                 val year = currentDate.year
                 val quarter = (currentDate.monthValue - 1) / 3 + 1
-                var calendarQuarter = CalendarQuarter(year, quarter, Locale.getDefault(), mutableListOf())
+                var calendarQuarter = CalendarQuarter(year, quarter)
 
                 try {
+                    val adapter = moshi.adapter(CalendarQuarter::class.java)
                     if (createPath(fragment, currentDate).exists()) {
-                        FileReader(createPath(fragment, currentDate)).use {
-                            calendarQuarter = GsonBuilder().create().fromJson(it, CalendarQuarter::class.java)
-                            calendarQuarter.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
+                        FileReader(createPath(fragment, currentDate)).use { fileReader ->
+                            adapter.fromJson(fileReader.readText())?.let {
+                                it.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
+                                calendarQuarter = it
+                            }
                         }
                     }
                 } catch (e: IOException) {
@@ -70,10 +79,11 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
      * @param binding the data binding
      * @param calendarQuarter the data class
      * @param currentDate the current date
+     * @param surfaceSize the actual size of surface view
      */
     fun save(
-        fragment: CalendarQuarterFragment, binding: FragmentCalendarQuarterBinding,
-        calendarQuarter: CalendarQuarter, currentDate: LocalDate
+        fragment: CalendarQuarterFragment, binding: FragmentCalendarBinding,
+        calendarQuarter: CalendarQuarter, currentDate: LocalDate, surfaceSize: Rect
     ) {
         if (!checkPermissions(fragment, binding.root)) return
 
@@ -81,9 +91,13 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
+                val calendarQuarterCopy = calendarQuarter.deepCopy()
+                calendarQuarterCopy.normalizeStrokes(surfaceSize.width(), surfaceSize.height(), 1404, 1872)
+
                 try {
+                    val adapter = moshi.adapter(CalendarQuarter::class.java)
                     PrintWriter(FileWriter(createPath(fragment, currentDate))).use {
-                        it.write(GsonBuilder().create().toJson(calendarQuarter).toString())
+                        it.write(adapter.toJson(calendarQuarterCopy))
                     }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
