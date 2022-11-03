@@ -56,8 +56,8 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
 
                 try {
                     val adapter = moshi.adapter(CalendarWeek::class.java)
-                    if (createPath(fragment, currentDate, calendarWeek.locale).exists()) {
-                        FileReader(createPath(fragment, currentDate, calendarWeek.locale)).use { fileReader ->
+                    if (getPath(fragment, currentDate, calendarWeek.locale).exists()) {
+                        FileReader(getPath(fragment, currentDate, calendarWeek.locale)).use { fileReader ->
                             adapter.fromJson(fileReader.readText())?.let {
                                 it.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
                                 calendarWeek = it
@@ -99,7 +99,7 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
                 calendarWeekCopy.normalizeStrokes(surfaceSize.width(), surfaceSize.height(), 1404, 1872)
                 try {
                     val adapter = moshi.adapter(CalendarWeek::class.java)
-                    PrintWriter(FileWriter(createPath(fragment, currentDate, locale))).use {
+                    PrintWriter(FileWriter(getPath(fragment, currentDate, locale, true))).use {
                         it.write(adapter.toJson(calendarWeekCopy))
                     }
                 } catch (e: IOException) {
@@ -112,20 +112,23 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
     }
 
     /**
-     * Create path of the files.
+     * Get path of the files.
      *
      * @param fragment the fragment
      * @param currentDate the current date
      * @param locale the current locale
+     * @param create create folders
      * @return the path on the filesystem
      */
-    private fun createPath(fragment: ScreenFragment, currentDate: LocalDate, locale: Locale): File {
+    private fun getPath(
+        fragment: ScreenFragment, currentDate: LocalDate, locale: Locale, create: Boolean = false
+    ): File {
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
         val week = currentDate.format(DateTimeFormatter.ofPattern("ww", locale))
 
         val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
         val path = File(rootPath, "calendar/$year/")
-        path.mkdirs()
+        if (create) path.mkdirs()
 
         return File(path, "week-$year-$week.json")
     }

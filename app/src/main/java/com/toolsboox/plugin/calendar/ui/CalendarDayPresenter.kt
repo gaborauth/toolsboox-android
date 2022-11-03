@@ -78,8 +78,8 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
 
                 try {
                     val adapter = moshi.adapter(CalendarDay::class.java)
-                    if (createPath(fragment, currentDate).exists()) {
-                        FileReader(createPath(fragment, currentDate)).use { fileReader ->
+                    if (getPath(fragment, currentDate).exists()) {
+                        FileReader(getPath(fragment, currentDate)).use { fileReader ->
                             adapter.fromJson(fileReader.readText())?.let {
                                 it.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
                                 calendarDay = it
@@ -125,7 +125,7 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
 
                 try {
                     val adapter = moshi.adapter(CalendarDay::class.java)
-                    PrintWriter(FileWriter(createPath(fragment, currentDate))).use {
+                    PrintWriter(FileWriter(getPath(fragment, currentDate, true))).use {
                         it.write(adapter.toJson(calendarDayCopy))
                     }
                 } catch (e: IOException) {
@@ -192,20 +192,21 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
     }
 
     /**
-     * Create path of the files.
+     * Get path of the files.
      *
      * @param fragment the fragment
      * @param currentDate the current date
+     * @param create create folders
      * @return the path on the filesystem
      */
-    private fun createPath(fragment: ScreenFragment, currentDate: LocalDate): File {
+    private fun getPath(fragment: ScreenFragment, currentDate: LocalDate, create: Boolean = false): File {
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
         val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
         val day = currentDate.format(DateTimeFormatter.ofPattern("dd"))
 
         val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
         val path = File(rootPath, "calendar/$year/$month/")
-        path.mkdirs()
+        if (create) path.mkdirs()
 
         return File(path, "day-$year-$month-$day.json")
     }

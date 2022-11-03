@@ -53,8 +53,8 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
 
                 try {
                     val adapter = moshi.adapter(CalendarQuarter::class.java)
-                    if (createPath(fragment, currentDate).exists()) {
-                        FileReader(createPath(fragment, currentDate)).use { fileReader ->
+                    if (getPath(fragment, currentDate).exists()) {
+                        FileReader(getPath(fragment, currentDate)).use { fileReader ->
                             adapter.fromJson(fileReader.readText())?.let {
                                 it.normalizeStrokes(1404, 1872, surfaceSize.width(), surfaceSize.height())
                                 calendarQuarter = it
@@ -96,7 +96,7 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
 
                 try {
                     val adapter = moshi.adapter(CalendarQuarter::class.java)
-                    PrintWriter(FileWriter(createPath(fragment, currentDate))).use {
+                    PrintWriter(FileWriter(getPath(fragment, currentDate, true))).use {
                         it.write(adapter.toJson(calendarQuarterCopy))
                     }
                 } catch (e: IOException) {
@@ -109,19 +109,20 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
     }
 
     /**
-     * Create path of the files.
+     * Get path of the files.
      *
      * @param fragment the fragment
      * @param currentDate the current date
+     * @param create create folders
      * @return the path on the filesystem
      */
-    private fun createPath(fragment: ScreenFragment, currentDate: LocalDate): File {
+    private fun getPath(fragment: ScreenFragment, currentDate: LocalDate, create: Boolean = false): File {
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
         val quarter = currentDate.format(DateTimeFormatter.ofPattern("QQ"))
 
         val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
         val path = File(rootPath, "calendar/$year/")
-        path.mkdirs()
+        if (create) path.mkdirs()
 
         return File(path, "quarter-$year-$quarter.json")
     }
