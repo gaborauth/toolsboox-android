@@ -98,6 +98,7 @@ class CalendarDayPage {
             val schedulesText = context.getString(R.string.calendar_day_schedules)
             val tasksText = context.getString(R.string.calendar_day_tasks)
             val notesText = context.getString(R.string.calendar_day_notes)
+            val notesCalsText = context.getString(R.string.calendar_day_notes_cals)
             val allDayText = context.getString(R.string.calendar_day_all_day)
             val locale = calendarDay.locale
 
@@ -155,7 +156,11 @@ class CalendarDayPage {
 
             // Notes title
             canvas.drawRect(lo + cew + 50.0f, to + 18 * ceh, lo + 2 * cew + 50.0f, to + 19 * ceh, Creator.fillGrey80)
-            canvas.drawText(notesText, lo + cew + 60.0f, to + 19 * ceh - 10.0f, Creator.textDefaultWhite)
+            if (googleCalendarEvents.isEmpty()) {
+                canvas.drawText(notesText, lo + cew + 60.0f, to + 19 * ceh - 10.0f, Creator.textDefaultWhite)
+            } else {
+                canvas.drawText(notesCalsText, lo + cew + 60.0f, to + 19 * ceh - 10.0f, Creator.textDefaultWhite)
+            }
 
             // Notes grid
             canvas.drawLine(

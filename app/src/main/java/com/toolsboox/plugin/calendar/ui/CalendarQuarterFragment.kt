@@ -1,5 +1,6 @@
 package com.toolsboox.plugin.calendar.ui
 
+import android.icu.text.DateFormat
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
@@ -20,6 +21,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -209,10 +212,10 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
     private fun updateNavigator(first: Boolean = false) {
         if (first) return
 
-        val year = currentDate.year
-        val quarter = (currentDate.monthValue - 1) / 3 + 1
+        val dateFormat = DateFormat.getPatternInstance(DateFormat.YEAR_QUARTER)
+        val titleDate = dateFormat.format(Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 
-        val pageTitle = getString(R.string.calendar_quarter_title).format(quarter, year)
+        val pageTitle = getString(R.string.calendar_quarter_title).format(titleDate)
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
         CalendarQuarterNavigator.draw(this.requireContext(), navigatorCanvas, calendarQuarter)

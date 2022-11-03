@@ -21,8 +21,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.*
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import javax.inject.Inject
 
 /**
@@ -218,11 +218,9 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     private fun updateNavigator(first: Boolean = false) {
         if (first) return
 
-        val year = currentDate.year
-        val monthName = currentDate.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
-        val day = currentDate.dayOfMonth
+        val titleDate = currentDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
 
-        val pageTitle = getString(R.string.calendar_day_title).format("$year $monthName $day")
+        val pageTitle = getString(R.string.calendar_day_title).format(titleDate)
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
         CalendarDayNavigator.draw(this.requireContext(), navigatorCanvas, calendarDay)

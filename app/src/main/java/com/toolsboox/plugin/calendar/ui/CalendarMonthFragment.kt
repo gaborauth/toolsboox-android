@@ -1,5 +1,6 @@
 package com.toolsboox.plugin.calendar.ui
 
+import android.icu.text.DateFormat
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
@@ -20,7 +21,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
-import java.time.format.TextStyle
+import java.time.ZoneId
 import java.util.*
 import javax.inject.Inject
 
@@ -210,12 +211,10 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
     private fun updateNavigator(first: Boolean = false) {
         if (first) return
 
-        val year = currentDate.year
-        val month = currentDate.monthValue
-        val quarter = (month - 1) / 3 + 1
-        val monthName = currentDate.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+        val dateFormat = DateFormat.getPatternInstance(DateFormat.YEAR_MONTH)
+        val titleDate = dateFormat.format(Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 
-        val pageTitle = getString(R.string.calendar_month_title).format(monthName, year)
+        val pageTitle = getString(R.string.calendar_month_title).format(titleDate)
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
         CalendarMonthNavigator.draw(this.requireContext(), navigatorCanvas, calendarMonth)

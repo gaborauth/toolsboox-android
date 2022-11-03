@@ -218,10 +218,10 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
 
         val locale = calendarWeek.locale
         val year = currentDate.year
-        val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
-        val week = "W${currentDate.plusWeeks(0L).get(weekOfYear)}"
+        val weekOfYearField = WeekFields.of(locale).weekOfWeekBasedYear()
+        val weekOfYear = currentDate.get(weekOfYearField)
 
-        val pageTitle = getString(R.string.calendar_week_title).format(week, year)
+        val pageTitle = getString(R.string.calendar_week_title).format(year, weekOfYear)
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
         CalendarWeekNavigator.draw(this.requireContext(), navigatorCanvas, calendarWeek)

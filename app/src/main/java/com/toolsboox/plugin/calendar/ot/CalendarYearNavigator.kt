@@ -52,7 +52,7 @@ class CalendarYearNavigator {
                     val py = motionEvent.y * 140.4f / view.height
 
                     if (px >= lo + 0 * cew && px <= lo + 1 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toMonth(fragment, localDate.minusYears(1L), false)
+                        CalendarNavigator.toYear(fragment, localDate.minusYears(1L), false)
                         return true
                     }
                     if (px >= lo + 1 * cew && px <= lo + 3 * cew && py >= to && py <= to + ceh) {
@@ -64,7 +64,7 @@ class CalendarYearNavigator {
                         return true
                     }
                     if (px >= lo + 19 * cew && px <= lo + 20 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toMonth(fragment, localDate.plusYears(1L), false)
+                        CalendarNavigator.toYear(fragment, localDate.plusYears(1L), false)
                         return true
                     }
                 }
