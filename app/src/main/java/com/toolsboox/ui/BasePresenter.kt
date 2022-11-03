@@ -35,7 +35,7 @@ abstract class BasePresenter<out V : BaseView>(private val view: V) {
      * @param onSuccess the success path function
      * @param onError the custom onError function
      */
-    protected fun <T> coroutinesCallHelper(
+    private fun <T> coroutinesCallHelper(
         call: () -> Deferred<T>,
         onSuccess: (response: T) -> Unit,
         onError: (t: Throwable) -> Unit

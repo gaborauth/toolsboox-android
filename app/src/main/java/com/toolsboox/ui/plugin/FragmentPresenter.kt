@@ -61,7 +61,7 @@ abstract class FragmentPresenter {
      * @param onSuccess the success path function
      * @param onError the custom onError function
      */
-    protected fun <T> coroutinesCallHelper(
+    private fun <T> coroutinesCallHelper(
         fragment: ScreenFragment,
         call: () -> Deferred<Response<T>>,
         onSuccess: (response: Response<T>) -> Unit,
