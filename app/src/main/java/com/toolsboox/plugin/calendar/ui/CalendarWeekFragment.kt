@@ -94,17 +94,18 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
         val weekOfYearValue = currentDate.plusWeeks(0L).get(weekOfYear)
 
-        if (notes) {
-            calendarWeek = CalendarWeek(
-                year, weekOfYearValue, locale,
-                Calendar.listDeepCopy(calendarWeek.strokes), Calendar.listDeepCopy(strokes)
-            )
-        } else {
-            calendarWeek = CalendarWeek(
-                year, weekOfYearValue, locale,
-                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarWeek.notesStrokes)
-            )
-        }
+        calendarWeek =
+            if (notes) {
+                CalendarWeek(
+                    year, weekOfYearValue, locale,
+                    Calendar.listDeepCopy(calendarWeek.strokes), Calendar.listDeepCopy(strokes)
+                )
+            } else {
+                CalendarWeek(
+                    year, weekOfYearValue, locale,
+                    Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarWeek.notesStrokes)
+                )
+            }
 
         presenter.save(this, binding, calendarWeek, currentDate, getSurfaceSize())
     }

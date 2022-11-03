@@ -92,17 +92,18 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         val month = currentDate.monthValue
         val locale = calendarMonth.locale
 
-        if (notes) {
-            calendarMonth = CalendarMonth(
-                year, month, locale,
-                Calendar.listDeepCopy(calendarMonth.strokes), Calendar.listDeepCopy(strokes)
-            )
-        } else {
-            calendarMonth = CalendarMonth(
-                year, month, locale,
-                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarMonth.notesStrokes)
-            )
-        }
+        calendarMonth =
+            if (notes) {
+                CalendarMonth(
+                    year, month, locale,
+                    Calendar.listDeepCopy(calendarMonth.strokes), Calendar.listDeepCopy(strokes)
+                )
+            } else {
+                CalendarMonth(
+                    year, month, locale,
+                    Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarMonth.notesStrokes)
+                )
+            }
 
         presenter.save(this, binding, calendarMonth, currentDate, getSurfaceSize())
     }

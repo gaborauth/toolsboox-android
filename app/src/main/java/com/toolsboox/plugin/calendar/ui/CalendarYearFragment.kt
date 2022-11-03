@@ -91,17 +91,18 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         val year = currentDate.year
         val locale = calendarYear.locale
 
-        if (notes) {
-            calendarYear = CalendarYear(
-                year, locale,
-                Calendar.listDeepCopy(calendarYear.strokes), Calendar.listDeepCopy(strokes)
-            )
-        } else {
-            calendarYear = CalendarYear(
-                year, locale,
-                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarYear.notesStrokes)
-            )
-        }
+        calendarYear =
+            if (notes) {
+                CalendarYear(
+                    year, locale,
+                    Calendar.listDeepCopy(calendarYear.strokes), Calendar.listDeepCopy(strokes)
+                )
+            } else {
+                CalendarYear(
+                    year, locale,
+                    Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarYear.notesStrokes)
+                )
+            }
 
         presenter.save(this, binding, calendarYear, currentDate, getSurfaceSize())
     }

@@ -91,17 +91,18 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         val quarter = (currentDate.monthValue - 1) / 3 + 1
         val locale = calendarQuarter.locale
 
-        if (notes) {
-            calendarQuarter = CalendarQuarter(
-                year, quarter, locale,
-                Calendar.listDeepCopy(calendarQuarter.strokes), Calendar.listDeepCopy(strokes)
-            )
-        } else {
-            calendarQuarter = CalendarQuarter(
-                year, quarter, locale,
-                Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarQuarter.notesStrokes)
-            )
-        }
+        calendarQuarter =
+            if (notes) {
+                CalendarQuarter(
+                    year, quarter, locale,
+                    Calendar.listDeepCopy(calendarQuarter.strokes), Calendar.listDeepCopy(strokes)
+                )
+            } else {
+                CalendarQuarter(
+                    year, quarter, locale,
+                    Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarQuarter.notesStrokes)
+                )
+            }
 
         presenter.save(this, binding, calendarQuarter, currentDate, getSurfaceSize())
     }
