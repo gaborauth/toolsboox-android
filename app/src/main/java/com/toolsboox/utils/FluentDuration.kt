@@ -59,56 +59,51 @@ class FluentDuration {
             val minutes = (totalSeconds % 3600) / 60
             val seconds = totalSeconds % 60
 
-            val htmlMessage = StringBuilder()
+            val result = StringBuilder()
             if (days > 0) {
+                result.append(" $days ")
                 if (days > 1) {
-                    htmlMessage.append(" ").append(days).append(" ")
-                        .append(context.getString(R.string.util_fluent_days))
+                    result.append(context.getString(R.string.util_fluent_days))
                 } else {
-                    htmlMessage.append(" ").append(days).append(" ").append(context.getString(R.string.util_fluent_day))
+                    result.append(context.getString(R.string.util_fluent_day))
                 }
+                result.append(" $hours ")
                 if (hours > 1) {
-                    htmlMessage.append(" ").append(hours).append(" ")
-                        .append(context.getString(R.string.util_fluent_hours))
+                    result.append(context.getString(R.string.util_fluent_hours))
                 } else {
-                    htmlMessage.append(" ").append(hours).append(" ")
-                        .append(context.getString(R.string.util_fluent_hour))
+                    result.append(context.getString(R.string.util_fluent_hour))
                 }
             } else if (hours > 0) {
+                result.append(" $hours ")
                 if (hours > 1) {
-                    htmlMessage.append(" ").append(hours).append(" ")
-                        .append(context.getString(R.string.util_fluent_hours))
+                    result.append(context.getString(R.string.util_fluent_hours))
                 } else {
-                    htmlMessage.append(" ").append(hours).append(" ")
-                        .append(context.getString(R.string.util_fluent_hour))
+                    result.append(context.getString(R.string.util_fluent_hour))
                 }
+                result.append(" $minutes ")
                 if (minutes > 1) {
-                    htmlMessage.append(" ").append(minutes).append(" ")
-                        .append(context.getString(R.string.util_fluent_minutes))
+                    result.append(context.getString(R.string.util_fluent_minutes))
                 } else {
-                    htmlMessage.append(" ").append(minutes).append(" ")
-                        .append(context.getString(R.string.util_fluent_minute))
+                    result.append(context.getString(R.string.util_fluent_minute))
                 }
             } else {
                 if (minutes > 0) {
+                    result.append(" $minutes ")
                     if (minutes > 1) {
-                        htmlMessage.append(" ").append(minutes).append(" ")
-                            .append(context.getString(R.string.util_fluent_minutes))
+                        result.append(context.getString(R.string.util_fluent_minutes))
                     } else {
-                        htmlMessage.append(" ").append(minutes).append(" ")
-                            .append(context.getString(R.string.util_fluent_minute))
+                        result.append(context.getString(R.string.util_fluent_minute))
                     }
                 }
+                result.append(" $seconds ")
                 if (seconds > 1) {
-                    htmlMessage.append(" ").append(seconds).append(" ")
-                        .append(context.getString(R.string.util_fluent_seconds))
+                    result.append(context.getString(R.string.util_fluent_seconds))
                 } else {
-                    htmlMessage.append(" ").append(seconds).append(" ")
-                        .append(context.getString(R.string.util_fluent_second))
+                    result.append(context.getString(R.string.util_fluent_second))
                 }
             }
 
-            return htmlMessage.trim().toString()
+            return result.trim().toString()
         }
     }
 }
