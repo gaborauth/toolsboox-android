@@ -89,13 +89,9 @@ Strings related to dashboard fragment -->
 
     <!-- Strings related to utils -->
     <string name="util_fluent_unknown">"inconnu"</string>
-    <string name="util_fluent_days">"jours"</string>
     <string name="util_fluent_day">"jour"</string>
-    <string name="util_fluent_hours">"heures"</string>
     <string name="util_fluent_hour">"heure"</string>
-    <string name="util_fluent_minutes">"minutes"</string>
     <string name="util_fluent_minute">"minute"</string>
-    <string name="util_fluent_seconds">"secondes"</string>
     <string name="util_fluent_second">"seconde"</string>
     <string name="templates_boxed_week_calendar_creator_title">"%d-S%d"</string>
     <string name="templates_boxed_week_calendar_creator_weekly_notes">"Notes hebdo"</string>
@@ -124,4 +120,8 @@ Strings related to dashboard fragment -->
 
     <!-- Strings related to templates 'community' fragment -->
     <string name="templates_community_title">"Gabarits partagés"</string>
+    <string name="util_fluent_days">"jours"</string>
+    <string name="util_fluent_hours">"heures"</string>
+    <string name="util_fluent_minutes">"minutes"</string>
+    <string name="util_fluent_seconds">"secondes"</string>
 </resources>

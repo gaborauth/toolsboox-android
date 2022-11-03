@@ -310,6 +310,15 @@ abstract class SurfaceFragment : ScreenFragment() {
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         }
 
+        // TODO: Without this the template image flickers... refresh race condition somewhere?!
+        val trickPath = Path()
+        trickPath.moveTo(0.0f, 0.0f)
+        for (i in 1..1404) {
+            trickPath.quadTo((i - 1) * 1.0f, 0.0f, i * 1.0f, 0.0f)
+        }
+        lockCanvas.drawPath(trickPath, paint)
+        canvas.drawPath(trickPath, paint)
+
         for (stroke in strokes) {
             val points = stroke.strokePoints
             if (points.isNotEmpty()) {

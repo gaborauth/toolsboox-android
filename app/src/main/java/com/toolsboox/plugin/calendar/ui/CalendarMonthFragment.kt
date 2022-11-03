@@ -163,11 +163,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         super.onResume()
 
         binding.templateImageView.setImageBitmap(templateBitmap)
-        binding.templateImageView.postInvalidate()
-
         binding.navigatorImageView.setImageBitmap(navigatorBitmap)
-        binding.navigatorImageView.postInvalidate()
-
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
@@ -199,8 +195,6 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
             CalendarMonthPage.drawPage(this.requireContext(), templateCanvas, calendarMonth)
             applyStrokes(calendarMonth.strokes.toMutableList(), true)
         }
-
-        binding.templateImageView.postInvalidate()
     }
 
     /**
