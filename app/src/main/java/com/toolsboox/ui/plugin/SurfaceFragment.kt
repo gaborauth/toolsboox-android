@@ -270,10 +270,6 @@ abstract class SurfaceFragment : ScreenFragment() {
         }
 
         provideSurfaceView().holder.addCallback(surfaceCallback)
-        provideSurfaceView().viewTreeObserver.addOnGlobalLayoutListener {
-            Timber.i("addOnGlobalLayoutListener")
-            touchHelper.setRawDrawingEnabled(true)
-        }
     }
 
     /**
