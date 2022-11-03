@@ -22,7 +22,7 @@ interface StrokeService {
      * @param roomId       the room ID
      * @param noteId       the note ID
      * @param pageId       the page ID
-     * @param strokePoints the list of stroke points
+     * @param strokes      the list of strokes
      * @return the saved stroke
      */
     @POST(value = "stroke/addStrokes/{roomId}/{noteId}/{pageId}")

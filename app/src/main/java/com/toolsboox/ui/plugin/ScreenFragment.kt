@@ -133,12 +133,14 @@ abstract class ScreenFragment : Fragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             REQUEST_PERMISSIONS -> {
-                var allGranted: Boolean = true
-                var someGranted: Boolean = false
+                var allGranted = true
+                var someGranted = false
+
                 grantResults.forEach {
                     allGranted = allGranted and (it == PackageManager.PERMISSION_GRANTED)
                     someGranted = someGranted or (it == PackageManager.PERMISSION_GRANTED)
                 }
+
                 val message = if (allGranted) {
                     R.string.main_all_granted_message
                 } else if (someGranted) {
@@ -192,12 +194,12 @@ abstract class ScreenFragment : Fragment() {
      * @return true, if granted
      */
     fun checkPermission(permissionName: String): Boolean {
-        if (Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissionName)) {
+        if (Manifest.permission.READ_EXTERNAL_STORAGE == permissionName) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 return true
             }
         }
-        if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissionName)) {
+        if (Manifest.permission.WRITE_EXTERNAL_STORAGE == permissionName) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 return true
             }

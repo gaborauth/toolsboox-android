@@ -188,9 +188,8 @@ class CalendarYearPage : Creator {
          * @param to the top offset
          * @param year the current year
          * @param month the current month
-         * @param firstDayOfWeek first day of the week
          */
-        private fun drawDayNumbers(canvas: Canvas, locale: Locale, le: Float, to: Float, year: Int, month: Int) {
+        private fun drawDayNumbers(canvas: Canvas, locale: Locale, lo: Float, to: Float, year: Int, month: Int) {
             val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
             val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
 
@@ -201,13 +200,13 @@ class CalendarYearPage : Creator {
             var firstInRow = true
 
             for (day in 1..yearMonth.month.length(yearMonth.isLeapYear)) {
-                val x = le + xOffset * cew + cew + cew / 2.0f
+                val x = lo + xOffset * cew + cew + cew / 2.0f
                 val y = to + yOffset * ceh - 15.0f
                 canvas.drawText("$day", x, y, Creator.textSmallBlackCenter)
 
                 if (firstInRow) {
                     val weekNumber = LocalDate.of(year, month, day).get(weekOfYear)
-                    canvas.drawText("$weekNumber", le + cew / 2.0f, y, Creator.textSmallBlackCenter)
+                    canvas.drawText("$weekNumber", lo + cew / 2.0f, y, Creator.textSmallBlackCenter)
                     firstInRow = false
                 }
 
