@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.os.Environment
 import com.squareup.moshi.Moshi
 import com.toolsboox.databinding.FragmentCalendarBinding
+import com.toolsboox.ot.ZipManager
 import com.toolsboox.plugin.calendar.da.CalendarYear
 import com.toolsboox.ui.plugin.FragmentPresenter
 import com.toolsboox.ui.plugin.ScreenFragment
@@ -98,6 +99,11 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
                     PrintWriter(FileWriter(createPath(fragment, currentDate))).use {
                         it.write(adapter.toJson(calendarYearCopy))
                     }
+
+                    // TODO: add a Backup/Restore plugin to handle backup and restore
+                    val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
+                    val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    ZipManager.zip(File(rootPath, "calendar"), File(downloads, "toolsBoox-calendar-backup.zip"))
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }
