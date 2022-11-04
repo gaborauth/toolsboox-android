@@ -3,6 +3,8 @@ package com.toolsboox.plugin.calendar.ui
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
@@ -32,6 +34,12 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
+
+    /**
+     * The Firebase analytics.
+     */
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     /**
      * The presenter of the fragment.
@@ -218,6 +226,10 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
         CalendarDayNavigator.draw(this.requireContext(), navigatorCanvas, calendarDay)
+
+        firebaseAnalytics.logEvent("calendarDay") {
+            param("currentDate", currentDate.format(DateTimeFormatter.ISO_DATE))
+        }
     }
 
     /**

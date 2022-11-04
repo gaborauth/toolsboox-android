@@ -27,6 +27,7 @@ import com.toolsboox.utils.ReleaseTree
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 /**
  * A dashboard screen that offers the main menu.
@@ -45,7 +46,8 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     /**
      * The Firebase analytics.
      */
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     /**
      * The view binding.
