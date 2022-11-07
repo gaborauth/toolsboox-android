@@ -6,10 +6,16 @@ import android.os.Bundle
 import android.text.Html
 import android.view.View
 import android.widget.TextView
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClient.BillingResponseCode
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.PurchasesUpdatedListener
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentAboutBinding
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -37,20 +43,20 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
     private lateinit var binding: FragmentAboutBinding
 
     /**
-     * Update textView content to clickable link.
-     *
-     * @param linkView the link holder textView
-     * @param messageResId the message resource id
-     * @param link the link
+     * The purchases updated listener.
      */
-    private fun htmlLinks(linkView: TextView, messageResId: Int, link: String) {
-        val linkMessage = getString(messageResId)
-        val linkHtml = "$linkMessage <a href=\"$link\">$link</a>"
-        linkView.text = Html.fromHtml(linkHtml, Html.FROM_HTML_MODE_COMPACT)
-        linkView.setOnClickListener {
-            this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+    private val purchasesUpdatedListener =
+        PurchasesUpdatedListener { billingResult, purchases ->
+            Timber.i("PurchasesUpdatedListener: $billingResult, $purchases")
         }
-    }
+
+    /**
+     * The billing client.
+     */
+    private var billingClient = BillingClient.newBuilder(requireContext())
+        .setListener(purchasesUpdatedListener)
+        .enablePendingPurchases()
+        .build()
 
     /**
      * OnViewCreated hook.
@@ -87,6 +93,18 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
             binding.otherLinksDiscord, R.string.about_other_links_discord_link,
             "https://discord.gg/S3sKsbmaSk"
         )
+
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingResponseCode.OK) {
+                    Timber.i("onBillingSetupFinished: $billingResult")
+                }
+            }
+
+            override fun onBillingServiceDisconnected() {
+                Timber.i("onBillingServiceDisconnected")
+            }
+        })
     }
 
     /**
@@ -111,5 +129,21 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
      */
     override fun hideLoading() {
         binding.mainProgress.visibility = View.INVISIBLE
+    }
+
+    /**
+     * Update textView content to clickable link.
+     *
+     * @param linkView the link holder textView
+     * @param messageResId the message resource id
+     * @param link the link
+     */
+    private fun htmlLinks(linkView: TextView, messageResId: Int, link: String) {
+        val linkMessage = getString(messageResId)
+        val linkHtml = "$linkMessage <a href=\"$link\">$link</a>"
+        linkView.text = Html.fromHtml(linkHtml, Html.FROM_HTML_MODE_COMPACT)
+        linkView.setOnClickListener {
+            this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+        }
     }
 }

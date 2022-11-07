@@ -135,5 +135,46 @@
                 android:singleLine="false"
                 android:text="@string/about_other_links_discord_link"/>
 
+        <TextView
+                android:id="@+id/projectHelpTitle"
+                android:layout_marginTop="20dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="20sp"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_project_help_title"/>
+
+        <TextView
+                android:id="@+id/projectHelpMessage1"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_project_help_message_1"/>
+
+        <TextView
+                android:id="@+id/projectHelpMessage2"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_project_help_message_2"/>
+
+        <TextView
+                android:id="@+id/projectHelpMessage3"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_project_help_message_3"/>
+
     </LinearLayout>
 </FrameLayout>
