@@ -178,6 +178,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
             touchHelper = TouchHelper.create(binding.drawLayout, callback)
             initializeSurface()
 
+            binding.titleLayout.removeAllViews()
             createLaneTitle(0, getString(R.string.kanban_planner_lane_dueSoonBacklogTitle, 0))
             createLaneTitle(1, getString(R.string.kanban_planner_lane_plannedTodayTitle, 0))
             createLaneTitle(2, getString(R.string.kanban_planner_lane_doneTodayTitle, 0))
