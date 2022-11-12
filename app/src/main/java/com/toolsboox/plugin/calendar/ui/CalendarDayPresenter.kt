@@ -25,6 +25,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -47,10 +48,11 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
      * @param binding the data binding
      * @param currentDate the current date
      * @param surfaceSize the actual size of surface view
+     * @param locale the default locale
      */
     fun load(
         fragment: CalendarDayFragment, binding: FragmentCalendarBinding,
-        currentDate: LocalDate, surfaceSize: Rect
+        currentDate: LocalDate, surfaceSize: Rect, locale: Locale
     ) {
         if (!fragment.checkPermission(Manifest.permission.READ_CALENDAR)) {
             fragment.showError(null, R.string.main_read_calendar_permission_missing, binding.root)
@@ -74,7 +76,7 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                 val year = currentDate.year
                 val month = currentDate.monthValue
                 val day = currentDate.dayOfMonth
-                var calendarDay = CalendarDay(year, month, day)
+                var calendarDay = CalendarDay(year, month, day, locale)
 
                 try {
                     val adapter = moshi.adapter(CalendarDay::class.java)

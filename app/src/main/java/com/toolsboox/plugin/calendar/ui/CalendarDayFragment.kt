@@ -1,5 +1,6 @@
 package com.toolsboox.plugin.calendar.ui
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
@@ -25,6 +26,7 @@ import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -34,6 +36,12 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
+
+    /**
+     * The shared preferences.
+     */
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     /**
      * The Firebase analytics.
@@ -66,6 +74,11 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
      * Flag of notes view.
      */
     private var notes: Boolean = false
+
+    /**
+     * The current locale.
+     */
+    private var locale: Locale = Locale.getDefault()
 
     /**
      * The timer job.
@@ -129,6 +142,14 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
 
         binding = FragmentCalendarBinding.bind(view)
 
+        val savedLocaleLanguageTag = sharedPreferences.getString("calendarLocale", Locale.getDefault().toLanguageTag())
+        if (savedLocaleLanguageTag != null) {
+            if (Locale.forLanguageTag(savedLocaleLanguageTag).toLanguageTag() == savedLocaleLanguageTag) {
+                locale = Locale.forLanguageTag(savedLocaleLanguageTag)
+                Timber.i("Locale switched to: ${locale.toLanguageTag()}")
+            }
+        }
+
         currentDate = LocalDate.now()
         arguments?.getString("year")?.toIntOrNull()?.let { year ->
             Timber.i("Set year to '$year' from parameter")
@@ -144,7 +165,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         }
         notes = arguments?.getString("notes")?.toBoolean() ?: false
 
-        calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
+        calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, locale)
 
         binding.navigatorImageView.setOnTouchListener { view, motionEvent ->
             CalendarDayNavigator.onTouchEvent(view, motionEvent, this@CalendarDayFragment, calendarDay)
@@ -179,7 +200,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
-            presenter.load(this@CalendarDayFragment, binding, currentDate, getSurfaceSize())
+            presenter.load(this@CalendarDayFragment, binding, currentDate, getSurfaceSize(), locale)
         }
     }
 

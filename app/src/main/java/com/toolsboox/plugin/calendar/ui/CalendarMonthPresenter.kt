@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import java.io.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -36,10 +37,11 @@ class CalendarMonthPresenter @Inject constructor() : FragmentPresenter() {
      * @param binding the data binding
      * @param currentDate the current date
      * @param surfaceSize the actual size of surface view
+     * @param locale the default locale
      */
     fun load(
         fragment: CalendarMonthFragment, binding: FragmentCalendarBinding,
-        currentDate: LocalDate, surfaceSize: Rect
+        currentDate: LocalDate, surfaceSize: Rect, locale: Locale
     ) {
         if (!checkPermissions(fragment, binding.root)) return
 
@@ -49,7 +51,7 @@ class CalendarMonthPresenter @Inject constructor() : FragmentPresenter() {
 
                 val year = currentDate.year
                 val month = currentDate.monthValue
-                var calendarMonth = CalendarMonth(year, month)
+                var calendarMonth = CalendarMonth(year, month, locale)
 
                 try {
                     val adapter = moshi.adapter(CalendarMonth::class.java)

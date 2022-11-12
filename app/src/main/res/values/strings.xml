@@ -73,6 +73,21 @@
     <string name="calendar_navigator_image">Calendar navigator image</string>
     <string name="calendar_template_image">Calendar template image</string>
 
+    <string name="calendar_settings_title">Settings</string>
+    <string name="calendar_settings_select_locale_text">Select the locale of the Calendar:</string>
+    <string name="calendar_settings_first_day_of_the_week_text">Start day of the week:</string>
+    <string name="calendar_settings_first_day_of_the_week_value">Monday</string>
+    <string name="calendar_settings_week_number_of_first_day_text">Week number of first day:</string>
+    <string name="calendar_settings_week_number_of_first_day_value">W1</string>
+    <string name="calendar_settings_week_number_of_last_day_text">Week number of last day:</string>
+    <string name="calendar_settings_week_number_of_last_day_value">W52</string>
+    <string name="calendar_settings_button_save">Save</string>
+    <string name="calendar_settings_button_back">Back</string>
+
+    <string name="calendar_drawing_toolbar_pen">Pen</string>
+    <string name="calendar_drawing_toolbar_eraser">Eraser</string>
+    <string name="calendar_drawing_toolbar_settings">Settings</string>
+
     <string name="calendar_navigator_prev_button_text">&lt;</string>
     <string name="calendar_navigator_next_button_text">&gt;</string>
     <string name="calendar_navigator_year_button_text">2022</string>

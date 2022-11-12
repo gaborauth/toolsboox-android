@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import java.io.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -36,10 +37,11 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
      * @param binding the data binding
      * @param currentDate the current date
      * @param surfaceSize the actual size of surface view
+     * @param locale the default locale
      */
     fun load(
         fragment: CalendarQuarterFragment, binding: FragmentCalendarBinding,
-        currentDate: LocalDate, surfaceSize: Rect
+        currentDate: LocalDate, surfaceSize: Rect, locale: Locale
     ) {
         if (!checkPermissions(fragment, binding.root)) return
 
@@ -49,7 +51,7 @@ class CalendarQuarterPresenter @Inject constructor() : FragmentPresenter() {
 
                 val year = currentDate.year
                 val quarter = (currentDate.monthValue - 1) / 3 + 1
-                var calendarQuarter = CalendarQuarter(year, quarter)
+                var calendarQuarter = CalendarQuarter(year, quarter, locale)
 
                 try {
                     val adapter = moshi.adapter(CalendarQuarter::class.java)

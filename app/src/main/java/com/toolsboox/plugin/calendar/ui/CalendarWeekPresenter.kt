@@ -38,10 +38,11 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
      * @param binding the data binding
      * @param currentDate the current date
      * @param surfaceSize the actual size of surface view
+     * @param locale the default locale
      */
     fun load(
         fragment: CalendarWeekFragment, binding: FragmentCalendarBinding,
-        currentDate: LocalDate, surfaceSize: Rect
+        currentDate: LocalDate, surfaceSize: Rect, locale: Locale
     ) {
         if (!checkPermissions(fragment, binding.root)) return
 
@@ -50,9 +51,9 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
                 val year = currentDate.year
-                val weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()
+                val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
                 val week = currentDate.plusWeeks(0L).get(weekOfYear)
-                var calendarWeek = CalendarWeek(year, week)
+                var calendarWeek = CalendarWeek(year, week, locale)
 
                 try {
                     val adapter = moshi.adapter(CalendarWeek::class.java)

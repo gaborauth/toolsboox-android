@@ -1,5 +1,6 @@
 package com.toolsboox.plugin.calendar.ui
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
@@ -36,6 +37,12 @@ import javax.inject.Inject
 class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
 
     /**
+     * The shared preferences.
+     */
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+
+    /**
      * The Firebase analytics.
      */
     @Inject
@@ -66,6 +73,11 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
      * Flag of notes view.
      */
     private var notes: Boolean = false
+
+    /**
+     * The current locale.
+     */
+    private var locale: Locale = Locale.getDefault()
 
     /**
      * The timer job.
@@ -130,12 +142,20 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
 
         binding = FragmentCalendarBinding.bind(view)
 
+        val savedLocaleLanguageTag = sharedPreferences.getString("calendarLocale", Locale.getDefault().toLanguageTag())
+        if (savedLocaleLanguageTag != null) {
+            if (Locale.forLanguageTag(savedLocaleLanguageTag).toLanguageTag() == savedLocaleLanguageTag) {
+                locale = Locale.forLanguageTag(savedLocaleLanguageTag)
+                Timber.i("Locale switched to: ${locale.toLanguageTag()}")
+            }
+        }
+
         currentDate = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
         arguments?.getString("year")?.toIntOrNull()?.let { year ->
             Timber.i("Set year to '$year' from parameter")
             currentDate = LocalDate.of(year, 1, 1)
             arguments?.getString("weekOfYear")?.toIntOrNull()?.let { weekOfYear ->
-                val weekFields = WeekFields.of(Locale.getDefault())
+                val weekFields = WeekFields.of(locale)
                 Timber.i("Set year and week to '$year'/'$weekOfYear' from parameter")
                 currentDate = LocalDate.ofYearDay(year, 1)
                     .with(weekFields.weekOfYear(), weekOfYear.toLong())
@@ -144,8 +164,8 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         }
         notes = arguments?.getString("notes")?.toBoolean() ?: false
 
-        val weekOfWeekBasedYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()
-        calendarWeek = CalendarWeek(currentDate.year, currentDate.get(weekOfWeekBasedYear))
+        val weekOfWeekBasedYear = WeekFields.of(locale).weekOfWeekBasedYear()
+        calendarWeek = CalendarWeek(currentDate.year, currentDate.get(weekOfWeekBasedYear), locale)
 
         binding.navigatorImageView.setOnTouchListener { view, motionEvent ->
             CalendarWeekNavigator.onTouchEvent(view, motionEvent, this@CalendarWeekFragment, calendarWeek)
@@ -181,7 +201,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
-            presenter.load(this@CalendarWeekFragment, binding, currentDate, getSurfaceSize())
+            presenter.load(this@CalendarWeekFragment, binding, currentDate, getSurfaceSize(), locale)
         }
     }
 

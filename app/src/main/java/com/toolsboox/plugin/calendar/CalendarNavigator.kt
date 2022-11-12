@@ -17,6 +17,18 @@ import java.util.*
 object CalendarNavigator {
 
     /**
+     * Navigate to the settings of calendar.
+     *
+     * @param fragment the fragment
+     */
+    fun toSettings(fragment: ScreenFragment) {
+        val bundle = bundleOf()
+
+        Timber.i("Navigate to the calendar settings")
+        fragment.findNavController().navigate(R.id.action_to_calendar_settings, bundle)
+    }
+
+    /**
      * Navigate to the daily calendar.
      *
      * @param fragment the fragment

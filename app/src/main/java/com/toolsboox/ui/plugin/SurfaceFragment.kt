@@ -14,6 +14,7 @@ import com.onyx.android.sdk.pen.data.TouchPointList
 import com.toolsboox.R
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.ot.OnGestureListener
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import timber.log.Timber
@@ -164,6 +165,10 @@ abstract class SurfaceFragment : ScreenFragment() {
             penState = false
             provideToolbarDrawing().toolbarEraser.background.setTint(Color.GRAY)
             provideToolbarDrawing().toolbarPen.background.setTint(Color.WHITE)
+        }
+
+        provideToolbarDrawing().toolbarSettings.setOnClickListener {
+            CalendarNavigator.toSettings(this)
         }
 
         templateBitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
