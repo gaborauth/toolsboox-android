@@ -53,10 +53,7 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
     /**
      * The billing client.
      */
-    private var billingClient = BillingClient.newBuilder(requireContext())
-        .setListener(purchasesUpdatedListener)
-        .enablePendingPurchases()
-        .build()
+    private lateinit var billingClient: BillingClient
 
     /**
      * OnViewCreated hook.
@@ -93,6 +90,11 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
             binding.otherLinksDiscord, R.string.about_other_links_discord_link,
             "https://discord.gg/S3sKsbmaSk"
         )
+
+        billingClient = BillingClient.newBuilder(requireContext())
+            .setListener(purchasesUpdatedListener)
+            .enablePendingPurchases()
+            .build()
 
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
