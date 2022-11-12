@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drawer_title">"%s – %s"</string>
+    <string name="filter_title">"Filtr záměru"</string>
+    <string name="fab_add_item">"Přidej položku"</string>
+    <string name="something_happened_error">"Něco se stalo... prosím zkontrolujte připojení k síti. :("</string>
+    <string name="something_happened_action">"OK"</string>
+    <string name="validation_field_required">"Povinné pole"</string>
+    <string name="validation_field_value_too_small">"Hodnota je příliš malá, nejmenší hodnota může být %d"</string>
+
+    <!-- Strings related to toolbar and drawer menu -->
+    <string name="drawer_menu_dashboard">"Nástroje"</string>
+    <string name="drawer_menu_website">"Náš web"</string>
+    <string name="drawer_menu_forum">"Fórum podpory"</string>
+    <string name="drawer_menu_facebook">"Facebook"</string>
+    <string name="drawer_menu_logout">"Odhlášení"</string>
+    <string name="toolbar_previous_image">"Předchozí"</string>
+    <string name="toolbar_pages_placeholder">"1/1"</string>
+    <string name="toolbar_pages_template">"%d / %d"</string>
+    <string name="toolbar_next_image">"Další"</string>
+    <string name="toolbar_back_image">"Zpět"</string>
+
+    <!-- Strings related to square item -->
+    <string name="square_item_image">"Čtvercový obrázek položky"</string>
+
+    <!-- Strings related to main activity -->
+    <string name="main_version">"%s–%s"</string>
+    <string name="main_update_not_now">"Teď ne"</string>
+    <string name="main_update">"Aktualizace"</string>
+    <string name="main_read_external_storage_permission_missing">"Nemáte oprávnění číst externí úložiště..."</string>
+    <string name="main_write_external_storage_permission_missing">"Nemáte oprávnění ukládat na externí úložiště..."</string>
+
+    <!-- Strings related to calendar plugin -->
+    <string name="calendar_main_title">"Kalendář"</string>
+
+    <!-- Strings related to dashboard plugin
+Strings related to dashboard fragment -->
+    <string name="dashboard_title">"Nástroje"</string>
+    <string name="dashboard_new_version_title">"Nová verze"</string>
+    <string name="dashboard_new_version_message">"Je k dispozici nová verze 'Tools for Boox', pro plnou funkčnost upgradujte."</string>
+
+    <!-- Strings related to team drawer plugin -->
+    <string name="team_drawer_title">"TýmováTabule"</string>
+
+    <!-- Strings related to team drawer page fragment -->
+    <string name="team_drawer_page_title">"'%s' stran"</string>
+    <string name="team_drawer_page_text">"Vítejte v naší týmové tabuli! :)"</string>
+    <string name="team_drawer_page_button_erase_text">"Smaž stranu"</string>
+    <string name="team_drawer_page_export_message">"Uloženo jako %s"</string>
+    <string name="team_drawer_page_add_new_page_dialog_title">"Přidej stranu"</string>
+    <string name="team_drawer_page_add_new_page_dialog_message">"Chceš přidat novou stranu?"</string>
+
+    <!-- Strings related to team drawer room fragment -->
+    <string name="team_drawer_room_title">"TýmováTabule - Místnosti"</string>
+    <string name="team_drawer_room_item_image">"Obrázek místnosti"</string>
+    <string name="team_drawer_room_add_dialog_title">"Přidej novou místnost"</string>
+
+    <!-- Strings related to team drawer note fragment -->
+    <string name="team_drawer_note_title">"'%s' poznámek"</string>
+    <string name="team_drawer_note_item_image">"Obrázek položky poznámky"</string>
+    <string name="team_drawer_note_add_dialog_title">"Přidej novou poznámku"</string>
+
+    <!-- Strings related to templates plugin -->
+    <string name="templates_main_title">"Šablony"</string>
+    <string name="templates_preview_button_text">"Náhled"</string>
+    <string name="templates_settings_button_text">"Nastavení"</string>
+
+    <!-- Strings related to templates 'boxed week's calendar' fragment -->
+    <string name="templates_boxed_weeks_calendar_title">"Šablona ročního kalendáře s týdenním boxem"</string>
+    <string name="templates_boxed_weeks_calendar_preview_description">"Náhled obrázku"</string>
+    <string name="templates_boxed_weeks_calendar_message">"Uložit jako vícestránkovou PDF šablonu"</string>
+    <string name="templates_boxed_weeks_calendar_preview_export_message">"Uloženo jako %s"</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_message">"Umístění dnů v týdnu:"</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_vertical">"Svisle"</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_horizontal">"Vodorovně"</string>
+
+    <!-- Strings related to templates 'this week's calendar' fragment -->
+    <string name="templates_this_weeks_calendar_title">"Kalendář na tento týden"</string>
+    <string name="templates_this_weeks_calendar_preview_description">"Náhled obrázku"</string>
+    <string name="templates_this_weeks_calendar_message">"Uložit jako místní šablonu"</string>
+    <string name="templates_this_weeks_calendar_preview_title">"%dW%d"</string>
+    <string name="templates_this_weeks_calendar_preview_weekly_notes">"Týdenní poznámky"</string>
+    <string name="templates_this_weeks_calendar_preview_export_message">"Uloženo jako %s"</string>
+
+    <!-- Strings related to utils -->
+    <string name="util_fluent_unknown">"neznámé"</string>
+    <string name="util_fluent_day">"den"</string>
+    <string name="util_fluent_hour">"hodina"</string>
+    <string name="util_fluent_minute">"minuta"</string>
+    <string name="util_fluent_second">"sekunda"</string>
+    <string name="templates_boxed_week_calendar_creator_title">"%dW%d"</string>
+    <string name="templates_boxed_week_calendar_creator_weekly_notes">"Týdenní poznámky"</string>
+
+    <!-- Strings related to templates 'flat week's calendar' fragment -->
+    <string name="templates_flat_weeks_calendar_title">"Roční kalendář po týdnech"</string>
+    <string name="templates_flat_weeks_calendar_preview_description">"Náhled obrázku"</string>
+    <string name="templates_flat_weeks_calendar_message">"Uložit jako vícestránkovou PDF šablonu"</string>
+    <string name="templates_flat_weeks_calendar_preview_export_message">"Uloženo jako %s"</string>
+    <string name="templates_flat_week_calendar_creator_title">"%dW%d"</string>
+    <string name="templates_flat_weeks_calendar_settings_with_days">"Generovat s daty"</string>
+
+    <!-- Strings related to templates 'boxed week's calendar' fragment -->
+    <string name="templates_boxed_days_calendar_title">"Šablona ročního kalendáře s dny"</string>
+    <string name="templates_boxed_days_calendar_preview_description">"Náhled obrázku"</string>
+    <string name="templates_boxed_days_calendar_message">"Exportujte tento náhled jako vícestránkovou místní šablonu PDF"</string>
+    <string name="templates_boxed_days_calendar_preview_export_message">"Exportováno jako %s"</string>
+    <string name="templates_boxed_days_calendar_settings_with_notes">"Generovat s poznámkami"</string>
+    <string name="templates_boxed_days_calendar_settings_with_tasks">"Generovat sí úkoly"</string>
+    <string name="templates_boxed_day_calendar_creator_title">"%s denní plánovač"</string>
+    <string name="templates_boxed_day_calendar_creator_notes">"Poznámky"</string>
+    <string name="templates_boxed_day_calendar_creator_tasks">"Úkoly"</string>
+    <string name="templates_boxed_days_calendar_settings_with_hours">"Vygenerujte s předvyplněnými hodinami"</string>
+    <string name="dashboard_item_cancel_alt">"Zrušit"</string>
+    <string name="dashboard_item_edit_alt">"Upravit"</string>
+    <string name="dashboard_item_save_alt">"Uložit"</string>
+    <string name="dashboard_item_settings_alt">"Nastavení"</string>
+
+    <!-- Strings related to kanban planner plugin -->
+    <string name="kanban_planner_main_title">"Kanban plán"</string>
+    <string name="kanban_planner_card_content">"Kanban plán náhled"</string>
+    <string name="templates_list_button_text">"Seznam"</string>
+
+    <!-- Strings related to templates 'community' fragment -->
+    <string name="templates_community_title">"Komunitní šablony"</string>
+    <string name="dashboard_item_delete_alt">"Smaž"</string>
+    <string name="dashboard_item_erase_alt">"Vymaž"</string>
+    <string name="kanban_planner_lane_dueSoonBacklogTitle">"Brzký termín backlog (%d)"</string>
+    <string name="kanban_planner_lane_plannedTodayTitle">"Plánováno dnes (%d)"</string>
+    <string name="kanban_planner_lane_doneTodayTitle">"Dnes splněno (%d)"</string>
+
+    <!-- Common messages -->
+    <string name="list_loading">"Nahrávám seznam..."</string>
+    <string name="list_empty">"Prázný seznam..."</string>
+    <string name="export_message">"Uloženo jako %s"</string>
+    <string name="templates_community_list_thumbnail">"Komunitní připínáček"</string>
+    <string name="templates_community_list_icon_star">"Hvězda"</string>
+    <string name="templates_community_list_icon_starred">"S hvězdou"</string>
+
+    <!-- Common messages -->
+    <string name="ok">"OK"</string>
+    <string name="missing_feature_message">"Chybějící funkce, vydržte! :)"</string>
+    <string name="main_all_granted_message">"Všechna požadovaná oprávnění udělena! Pěkný den!"</string>
+    <string name="main_some_granted_message">"Některá požadovaná oprávnění udělena, chybějící oprávnění mohou omezit funkce!"</string>
+    <string name="main_all_denied_message">"Všechna oprávnění odepřena, odepření oprávnění může omezit funkce!"</string>
+    <string name="main_ask_permissions_title">"Požádej o oprávnění"</string>
+    <string name="main_ask_permissions_message">"Potřebuješ oprávnění k %s."</string>
+    <string name="main_internet_permission_missing">"Chybí oprávnění na internet..."</string>
+    <string name="main_read_calendar_permission_missing">"Chybí oprávnění číst kalendář..."</string>
+    <string name="calendar_template_image">"Obrázek šablony kalendáře"</string>
+    <string name="calendar_navigator_prev_button_text">"&lt;"</string>
+    <string name="calendar_navigator_next_button_text">"&gt;"</string>
+    <string name="calendar_navigator_year_button_text">"2022"</string>
+    <string name="calendar_navigator_year_quarter_button_text">"4. čtvrtletí 2022"</string>
+    <string name="calendar_navigator_q1_button_text">"Q1"</string>
+    <string name="calendar_navigator_q2_button_text">"Q2"</string>
+    <string name="calendar_navigator_q3_button_text">"Q3"</string>
+    <string name="calendar_navigator_q4_button_text">"Q4"</string>
+    <string name="calendar_navigator_month_1_button_text">"říjen"</string>
+    <string name="calendar_navigator_month_2_button_text">"listopad"</string>
+    <string name="calendar_navigator_month_3_button_text">"prosinec"</string>
+    <string name="calendar_navigator_week_1_button_text">"T39"</string>
+    <string name="calendar_navigator_week_2_button_text">"T40"</string>
+    <string name="calendar_navigator_week_3_button_text">"T41"</string>
+    <string name="calendar_navigator_week_4_button_text">"T42"</string>
+    <string name="calendar_navigator_week_5_button_text">"T43"</string>
+    <string name="calendar_navigator_week_6_button_text">"T44"</string>
+    <string name="calendar_navigator_day_of_week_1_button_text">"P"</string>
+    <string name="calendar_navigator_day_of_week_2_button_text">"Ú"</string>
+    <string name="calendar_navigator_day_of_week_3_button_text">"S"</string>
+    <string name="calendar_navigator_day_of_week_4_button_text">"Č"</string>
+    <string name="calendar_navigator_day_of_week_5_button_text">"P"</string>
+    <string name="calendar_navigator_day_of_week_6_button_text">"S"</string>
+    <string name="calendar_navigator_day_of_week_7_button_text">"S"</string>
+    <string name="calendar_navigator_month_button_text">"Říj"</string>
+    <string name="calendar_navigator_day_button_text">"18"</string>
+    <string name="calendar_navigator_week_button_text">"T41"</string>
+    <string name="calendar_navigator_day_of_week_button_text">"Čtvrtek"</string>
+    <string name="calendar_year_title">"Roční plánovač – %s"</string>
+    <string name="calendar_quarter_title">"Čtvrtletní plánovač – %s"</string>
+    <string name="calendar_month_title">"Měsíční plánovač – %s"</string>
+    <string name="calendar_week_title">"Týdenní plánovač – %s týden %s"</string>
+    <string name="calendar_week_notes">"Poznámky"</string>
+    <string name="calendar_day_title">"Denní plánovač – %s"</string>
+    <string name="calendar_day_schedules">"Časy"</string>
+    <string name="calendar_day_tasks">"Úkoly"</string>
+    <string name="calendar_day_notes">"Poznámky"</string>
+    <string name="dashboard_device_mismatch_title">"Nesoulad zařízení"</string>
+    <string name="dashboard_device_mismatch_message">"Aplikace 'Tools for Boox' je vyvinuta pro zařízení Onyx Boox, vaše zařízení nevypadá jako Onyx Boox (%s - %s), mohou se vyskytovat chyby a pády."</string>
+
+    <!-- Strings related to about plugin -->
+    <string name="about_title">"O"</string>
+    <string name="about_about_me_title">"O mně"</string>
+    <string name="about_about_me_message">"Jmenuji se Gábor AUTH, jsem vývojář pro Android a vyvíjím tuto aplikaci pro zařízení Onxy Boox! :)"</string>
+    <string name="about_about_me_link">"Odkaz:"</string>
+    <string name="about_project_home_title">"Projektová homepage"</string>
+    <string name="about_project_home_message">"Projekt je open source, najdete ho v mém úložišti GitHub:"</string>
+    <string name="about_project_home_link">"Odkaz:"</string>
+    <string name="about_other_links_title">"Odkazy"</string>
+    <string name="about_other_links_webpage_link">"Webová stránka:"</string>
+    <string name="about_other_links_translate_link">"Přeložit:"</string>
+    <string name="about_other_links_facebook_link">"Facebook:"</string>
+    <string name="about_other_links_discord_link">"Discord:"</string>
+    <string name="calendar_day_all_day">"Celodenní akce"</string>
+    <string name="dashboard_api_level_warning_title">"Upozornění na verzi Androidu"</string>
+    <string name="dashboard_api_level_warning_message">"Zdá se, že vaše zařízení je založeno na systému Android %s, což omezuje přímé použití externího úložiště, takže aplikace nemůže exportovat šablony poznámek přímo do složky noteTemplate."</string>
+    <string name="calendar_navigator_image">"Obrázek navigátoru kalendáře"</string>
+    <string name="util_fluent_days">"dní"</string>
+    <string name="util_fluent_hours">"hodin"</string>
+    <string name="util_fluent_minutes">"minut"</string>
+    <string name="util_fluent_seconds">"sekund"</string>
+    <string name="calendar_year_notes">"Poznámky"</string>
+    <string name="calendar_quarter_notes">"Poznámky"</string>
+    <string name="calendar_month_notes">"Poznámky"</string>
+    <string name="calendar_day_notes_cals">"Poznámky a události kalendáře"</string>
+    <string name="about_project_help_title">"Jak můžete pomoci?"</string>
+    <string name="about_project_help_message_1">"1, Pokud se vám to líbí, dejte mu pár hvězdiček… pokud můžete, také napište recenzi!"</string>
+    <string name="about_project_help_message_2">"2, Mluvte o tom na fórech a skupinách, sdílejte znalosti!"</string>
+    <string name="about_project_help_message_3">"3, Poskytněte zpětnou vazbu a zapojte se do diskuzí na GitHubu!"</string>
+</resources>
