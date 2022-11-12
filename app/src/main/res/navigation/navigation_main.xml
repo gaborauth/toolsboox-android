@@ -19,6 +19,18 @@
                 android:id="@+id/action_to_calendar_day"
                 app:destination="@id/CalendarDayFragment"/>
         <action
+                android:id="@+id/action_to_calendar_week"
+                app:destination="@id/CalendarWeekFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_month"
+                app:destination="@id/CalendarMonthFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_quarter"
+                app:destination="@id/CalendarQuarterFragment"/>
+        <action
+                android:id="@+id/action_to_calendar_year"
+                app:destination="@id/CalendarYearFragment"/>
+        <action
                 android:id="@+id/action_to_kanban_main"
                 app:destination="@id/KanbanMainFragment"/>
         <action

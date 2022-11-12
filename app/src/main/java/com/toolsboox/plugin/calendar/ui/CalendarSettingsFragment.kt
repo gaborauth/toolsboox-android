@@ -8,6 +8,7 @@ import com.toolsboox.R
 import com.toolsboox.da.LocaleItem
 import com.toolsboox.databinding.FragmentCalendarSettingsBinding
 import com.toolsboox.ot.LocaleItemAdapter
+import com.toolsboox.ot.NoFilterAdapter
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
@@ -59,6 +60,11 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
     private lateinit var selectedLocaleLanguageTag: String
 
     /**
+     * The selected start view.
+     */
+    private var selectedStartView: Int = 0
+
+    /**
      * OnViewCreated hook.
      *
      * @param view the parent view
@@ -81,23 +87,43 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
         val savedLocaleLanguageTag = sharedPreferences.getString("calendarLocale", Locale.getDefault().toLanguageTag())
         selectedLocaleLanguageTag = savedLocaleLanguageTag ?: Locale.getDefault().toLanguageTag()
 
+        selectedStartView = sharedPreferences.getInt("calendarStartView", 0)
+
+        val listOfStartViews = mutableListOf<String>()
+        listOfStartViews.add(getString(R.string.calendar_settings_start_view_day))
+        listOfStartViews.add(getString(R.string.calendar_settings_start_view_week))
+        listOfStartViews.add(getString(R.string.calendar_settings_start_view_month))
+        listOfStartViews.add(getString(R.string.calendar_settings_start_view_quarter))
+        listOfStartViews.add(getString(R.string.calendar_settings_start_view_year))
+
+        val startViewAdapter = NoFilterAdapter(this.requireContext(), R.layout.list_item_locale, listOfStartViews)
+        binding.startViewSpinner.setAdapter(startViewAdapter)
+        startViewAdapter.notifyDataSetChanged()
+
+        binding.startViewSpinner.setOnItemClickListener { _, _, position, _ ->
+            selectedStartView = position
+        }
+
+        // Locale settings
         val listOfLocales = mutableListOf<LocaleItem>()
         for (locale in Locale.getAvailableLocales()) {
             listOfLocales.add(LocaleItem(locale.toLanguageTag(), locale.displayName))
         }
 
-        val index = listOfLocales.indexOfFirst { it.languageTag == selectedLocaleLanguageTag }
+        val localeIndex = listOfLocales.indexOfFirst { it.languageTag == selectedLocaleLanguageTag }
 
-        val adapter = LocaleItemAdapter(this.requireContext(), R.layout.list_item_locale, listOfLocales)
-        binding.localesSpinner.setAdapter(adapter)
-        adapter.notifyDataSetChanged()
+        val localeAdapter = LocaleItemAdapter(this.requireContext(), R.layout.list_item_locale, listOfLocales)
+        binding.localesSpinner.setAdapter(localeAdapter)
+        localeAdapter.notifyDataSetChanged()
 
         binding.localesSpinner.setOnItemClickListener { _, _, position, _ ->
-            updateLocaleSettings(adapter, position)
+            updateLocaleSettings(localeAdapter, position)
         }
 
+        // Save and back
         binding.buttonSave.setOnClickListener {
             sharedPreferences.edit().putString("calendarLocale", selectedLocaleLanguageTag).apply()
+            sharedPreferences.edit().putInt("calendarStartView", selectedStartView).apply()
             this@CalendarSettingsFragment.requireActivity().onBackPressed()
         }
 
@@ -105,10 +131,13 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
             this@CalendarSettingsFragment.requireActivity().onBackPressed()
         }
 
-        if (index > -1) {
-            binding.localesSpinner.setText(listOfLocales[index].toString())
-            updateLocaleSettings(adapter, index)
+        // Set start of spinners
+        if (localeIndex > -1) {
+            binding.localesSpinner.setText(listOfLocales[localeIndex].toString())
+            updateLocaleSettings(localeAdapter, localeIndex)
         }
+
+        binding.startViewSpinner.setText(listOfStartViews[selectedStartView])
     }
 
     /**

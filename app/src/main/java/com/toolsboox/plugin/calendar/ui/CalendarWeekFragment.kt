@@ -150,7 +150,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
             }
         }
 
-        currentDate = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
+        currentDate = LocalDate.now()
         arguments?.getString("year")?.toIntOrNull()?.let { year ->
             Timber.i("Set year to '$year' from parameter")
             currentDate = LocalDate.of(year, 1, 1)

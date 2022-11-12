@@ -86,11 +86,20 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
             layoutManager = GridLayoutManager(this@DashboardFragment.requireContext(), 4)
         }
 
+        val calendarStartActionId = when (sharedPreferences.getInt("calendarStartView", 0)) {
+            0 -> R.id.action_to_calendar_day
+            1 -> R.id.action_to_calendar_week
+            2 -> R.id.action_to_calendar_month
+            3 -> R.id.action_to_calendar_quarter
+            4 -> R.id.action_to_calendar_year
+            else -> R.id.action_to_calendar_day
+        }
+
         val squareItems = mutableListOf<SquareItem>()
         squareItems.add(
             SquareItem(
                 "Calendar", R.drawable.ic_dashboard_item_calendar,
-                R.id.action_to_calendar_day, bundleOf()
+                calendarStartActionId, bundleOf()
             )
         )
         squareItems.add(
