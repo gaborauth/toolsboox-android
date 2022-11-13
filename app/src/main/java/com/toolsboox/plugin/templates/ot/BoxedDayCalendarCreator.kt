@@ -60,7 +60,7 @@ class BoxedDayCalendarCreator {
             textPaint.color = Color.BLACK
             textPaint.textSize = 40.0f
 
-            val localDate = LocalDate.of(LocalDate.now().year, 1, 1)
+            val localDate = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
                 .with(TemporalAdjusters.firstDayOfMonth())
                 .plusDays(dm - 1)
             val date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
