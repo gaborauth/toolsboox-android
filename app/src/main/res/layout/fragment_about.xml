@@ -176,5 +176,26 @@
                 android:singleLine="false"
                 android:text="@string/about_project_help_message_3"/>
 
+        <TextView
+                android:id="@+id/this_translation_title"
+                android:layout_marginTop="20dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="20sp"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_this_translation_contributors_title"/>
+
+        <TextView
+                android:id="@+id/this_translation_text"
+                android:layout_marginTop="10dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="@string/about_this_translation_contributors_list"/>
+
     </LinearLayout>
 </FrameLayout>
