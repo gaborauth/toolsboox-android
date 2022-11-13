@@ -202,7 +202,7 @@ class CalendarDayPage {
                             )
                         } else {
                             val startDate = event.startDate.atZone(ZoneId.systemDefault())
-                                .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG))
+                                .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.LONG))
                             val endDate = event.endDate.atZone(ZoneId.systemDefault())
                                 .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.LONG))
                             canvas.drawText(
