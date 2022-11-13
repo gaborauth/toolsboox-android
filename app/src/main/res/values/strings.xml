@@ -87,6 +87,8 @@
     <string name="calendar_settings_week_number_of_first_day_value">W1</string>
     <string name="calendar_settings_week_number_of_last_day_text">Week number of last day:</string>
     <string name="calendar_settings_week_number_of_last_day_value">W52</string>
+    <string name="calendar_settings_button_backup">Export backup to Downloads</string>
+    <string name="calendar_settings_backup_done">Calendar backup exported to the Downloads</string>
     <string name="calendar_settings_button_save">Save</string>
     <string name="calendar_settings_button_back">Back</string>
 

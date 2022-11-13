@@ -120,6 +120,11 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
             updateLocaleSettings(localeAdapter, position)
         }
 
+        // Export the calendar
+        binding.buttonBackup.setOnClickListener {
+            presenter.export(this@CalendarSettingsFragment, binding)
+        }
+
         // Save and back
         binding.buttonSave.setOnClickListener {
             sharedPreferences.edit().putString("calendarLocale", selectedLocaleLanguageTag).apply()
