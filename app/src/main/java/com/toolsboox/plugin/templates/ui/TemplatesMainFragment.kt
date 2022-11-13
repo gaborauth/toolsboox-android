@@ -58,31 +58,31 @@ class TemplatesMainFragment @Inject constructor() : ScreenFragment() {
         val squareItems = mutableListOf<SquareItem>()
         squareItems.add(
             SquareItem(
-                "Boxed days\ncalendar", R.drawable.ic_dashboard_item_calendar,
+                getString(R.string.templates_item_boxed_days_title), R.drawable.ic_dashboard_item_calendar,
                 R.id.action_to_templates_boxed_days_calendar, bundleOf() //"/templates/boxedDaysCalendar"
             )
         )
         squareItems.add(
             SquareItem(
-                "Boxed weeks\ncalendar", R.drawable.ic_dashboard_item_calendar,
+                getString(R.string.templates_item_boxed_weeks_title), R.drawable.ic_dashboard_item_calendar,
                 R.id.action_to_templates_boxed_weeks_calendar, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
-                "Community\ntemplates", R.drawable.ic_community_templates,
+                getString(R.string.templates_item_community_title), R.drawable.ic_community_templates,
                 R.id.action_to_templates_community, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
-                "Flat weeks\ncalendar", R.drawable.ic_dashboard_item_calendar,
+                getString(R.string.templates_item_flat_weeks_title), R.drawable.ic_dashboard_item_calendar,
                 R.id.action_to_templates_flat_weeks_calendar, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
-                "This week's\ncalendar", R.drawable.ic_dashboard_item_calendar,
+                getString(R.string.templates_item_this_weeks_title), R.drawable.ic_dashboard_item_calendar,
                 R.id.action_to_templates_this_weeks_calendar, bundleOf()
             )
         )

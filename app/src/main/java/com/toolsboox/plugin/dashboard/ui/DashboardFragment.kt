@@ -98,31 +98,31 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         val squareItems = mutableListOf<SquareItem>()
         squareItems.add(
             SquareItem(
-                "Calendar", R.drawable.ic_dashboard_item_calendar,
+                getString(R.string.dashboard_item_calendar_title), R.drawable.ic_dashboard_item_calendar,
                 calendarStartActionId, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
-                "Templates", R.drawable.ic_dashboard_item_templates,
+                getString(R.string.dashboard_item_templates_title), R.drawable.ic_dashboard_item_templates,
                 R.id.action_to_templates_main, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
-                "TeamDrawer", R.drawable.ic_dashboard_item_teamdrawer,
+                getString(R.string.dashboard_item_teamdrawer_title), R.drawable.ic_dashboard_item_teamdrawer,
                 R.id.action_to_teamdrawer_room, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
-                "Kanban\nplanner", R.drawable.ic_dashboard_item_kanban,
+                getString(R.string.dashboard_item_kanban_planner_title), R.drawable.ic_dashboard_item_kanban,
                 R.id.action_to_kanban_main, bundleOf()
             )
         )
         squareItems.add(
             SquareItem(
-                "About", R.drawable.ic_dashboard_item_about,
+                getString(R.string.dashboard_item_about_title), R.drawable.ic_dashboard_item_about,
                 R.id.action_to_about, bundleOf()
             )
         )

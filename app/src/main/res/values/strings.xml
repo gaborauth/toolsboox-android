@@ -39,7 +39,7 @@
 
     <!-- Strings related to main activity -->
     <string name="main_version">%s&#8211;%s</string>
-    <string name="main_update_not_now">Now now</string>
+    <string name="main_update_not_now">Not now</string>
     <string name="main_update">Update</string>
     <string name="main_all_granted_message">All asked permissions granted! Have a nice day!</string>
     <string name="main_some_granted_message">Some asked permissions granted, denying permissions may cause feature loss!</string>
@@ -155,6 +155,11 @@
     <string name="dashboard_device_mismatch_message">The \'Tools for Boox\' application is developed to Onyx Boox devices, your device doesn\'t look like an Onxy Boox (%s - %s), there may be bugs and crashes.</string>
     <string name="dashboard_api_level_warning_title">Android version warning</string>
     <string name="dashboard_api_level_warning_message">It looks like your device based on Android %s, which is restricts the direct usage of the external storage, so that the application cannot export note templates directly to the noteTemplate folder.</string>
+    <string name="dashboard_item_calendar_title">Calendar</string>
+    <string name="dashboard_item_templates_title">Templates</string>
+    <string name="dashboard_item_teamdrawer_title">TeamDrawer</string>
+    <string name="dashboard_item_kanban_planner_title">Kanban\nplanner</string>
+    <string name="dashboard_item_about_title">About</string>
     <string name="dashboard_item_cancel_alt">Cancel</string>
     <string name="dashboard_item_delete_alt">Delete</string>
     <string name="dashboard_item_edit_alt">Edit</string>
@@ -193,6 +198,11 @@
 
     <!-- Strings related to templates plugin -->
     <string name="templates_main_title">Templates</string>
+    <string name="templates_item_boxed_days_title">Boxed days\ncalendar</string>
+    <string name="templates_item_boxed_weeks_title">Boxed weeks\ncalendar</string>
+    <string name="templates_item_community_title">Community\ntemplates</string>
+    <string name="templates_item_flat_weeks_title">Flat week\ncalendar</string>
+    <string name="templates_item_this_weeks_title">This week\'s\ncalendar</string>
     <string name="templates_list_button_text">List</string>
     <string name="templates_preview_button_text">Preview</string>
     <string name="templates_settings_button_text">Settings</string>
