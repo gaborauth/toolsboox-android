@@ -60,6 +60,19 @@ abstract class ScreenFragment : Fragment() {
     /**
      * Show the 'something happened' error...
      *
+     * @param silent log only the error
+     * @param t the optional throwable
+     * @param parentView the optional parent view of the snackbar
+     */
+    fun somethingHappened(silent: Boolean = false, t: Throwable? = null, parentView: View? = null) {
+        runOnActivity {
+            showError(t, R.string.something_happened_error, parentView, silent)
+        }
+    }
+
+    /**
+     * Show the 'something happened' error...
+     *
      * @param t the optional throwable
      * @param parentView the optional parent view of the snackbar
      */
@@ -75,9 +88,11 @@ abstract class ScreenFragment : Fragment() {
      * @param t the optional throwable
      * @param errorResId the resource id of the error
      * @param parentView the optional parent view of the snackbar
+     * @param silent log only the error
      */
-    open fun showError(t: Throwable?, @StringRes errorResId: Int, parentView: View? = null) {
+    open fun showError(t: Throwable?, @StringRes errorResId: Int, parentView: View? = null, silent: Boolean = false) {
         t?.let { Timber.e(it, getString(errorResId)) }
+        if (silent) return
 
         val snackbar = Snackbar.make(
             parentView?.let { parentView } ?: toolbar.root, errorResId, Snackbar.LENGTH_INDEFINITE

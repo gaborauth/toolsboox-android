@@ -50,8 +50,9 @@ abstract class FragmentPresenter {
     protected fun <T> coroutinesCallHelper(
         fragment: ScreenFragment,
         call: () -> Deferred<Response<T>>,
-        onSuccess: (response: Response<T>) -> Unit
-    ) = coroutinesCallHelper(fragment, call, onSuccess) { t -> fragment.somethingHappened(t) }
+        onSuccess: (response: Response<T>) -> Unit,
+        silent: Boolean = false
+    ) = coroutinesCallHelper(fragment, call, onSuccess) { t -> fragment.somethingHappened(silent, t) }
 
     /**
      * Coroutines based call helper.

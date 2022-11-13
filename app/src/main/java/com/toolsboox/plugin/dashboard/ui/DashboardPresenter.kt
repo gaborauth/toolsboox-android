@@ -30,15 +30,16 @@ class DashboardPresenter @Inject constructor() : FragmentPresenter() {
                     200 -> {
                         val body = response.body()
                         if (body == null) {
-                            fragment.somethingHappened()
+                            fragment.somethingHappened(true)
                         } else {
                             fragment.versionResult(body)
                         }
                     }
 
-                    else -> fragment.somethingHappened()
+                    else -> fragment.somethingHappened(true)
                 }
-            }
+            },
+            true
         )
     }
 }
