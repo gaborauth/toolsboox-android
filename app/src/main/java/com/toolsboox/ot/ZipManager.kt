@@ -21,6 +21,8 @@ class ZipManager {
          * @param zipFile the zip file
          */
         fun zip(sourcePath: File, zipFile: File) {
+            if (!sourcePath.exists()) return
+
             ZipOutputStream(BufferedOutputStream(FileOutputStream(zipFile))).use { zos ->
                 val data = ByteArray(1024 * 16)
 
