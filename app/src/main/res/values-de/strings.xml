@@ -251,4 +251,9 @@ Strings related to dashboard fragment -->
     <string name="calendar_settings_backup_done">"Kalenderbackup in die Downloads gespeichert"</string>
     <string name="about_this_translation_contributors_title">"Mitwirkende der Übersetzung"</string>
     <string name="about_this_translation_contributors_list">"Anonymer Mitwirkender"</string>
+    <string name="dashboard_item_calendar_title">"Kalender"</string>
+    <string name="dashboard_item_templates_title">"Vorlagen"</string>
+    <string name="dashboard_item_teamdrawer_title">"Team Zeichungen"</string>
+    <string name="dashboard_item_kanban_planner_title">"Kanban Planer"</string>
+    <string name="dashboard_item_about_title">"Über"</string>
 </resources>
