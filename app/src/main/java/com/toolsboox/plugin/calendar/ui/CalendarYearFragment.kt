@@ -138,6 +138,12 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
                 )
             }
 
+        if (calendarPattern != null) {
+            val pages = if (calendarYear.strokes.isEmpty()) 0 else 1
+            val notes = if (calendarYear.notesStrokes.isEmpty()) 0 else 1
+            calendarPattern!!.updateYear(pages, notes)
+        }
+
         presenter.save(this, binding, calendarYear, currentDate, getSurfaceSize())
         patternPresenter.save(this, binding, calendarPattern, currentDate)
     }

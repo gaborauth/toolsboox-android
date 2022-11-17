@@ -124,21 +124,27 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
         val year = currentDate.year
         val locale = calendarWeek.locale
-        val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
-        val weekOfYearValue = currentDate.plusWeeks(0L).get(weekOfYear)
+        val weekOfYearField = WeekFields.of(locale).weekOfWeekBasedYear()
+        val weekOfYear = currentDate.plusWeeks(0L).get(weekOfYearField)
 
         calendarWeek =
             if (notes) {
                 CalendarWeek(
-                    year, weekOfYearValue, locale,
+                    year, weekOfYear, locale,
                     Calendar.listDeepCopy(calendarWeek.strokes), Calendar.listDeepCopy(strokes)
                 )
             } else {
                 CalendarWeek(
-                    year, weekOfYearValue, locale,
+                    year, weekOfYear, locale,
                     Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarWeek.notesStrokes)
                 )
             }
+
+        if (calendarPattern != null) {
+            val pages = if (calendarWeek.strokes.isEmpty()) 0 else 1
+            val notes = if (calendarWeek.notesStrokes.isEmpty()) 0 else 1
+            calendarPattern!!.updateWeek(weekOfYear, pages, notes)
+        }
 
         presenter.save(this, binding, calendarWeek, currentDate, getSurfaceSize())
         patternPresenter.save(this, binding, calendarPattern, currentDate)

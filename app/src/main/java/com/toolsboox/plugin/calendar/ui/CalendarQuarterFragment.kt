@@ -140,6 +140,12 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
                 )
             }
 
+        if (calendarPattern != null) {
+            val pages = if (calendarQuarter.strokes.isEmpty()) 0 else 1
+            val notes = if (calendarQuarter.notesStrokes.isEmpty()) 0 else 1
+            calendarPattern!!.updateQuarter(quarter, pages, notes)
+        }
+
         presenter.save(this, binding, calendarQuarter, currentDate, getSurfaceSize())
         patternPresenter.save(this, binding, calendarPattern, currentDate)
     }

@@ -139,6 +139,12 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
                 )
             }
 
+        if (calendarPattern != null) {
+            val pages = if (calendarMonth.strokes.isEmpty()) 0 else 1
+            val notes = if (calendarMonth.notesStrokes.isEmpty()) 0 else 1
+            calendarPattern!!.updateMonth(month, pages, notes)
+        }
+
         presenter.save(this, binding, calendarMonth, currentDate, getSurfaceSize())
         patternPresenter.save(this, binding, calendarPattern, currentDate)
     }

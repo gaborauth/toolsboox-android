@@ -125,6 +125,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         val year = currentDate.year
         val month = currentDate.monthValue
         val day = currentDate.dayOfMonth
+        val dayOfYear = currentDate.dayOfYear
         val locale = calendarDay.locale
 
         calendarDay =
@@ -140,6 +141,12 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
                 )
             }
 
+        if (calendarPattern != null) {
+            val pages = if (calendarDay.strokes.isEmpty()) 0 else 1
+            val notes = if (calendarDay.notesStrokes.isEmpty()) 0 else 1
+            calendarPattern!!.updateDay(dayOfYear, pages, notes)
+        }
+
         presenter.save(this, binding, calendarDay, currentDate, getSurfaceSize())
         patternPresenter.save(this, binding, calendarPattern, currentDate)
     }
@@ -151,7 +158,6 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
      */
     override fun onCalendarPatternLoaded(calendarPattern: CalendarPattern) {
         this.calendarPattern = calendarPattern
-        Timber.e("$calendarPattern")
     }
 
     /**
