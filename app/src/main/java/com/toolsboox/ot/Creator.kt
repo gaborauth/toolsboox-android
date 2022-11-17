@@ -1,10 +1,7 @@
 package com.toolsboox.ot
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
+import android.graphics.*
 import android.text.TextPaint
 import android.text.TextUtils
 import androidx.core.content.res.ResourcesCompat
@@ -23,6 +20,7 @@ interface Creator {
         val colorGrey80 = Color.argb(0.8f, 0.5f, 0.5f, 0.5f)
         val colorWhite = Color.argb(1.0f, 1.0f, 1.0f, 1.0f)
 
+        val fillBlack = Paint()
         val fillGrey20 = Paint()
         val fillGrey80 = Paint()
         val fillWhite = Paint()
@@ -44,14 +42,21 @@ interface Creator {
 
         init {
             // Fill styles
+            fillBlack.strokeWidth = 1.0f
+            fillBlack.color = Color.BLACK
+            fillBlack.style = Paint.Style.FILL_AND_STROKE
+
+            fillGrey20.strokeWidth = 1.0f
             fillGrey20.color = colorGrey20
-            fillGrey20.style = Paint.Style.FILL
+            fillGrey20.style = Paint.Style.FILL_AND_STROKE
 
+            fillGrey80.strokeWidth = 1.0f
             fillGrey80.color = colorGrey80
-            fillGrey80.style = Paint.Style.FILL
+            fillGrey80.style = Paint.Style.FILL_AND_STROKE
 
+            fillWhite.strokeWidth = 1.0f
             fillWhite.color = colorWhite
-            fillWhite.style = Paint.Style.FILL
+            fillWhite.style = Paint.Style.FILL_AND_STROKE
 
             // Line styles
             lineDefaultBlack.color = colorBlack
@@ -151,6 +156,40 @@ interface Creator {
             } else {
                 canvas.drawText(ellipsizedText, x, y, style)
             }
+        }
+
+        /**
+         * Draw circle.
+         *
+         * @param canvas the canvas
+         * @param x the x coordinate
+         * @param y the y coordinate
+         * @param size the size of the circle
+         * @param fillPaint optional fill paint
+         */
+        fun drawCircle(canvas: Canvas, x: Float, y: Float, size: Float, fillPaint: Paint = fillBlack) {
+            canvas.drawOval(x - size, y - size, x + size, y + size, fillPaint)
+        }
+
+        /**
+         * Draw top-left triangle.
+         *
+         * @param canvas the canvas
+         * @param x the x coordinate
+         * @param y the y coordinate
+         * @param size the size of the triangle
+         * @param fillPaint optional fill paint
+         */
+        fun drawTriangle(canvas: Canvas, x: Float, y: Float, size: Float, fillPaint: Paint = fillBlack) {
+            val path = Path()
+            path.fillType = Path.FillType.EVEN_ODD
+            path.moveTo(x + 0.0f, y + 0.0f)
+            path.lineTo(x + size, y + 0.0f)
+            path.lineTo(x + 0.0f, y + size)
+            path.lineTo(x + 0.0f, y + 0.0f)
+            path.close()
+
+            canvas.drawPath(path, fillPaint)
         }
     }
 }
