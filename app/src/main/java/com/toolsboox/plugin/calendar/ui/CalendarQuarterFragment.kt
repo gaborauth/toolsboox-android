@@ -11,6 +11,7 @@ import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.calendar.da.Calendar
+import com.toolsboox.plugin.calendar.da.CalendarPattern
 import com.toolsboox.plugin.calendar.da.CalendarQuarter
 import com.toolsboox.plugin.calendar.ot.CalendarQuarterNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarQuarterPage
@@ -48,6 +49,12 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
      */
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    /**
+     * The presenter of the pattern fragment.
+     */
+    @Inject
+    lateinit var patternPresenter: CalendarPatternPresenter
 
     /**
      * The presenter of the fragment.
@@ -91,6 +98,11 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
     private lateinit var calendarQuarter: CalendarQuarter
 
     /**
+     * The pattern data class.
+     */
+    private var calendarPattern: CalendarPattern? = null
+
+    /**
      * SurfaceView provide method.
      *
      * @return the actual surfaceView
@@ -129,6 +141,16 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
             }
 
         presenter.save(this, binding, calendarQuarter, currentDate, getSurfaceSize())
+        patternPresenter.save(this, binding, calendarPattern, currentDate)
+    }
+
+    /**
+     * Calendar pattern loaded.
+     *
+     * @param calendarPattern the calendar pattern
+     */
+    override fun onCalendarPatternLoaded(calendarPattern: CalendarPattern) {
+        this.calendarPattern = calendarPattern
     }
 
     /**
@@ -197,6 +219,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
+            patternPresenter.load(this@CalendarQuarterFragment, binding, currentDate, locale)
             presenter.load(this@CalendarQuarterFragment, binding, currentDate, getSurfaceSize(), locale)
         }
     }

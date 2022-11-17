@@ -10,6 +10,7 @@ import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.calendar.da.Calendar
+import com.toolsboox.plugin.calendar.da.CalendarPattern
 import com.toolsboox.plugin.calendar.da.CalendarYear
 import com.toolsboox.plugin.calendar.ot.CalendarYearNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarYearPage
@@ -47,6 +48,12 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      */
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    /**
+     * The presenter of the pattern fragment.
+     */
+    @Inject
+    lateinit var patternPresenter: CalendarPatternPresenter
 
     /**
      * The presenter of the fragment.
@@ -90,6 +97,11 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     private lateinit var calendarYear: CalendarYear
 
     /**
+     * The pattern data class.
+     */
+    private var calendarPattern: CalendarPattern? = null
+
+    /**
      * SurfaceView provide method.
      *
      * @return the actual surfaceView
@@ -127,6 +139,16 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
             }
 
         presenter.save(this, binding, calendarYear, currentDate, getSurfaceSize())
+        patternPresenter.save(this, binding, calendarPattern, currentDate)
+    }
+
+    /**
+     * Calendar pattern loaded.
+     *
+     * @param calendarPattern the calendar pattern
+     */
+    override fun onCalendarPatternLoaded(calendarPattern: CalendarPattern) {
+        this.calendarPattern = calendarPattern
     }
 
     /**
@@ -191,6 +213,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
+            patternPresenter.load(this@CalendarYearFragment, binding, currentDate, locale)
             presenter.load(this@CalendarYearFragment, binding, currentDate, getSurfaceSize(), locale)
         }
     }
