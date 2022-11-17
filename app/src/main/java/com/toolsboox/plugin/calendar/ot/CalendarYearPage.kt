@@ -9,6 +9,7 @@ import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
+import com.toolsboox.plugin.calendar.da.CalendarPattern
 import com.toolsboox.plugin.calendar.da.CalendarYear
 import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import java.time.DayOfWeek
@@ -121,8 +122,9 @@ class CalendarYearPage : Creator {
          * @param context the context
          * @param canvas the canvas
          * @param calendarYear data class
+         * @param calendarPattern pattern data class
          */
-        fun drawPage(context: Context, canvas: Canvas, calendarYear: CalendarYear) {
+        fun drawPage(context: Context, canvas: Canvas, calendarYear: CalendarYear, calendarPattern: CalendarPattern) {
             val year = calendarYear.year
             val locale = calendarYear.locale
             val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
@@ -137,12 +139,12 @@ class CalendarYearPage : Creator {
                     val xo = lo + cew + x * 9 * cew
                     val yo = to + y * 9 * ceh
 
-                    drawQuarter(canvas, xo - 50.0f, yo, quarterNumber)
+                    drawQuarter(canvas, xo - 50.0f, yo, quarterNumber, calendarPattern)
 
                     drawMonthGrid(canvas, xo, yo, firstDayOfWeek)
-                    drawMonthName(canvas, xo, yo, monthNumber)
+                    drawMonthName(canvas, xo, yo, monthNumber, calendarPattern)
 
-                    drawDayNumbers(canvas, locale, xo, yo, year, monthNumber)
+                    drawDayNumbers(canvas, locale, xo, yo, year, monthNumber, calendarPattern)
                     drawDayNames(canvas, xo, yo, firstDayOfWeek)
                 }
             }
@@ -188,12 +190,17 @@ class CalendarYearPage : Creator {
          * @param to the top offset
          * @param year the current year
          * @param month the current month
+         * @param calendarPattern the pattern data class
          */
-        private fun drawDayNumbers(canvas: Canvas, locale: Locale, lo: Float, to: Float, year: Int, month: Int) {
+        private fun drawDayNumbers(
+            canvas: Canvas, locale: Locale, lo: Float, to: Float, year: Int, month: Int,
+            calendarPattern: CalendarPattern
+        ) {
             val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
-            val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
+            val weekOfYearField = WeekFields.of(locale).weekOfWeekBasedYear()
 
             val yearMonth = YearMonth.of(year, month)
+            val dayOfYearBase = LocalDate.of(year, month, 1).dayOfYear
             val dayValue: Int = LocalDate.of(year, month, 1).dayOfWeek.value
             var xOffset = (dayValue - firstDayOfWeek + 7) % 7
             var yOffset = 3
@@ -202,11 +209,26 @@ class CalendarYearPage : Creator {
             for (day in 1..yearMonth.month.length(yearMonth.isLeapYear)) {
                 val x = lo + xOffset * cew + cew + cew / 2.0f
                 val y = to + yOffset * ceh - 15.0f
+                val dayOfYear = dayOfYearBase + day - 1
                 canvas.drawText("$day", x, y, Creator.textSmallBlackCenter)
 
+                if (calendarPattern.getDayPages(dayOfYear) > 0) {
+                    Creator.drawTriangle(canvas, x - cew / 2.0f, y - ceh + 15.0f, 10.0f)
+                }
+                if (calendarPattern.getDayNotes(dayOfYear) > 0) {
+                    Creator.drawCircle(canvas, x - cew / 2.0f + 5.0f, y + 10.0f, 2.5f)
+                }
+
                 if (firstInRow) {
-                    val weekNumber = LocalDate.of(year, month, day).get(weekOfYear)
-                    canvas.drawText("$weekNumber", lo + cew / 2.0f, y, Creator.textSmallBlackCenter)
+                    val weekOfYear = LocalDate.of(year, month, day).get(weekOfYearField)
+                    canvas.drawText("$weekOfYear", lo + cew / 2.0f, y, Creator.textSmallBlackCenter)
+
+                    if (calendarPattern.getWeekPages(weekOfYear) > 0) {
+                        Creator.drawTriangle(canvas, lo, y - ceh + 15.0f, 10.0f)
+                    }
+                    if (calendarPattern.getWeekNotes(weekOfYear) > 0) {
+                        Creator.drawCircle(canvas, lo + 5.0f, y + 10.0f, 2.5f)
+                    }
                     firstInRow = false
                 }
 
@@ -264,10 +286,20 @@ class CalendarYearPage : Creator {
          * @param lo the left offset
          * @param to the top offset
          * @param monthNumber the month as number
+         * @param calendarPattern the pattern data class
          */
-        private fun drawMonthName(canvas: Canvas, lo: Float, to: Float, monthNumber: Int) {
+        private fun drawMonthName(
+            canvas: Canvas, lo: Float, to: Float, monthNumber: Int, calendarPattern: CalendarPattern
+        ) {
             val monthName = Month.of(monthNumber).getDisplayName(TextStyle.FULL, Locale.getDefault())
             canvas.drawText(monthName, lo + 4 * cew, to + ceh - 10.0f, Creator.textDefaultWhiteCenter)
+
+            if (calendarPattern.getMonthPages(monthNumber) > 0) {
+                Creator.drawTriangle(canvas, lo + 2.0f, to + 2.0f, 20.0f, Creator.fillWhite)
+            }
+            if (calendarPattern.getMonthNotes(monthNumber) > 0) {
+                Creator.drawCircle(canvas, lo + 10.0f, to + ceh - 10.0f, 5.0f, Creator.fillWhite)
+            }
         }
 
         /**
@@ -277,13 +309,23 @@ class CalendarYearPage : Creator {
          * @param lo the left offset
          * @param to the top offset
          * @param quarterNumber the quarter as number
+         * @param calendarPattern the pattern data class
          */
-        private fun drawQuarter(canvas: Canvas, lo: Float, to: Float, quarterNumber: Int) {
+        private fun drawQuarter(
+            canvas: Canvas, lo: Float, to: Float, quarterNumber: Int, calendarPattern: CalendarPattern
+        ) {
             canvas.drawRect(lo + 0 * cew, to + 0 * ceh, lo + 1 * cew, to + 8 * ceh, Creator.fillGrey80)
             canvas.save()
             canvas.rotate(-90.0f, lo + cew - 5.0f, to + 4 * ceh)
             canvas.drawText("Q$quarterNumber", lo + cew - 5.0f, to + 4 * ceh - 5.0f, Creator.textDefaultWhiteCenter)
             canvas.restore()
+
+            if (calendarPattern.getQuarterPages(quarterNumber) > 0) {
+                Creator.drawTriangle(canvas, lo + 2.0f, to + 2.0f, 20.0f, Creator.fillWhite)
+            }
+            if (calendarPattern.getQuarterNotes(quarterNumber) > 0) {
+                Creator.drawCircle(canvas, lo + 10.0f, to + 8 * ceh - 10.0f, 5.0f, Creator.fillWhite)
+            }
         }
     }
 }

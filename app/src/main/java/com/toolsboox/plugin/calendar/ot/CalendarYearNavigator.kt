@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
+import com.toolsboox.plugin.calendar.da.CalendarPattern
 import com.toolsboox.plugin.calendar.da.CalendarYear
 import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import java.time.LocalDate
@@ -79,8 +80,9 @@ class CalendarYearNavigator {
          * @param context the context
          * @param canvas the canvas
          * @param calendarYear data class
+         * @param calendarPattern the calendar pattern
          */
-        fun draw(context: Context, canvas: Canvas, calendarYear: CalendarYear) {
+        fun draw(context: Context, canvas: Canvas, calendarYear: CalendarYear, calendarPattern: CalendarPattern) {
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 140.4f, Creator.fillWhite)
 
             canvas.drawLine(0.0f, 138.4f, 1404.0f, 138.4f, Creator.lineDefaultBlack)
@@ -111,6 +113,13 @@ class CalendarYearNavigator {
             Creator.drawEllipsizedText(
                 canvas, "$year", Creator.textBigBlackCenter, lo + 15 * cew, to + 1 * ceh - 30.0f, 4 * cew
             )
+
+            if (calendarPattern.getYearPages() > 0) {
+                Creator.drawTriangle(canvas, lo + 15 * cew, to + 0 * ceh, 20.0f)
+            }
+            if (calendarPattern.getYearNotes() > 0) {
+                Creator.drawCircle(canvas, lo + 15 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
+            }
 
             canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.lineDefaultBlack)

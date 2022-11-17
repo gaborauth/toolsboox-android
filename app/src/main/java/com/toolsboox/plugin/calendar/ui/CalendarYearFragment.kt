@@ -50,12 +50,6 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     /**
-     * The presenter of the pattern fragment.
-     */
-    @Inject
-    lateinit var patternPresenter: CalendarPatternPresenter
-
-    /**
      * The presenter of the fragment.
      */
     @Inject
@@ -99,7 +93,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     /**
      * The pattern data class.
      */
-    private var calendarPattern: CalendarPattern? = null
+    private lateinit var calendarPattern: CalendarPattern
 
     /**
      * SurfaceView provide method.
@@ -138,23 +132,11 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
                 )
             }
 
-        if (calendarPattern != null) {
-            val pages = if (calendarYear.strokes.isEmpty()) 0 else 1
-            val notes = if (calendarYear.notesStrokes.isEmpty()) 0 else 1
-            calendarPattern!!.updateYear(pages, notes)
-        }
+        val pages = if (calendarYear.strokes.isEmpty()) 0 else 1
+        val notes = if (calendarYear.notesStrokes.isEmpty()) 0 else 1
+        calendarPattern.updateYear(pages, notes)
 
-        presenter.save(this, binding, calendarYear, currentDate, getSurfaceSize())
-        patternPresenter.save(this, binding, calendarPattern, currentDate)
-    }
-
-    /**
-     * Calendar pattern loaded.
-     *
-     * @param calendarPattern the calendar pattern
-     */
-    override fun onCalendarPatternLoaded(calendarPattern: CalendarPattern) {
-        this.calendarPattern = calendarPattern
+        presenter.save(this, binding, calendarYear, calendarPattern, currentDate, getSurfaceSize())
     }
 
     /**
@@ -219,7 +201,6 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
-            patternPresenter.load(this@CalendarYearFragment, binding, currentDate, locale)
             presenter.load(this@CalendarYearFragment, binding, currentDate, getSurfaceSize(), locale)
         }
     }
@@ -236,16 +217,20 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
 
     /**
      * Reload the current page.
+     *
+     * @param calendarYear the data class
+     * @param calendarPattern the pattern data class
      */
-    fun renderPage(calendarYear: CalendarYear) {
+    fun renderPage(calendarYear: CalendarYear, calendarPattern: CalendarPattern) {
         this.calendarYear = calendarYear
+        this.calendarPattern = calendarPattern
         updateNavigator()
 
         if (notes) {
-            CalendarYearPageNotes.drawPage(this.requireContext(), templateCanvas, calendarYear)
+            CalendarYearPageNotes.drawPage(this.requireContext(), templateCanvas, calendarYear, calendarPattern)
             applyStrokes(calendarYear.notesStrokes.toMutableList(), true)
         } else {
-            CalendarYearPage.drawPage(this.requireContext(), templateCanvas, calendarYear)
+            CalendarYearPage.drawPage(this.requireContext(), templateCanvas, calendarYear, calendarPattern)
             applyStrokes(calendarYear.strokes.toMutableList(), true)
         }
     }
@@ -263,7 +248,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         val pageTitle = getString(R.string.calendar_year_title).format(year)
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
-        CalendarYearNavigator.draw(this.requireContext(), navigatorCanvas, calendarYear)
+        CalendarYearNavigator.draw(this.requireContext(), navigatorCanvas, calendarYear, calendarPattern)
 
         firebaseAnalytics.logEvent("calendarYear") {
             param("currentDate", currentDate.format(DateTimeFormatter.ISO_DATE))

@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.os.Environment
 import com.squareup.moshi.Moshi
 import com.toolsboox.databinding.FragmentCalendarBinding
+import com.toolsboox.plugin.calendar.da.CalendarPattern
 import com.toolsboox.plugin.calendar.da.CalendarYear
 import com.toolsboox.ui.plugin.FragmentPresenter
 import com.toolsboox.ui.plugin.ScreenFragment
@@ -66,7 +67,21 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }
 
-                withContext(Dispatchers.Main) { fragment.renderPage(calendarYear) }
+                var calendarPattern = CalendarPattern(year, locale).fill()
+                try {
+                    val adapter = moshi.adapter(CalendarPattern::class.java)
+                    if (getPatternPath(fragment, currentDate).exists()) {
+                        FileReader(getPatternPath(fragment, currentDate)).use { fileReader ->
+                            adapter.fromJson(fileReader.readText())?.let {
+                                calendarPattern = it
+                            }
+                        }
+                    }
+                } catch (e: IOException) {
+                    withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
+                }
+
+                withContext(Dispatchers.Main) { fragment.renderPage(calendarYear, calendarPattern) }
             } finally {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
             }
@@ -79,12 +94,13 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
      * @param fragment the fragment
      * @param binding the data binding
      * @param calendarYear the data class
+     * @param calendarPattern the pattern data class
      * @param currentDate the current date
      * @param surfaceSize the actual size of surface view
      */
     fun save(
         fragment: CalendarYearFragment, binding: FragmentCalendarBinding,
-        calendarYear: CalendarYear, currentDate: LocalDate, surfaceSize: Rect
+        calendarYear: CalendarYear, calendarPattern: CalendarPattern, currentDate: LocalDate, surfaceSize: Rect
     ) {
         if (!checkPermissions(fragment, binding.root)) return
 
@@ -99,6 +115,15 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
                     val adapter = moshi.adapter(CalendarYear::class.java)
                     PrintWriter(FileWriter(getPath(fragment, currentDate, true))).use {
                         it.write(adapter.toJson(calendarYearCopy))
+                    }
+                } catch (e: IOException) {
+                    withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
+                }
+
+                try {
+                    val adapter = moshi.adapter(CalendarPattern::class.java)
+                    PrintWriter(FileWriter(getPatternPath(fragment, currentDate, true))).use {
+                        it.write(adapter.toJson(calendarPattern))
                     }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
@@ -125,5 +150,23 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
         if (create) path.mkdirs()
 
         return File(path, "year-$year.json")
+    }
+
+    /**
+     * Get path of the files.
+     *
+     * @param fragment the fragment
+     * @param currentDate the current date
+     * @param create create folders
+     * @return the path on the filesystem
+     */
+    private fun getPatternPath(fragment: ScreenFragment, currentDate: LocalDate, create: Boolean = false): File {
+        val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
+
+        val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
+        val path = File(rootPath, "calendar/$year/")
+        if (create) path.mkdirs()
+
+        return File(path, "pattern-$year.json")
     }
 }
