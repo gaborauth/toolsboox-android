@@ -7,6 +7,7 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarDay
+import com.toolsboox.plugin.calendar.da.CalendarPattern
 import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -97,8 +98,9 @@ class CalendarDayNavigator {
          * @param context the context
          * @param canvas the canvas
          * @param calendarDay data class
+         * @param calendarPattern the calendar pattern
          */
-        fun draw(context: Context, canvas: Canvas, calendarDay: CalendarDay) {
+        fun draw(context: Context, canvas: Canvas, calendarDay: CalendarDay, calendarPattern: CalendarPattern) {
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 140.4f, Creator.fillWhite)
 
             canvas.drawLine(0.0f, 138.4f, 1404.0f, 138.4f, Creator.lineDefaultBlack)
@@ -108,10 +110,12 @@ class CalendarDayNavigator {
             val locale = calendarDay.locale
 
             val year = currentDate.year
+            val dayOfYear = currentDate.dayOfYear
+            val monthOfYear = currentDate.monthValue
             val monthName = currentDate.month.getDisplayName(TextStyle.SHORT, Locale.getDefault())
-            val quarter = (currentDate.monthValue - 1) / 3 + 1
+            val quarterOfYear = (currentDate.monthValue - 1) / 3 + 1
             val day = currentDate.dayOfMonth
-            val week = currentDate.plusWeeks(0L).get(WeekFields.of(locale).weekOfWeekBasedYear())
+            val weekOfYear = currentDate.plusWeeks(0L).get(WeekFields.of(locale).weekOfWeekBasedYear())
             val dayOfWeek = currentDate.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
 
             canvas.drawRect(lo + 0 * cew, to + 0 * ceh, lo + 1 * cew, to + 1 * ceh, Creator.fillGrey20)
@@ -124,6 +128,13 @@ class CalendarDayNavigator {
                 canvas, "$day", Creator.textBigBlackCenter, lo + 1 * cew, to + 1 * ceh - 30.0f, 2 * cew
             )
 
+            if (calendarPattern.getDayPages(dayOfYear) > 0) {
+                Creator.drawTriangle(canvas, lo + 1 * cew, to + 0 * ceh, 20.0f)
+            }
+            if (calendarPattern.getDayNotes(dayOfYear) > 0) {
+                Creator.drawCircle(canvas, lo + 1 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
+            }
+
             canvas.drawRect(lo + 3 * cew, to + 0 * ceh, lo + 6 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 3 * cew, to + 0 * ceh, lo + 6 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
             Creator.drawEllipsizedText(
@@ -133,8 +144,15 @@ class CalendarDayNavigator {
             canvas.drawRect(lo + 6 * cew, to + 0 * ceh, lo + 9 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 6 * cew, to + 0 * ceh, lo + 9 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
             Creator.drawEllipsizedText(
-                canvas, "W$week", Creator.textBigBlackCenter, lo + 6 * cew, to + 1 * ceh - 30.0f, 3 * cew
+                canvas, "W$weekOfYear", Creator.textBigBlackCenter, lo + 6 * cew, to + 1 * ceh - 30.0f, 3 * cew
             )
+
+            if (calendarPattern.getWeekPages(weekOfYear) > 0) {
+                Creator.drawTriangle(canvas, lo + 6 * cew, to + 0 * ceh, 20.0f)
+            }
+            if (calendarPattern.getWeekNotes(weekOfYear) > 0) {
+                Creator.drawCircle(canvas, lo + 6 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
+            }
 
             canvas.drawRect(lo + 9 * cew, to + 0 * ceh, lo + 13 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 9 * cew, to + 0 * ceh, lo + 13 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
@@ -142,17 +160,38 @@ class CalendarDayNavigator {
                 canvas, monthName, Creator.textBigBlackCenter, lo + 9 * cew, to + 1 * ceh - 30.0f, 4 * cew
             )
 
+            if (calendarPattern.getMonthPages(monthOfYear) > 0) {
+                Creator.drawTriangle(canvas, lo + 9 * cew, to + 0 * ceh, 20.0f)
+            }
+            if (calendarPattern.getMonthNotes(monthOfYear) > 0) {
+                Creator.drawCircle(canvas, lo + 9 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
+            }
+
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
             Creator.drawEllipsizedText(
-                canvas, "Q$quarter", Creator.textBigBlackCenter, lo + 13 * cew, to + 1 * ceh - 30.0f, 2 * cew
+                canvas, "Q$quarterOfYear", Creator.textBigBlackCenter, lo + 13 * cew, to + 1 * ceh - 30.0f, 2 * cew
             )
+
+            if (calendarPattern.getQuarterPages(quarterOfYear) > 0) {
+                Creator.drawTriangle(canvas, lo + 13 * cew, to + 0 * ceh, 20.0f)
+            }
+            if (calendarPattern.getQuarterNotes(quarterOfYear) > 0) {
+                Creator.drawCircle(canvas, lo + 13 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
+            }
 
             canvas.drawRect(lo + 15 * cew, to + 0 * ceh, lo + 19 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 15 * cew, to + 0 * ceh, lo + 19 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
             Creator.drawEllipsizedText(
                 canvas, "$year", Creator.textBigBlackCenter, lo + 15 * cew, to + 1 * ceh - 30.0f, 4 * cew
             )
+
+            if (calendarPattern.getYearPages() > 0) {
+                Creator.drawTriangle(canvas, lo + 15 * cew, to + 0 * ceh, 20.0f)
+            }
+            if (calendarPattern.getYearNotes() > 0) {
+                Creator.drawCircle(canvas, lo + 15 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
+            }
 
             canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
