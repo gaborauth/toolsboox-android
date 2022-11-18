@@ -8,6 +8,7 @@ import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
+import com.toolsboox.plugin.calendar.da.CalendarPattern
 import com.toolsboox.plugin.calendar.da.CalendarWeek
 import com.toolsboox.plugin.calendar.ui.CalendarWeekFragment
 import java.time.DayOfWeek
@@ -114,8 +115,9 @@ class CalendarWeekPage : Creator {
          * @param context the context
          * @param canvas the canvas
          * @param calendarWeek data class
+         * @param calendarPattern the calendar pattern
          */
-        fun drawPage(context: Context, canvas: Canvas, calendarWeek: CalendarWeek) {
+        fun drawPage(context: Context, canvas: Canvas, calendarWeek: CalendarWeek, calendarPattern: CalendarPattern) {
             val year = calendarWeek.year
             val weekOfYear = calendarWeek.weekOfYear
             val locale = calendarWeek.locale
@@ -124,10 +126,12 @@ class CalendarWeekPage : Creator {
             val startWeekDate = LocalDate.ofYearDay(year, 1)
                 .with(weekFields.weekOfYear(), weekOfYear.toLong())
                 .with(weekFields.dayOfWeek(), 1)
+            val dayOfYearBase = startWeekDate.dayOfYear
 
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)
 
             for (i in 0..7) {
+                val dayOfYear = dayOfYearBase + i
                 val xo = lo + (i % 2) * cew + (i % 2) * 50.0f
                 val yo = to + (i / 2) * ceh + (i / 2) * 50.0f
                 drawDayGrid(canvas, xo, yo)
@@ -148,8 +152,15 @@ class CalendarWeekPage : Creator {
                     canvas.drawText("W$weekOfYear", xo + 10.0f, yo + 40.0f, Creator.textDefaultWhite)
                     canvas.drawText(notes, xo + cew - 10.0f, yo + 40.0f, Creator.textDefaultWhiteRight)
                 } else {
-                    canvas.drawText("$day", xo + 10.0f, yo + 40.0f, Creator.textDefaultWhite)
+                    canvas.drawText("$day", xo + 20.0f, yo + 40.0f, Creator.textDefaultWhite)
                     canvas.drawText(dayName, xo + cew - 10.0f, yo + 40.0f, Creator.textDefaultWhiteRight)
+
+                    if (calendarPattern.getDayPages(dayOfYear) > 0) {
+                        Creator.drawTriangle(canvas, xo + 2.0f, yo + 2.0f, 10.0f, Creator.fillWhite)
+                    }
+                    if (calendarPattern.getDayNotes(dayOfYear) > 0) {
+                        Creator.drawCircle(canvas, xo + 5.0f, yo + 45.0f, 2.5f, Creator.fillWhite)
+                    }
                 }
             }
         }

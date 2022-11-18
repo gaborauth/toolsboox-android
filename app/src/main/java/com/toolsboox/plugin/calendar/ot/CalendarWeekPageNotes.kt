@@ -7,6 +7,7 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
+import com.toolsboox.plugin.calendar.da.CalendarPattern
 import com.toolsboox.plugin.calendar.da.CalendarWeek
 import com.toolsboox.plugin.calendar.ui.CalendarWeekFragment
 import java.time.LocalDate
@@ -78,8 +79,9 @@ class CalendarWeekPageNotes : Creator {
          * @param context the context
          * @param canvas the canvas
          * @param calendarWeek data class
+         * @param calendarPattern the calendar pattern
          */
-        fun drawPage(context: Context, canvas: Canvas, calendarWeek: CalendarWeek) {
+        fun drawPage(context: Context, canvas: Canvas, calendarWeek: CalendarWeek, calendarPattern: CalendarPattern) {
             val text1 = "What do you want to write here?"
             val text2 = "Sketch a template and send it to me... :)"
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)

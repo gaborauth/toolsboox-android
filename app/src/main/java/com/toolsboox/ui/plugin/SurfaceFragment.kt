@@ -15,7 +15,6 @@ import com.toolsboox.R
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.CalendarPattern
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import timber.log.Timber
@@ -141,13 +140,6 @@ abstract class SurfaceFragment : ScreenFragment() {
      * @param strokes the actual strokes
      */
     open fun onStrokeChanged(strokes: MutableList<Stroke>) {}
-
-    /**
-     * Calendar pattern loaded.
-     *
-     * @param calendarPattern the calendar pattern
-     */
-    open fun onCalendarPatternLoaded(calendarPattern: CalendarPattern) {}
 
     /**
      * OnResume hook.

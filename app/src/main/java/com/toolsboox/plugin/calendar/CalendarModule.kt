@@ -33,7 +33,4 @@ abstract class CalendarModule {
 
     @Binds
     abstract fun bindSettingsPresenter(presenter: CalendarSettingsPresenter): FragmentPresenter
-
-    @Binds
-    abstract fun bindPatternPresenter(presenter: CalendarPatternPresenter): FragmentPresenter
 }
