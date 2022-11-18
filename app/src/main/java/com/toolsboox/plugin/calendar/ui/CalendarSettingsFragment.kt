@@ -125,6 +125,11 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
             presenter.export(this@CalendarSettingsFragment, binding)
         }
 
+        // Sync the patterns of the calendar
+        binding.buttonPatternSync.setOnClickListener {
+            presenter.patternSync(this@CalendarSettingsFragment, binding)
+        }
+
         // Save and back
         binding.buttonSave.setOnClickListener {
             sharedPreferences.edit().putString("calendarLocale", selectedLocaleLanguageTag).apply()

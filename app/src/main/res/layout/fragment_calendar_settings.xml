@@ -222,6 +222,21 @@
             android:layout_marginEnd="16dp"
 
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_pattern_sync"
+            app:layout_constraintTop_toBottomOf="@+id/calendar_week_number_of_last_day_value"
+            android:layout_marginTop="24dp"/>
+
+    <Button
+            android:id="@+id/button_pattern_sync"
+            android:text="@string/calendar_settings_button_pattern_sync"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+
+            app:layout_constraintStart_toEndOf="@id/button_backup"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendar_week_number_of_last_day_value"
             android:layout_marginTop="24dp"/>
 
