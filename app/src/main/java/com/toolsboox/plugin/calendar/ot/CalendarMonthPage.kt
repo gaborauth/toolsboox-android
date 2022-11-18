@@ -8,6 +8,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.CalendarMonth
+import com.toolsboox.plugin.calendar.da.CalendarPattern
 import com.toolsboox.plugin.calendar.ui.CalendarMonthFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -128,8 +129,9 @@ class CalendarMonthPage : Creator {
          * @param context the context
          * @param canvas the canvas
          * @param calendarMonth data class
+         * @param calendarPattern pattern data class
          */
-        fun drawPage(context: Context, canvas: Canvas, calendarMonth: CalendarMonth) {
+        fun drawPage(context: Context, canvas: Canvas, calendarMonth: CalendarMonth, calendarPattern: CalendarPattern) {
             val year = calendarMonth.year
             val month = calendarMonth.month
             val locale = calendarMonth.locale
@@ -145,14 +147,14 @@ class CalendarMonthPage : Creator {
             }
 
             val currentDate = LocalDate.of(calendarMonth.year, calendarMonth.month, 1)
-            val weekOfYear = WeekFields.of(locale).weekOfWeekBasedYear()
+            val weekOfYearField = WeekFields.of(locale).weekOfWeekBasedYear()
 
             for (i in 0..5) {
-                val weekOfYearText = "W${currentDate.plusWeeks(i.toLong()).get(weekOfYear)}"
-                drawWeekNames(canvas, lo, to + 50.0f + i * ceh, weekOfYearText)
+                val weekOfYear = currentDate.plusWeeks(i.toLong()).get(weekOfYearField)
+                drawWeekNames(canvas, lo, to + 50.0f + i * ceh, weekOfYear, calendarPattern)
             }
 
-            drawDayNumbers(canvas, locale, lo + 50.0f, to + 50.0f, year, month)
+            drawDayNumbers(canvas, locale, lo + 50.0f, to + 50.0f, year, month, calendarPattern)
         }
 
         /**
@@ -163,11 +165,16 @@ class CalendarMonthPage : Creator {
          * @param to the top offset
          * @param year the current year
          * @param month the current month
+         * @param calendarPattern the pattern data class
          */
-        private fun drawDayNumbers(canvas: Canvas, locale: Locale, lo: Float, to: Float, year: Int, month: Int) {
+        private fun drawDayNumbers(
+            canvas: Canvas, locale: Locale, lo: Float, to: Float, year: Int, month: Int,
+            calendarPattern: CalendarPattern
+        ) {
             val firstDayOfWeek = WeekFields.of(locale).firstDayOfWeek.value
 
             val yearMonth = YearMonth.of(year, month)
+            val dayOfYearBase = LocalDate.of(year, month, 1).dayOfYear
             val dayValue: Int = LocalDate.of(year, month, 1).dayOfWeek.value
             var xOffset = (dayValue - firstDayOfWeek + 7) % 7
             var yOffset = 0
@@ -175,7 +182,15 @@ class CalendarMonthPage : Creator {
             for (day in 1..yearMonth.month.length(yearMonth.isLeapYear)) {
                 val x = lo + xOffset * cew + cew - 10.0f
                 val y = to + yOffset * ceh + 40.0f
+                val dayOfYear = dayOfYearBase + day - 1
                 canvas.drawText("$day", x, y, Creator.textDefaultBlackRight)
+
+                if (calendarPattern.getDayPages(dayOfYear) > 0) {
+                    Creator.drawTriangle(canvas, x - cew + 12.0f, y - 38.0f, 20.0f)
+                }
+                if (calendarPattern.getDayNotes(dayOfYear) > 0) {
+                    Creator.drawCircle(canvas, x - cew + 20.0f, y + ceh - 50.0f, 5.0f)
+                }
 
                 xOffset++
                 if (xOffset > 6) {
@@ -194,7 +209,7 @@ class CalendarMonthPage : Creator {
          * @param dayOfWeekNumber the number of the day of week
          */
         private fun drawDayOfWeekNames(canvas: Canvas, lo: Float, to: Float, dayOfWeekNumber: Int) {
-            canvas.drawRect(lo - 50.0f, to, lo + cew, to + 50.0f, Creator.fillGrey80)
+            canvas.drawRect(lo, to, lo + cew, to + 50.0f, Creator.fillGrey80)
             val locale = Locale.getDefault()
             val displayName = when (dayOfWeekNumber) {
                 DayOfWeek.MONDAY.value -> DayOfWeek.MONDAY.getDisplayName(TextStyle.SHORT, locale)
@@ -241,13 +256,23 @@ class CalendarMonthPage : Creator {
          * @param lo the left offset
          * @param to the top offset
          * @param weekOfYear the week of year
+         * @param calendarPattern the pattern data class
          */
-        private fun drawWeekNames(canvas: Canvas, lo: Float, to: Float, weekOfYear: String) {
+        private fun drawWeekNames(
+            canvas: Canvas, lo: Float, to: Float, weekOfYear: Int, calendarPattern: CalendarPattern
+        ) {
             canvas.drawRect(lo, to, lo + 50.0f, to + ceh, Creator.fillGrey80)
             canvas.save()
             canvas.rotate(-90.0f, lo + 45.0f, to + ceh / 2.0f)
-            canvas.drawText(weekOfYear, lo + 45.0f, to + ceh / 2.0f - 5.0f, Creator.textDefaultWhiteCenter)
+            canvas.drawText("W$weekOfYear", lo + 45.0f, to + ceh / 2.0f - 5.0f, Creator.textDefaultWhiteCenter)
             canvas.restore()
+
+            if (calendarPattern.getWeekPages(weekOfYear) > 0) {
+                Creator.drawTriangle(canvas, lo + 2.0f, to + 2.0f, 20.0f, Creator.fillWhite)
+            }
+            if (calendarPattern.getWeekNotes(weekOfYear) > 0) {
+                Creator.drawCircle(canvas, lo + 10.0f, to + ceh - 10.0f, 5.0f, Creator.fillWhite)
+            }
         }
     }
 }

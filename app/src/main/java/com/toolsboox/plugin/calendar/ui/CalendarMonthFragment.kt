@@ -51,12 +51,6 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     /**
-     * The presenter of the pattern fragment.
-     */
-    @Inject
-    lateinit var patternPresenter: CalendarPatternPresenter
-
-    /**
      * The presenter of the fragment.
      */
     @Inject
@@ -100,7 +94,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
     /**
      * The pattern data class.
      */
-    private var calendarPattern: CalendarPattern? = null
+    private lateinit var calendarPattern: CalendarPattern
 
     /**
      * SurfaceView provide method.
@@ -139,23 +133,11 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
                 )
             }
 
-        if (calendarPattern != null) {
-            val pages = if (calendarMonth.strokes.isEmpty()) 0 else 1
-            val notes = if (calendarMonth.notesStrokes.isEmpty()) 0 else 1
-            calendarPattern!!.updateMonth(month, pages, notes)
-        }
+        val pages = if (calendarMonth.strokes.isEmpty()) 0 else 1
+        val notes = if (calendarMonth.notesStrokes.isEmpty()) 0 else 1
+        calendarPattern.updateMonth(month, pages, notes)
 
-        presenter.save(this, binding, calendarMonth, currentDate, getSurfaceSize())
-        patternPresenter.save(this, binding, calendarPattern, currentDate)
-    }
-
-    /**
-     * Calendar pattern loaded.
-     *
-     * @param calendarPattern the calendar pattern
-     */
-    override fun onCalendarPatternLoaded(calendarPattern: CalendarPattern) {
-        this.calendarPattern = calendarPattern
+        presenter.save(this, binding, calendarMonth, calendarPattern, currentDate, getSurfaceSize())
     }
 
     /**
@@ -224,7 +206,6 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
-            patternPresenter.load(this@CalendarMonthFragment, binding, currentDate, locale)
             presenter.load(this@CalendarMonthFragment, binding, currentDate, getSurfaceSize(), locale)
         }
     }
@@ -241,16 +222,20 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
 
     /**
      * Reload the current page.
+     *
+     * @param calendarYear the data class
+     * @param calendarPattern the pattern data class
      */
-    fun renderPage(calendarMonth: CalendarMonth) {
+    fun renderPage(calendarMonth: CalendarMonth, calendarPattern: CalendarPattern) {
         this.calendarMonth = calendarMonth
+        this.calendarPattern = calendarPattern
         updateNavigator()
 
         if (notes) {
-            CalendarMonthPageNotes.drawPage(this.requireContext(), templateCanvas, calendarMonth)
+            CalendarMonthPageNotes.drawPage(this.requireContext(), templateCanvas, calendarMonth, calendarPattern)
             applyStrokes(calendarMonth.notesStrokes.toMutableList(), true)
         } else {
-            CalendarMonthPage.drawPage(this.requireContext(), templateCanvas, calendarMonth)
+            CalendarMonthPage.drawPage(this.requireContext(), templateCanvas, calendarMonth, calendarPattern)
             applyStrokes(calendarMonth.strokes.toMutableList(), true)
         }
     }
@@ -269,7 +254,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         val pageTitle = getString(R.string.calendar_month_title).format(titleDate)
         toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
 
-        CalendarMonthNavigator.draw(this.requireContext(), navigatorCanvas, calendarMonth)
+        CalendarMonthNavigator.draw(this.requireContext(), navigatorCanvas, calendarMonth, calendarPattern)
 
         firebaseAnalytics.logEvent("calendarMonth") {
             param("currentDate", currentDate.format(DateTimeFormatter.ISO_DATE))
