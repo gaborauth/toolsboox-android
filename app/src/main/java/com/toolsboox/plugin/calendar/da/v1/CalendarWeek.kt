@@ -1,30 +1,30 @@
-package com.toolsboox.plugin.calendar.da
+package com.toolsboox.plugin.calendar.da.v1
 
 import com.squareup.moshi.JsonClass
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import java.util.*
 
 /**
- * Calendar quarter data class.
+ * Calendar week data class.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @JsonClass(generateAdapter = true)
-data class CalendarQuarter(
-    val year: Int,
-    val quarter: Int,
+data class CalendarWeek(
+    var year: Int,
+    var weekOfYear: Int,
     val locale: Locale = Locale.getDefault(),
 
     override val strokes: List<Stroke> = listOf(),
     override val notesStrokes: List<Stroke> = listOf()
 ) : Calendar {
     /**
-     * Deep copy of the calendar quarter data class
+     * Deep copy of the calendar week data class
      */
-    fun deepCopy(): CalendarQuarter {
+    fun deepCopy(): CalendarWeek {
         val strokes = Calendar.listDeepCopy(this.strokes)
         val notesStrokes = Calendar.listDeepCopy(this.notesStrokes)
 
-        return CalendarQuarter(this.year, this.quarter, this.locale, strokes, notesStrokes)
+        return CalendarWeek(this.year, this.weekOfYear, this.locale, strokes, notesStrokes)
     }
 }

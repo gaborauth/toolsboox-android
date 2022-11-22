@@ -6,7 +6,7 @@ import com.squareup.moshi.Moshi
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarSettingsBinding
 import com.toolsboox.ot.ZipManager
-import com.toolsboox.plugin.calendar.da.*
+import com.toolsboox.plugin.calendar.da.v1.*
 import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

@@ -11,9 +11,9 @@ import androidx.core.database.getStringOrNull
 import com.squareup.moshi.Moshi
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarBinding
-import com.toolsboox.plugin.calendar.da.CalendarDay
-import com.toolsboox.plugin.calendar.da.CalendarPattern
-import com.toolsboox.plugin.calendar.da.GoogleCalendarEvent
+import com.toolsboox.plugin.calendar.da.v1.CalendarDay
+import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
 import com.toolsboox.ui.plugin.FragmentPresenter
 import com.toolsboox.ui.plugin.ScreenFragment
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package com.toolsboox.plugin.calendar.da
+package com.toolsboox.plugin.calendar.da.v1
 
 import com.squareup.moshi.JsonClass
 import java.util.*

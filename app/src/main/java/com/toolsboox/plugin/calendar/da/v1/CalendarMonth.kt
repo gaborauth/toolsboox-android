@@ -1,29 +1,30 @@
-package com.toolsboox.plugin.calendar.da
+package com.toolsboox.plugin.calendar.da.v1
 
 import com.squareup.moshi.JsonClass
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import java.util.*
 
 /**
- * Calendar year data class.
+ * Calendar month data class.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @JsonClass(generateAdapter = true)
-data class CalendarYear(
+data class CalendarMonth(
     val year: Int,
+    val month: Int,
     val locale: Locale = Locale.getDefault(),
 
     override val strokes: List<Stroke> = listOf(),
     override val notesStrokes: List<Stroke> = listOf()
 ) : Calendar {
     /**
-     * Deep copy of the calendar year data class
+     * Deep copy of the calendar month data class
      */
-    fun deepCopy(): CalendarYear {
+    fun deepCopy(): CalendarMonth {
         val strokes = Calendar.listDeepCopy(this.strokes)
         val notesStrokes = Calendar.listDeepCopy(this.notesStrokes)
 
-        return CalendarYear(this.year, this.locale, strokes, notesStrokes)
+        return CalendarMonth(this.year, this.month, this.locale, strokes, notesStrokes)
     }
 }

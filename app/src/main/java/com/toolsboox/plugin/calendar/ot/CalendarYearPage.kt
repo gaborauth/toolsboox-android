@@ -9,8 +9,8 @@ import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.CalendarPattern
-import com.toolsboox.plugin.calendar.da.CalendarYear
+import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v1.CalendarYear
 import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import java.time.DayOfWeek
 import java.time.LocalDate

@@ -6,8 +6,8 @@ import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.CalendarDay
-import com.toolsboox.plugin.calendar.da.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v1.CalendarDay
+import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
 import java.time.LocalDate
 import java.time.format.TextStyle

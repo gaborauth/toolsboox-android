@@ -9,9 +9,9 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
-import com.toolsboox.plugin.calendar.da.Calendar
-import com.toolsboox.plugin.calendar.da.CalendarPattern
-import com.toolsboox.plugin.calendar.da.CalendarYear
+import com.toolsboox.plugin.calendar.da.v1.Calendar
+import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v1.CalendarYear
 import com.toolsboox.plugin.calendar.ot.CalendarYearNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarYearPage
 import com.toolsboox.plugin.calendar.ot.CalendarYearPageNotes

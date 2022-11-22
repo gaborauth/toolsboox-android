@@ -9,10 +9,10 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
-import com.toolsboox.plugin.calendar.da.Calendar
-import com.toolsboox.plugin.calendar.da.CalendarDay
-import com.toolsboox.plugin.calendar.da.CalendarPattern
-import com.toolsboox.plugin.calendar.da.GoogleCalendarEvent
+import com.toolsboox.plugin.calendar.da.v1.Calendar
+import com.toolsboox.plugin.calendar.da.v1.CalendarDay
+import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
 import com.toolsboox.plugin.calendar.ot.CalendarDayNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarDayPage
 import com.toolsboox.plugin.calendar.ot.CalendarDayPageNotes

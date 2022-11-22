@@ -7,8 +7,8 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.CalendarPattern
-import com.toolsboox.plugin.calendar.da.CalendarWeek
+import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v1.CalendarWeek
 import com.toolsboox.plugin.calendar.ui.CalendarWeekFragment
 import java.time.LocalDate
 import java.time.temporal.WeekFields

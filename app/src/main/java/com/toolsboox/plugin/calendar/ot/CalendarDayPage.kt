@@ -8,8 +8,8 @@ import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.CalendarDay
-import com.toolsboox.plugin.calendar.da.GoogleCalendarEvent
+import com.toolsboox.plugin.calendar.da.v1.CalendarDay
+import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
 import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
 import java.time.LocalDate
 import java.time.ZoneId

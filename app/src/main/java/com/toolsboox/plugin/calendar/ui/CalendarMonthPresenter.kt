@@ -4,8 +4,8 @@ import android.graphics.Rect
 import android.os.Environment
 import com.squareup.moshi.Moshi
 import com.toolsboox.databinding.FragmentCalendarBinding
-import com.toolsboox.plugin.calendar.da.CalendarMonth
-import com.toolsboox.plugin.calendar.da.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v1.CalendarMonth
+import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.ui.plugin.FragmentPresenter
 import com.toolsboox.ui.plugin.ScreenFragment
 import kotlinx.coroutines.Dispatchers
