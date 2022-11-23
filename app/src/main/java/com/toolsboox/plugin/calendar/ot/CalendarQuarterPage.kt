@@ -101,7 +101,7 @@ class CalendarQuarterPage : Creator {
                         for (day in 1..days) {
                             val dyo = yo + day * ceh
                             if (px >= xo && px <= xo + cew && py >= dyo && py <= dyo + ceh) {
-                                CalendarNavigator.toDay(fragment, LocalDate.of(year, startMonth + i, day), false)
+                                CalendarNavigator.toDayPage(fragment, LocalDate.of(year, startMonth + i, day))
                                 return true
                             }
                         }

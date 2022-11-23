@@ -7,6 +7,7 @@ import android.view.View
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
+import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.calendar.da.v1.Calendar
@@ -15,7 +16,6 @@ import com.toolsboox.plugin.calendar.da.v1.CalendarYear
 import com.toolsboox.plugin.calendar.ot.CalendarYearNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarYearPage
 import com.toolsboox.plugin.calendar.ot.CalendarYearPageNotes
-import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -116,6 +116,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
+        val converted = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertFrom(strokes, UUID.randomUUID())
         val year = currentDate.year
         val locale = calendarYear.locale
 
@@ -123,12 +124,12 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
             if (notes) {
                 CalendarYear(
                     year, locale,
-                    Calendar.listDeepCopy(calendarYear.strokes), Calendar.listDeepCopy(strokes)
+                    Calendar.listDeepCopy(calendarYear.strokes), Calendar.listDeepCopy(converted)
                 )
             } else {
                 CalendarYear(
                     year, locale,
-                    Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarYear.notesStrokes)
+                    Calendar.listDeepCopy(converted), Calendar.listDeepCopy(calendarYear.notesStrokes)
                 )
             }
 
@@ -228,10 +229,12 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
 
         if (notes) {
             CalendarYearPageNotes.drawPage(this.requireContext(), templateCanvas, calendarYear, calendarPattern)
-            applyStrokes(calendarYear.notesStrokes.toMutableList(), true)
+            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarYear.notesStrokes)
+            applyStrokes(strokes, true)
         } else {
             CalendarYearPage.drawPage(this.requireContext(), templateCanvas, calendarYear, calendarPattern)
-            applyStrokes(calendarYear.strokes.toMutableList(), true)
+            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarYear.notesStrokes)
+            applyStrokes(strokes, true)
         }
     }
 

@@ -7,6 +7,7 @@ import android.view.View
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
+import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.calendar.da.v1.Calendar
@@ -15,7 +16,6 @@ import com.toolsboox.plugin.calendar.da.v1.CalendarWeek
 import com.toolsboox.plugin.calendar.ot.CalendarWeekNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarWeekPage
 import com.toolsboox.plugin.calendar.ot.CalendarWeekPageNotes
-import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -116,6 +116,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
+        val converted = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertFrom(strokes, UUID.randomUUID())
         val year = currentDate.year
         val locale = calendarWeek.locale
         val weekOfYearField = WeekFields.of(locale).weekOfWeekBasedYear()
@@ -125,12 +126,12 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
             if (notes) {
                 CalendarWeek(
                     year, weekOfYear, locale,
-                    Calendar.listDeepCopy(calendarWeek.strokes), Calendar.listDeepCopy(strokes)
+                    Calendar.listDeepCopy(calendarWeek.strokes), Calendar.listDeepCopy(converted)
                 )
             } else {
                 CalendarWeek(
                     year, weekOfYear, locale,
-                    Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarWeek.notesStrokes)
+                    Calendar.listDeepCopy(converted), Calendar.listDeepCopy(calendarWeek.notesStrokes)
                 )
             }
 
@@ -238,10 +239,12 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
 
         if (notes) {
             CalendarWeekPageNotes.drawPage(this.requireContext(), templateCanvas, calendarWeek, calendarPattern)
-            applyStrokes(calendarWeek.notesStrokes.toMutableList(), true)
+            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarWeek.notesStrokes)
+            applyStrokes(strokes, true)
         } else {
             CalendarWeekPage.drawPage(this.requireContext(), templateCanvas, calendarWeek, calendarPattern)
-            applyStrokes(calendarWeek.strokes.toMutableList(), true)
+            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarWeek.notesStrokes)
+            applyStrokes(strokes, true)
         }
     }
 

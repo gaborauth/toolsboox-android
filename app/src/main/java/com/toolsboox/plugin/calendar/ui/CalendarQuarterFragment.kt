@@ -8,6 +8,7 @@ import android.view.View
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
+import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.calendar.da.v1.Calendar
@@ -16,7 +17,6 @@ import com.toolsboox.plugin.calendar.da.v1.CalendarQuarter
 import com.toolsboox.plugin.calendar.ot.CalendarQuarterNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarQuarterPage
 import com.toolsboox.plugin.calendar.ot.CalendarQuarterPageNotes
-import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -117,6 +117,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
+        val converted = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertFrom(strokes, UUID.randomUUID())
         val year = currentDate.year
         val quarter = (currentDate.monthValue - 1) / 3 + 1
         val locale = calendarQuarter.locale
@@ -125,12 +126,12 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
             if (notes) {
                 CalendarQuarter(
                     year, quarter, locale,
-                    Calendar.listDeepCopy(calendarQuarter.strokes), Calendar.listDeepCopy(strokes)
+                    Calendar.listDeepCopy(calendarQuarter.strokes), Calendar.listDeepCopy(converted)
                 )
             } else {
                 CalendarQuarter(
                     year, quarter, locale,
-                    Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarQuarter.notesStrokes)
+                    Calendar.listDeepCopy(converted), Calendar.listDeepCopy(calendarQuarter.notesStrokes)
                 )
             }
 
@@ -234,10 +235,12 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
 
         if (notes) {
             CalendarQuarterPageNotes.drawPage(this.requireContext(), templateCanvas, calendarQuarter, calendarPattern)
-            applyStrokes(calendarQuarter.notesStrokes.toMutableList(), true)
+            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarQuarter.notesStrokes)
+            applyStrokes(strokes, true)
         } else {
             CalendarQuarterPage.drawPage(this.requireContext(), templateCanvas, calendarQuarter, calendarPattern)
-            applyStrokes(calendarQuarter.strokes.toMutableList(), true)
+            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarQuarter.notesStrokes)
+            applyStrokes(strokes, true)
         }
     }
 

@@ -107,7 +107,7 @@ class CalendarMonthPage : Creator {
                         val yo = to + 50.0f + yOffset * ceh
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
-                            CalendarNavigator.toDay(fragment, localDate.plusDays(day.toLong() - 1L), false)
+                            CalendarNavigator.toDayPage(fragment, localDate.plusDays(day.toLong() - 1L))
                             return true
                         }
 

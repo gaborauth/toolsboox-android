@@ -6,7 +6,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.v1.CalendarDay
+import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
 import java.time.LocalDate
@@ -59,11 +59,11 @@ class CalendarDayNavigator {
                     val py = motionEvent.y * 140.4f / view.height
 
                     if (px >= lo + 0 * cew && px <= lo + 1 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toDay(fragment, localDate.minusDays(1L), false)
+                        CalendarNavigator.toDayPage(fragment, localDate.minusDays(1L))
                         return true
                     }
                     if (px >= lo + 1 * cew && px <= lo + 3 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toDay(fragment, localDate, false)
+                        CalendarNavigator.toDayPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 3 * cew && px <= lo + 9 * cew && py >= to && py <= to + ceh) {
@@ -83,7 +83,7 @@ class CalendarDayNavigator {
                         return true
                     }
                     if (px >= lo + 19 * cew && px <= lo + 20 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toDay(fragment, localDate.plusDays(1L), false)
+                        CalendarNavigator.toDayPage(fragment, localDate.plusDays(1L))
                         return true
                     }
                 }

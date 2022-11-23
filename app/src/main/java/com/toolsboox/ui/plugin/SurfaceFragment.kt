@@ -12,11 +12,11 @@ import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.pen.data.TouchPointList
 import com.toolsboox.R
+import com.toolsboox.da.Stroke
+import com.toolsboox.da.StrokePoint
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
-import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import timber.log.Timber
 import java.time.Instant
 import java.util.*
@@ -353,6 +353,53 @@ abstract class SurfaceFragment : ScreenFragment() {
     }
 
     /**
+     * Normalize strokes from surface dimensions to unified.
+     *
+     * @param strokes the strokes
+     * @return the normalized strokes
+     */
+    fun surfaceFrom(strokes: List<Stroke>): List<Stroke> {
+        return normalizeStrokes(strokes, surfaceSize.width(), surfaceSize.height(), 1404, 1872)
+    }
+
+    /**
+     * Normalize strokes to surface dimensions from unified.
+     *
+     * @param strokes the strokes
+     * @return the normalized strokes
+     */
+    fun surfaceTo(strokes: List<Stroke>): List<Stroke> {
+        return normalizeStrokes(strokes, 1404, 1872, surfaceSize.width(), surfaceSize.height())
+    }
+
+    /**
+     * Normalize strokes.
+     *
+     * @param strokes the strokes
+     * @param fromWidth from width
+     * @param fromHeight from height
+     * @param toWidth to width
+     * @param toHeight to height
+     * @return the normalized strokes
+     */
+    private fun normalizeStrokes(
+        strokes: List<Stroke>, fromWidth: Int, fromHeight: Int, toWidth: Int, toHeight: Int
+    ): List<Stroke> {
+        val strokesCopy = Stroke.listDeepCopy(strokes)
+
+        val widthRatio = 1.0f * toWidth / fromWidth
+        val heightRatio = 1.0f * toHeight / fromHeight
+        for (stroke in strokesCopy) {
+            for (point in stroke.strokePoints) {
+                point.x *= widthRatio
+                point.y *= heightRatio
+            }
+        }
+
+        return strokesCopy
+    }
+
+    /**
      * Get the size of the surface.
      *
      * @return the size of the surface
@@ -433,7 +480,7 @@ abstract class SurfaceFragment : ScreenFragment() {
                     )
                 }
             }
-            val stroke = Stroke(UUID.randomUUID(), UUID.randomUUID(), strokePoints)
+            val stroke = Stroke(UUID.randomUUID(), strokePoints)
             strokes.add(stroke)
             strokesToAdd.add(stroke)
         }

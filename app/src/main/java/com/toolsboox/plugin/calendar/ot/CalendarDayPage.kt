@@ -8,8 +8,8 @@ import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.v1.CalendarDay
 import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
+import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
 import java.time.LocalDate
 import java.time.ZoneId
@@ -61,12 +61,12 @@ class CalendarDayPage {
 
             when (gestureResult) {
                 OnGestureListener.LTR -> {
-                    CalendarNavigator.toDay(fragment, localDate.minusDays(1L), false)
+                    CalendarNavigator.toDayPage(fragment, localDate.minusDays(1L))
                     return true
                 }
 
                 OnGestureListener.RTL -> {
-                    CalendarNavigator.toDay(fragment, localDate.plusDays(1L), false)
+                    CalendarNavigator.toDayPage(fragment, localDate.plusDays(1L))
                     return true
                 }
 
@@ -76,7 +76,7 @@ class CalendarDayPage {
                 }
 
                 OnGestureListener.DTU -> {
-                    CalendarNavigator.toDay(fragment, localDate, true)
+                    CalendarNavigator.toDayNote(fragment, localDate, "0")
                     return true
                 }
             }

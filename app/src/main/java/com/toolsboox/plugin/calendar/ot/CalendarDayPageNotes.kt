@@ -7,7 +7,7 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.v1.CalendarDay
+import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
 import java.time.LocalDate
 
@@ -57,7 +57,7 @@ class CalendarDayPageNotes : Creator {
 
             when (gestureResult) {
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toDay(fragment, localDate, false)
+                    CalendarNavigator.toDayPage(fragment, localDate)
                     return true
                 }
 

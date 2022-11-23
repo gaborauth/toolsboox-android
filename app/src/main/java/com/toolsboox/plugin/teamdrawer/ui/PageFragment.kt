@@ -97,8 +97,8 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
      *
      * @param strokes list of strokes
      */
-    override fun onStrokesAdded(strokes: List<Stroke>) {
-        presenter.add(this@PageFragment, roomId, noteId, pageId, strokes)
+    override fun onStrokesAdded(strokes: List<com.toolsboox.da.Stroke>) {
+        presenter.add(this@PageFragment, roomId, noteId, pageId, Stroke.convertFrom(strokes, roomId))
     }
 
     /**
@@ -255,7 +255,7 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
      * @param clearPage clear the page
      */
     fun listResult(strokes: List<Stroke>, clearPage: Boolean) {
-        applyStrokes(strokes, clearPage)
+        applyStrokes(Stroke.convertTo(strokes), clearPage)
     }
 
     /**

@@ -29,13 +29,13 @@ object CalendarNavigator {
     }
 
     /**
-     * Navigate to the daily calendar.
+     * Navigate to the daily calendar notes.
      *
      * @param fragment the fragment
      * @param localDate the local date
-     * @param notes navigate to the notes page
+     * @param notePage navigate to the note page
      */
-    fun toDay(fragment: ScreenFragment, localDate: LocalDate, notes: Boolean) {
+    fun toDayNote(fragment: ScreenFragment, localDate: LocalDate, notePage: String) {
         val year = localDate.year
         val month = localDate.monthValue
         val day = localDate.dayOfMonth
@@ -44,9 +44,31 @@ object CalendarNavigator {
         bundle.putString("year", "$year")
         bundle.putString("month", "$month")
         bundle.putString("day", "$day")
-        bundle.putString("notes", "$notes")
+        bundle.putString("notePage", notePage)
 
-        Timber.i("Navigate to the '$year-$month-$day' ($notes) daily calendar")
+        Timber.i("Navigate to the '$year-$month-$day' ($notePage) daily calendar")
+        fragment.findNavController().navigate(R.id.action_to_calendar_day, bundle)
+    }
+
+    /**
+     * Navigate to the daily calendar page.
+     *
+     * @param fragment the fragment
+     * @param localDate the local date
+     * @param calendarStyle to the calendar page
+     */
+    fun toDayPage(fragment: ScreenFragment, localDate: LocalDate, calendarStyle: String = "Default") {
+        val year = localDate.year
+        val month = localDate.monthValue
+        val day = localDate.dayOfMonth
+
+        val bundle = bundleOf()
+        bundle.putString("year", "$year")
+        bundle.putString("month", "$month")
+        bundle.putString("day", "$day")
+        bundle.putString("calendarStyle", calendarStyle)
+
+        Timber.i("Navigate to the '$year-$month-$day' ($calendarStyle) daily calendar")
         fragment.findNavController().navigate(R.id.action_to_calendar_day, bundle)
     }
 

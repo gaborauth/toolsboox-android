@@ -1,4 +1,4 @@
-package com.toolsboox.plugin.teamdrawer.nw.domain
+package com.toolsboox.da
 
 import com.squareup.moshi.JsonClass
 

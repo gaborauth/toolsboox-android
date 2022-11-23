@@ -97,7 +97,7 @@ class CalendarWeekPage : Creator {
                             if (i == 7) {
                                 CalendarNavigator.toWeek(fragment, startWeekDate, locale, false)
                             } else {
-                                CalendarNavigator.toDay(fragment, startWeekDate.plusDays(i.toLong()), false)
+                                CalendarNavigator.toDayPage(fragment, startWeekDate.plusDays(i.toLong()))
                             }
 
                             return true

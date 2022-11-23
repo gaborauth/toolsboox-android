@@ -8,6 +8,7 @@ import android.view.View
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
+import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.calendar.da.v1.Calendar
@@ -16,7 +17,6 @@ import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.ot.CalendarMonthNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarMonthPage
 import com.toolsboox.plugin.calendar.ot.CalendarMonthPageNotes
-import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -116,6 +116,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
+        val converted = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertFrom(strokes, UUID.randomUUID())
         val year = currentDate.year
         val month = currentDate.monthValue
         val locale = calendarMonth.locale
@@ -124,12 +125,12 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
             if (notes) {
                 CalendarMonth(
                     year, month, locale,
-                    Calendar.listDeepCopy(calendarMonth.strokes), Calendar.listDeepCopy(strokes)
+                    Calendar.listDeepCopy(calendarMonth.strokes), Calendar.listDeepCopy(converted)
                 )
             } else {
                 CalendarMonth(
                     year, month, locale,
-                    Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarMonth.notesStrokes)
+                    Calendar.listDeepCopy(converted), Calendar.listDeepCopy(calendarMonth.notesStrokes)
                 )
             }
 
@@ -233,10 +234,12 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
 
         if (notes) {
             CalendarMonthPageNotes.drawPage(this.requireContext(), templateCanvas, calendarMonth, calendarPattern)
-            applyStrokes(calendarMonth.notesStrokes.toMutableList(), true)
+            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarMonth.notesStrokes)
+            applyStrokes(strokes, true)
         } else {
             CalendarMonthPage.drawPage(this.requireContext(), templateCanvas, calendarMonth, calendarPattern)
-            applyStrokes(calendarMonth.strokes.toMutableList(), true)
+            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarMonth.strokes)
+            applyStrokes(strokes, true)
         }
     }
 
