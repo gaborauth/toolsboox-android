@@ -16,6 +16,7 @@
 
     <!-- Common messages -->
     <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="list_loading">Loading the list…</string>
     <string name="list_empty">Empty list…</string>
     <string name="export_message">Exported as %s</string>
@@ -98,6 +99,9 @@
 
     <string name="calendar_drawing_toolbar_pen">Pen</string>
     <string name="calendar_drawing_toolbar_eraser">Eraser</string>
+    <string name="calendar_drawing_toolbar_trash">Trash page</string>
+    <string name="calendar_drawing_toolbar_trash_dialog_title">Are you sure?</string>
+    <string name="calendar_drawing_toolbar_trash_dialog_message">Do you want to erase the whole content?</string>
     <string name="calendar_drawing_toolbar_settings">Settings</string>
 
     <string name="calendar_navigator_prev_button_text">&lt;</string>
