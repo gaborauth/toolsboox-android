@@ -1,7 +1,7 @@
 package com.toolsboox.plugin.calendar.da.v2
 
 import com.squareup.moshi.JsonClass
-import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
+import com.toolsboox.da.Stroke
 import java.util.*
 
 /**
@@ -15,16 +15,40 @@ data class CalendarWeek(
     var weekOfYear: Int,
     val locale: Locale = Locale.getDefault(),
 
-    override val strokes: List<Stroke> = listOf(),
-    override val notesStrokes: List<Stroke> = listOf()
+    override var calendarStrokes: MutableMap<String, List<Stroke>> = mutableMapOf(),
+    override var noteStrokes: MutableMap<String, List<Stroke>> = mutableMapOf()
 ) : Calendar {
+
+    companion object {
+        /**
+         * Name of the default calendar page style.
+         */
+        const val DEFAULT_STYLE = "Default"
+
+        /**
+         * Covert calendar week data class from v1 format to v2 format.
+         *
+         * @param v1 the v1 data class
+         * @return the v2 data class
+         */
+        fun convert(v1: com.toolsboox.plugin.calendar.da.v1.CalendarWeek): CalendarWeek {
+            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(v1.strokes)
+            val notesStrokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(v1.notesStrokes)
+
+            val calendarStrokes = mutableMapOf(DEFAULT_STYLE to strokes)
+            val noteStrokes = mutableMapOf("0" to notesStrokes)
+
+            return CalendarWeek(v1.year, v1.weekOfYear, v1.locale, calendarStrokes, noteStrokes)
+        }
+    }
+
     /**
      * Deep copy of the calendar week data class
      */
     fun deepCopy(): CalendarWeek {
-        val strokes = Calendar.listDeepCopy(this.strokes)
-        val notesStrokes = Calendar.listDeepCopy(this.notesStrokes)
-
-        return CalendarWeek(this.year, this.weekOfYear, this.locale, strokes, notesStrokes)
+        return CalendarWeek(
+            this.year, this.weekOfYear, this.locale,
+            Calendar.mapDeepCopy(calendarStrokes), Calendar.mapDeepCopy(noteStrokes)
+        )
     }
 }

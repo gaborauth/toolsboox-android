@@ -2,6 +2,7 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.view.MotionEvent
 import android.view.View
 import androidx.navigation.fragment.findNavController
@@ -10,7 +11,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarYear
+import com.toolsboox.plugin.calendar.da.v2.CalendarYear
 import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -62,13 +63,13 @@ class CalendarYearPage : Creator {
             when (gestureResult) {
                 OnGestureListener.LTR -> {
                     val localDate = LocalDate.of(year, 1, 1)
-                    CalendarNavigator.toYear(fragment, localDate.minusYears(1L), false)
+                    CalendarNavigator.toYearPage(fragment, localDate.minusYears(1L))
                     return true
                 }
 
                 OnGestureListener.RTL -> {
                     val localDate = LocalDate.of(year, 1, 1)
-                    CalendarNavigator.toYear(fragment, localDate.plusYears(1L), false)
+                    CalendarNavigator.toYearPage(fragment, localDate.plusYears(1L))
                     return true
                 }
 
@@ -79,7 +80,7 @@ class CalendarYearPage : Creator {
 
                 OnGestureListener.DTU -> {
                     val localDate = LocalDate.of(year, 1, 1)
-                    CalendarNavigator.toYear(fragment, localDate, true)
+                    CalendarNavigator.toYearNote(fragment, localDate, "0")
                     return true
                 }
             }
@@ -99,13 +100,13 @@ class CalendarYearPage : Creator {
 
                             if (px >= xo - cew && px <= xo && py >= yo && py <= yo + 8 * ceh) {
                                 val localDate = LocalDate.of(year, quarterMonthNumber, 1)
-                                CalendarNavigator.toQuarter(fragment, localDate, false)
+                                CalendarNavigator.toQuarterPage(fragment, localDate)
                                 return true
                             }
 
                             if (px >= xo && px <= xo + 8 * cew && py >= yo && py <= yo + 8 * ceh) {
                                 val localDate = LocalDate.of(year, monthNumber, 1)
-                                CalendarNavigator.toMonth(fragment, localDate, false)
+                                CalendarNavigator.toMonthPage(fragment, localDate)
                                 return true
                             }
                         }
@@ -215,9 +216,7 @@ class CalendarYearPage : Creator {
                 if (calendarPattern.getDayPages(dayOfYear) > 0) {
                     Creator.drawTriangle(canvas, x - cew / 2.0f, y - ceh + 15.0f, 10.0f)
                 }
-                if (calendarPattern.getDayNotes(dayOfYear) > 0) {
-                    Creator.drawCircle(canvas, x - cew / 2.0f + 5.0f, y + 10.0f, 2.5f)
-                }
+                Creator.notesDots(canvas, x - cew / 2.0f + 5.0f, y + 10.0f, 2.5f, calendarPattern.getDayNotes(dayOfYear))
 
                 if (firstInRow) {
                     val weekOfYear = LocalDate.of(year, month, day).get(weekOfYearField)
@@ -226,9 +225,7 @@ class CalendarYearPage : Creator {
                     if (calendarPattern.getWeekPages(weekOfYear) > 0) {
                         Creator.drawTriangle(canvas, lo, y - ceh + 15.0f, 10.0f)
                     }
-                    if (calendarPattern.getWeekNotes(weekOfYear) > 0) {
-                        Creator.drawCircle(canvas, lo + 5.0f, y + 10.0f, 2.5f)
-                    }
+                    Creator.notesDots(canvas, lo + 5.0f, y + 10.0f, 2.5f, calendarPattern.getWeekNotes(weekOfYear))
                     firstInRow = false
                 }
 
@@ -297,9 +294,7 @@ class CalendarYearPage : Creator {
             if (calendarPattern.getMonthPages(monthNumber) > 0) {
                 Creator.drawTriangle(canvas, lo + 2.0f, to + 2.0f, 20.0f, Creator.fillWhite)
             }
-            if (calendarPattern.getMonthNotes(monthNumber) > 0) {
-                Creator.drawCircle(canvas, lo + 10.0f, to + ceh - 10.0f, 5.0f, Creator.fillWhite)
-            }
+            Creator.notesDots(canvas, lo + 10.0f, to + ceh - 10.0f, 5.0f, calendarPattern.getMonthNotes(monthNumber), Color.WHITE)
         }
 
         /**
@@ -323,9 +318,7 @@ class CalendarYearPage : Creator {
             if (calendarPattern.getQuarterPages(quarterNumber) > 0) {
                 Creator.drawTriangle(canvas, lo + 2.0f, to + 2.0f, 20.0f, Creator.fillWhite)
             }
-            if (calendarPattern.getQuarterNotes(quarterNumber) > 0) {
-                Creator.drawCircle(canvas, lo + 10.0f, to + 8 * ceh - 10.0f, 5.0f, Creator.fillWhite)
-            }
+            Creator.notesDots(canvas, lo + 10.0f, to + 8 * ceh - 10.0f, 5.0f, calendarPattern.getQuarterNotes(quarterNumber), Color.WHITE)
         }
     }
 }

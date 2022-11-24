@@ -7,8 +7,7 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarWeek
+import com.toolsboox.plugin.calendar.da.v2.CalendarWeek
 import com.toolsboox.plugin.calendar.ui.CalendarWeekFragment
 import java.time.LocalDate
 import java.time.temporal.WeekFields
@@ -42,11 +41,12 @@ class CalendarWeekPageNotes : Creator {
          * @param gestureResult the gesture result
          * @param fragment the parent fragment
          * @param calendarWeek the calendar data class
+         * @param notePage current notePage
          * @return true
          */
         fun onTouchEvent(
             view: View, motionEvent: MotionEvent, gestureResult: Int,
-            fragment: CalendarWeekFragment, calendarWeek: CalendarWeek
+            fragment: CalendarWeekFragment, calendarWeek: CalendarWeek, notePage: String
         ): Boolean {
             if (motionEvent.getToolType(0) != MotionEvent.TOOL_TYPE_FINGER) return true
 
@@ -59,13 +59,18 @@ class CalendarWeekPageNotes : Creator {
                 .with(weekFields.weekOfYear(), weekOfYear.toLong())
                 .with(weekFields.dayOfWeek(), 1)
 
+            val page = notePage.toIntOrNull() ?: 0
             when (gestureResult) {
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate, locale, false)
-                    return true
+                    if (page == 0) {
+                        CalendarNavigator.toWeekPage(fragment, startWeekDate, locale)
+                    } else {
+                        CalendarNavigator.toWeekNote(fragment, startWeekDate, locale, "${page - 1}")
+                    }
                 }
 
                 OnGestureListener.DTU -> {
+                    CalendarNavigator.toWeekNote(fragment, startWeekDate, locale, "${page + 1}")
                     return true
                 }
             }
@@ -79,22 +84,17 @@ class CalendarWeekPageNotes : Creator {
          * @param context the context
          * @param canvas the canvas
          * @param calendarWeek data class
-         * @param calendarPattern the calendar pattern
+         * @param notePage current notePage
          */
-        fun drawPage(context: Context, canvas: Canvas, calendarWeek: CalendarWeek, calendarPattern: CalendarPattern) {
-            val text1 = "What do you want to write here?"
-            val text2 = "Sketch a template and send it to me... :)"
+        fun drawPage(context: Context, canvas: Canvas, calendarWeek: CalendarWeek, notePage: String) {
+            val page = notePage.toIntOrNull() ?: 0
+
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)
 
-            canvas.drawRect(lo, to, lo + cew, to + ceh, Creator.fillGrey80)
-            canvas.drawText(text1, lo + 10.0f, to + ceh - 10.0f, Creator.textDefaultWhite)
-
-            canvas.drawRect(lo, to + 34 * ceh, lo + cew, to + 35 * ceh, Creator.fillGrey80)
-            canvas.drawText(text2, lo + 10.0f, to + 35 * ceh - 10.0f, Creator.textDefaultWhite)
+            canvas.drawText("${page + 1}", lo + cew - 10.0f, to + 3 * ceh - 10.0f, Creator.textBigGray20Right)
 
             canvas.drawLine(lo, to + 0 * ceh, lo + cew, to + 0 * ceh, Creator.lineDefaultBlack)
-            canvas.drawLine(lo, to + 1 * ceh, lo + cew, to + 1 * ceh, Creator.lineDefaultBlack)
-            for (i in 2..34) {
+            for (i in 1..34) {
                 canvas.drawLine(lo, to + i * ceh, lo + cew, to + i * ceh, Creator.lineDefaultGrey50)
             }
             canvas.drawLine(lo, to + 35 * ceh, lo + cew, to + 35 * ceh, Creator.lineDefaultBlack)

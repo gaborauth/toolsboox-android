@@ -6,8 +6,8 @@ import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.v1.CalendarDay
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -59,31 +59,31 @@ class CalendarDayNavigator {
                     val py = motionEvent.y * 140.4f / view.height
 
                     if (px >= lo + 0 * cew && px <= lo + 1 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toDay(fragment, localDate.minusDays(1L), false)
+                        CalendarNavigator.toDayPage(fragment, localDate.minusDays(1L))
                         return true
                     }
                     if (px >= lo + 1 * cew && px <= lo + 3 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toDay(fragment, localDate, false)
+                        CalendarNavigator.toDayPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 3 * cew && px <= lo + 9 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toWeek(fragment, localDate, locale, false)
+                        CalendarNavigator.toWeekPage(fragment, localDate, locale)
                         return true
                     }
                     if (px >= lo + 9 * cew && px <= lo + 13 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toMonth(fragment, localDate, false)
+                        CalendarNavigator.toMonthPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 13 * cew && px <= lo + 15 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toQuarter(fragment, localDate, false)
+                        CalendarNavigator.toQuarterPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 15 * cew && px <= lo + 19 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toYear(fragment, localDate, false)
+                        CalendarNavigator.toYearPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 19 * cew && px <= lo + 20 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toDay(fragment, localDate.plusDays(1L), false)
+                        CalendarNavigator.toDayPage(fragment, localDate.plusDays(1L))
                         return true
                     }
                 }
@@ -131,9 +131,7 @@ class CalendarDayNavigator {
             if (calendarPattern.getDayPages(dayOfYear) > 0) {
                 Creator.drawTriangle(canvas, lo + 1 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getDayNotes(dayOfYear) > 0) {
-                Creator.drawCircle(canvas, lo + 1 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getDayNotes(dayOfYear))
 
             canvas.drawRect(lo + 3 * cew, to + 0 * ceh, lo + 6 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 3 * cew, to + 0 * ceh, lo + 6 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
@@ -150,9 +148,7 @@ class CalendarDayNavigator {
             if (calendarPattern.getWeekPages(weekOfYear) > 0) {
                 Creator.drawTriangle(canvas, lo + 6 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getWeekNotes(weekOfYear) > 0) {
-                Creator.drawCircle(canvas, lo + 6 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + 6 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getWeekNotes(weekOfYear))
 
             canvas.drawRect(lo + 9 * cew, to + 0 * ceh, lo + 13 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 9 * cew, to + 0 * ceh, lo + 13 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
@@ -163,9 +159,7 @@ class CalendarDayNavigator {
             if (calendarPattern.getMonthPages(monthOfYear) > 0) {
                 Creator.drawTriangle(canvas, lo + 9 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getMonthNotes(monthOfYear) > 0) {
-                Creator.drawCircle(canvas, lo + 9 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + 9 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getMonthNotes(monthOfYear))
 
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
@@ -176,9 +170,7 @@ class CalendarDayNavigator {
             if (calendarPattern.getQuarterPages(quarterOfYear) > 0) {
                 Creator.drawTriangle(canvas, lo + 13 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getQuarterNotes(quarterOfYear) > 0) {
-                Creator.drawCircle(canvas, lo + 13 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + 13 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getQuarterNotes(quarterOfYear))
 
             canvas.drawRect(lo + 15 * cew, to + 0 * ceh, lo + 19 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 15 * cew, to + 0 * ceh, lo + 19 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
@@ -189,9 +181,7 @@ class CalendarDayNavigator {
             if (calendarPattern.getYearPages() > 0) {
                 Creator.drawTriangle(canvas, lo + 15 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getYearNotes() > 0) {
-                Creator.drawCircle(canvas, lo + 15 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + 15 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getYearNotes())
 
             canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.lineDefaultBlack)

@@ -13,13 +13,13 @@ import androidx.core.view.GestureDetectorCompat
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.pen.TouchHelper
 import com.toolsboox.R
+import com.toolsboox.da.StrokePoint
 import com.toolsboox.databinding.FragmentKanbanMainBinding
 import com.toolsboox.ot.DeepCopy
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.ot.PenRawInputCallback
 import com.toolsboox.plugin.kanban.da.CardItem
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
-import com.toolsboox.plugin.teamdrawer.nw.domain.StrokePoint
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber

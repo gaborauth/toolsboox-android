@@ -2,13 +2,14 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarQuarter
+import com.toolsboox.plugin.calendar.da.v2.CalendarQuarter
 import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -62,22 +63,22 @@ class CalendarQuarterPage : Creator {
 
             when (gestureResult) {
                 OnGestureListener.LTR -> {
-                    CalendarNavigator.toQuarter(fragment, localDate.minusMonths(3L), false)
+                    CalendarNavigator.toQuarterPage(fragment, localDate.minusMonths(3L))
                     return true
                 }
 
                 OnGestureListener.RTL -> {
-                    CalendarNavigator.toQuarter(fragment, localDate.plusMonths(3L), false)
+                    CalendarNavigator.toQuarterPage(fragment, localDate.plusMonths(3L))
                     return true
                 }
 
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toYear(fragment, localDate, false)
+                    CalendarNavigator.toYearPage(fragment, localDate)
                     return true
                 }
 
                 OnGestureListener.DTU -> {
-                    CalendarNavigator.toQuarter(fragment, localDate, true)
+                    CalendarNavigator.toQuarterNote(fragment, localDate, "0")
                     return true
                 }
             }
@@ -92,7 +93,7 @@ class CalendarQuarterPage : Creator {
                         val yo = to
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
-                            CalendarNavigator.toMonth(fragment, localDate.plusMonths(i.toLong()), false)
+                            CalendarNavigator.toMonthPage(fragment, localDate.plusMonths(i.toLong()))
                             return true
                         }
 
@@ -101,7 +102,7 @@ class CalendarQuarterPage : Creator {
                         for (day in 1..days) {
                             val dyo = yo + day * ceh
                             if (px >= xo && px <= xo + cew && py >= dyo && py <= dyo + ceh) {
-                                CalendarNavigator.toDay(fragment, LocalDate.of(year, startMonth + i, day), false)
+                                CalendarNavigator.toDayPage(fragment, LocalDate.of(year, startMonth + i, day))
                                 return true
                             }
                         }
@@ -184,9 +185,7 @@ class CalendarQuarterPage : Creator {
                 if (calendarPattern.getDayPages(dayOfYear) > 0) {
                     Creator.drawTriangle(canvas, lo + 77.0f, to + (i - 1) * ceh, 10.0f)
                 }
-                if (calendarPattern.getDayNotes(dayOfYear) > 0) {
-                    Creator.drawCircle(canvas, lo + 80.0f, to + (i - 1) * ceh - 5.0f, 2.5f)
-                }
+                Creator.notesDots(canvas, lo + 80.0f, to + (i - 1) * ceh - 5.0f, 2.5f, calendarPattern.getDayNotes(dayOfYear))
             }
         }
 
@@ -208,9 +207,7 @@ class CalendarQuarterPage : Creator {
             if (calendarPattern.getMonthPages(month) > 0) {
                 Creator.drawTriangle(canvas, lo + 2.0f, to - ceh + 2.0f, 20.0f, Creator.fillWhite)
             }
-            if (calendarPattern.getMonthNotes(month) > 0) {
-                Creator.drawCircle(canvas, lo + 10.0f, to - 10.0f, 5.0f, Creator.fillWhite)
-            }
+            Creator.notesDots(canvas, lo + 10.0f, to - 10.0f, 5.0f, calendarPattern.getMonthNotes(month), Color.WHITE)
         }
     }
 }

@@ -9,7 +9,7 @@ import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarQuarter
+import com.toolsboox.plugin.calendar.da.v2.CalendarQuarter
 import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
 import java.time.LocalDate
 
@@ -57,23 +57,23 @@ class CalendarQuarterNavigator {
                     val py = motionEvent.y * 140.4f / view.height
 
                     if (px >= lo + 0 * cew && px <= lo + 1 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toQuarter(fragment, localDate.minusMonths(3L), false)
+                        CalendarNavigator.toQuarterPage(fragment, localDate.minusMonths(3L))
                         return true
                     }
                     if (px >= lo + 1 * cew && px <= lo + 3 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toDay(fragment, LocalDate.now(), false)
+                        CalendarNavigator.toDayPage(fragment, LocalDate.now())
                         return true
                     }
                     if (px >= lo + 13 * cew && px <= lo + 15 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toQuarter(fragment, localDate, false)
+                        CalendarNavigator.toQuarterPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 15 * cew && px <= lo + 19 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toYear(fragment, localDate, false)
+                        CalendarNavigator.toYearPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 19 * cew && px <= lo + 20 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toQuarter(fragment, localDate.plusMonths(3L), false)
+                        CalendarNavigator.toQuarterPage(fragment, localDate.plusMonths(3L))
                         return true
                     }
                 }
@@ -128,9 +128,8 @@ class CalendarQuarterNavigator {
             if (calendarPattern.getQuarterPages(quarterOfYear) > 0) {
                 Creator.drawTriangle(canvas, lo + 13 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getQuarterNotes(quarterOfYear) > 0) {
-                Creator.drawCircle(canvas, lo + 13 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + 13 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getQuarterNotes(quarterOfYear))
+
 
             canvas.drawRect(lo + 15 * cew, to + 0 * ceh, lo + 19 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 15 * cew, to + 0 * ceh, lo + 19 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
@@ -141,9 +140,7 @@ class CalendarQuarterNavigator {
             if (calendarPattern.getYearPages() > 0) {
                 Creator.drawTriangle(canvas, lo + 15 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getYearNotes() > 0) {
-                Creator.drawCircle(canvas, lo + 15 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + 15 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getYearNotes())
 
             canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.lineDefaultBlack)

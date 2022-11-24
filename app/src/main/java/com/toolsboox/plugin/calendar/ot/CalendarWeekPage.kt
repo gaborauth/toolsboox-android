@@ -2,6 +2,7 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.R
@@ -9,7 +10,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarWeek
+import com.toolsboox.plugin.calendar.da.v2.CalendarWeek
 import com.toolsboox.plugin.calendar.ui.CalendarWeekFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -64,22 +65,22 @@ class CalendarWeekPage : Creator {
 
             when (gestureResult) {
                 OnGestureListener.LTR -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate.minusWeeks(1L), locale, false)
+                    CalendarNavigator.toWeekPage(fragment, startWeekDate.minusWeeks(1L), locale)
                     return true
                 }
 
                 OnGestureListener.RTL -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate.plusWeeks(1L), locale, false)
+                    CalendarNavigator.toWeekPage(fragment, startWeekDate.plusWeeks(1L), locale)
                     return true
                 }
 
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toMonth(fragment, startWeekDate, false)
+                    CalendarNavigator.toMonthPage(fragment, startWeekDate)
                     return true
                 }
 
                 OnGestureListener.DTU -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate, locale, true)
+                    CalendarNavigator.toWeekNote(fragment, startWeekDate, locale, "0")
                     return true
                 }
             }
@@ -95,9 +96,9 @@ class CalendarWeekPage : Creator {
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
                             if (i == 7) {
-                                CalendarNavigator.toWeek(fragment, startWeekDate, locale, false)
+                                CalendarNavigator.toWeekPage(fragment, startWeekDate, locale)
                             } else {
-                                CalendarNavigator.toDay(fragment, startWeekDate.plusDays(i.toLong()), false)
+                                CalendarNavigator.toDayPage(fragment, startWeekDate.plusDays(i.toLong()))
                             }
 
                             return true
@@ -158,9 +159,7 @@ class CalendarWeekPage : Creator {
                     if (calendarPattern.getDayPages(dayOfYear) > 0) {
                         Creator.drawTriangle(canvas, xo + 2.0f, yo + 2.0f, 10.0f, Creator.fillWhite)
                     }
-                    if (calendarPattern.getDayNotes(dayOfYear) > 0) {
-                        Creator.drawCircle(canvas, xo + 5.0f, yo + 45.0f, 2.5f, Creator.fillWhite)
-                    }
+                    Creator.notesDots(canvas, xo + 5.0f, yo + 45.0f, 2.5f, calendarPattern.getDayNotes(dayOfYear), Color.WHITE)
                 }
             }
         }

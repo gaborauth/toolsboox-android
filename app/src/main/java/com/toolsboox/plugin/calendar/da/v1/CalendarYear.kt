@@ -16,14 +16,4 @@ data class CalendarYear(
 
     override val strokes: List<Stroke> = listOf(),
     override val notesStrokes: List<Stroke> = listOf()
-) : Calendar {
-    /**
-     * Deep copy of the calendar year data class
-     */
-    fun deepCopy(): CalendarYear {
-        val strokes = Calendar.listDeepCopy(this.strokes)
-        val notesStrokes = Calendar.listDeepCopy(this.notesStrokes)
-
-        return CalendarYear(this.year, this.locale, strokes, notesStrokes)
-    }
-}
+) : Calendar

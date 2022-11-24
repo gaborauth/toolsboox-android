@@ -7,16 +7,15 @@ import android.view.View
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
+import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
-import com.toolsboox.plugin.calendar.da.v1.Calendar
-import com.toolsboox.plugin.calendar.da.v1.CalendarDay
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
+import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.ot.CalendarDayNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarDayPage
 import com.toolsboox.plugin.calendar.ot.CalendarDayPageNotes
-import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -72,9 +71,14 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     private var currentDate: LocalDate = LocalDate.now()
 
     /**
-     * Flag of notes view.
+     * Style of calendar view.
      */
-    private var notes: Boolean = false
+    private var calendarStyle: String? = null
+
+    /**
+     * Page of notes view.
+     */
+    private var notePage: String? = null
 
     /**
      * The current locale.
@@ -116,30 +120,20 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        val year = currentDate.year
-        val month = currentDate.monthValue
-        val day = currentDate.dayOfMonth
         val dayOfYear = currentDate.dayOfYear
-        val locale = calendarDay.locale
 
-        calendarDay =
-            if (notes) {
-                CalendarDay(
-                    year, month, day, locale,
-                    Calendar.listDeepCopy(calendarDay.strokes), Calendar.listDeepCopy(strokes)
-                )
-            } else {
-                CalendarDay(
-                    year, month, day, locale,
-                    Calendar.listDeepCopy(strokes), Calendar.listDeepCopy(calendarDay.notesStrokes)
-                )
-            }
+        val normalizedStrokes = surfaceFrom(strokes)
+        if (notePage != null) {
+            calendarDay.noteStrokes[notePage!!] = normalizedStrokes
+        } else {
+            calendarDay.calendarStrokes[calendarStyle ?: CalendarDay.DEFAULT_STYLE] = normalizedStrokes
+        }
 
-        val pages = if (calendarDay.strokes.isEmpty()) 0 else 1
-        val notes = if (calendarDay.notesStrokes.isEmpty()) 0 else 1
+        val pages = calendarDay.calendarStrokes.filter { it.value.isNotEmpty() }.size
+        val notes = calendarDay.noteStrokes.filter { it.value.isNotEmpty() }.size
         calendarPattern.updateDay(dayOfYear, pages, notes)
 
-        presenter.save(this, binding, calendarDay, calendarPattern, currentDate, getSurfaceSize())
+        presenter.save(this, binding, calendarDay, calendarPattern, currentDate)
     }
 
     /**
@@ -174,7 +168,8 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
                 }
             }
         }
-        notes = arguments?.getString("notes")?.toBoolean() ?: false
+        calendarStyle = arguments?.getString("calendarStyle")
+        notePage = arguments?.getString("notePage")
 
         calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, locale)
 
@@ -185,9 +180,9 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
 
-            if (notes)
+            if (notePage != null)
                 CalendarDayPageNotes.onTouchEvent(
-                    view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay
+                    view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay, notePage!!
                 )
             else
                 CalendarDayPage.onTouchEvent(
@@ -211,7 +206,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
-            presenter.load(this@CalendarDayFragment, binding, currentDate, getSurfaceSize(), locale)
+            presenter.load(this@CalendarDayFragment, binding, currentDate, locale)
         }
     }
 
@@ -239,12 +234,14 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         this.calendarPattern = calendarPattern
         updateNavigator()
 
-        if (notes) {
-            CalendarDayPageNotes.drawPage(this.requireContext(), templateCanvas, calendarDay)
-            applyStrokes(calendarDay.notesStrokes.toMutableList(), true)
+        if (notePage != null) {
+            val noteStrokes = calendarDay.noteStrokes[notePage] ?: listOf()
+            CalendarDayPageNotes.drawPage(this.requireContext(), templateCanvas, calendarDay, notePage!!)
+            applyStrokes(surfaceTo(noteStrokes), true)
         } else {
+            val calendarStrokes = calendarDay.calendarStrokes[calendarStyle ?: CalendarDay.DEFAULT_STYLE] ?: listOf()
             CalendarDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, googleCalendarEvents)
-            applyStrokes(calendarDay.strokes.toMutableList(), true)
+            applyStrokes(surfaceTo(calendarStrokes), true)
         }
     }
 

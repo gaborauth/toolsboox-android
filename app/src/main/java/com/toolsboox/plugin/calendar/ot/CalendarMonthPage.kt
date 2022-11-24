@@ -7,8 +7,8 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.v1.CalendarMonth
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
 import com.toolsboox.plugin.calendar.ui.CalendarMonthFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -62,22 +62,22 @@ class CalendarMonthPage : Creator {
 
             when (gestureResult) {
                 OnGestureListener.LTR -> {
-                    CalendarNavigator.toMonth(fragment, localDate.minusMonths(1L), false)
+                    CalendarNavigator.toMonthPage(fragment, localDate.minusMonths(1L))
                     return true
                 }
 
                 OnGestureListener.RTL -> {
-                    CalendarNavigator.toMonth(fragment, localDate.plusMonths(1L), false)
+                    CalendarNavigator.toMonthPage(fragment, localDate.plusMonths(1L))
                     return true
                 }
 
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toQuarter(fragment, localDate, false)
+                    CalendarNavigator.toQuarterPage(fragment, localDate)
                     return true
                 }
 
                 OnGestureListener.DTU -> {
-                    CalendarNavigator.toMonth(fragment, localDate, true)
+                    CalendarNavigator.toMonthNote(fragment, localDate, "0")
                     return true
                 }
             }
@@ -92,7 +92,7 @@ class CalendarMonthPage : Creator {
                         val yo = to + 50.0f + i * ceh
 
                         if (px >= xo && px <= xo + 50.0f && py >= yo && py <= yo + ceh) {
-                            CalendarNavigator.toWeek(fragment, localDate.plusWeeks(i.toLong()), locale, false)
+                            CalendarNavigator.toWeekPage(fragment, localDate.plusWeeks(i.toLong()), locale)
                             return true
                         }
                     }
@@ -107,7 +107,7 @@ class CalendarMonthPage : Creator {
                         val yo = to + 50.0f + yOffset * ceh
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
-                            CalendarNavigator.toDay(fragment, localDate.plusDays(day.toLong() - 1L), false)
+                            CalendarNavigator.toDayPage(fragment, localDate.plusDays(day.toLong() - 1L))
                             return true
                         }
 
@@ -188,9 +188,7 @@ class CalendarMonthPage : Creator {
                 if (calendarPattern.getDayPages(dayOfYear) > 0) {
                     Creator.drawTriangle(canvas, x - cew + 12.0f, y - 38.0f, 20.0f)
                 }
-                if (calendarPattern.getDayNotes(dayOfYear) > 0) {
-                    Creator.drawCircle(canvas, x - cew + 20.0f, y + ceh - 50.0f, 5.0f)
-                }
+                Creator.notesDots(canvas, x - cew + 20.0f, y + ceh - 50.0f, 5.0f, calendarPattern.getDayNotes(dayOfYear))
 
                 xOffset++
                 if (xOffset > 6) {
@@ -270,9 +268,7 @@ class CalendarMonthPage : Creator {
             if (calendarPattern.getWeekPages(weekOfYear) > 0) {
                 Creator.drawTriangle(canvas, lo + 2.0f, to + 2.0f, 20.0f, Creator.fillWhite)
             }
-            if (calendarPattern.getWeekNotes(weekOfYear) > 0) {
-                Creator.drawCircle(canvas, lo + 10.0f, to + ceh - 10.0f, 5.0f, Creator.fillWhite)
-            }
+            Creator.notesDots(canvas, lo + 10.0f, to + ceh - 10.0f, 5.0f, calendarPattern.getWeekNotes(weekOfYear))
         }
     }
 }
