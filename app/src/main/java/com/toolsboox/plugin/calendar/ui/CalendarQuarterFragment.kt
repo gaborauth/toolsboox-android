@@ -11,9 +11,8 @@ import com.toolsboox.R
 import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
-import com.toolsboox.plugin.calendar.da.v1.Calendar
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarQuarter
+import com.toolsboox.plugin.calendar.da.v2.CalendarQuarter
 import com.toolsboox.plugin.calendar.ot.CalendarQuarterNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarQuarterPage
 import com.toolsboox.plugin.calendar.ot.CalendarQuarterPageNotes
@@ -72,9 +71,14 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
     private var currentDate: LocalDate = LocalDate.now()
 
     /**
-     * Flag of notes view.
+     * Style of calendar view.
      */
-    private var notes: Boolean = false
+    private var calendarStyle: String? = null
+
+    /**
+     * Page of notes view.
+     */
+    private var notePage: String? = null
 
     /**
      * The current locale.
@@ -117,29 +121,20 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        val converted = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertFrom(strokes, UUID.randomUUID())
-        val year = currentDate.year
         val quarter = (currentDate.monthValue - 1) / 3 + 1
-        val locale = calendarQuarter.locale
 
-        calendarQuarter =
-            if (notes) {
-                CalendarQuarter(
-                    year, quarter, locale,
-                    Calendar.listDeepCopy(calendarQuarter.strokes), Calendar.listDeepCopy(converted)
-                )
-            } else {
-                CalendarQuarter(
-                    year, quarter, locale,
-                    Calendar.listDeepCopy(converted), Calendar.listDeepCopy(calendarQuarter.notesStrokes)
-                )
-            }
+        val normalizedStrokes = surfaceFrom(strokes)
+        if (notePage != null) {
+            calendarQuarter.noteStrokes[notePage!!] = normalizedStrokes
+        } else {
+            calendarQuarter.calendarStrokes[calendarStyle ?: CalendarQuarter.DEFAULT_STYLE] = normalizedStrokes
+        }
 
-        val pages = if (calendarQuarter.strokes.isEmpty()) 0 else 1
-        val notes = if (calendarQuarter.notesStrokes.isEmpty()) 0 else 1
+        val pages = calendarQuarter.calendarStrokes.filter { it.value.isNotEmpty() }.size
+        val notes = calendarQuarter.noteStrokes.filter { it.value.isNotEmpty() }.size
         calendarPattern.updateQuarter(quarter, pages, notes)
 
-        presenter.save(this, binding, calendarQuarter, calendarPattern, currentDate, getSurfaceSize())
+        presenter.save(this, binding, calendarQuarter, calendarPattern, currentDate)
     }
 
     /**
@@ -170,7 +165,8 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
                 currentDate = LocalDate.of(year, (quarter - 1) * 3 + 1, 1)
             }
         }
-        notes = arguments?.getString("notes")?.toBoolean() ?: false
+        calendarStyle = arguments?.getString("calendarStyle")
+        notePage = arguments?.getString("notePage")
 
         calendarQuarter = CalendarQuarter(currentDate.year, (currentDate.monthValue - 1 / 3) + 1, locale)
 
@@ -181,7 +177,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
 
-            if (notes) {
+            if (notePage != null) {
                 CalendarQuarterPageNotes.onTouchEvent(
                     view, motionEvent, gestureResult, this@CalendarQuarterFragment, calendarQuarter
                 )
@@ -208,7 +204,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
-            presenter.load(this@CalendarQuarterFragment, binding, currentDate, getSurfaceSize(), locale)
+            presenter.load(this@CalendarQuarterFragment, binding, currentDate, locale)
         }
     }
 
@@ -233,14 +229,14 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         this.calendarPattern = calendarPattern
         updateNavigator()
 
-        if (notes) {
+        if (notePage != null) {
+            val noteStrokes = calendarQuarter.noteStrokes[notePage] ?: listOf()
             CalendarQuarterPageNotes.drawPage(this.requireContext(), templateCanvas, calendarQuarter, calendarPattern)
-            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarQuarter.notesStrokes)
-            applyStrokes(strokes, true)
+            applyStrokes(surfaceTo(noteStrokes), true)
         } else {
+            val calendarStrokes = calendarQuarter.calendarStrokes[calendarStyle ?: CalendarQuarter.DEFAULT_STYLE] ?: listOf()
             CalendarQuarterPage.drawPage(this.requireContext(), templateCanvas, calendarQuarter, calendarPattern)
-            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarQuarter.notesStrokes)
-            applyStrokes(strokes, true)
+            applyStrokes(surfaceTo(calendarStrokes), true)
         }
     }
 

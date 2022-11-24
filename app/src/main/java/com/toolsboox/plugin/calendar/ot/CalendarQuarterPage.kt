@@ -8,7 +8,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarQuarter
+import com.toolsboox.plugin.calendar.da.v2.CalendarQuarter
 import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -62,12 +62,12 @@ class CalendarQuarterPage : Creator {
 
             when (gestureResult) {
                 OnGestureListener.LTR -> {
-                    CalendarNavigator.toQuarter(fragment, localDate.minusMonths(3L), false)
+                    CalendarNavigator.toQuarterPage(fragment, localDate.minusMonths(3L))
                     return true
                 }
 
                 OnGestureListener.RTL -> {
-                    CalendarNavigator.toQuarter(fragment, localDate.plusMonths(3L), false)
+                    CalendarNavigator.toQuarterPage(fragment, localDate.plusMonths(3L))
                     return true
                 }
 
@@ -77,7 +77,7 @@ class CalendarQuarterPage : Creator {
                 }
 
                 OnGestureListener.DTU -> {
-                    CalendarNavigator.toQuarter(fragment, localDate, true)
+                    CalendarNavigator.toQuarterNote(fragment, localDate, "0")
                     return true
                 }
             }

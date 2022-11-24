@@ -77,7 +77,7 @@ class CalendarWeekNavigator {
                         return true
                     }
                     if (px >= lo + 13 * cew && px <= lo + 15 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toQuarter(fragment, localDate, false)
+                        CalendarNavigator.toQuarterPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 15 * cew && px <= lo + 19 * cew && py >= to && py <= to + ceh) {

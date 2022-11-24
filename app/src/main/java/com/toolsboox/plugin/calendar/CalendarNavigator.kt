@@ -5,6 +5,7 @@ import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
 import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
+import com.toolsboox.plugin.calendar.da.v2.CalendarQuarter
 import com.toolsboox.ui.plugin.ScreenFragment
 import timber.log.Timber
 import java.time.LocalDate
@@ -119,13 +120,13 @@ object CalendarNavigator {
     }
 
     /**
-     * Navigate to the quarterly calendar.
+     * Navigate to the quarterly calendar notes.
      *
      * @param fragment the fragment
      * @param localDate the local date
-     * @param notes navigate to the notes page
+     * @param notePage navigate to the note page
      */
-    fun toQuarter(fragment: ScreenFragment, localDate: LocalDate, notes: Boolean) {
+    fun toQuarterNote(fragment: ScreenFragment, localDate: LocalDate, notePage: String) {
         val year = localDate.year
         val month = localDate.monthValue
         val quarter = (month - 1) / 3 + 1
@@ -133,9 +134,32 @@ object CalendarNavigator {
         val bundle = bundleOf()
         bundle.putString("year", "$year")
         bundle.putString("quarter", "$quarter")
-        bundle.putString("notes", "$notes")
+        bundle.putString("notePage", notePage)
 
-        Timber.i("Navigate to the '$year-$quarter' ($notes) quarterly calendar")
+        Timber.i("Navigate to the '$year-$quarter' ($notePage) quarterly calendar")
+        fragment.findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
+    }
+
+    /**
+     * Navigate to the quarterly calendar page.
+     *
+     * @param fragment the fragment
+     * @param localDate the local date
+     * @param calendarStyle to the calendar style
+     */
+    fun toQuarterPage(
+        fragment: ScreenFragment, localDate: LocalDate, calendarStyle: String = CalendarQuarter.DEFAULT_STYLE
+    ) {
+        val year = localDate.year
+        val month = localDate.monthValue
+        val quarter = (month - 1) / 3 + 1
+
+        val bundle = bundleOf()
+        bundle.putString("year", "$year")
+        bundle.putString("quarter", "$quarter")
+        bundle.putString("calendarStyle", calendarStyle)
+
+        Timber.i("Navigate to the '$year-$quarter' ($calendarStyle) quarterly calendar")
         fragment.findNavController().navigate(R.id.action_to_calendar_quarter, bundle)
     }
 

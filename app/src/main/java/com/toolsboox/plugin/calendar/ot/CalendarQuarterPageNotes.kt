@@ -8,7 +8,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarQuarter
+import com.toolsboox.plugin.calendar.da.v2.CalendarQuarter
 import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
 import java.time.LocalDate
 
@@ -57,7 +57,7 @@ class CalendarQuarterPageNotes : Creator {
 
             when (gestureResult) {
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toQuarter(fragment, localDate, false)
+                    CalendarNavigator.toQuarterPage(fragment, localDate)
                     return true
                 }
 

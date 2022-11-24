@@ -7,7 +7,7 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarQuarter
+import com.toolsboox.plugin.calendar.da.v2.CalendarQuarter
 import com.toolsboox.plugin.calendar.ui.CalendarQuarterFragment
 import java.time.LocalDate
 
@@ -55,7 +55,7 @@ class CalendarQuarterNavigator {
                     val py = motionEvent.y * 140.4f / view.height
 
                     if (px >= lo + 0 * cew && px <= lo + 1 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toQuarter(fragment, localDate.minusMonths(3L), false)
+                        CalendarNavigator.toQuarterPage(fragment, localDate.minusMonths(3L))
                         return true
                     }
                     if (px >= lo + 1 * cew && px <= lo + 3 * cew && py >= to && py <= to + ceh) {
@@ -63,7 +63,7 @@ class CalendarQuarterNavigator {
                         return true
                     }
                     if (px >= lo + 13 * cew && px <= lo + 15 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toQuarter(fragment, localDate, false)
+                        CalendarNavigator.toQuarterPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 15 * cew && px <= lo + 19 * cew && py >= to && py <= to + ceh) {
@@ -71,7 +71,7 @@ class CalendarQuarterNavigator {
                         return true
                     }
                     if (px >= lo + 19 * cew && px <= lo + 20 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toQuarter(fragment, localDate.plusMonths(3L), false)
+                        CalendarNavigator.toQuarterPage(fragment, localDate.plusMonths(3L))
                         return true
                     }
                 }
