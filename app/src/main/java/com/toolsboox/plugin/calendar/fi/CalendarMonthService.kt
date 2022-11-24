@@ -8,6 +8,7 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.io.PrintWriter
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -31,9 +32,9 @@ class CalendarMonthService @Inject constructor() {
      * @param locale the current locale
      */
     fun load(rootPath: File, currentDate: LocalDate, locale: Locale): CalendarMonth {
-        val year = currentDate.year
-        val month = currentDate.monthValue
-        val calendarMonth = CalendarMonth(year, month, locale)
+        val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
+        val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
+        val calendarMonth = CalendarMonth(currentDate.year, currentDate.monthValue, locale)
 
         val path = File(rootPath, "calendar/$year/$month/")
         val baseName = "month-$year-$month"
@@ -67,8 +68,8 @@ class CalendarMonthService @Inject constructor() {
      * @param calendarMonth the data class
      */
     fun save(rootPath: File, currentDate: LocalDate, calendarMonth: CalendarMonth) {
-        val year = currentDate.year
-        val month = currentDate.monthValue
+        val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
+        val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
 
         val path = File(rootPath, "calendar/$year/$month/")
         path.mkdirs()

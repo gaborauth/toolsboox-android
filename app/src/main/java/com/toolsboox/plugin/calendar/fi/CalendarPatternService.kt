@@ -8,6 +8,7 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.io.PrintWriter
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -31,13 +32,13 @@ class CalendarPatternService @Inject constructor() {
      * @param locale the current locale
      */
     fun load(rootPath: File, currentDate: LocalDate, locale: Locale): CalendarPattern {
-        val year = currentDate.year
+        val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
 
         val path = File(rootPath, "calendar/$year/")
 
         val baseName = "pattern-$year"
 
-        val calendarPattern = CalendarPattern(year, locale).fill()
+        val calendarPattern = CalendarPattern(currentDate.year, locale).fill()
 
         if (File(path, "$baseName-v1.json").exists()) {
             Timber.i("Load from $baseName-v1.json")
@@ -70,7 +71,7 @@ class CalendarPatternService @Inject constructor() {
      * @param calendarPattern the data class
      */
     fun save(rootPath: File, currentDate: LocalDate, calendarPattern: CalendarPattern) {
-        val year = currentDate.year
+        val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
 
         val path = File(rootPath, "calendar/$year/")
         path.mkdirs()
