@@ -178,7 +178,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
 
             if (notePage != null) {
                 CalendarMonthPageNotes.onTouchEvent(
-                    view, motionEvent, gestureResult, this@CalendarMonthFragment, calendarMonth
+                    view, motionEvent, gestureResult, this@CalendarMonthFragment, calendarMonth, notePage!!
                 )
             } else {
                 CalendarMonthPage.onTouchEvent(
@@ -230,7 +230,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
 
         if (notePage != null) {
             val noteStrokes = calendarMonth.noteStrokes[notePage] ?: listOf()
-            CalendarMonthPageNotes.drawPage(this.requireContext(), templateCanvas, calendarMonth, calendarPattern)
+            CalendarMonthPageNotes.drawPage(this.requireContext(), templateCanvas, calendarMonth, notePage!!)
             applyStrokes(surfaceTo(noteStrokes), true)
         } else {
             val calendarStrokes = calendarMonth.calendarStrokes[calendarStyle ?: CalendarMonth.DEFAULT_STYLE] ?: listOf()

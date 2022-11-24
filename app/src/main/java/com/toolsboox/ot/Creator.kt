@@ -5,6 +5,8 @@ import android.graphics.*
 import android.text.TextPaint
 import android.text.TextUtils
 import androidx.core.content.res.ResourcesCompat
+import timber.log.Timber
+import kotlin.math.min
 
 /**
  * Creator interface, common drawing methods and constants.
@@ -27,8 +29,10 @@ interface Creator {
 
         val lineDefaultBlack: Paint = Paint()
         val lineDefaultGrey50: Paint = Paint()
+        val lineDefaultWhite: Paint = Paint()
 
         val textBigBlackCenter = TextPaint()
+        val textBigGray20Right = TextPaint()
         val textDefaultBlack = TextPaint()
         val textDefaultBlackCenter = TextPaint()
         val textDefaultBlackRight = TextPaint()
@@ -67,11 +71,20 @@ interface Creator {
             lineDefaultGrey50.strokeWidth = 2.0f
             lineDefaultGrey50.style = Paint.Style.STROKE
 
+            lineDefaultWhite.color = colorWhite
+            lineDefaultWhite.strokeWidth = 2.0f
+            lineDefaultWhite.style = Paint.Style.STROKE
+
             // Text styles
             textBigBlackCenter.color = colorBlack
             textBigBlackCenter.textAlign = Paint.Align.CENTER
             textBigBlackCenter.textSize = 80.0f
             textBigBlackCenter.typeface = Typeface.DEFAULT_BOLD
+
+            textBigGray20Right.color = colorGrey20
+            textBigGray20Right.textAlign = Paint.Align.RIGHT
+            textBigGray20Right.textSize = 160.0f
+            textBigGray20Right.typeface = Typeface.DEFAULT_BOLD
 
             textDefaultBlack.color = colorBlack
             textDefaultBlack.textSize = 40.0f
@@ -167,7 +180,7 @@ interface Creator {
          * @param size the size of the circle
          * @param fillPaint optional fill paint
          */
-        fun drawCircle(canvas: Canvas, x: Float, y: Float, size: Float, fillPaint: Paint = fillBlack) {
+        private fun drawCircle(canvas: Canvas, x: Float, y: Float, size: Float, fillPaint: Paint = fillBlack) {
             canvas.drawOval(x - size, y - size, x + size, y + size, fillPaint)
         }
 
@@ -190,6 +203,36 @@ interface Creator {
             path.close()
 
             canvas.drawPath(path, fillPaint)
+        }
+
+        /**
+         * Draw note dots (max 5).
+         *
+         * @param canvas the canvas
+         * @param x the x coordinate
+         * @param y the y coordinate
+         * @param size the size of the dots
+         * @param notePages the number of pages
+         * @param color optional fill color
+         */
+        fun notesDots(canvas: Canvas, x: Float, y: Float, size: Float, notePages: Int, color: Int = Color.BLACK) {
+            Timber.i("$notePages")
+            for (i in 0 until min(notePages, 5)) {
+                if (color == Color.BLACK) {
+                    drawCircle(canvas, x + 2 * i * size, y, size, fillBlack)
+                } else {
+                    drawCircle(canvas, x + 2 * i * size, y, size, fillWhite)
+                }
+            }
+            if (notePages > 5) {
+                if (color == Color.BLACK) {
+                    canvas.drawLine(x + 10 * size - size, y, x + 10 * size + size, y, lineDefaultBlack)
+                    canvas.drawLine(x + 10 * size, y - size, x + 10 * size, y + size, lineDefaultBlack)
+                } else {
+                    canvas.drawLine(x + 10 * size - size, y, x + 10 * size + size, y, lineDefaultWhite)
+                    canvas.drawLine(x + 10 * size, y - size, x + 10 * size, y + size, lineDefaultWhite)
+                }
+            }
         }
     }
 }

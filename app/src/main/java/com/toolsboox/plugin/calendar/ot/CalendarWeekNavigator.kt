@@ -142,9 +142,7 @@ class CalendarWeekNavigator {
             if (calendarPattern.getWeekPages(weekOfYear) > 0) {
                 Creator.drawTriangle(canvas, lo + 6 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getWeekNotes(weekOfYear) > 0) {
-                Creator.drawCircle(canvas, lo + 6 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + 6 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getWeekNotes(weekOfYear))
 
             canvas.drawRect(lo + 9 * cew, to + 0 * ceh, lo + 13 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 9 * cew, to + 0 * ceh, lo + 13 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
@@ -155,9 +153,7 @@ class CalendarWeekNavigator {
             if (calendarPattern.getMonthPages(monthOfYear) > 0) {
                 Creator.drawTriangle(canvas, lo + 9 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getMonthNotes(monthOfYear) > 0) {
-                Creator.drawCircle(canvas, lo + 9 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + 9 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getMonthNotes(monthOfYear))
 
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
@@ -168,9 +164,7 @@ class CalendarWeekNavigator {
             if (calendarPattern.getQuarterPages(quarterOfYear) > 0) {
                 Creator.drawTriangle(canvas, lo + 13 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getQuarterNotes(quarterOfYear) > 0) {
-                Creator.drawCircle(canvas, lo + 13 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + 13 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getQuarterNotes(quarterOfYear))
 
             canvas.drawRect(lo + 15 * cew, to + 0 * ceh, lo + 19 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 15 * cew, to + 0 * ceh, lo + 19 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
@@ -181,9 +175,7 @@ class CalendarWeekNavigator {
             if (calendarPattern.getYearPages() > 0) {
                 Creator.drawTriangle(canvas, lo + 15 * cew, to + 0 * ceh, 20.0f)
             }
-            if (calendarPattern.getYearNotes() > 0) {
-                Creator.drawCircle(canvas, lo + 15 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f)
-            }
+            Creator.notesDots(canvas, lo + 15 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getYearNotes())
 
             canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.lineDefaultBlack)

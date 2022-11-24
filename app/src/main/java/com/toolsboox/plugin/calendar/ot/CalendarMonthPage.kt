@@ -188,9 +188,7 @@ class CalendarMonthPage : Creator {
                 if (calendarPattern.getDayPages(dayOfYear) > 0) {
                     Creator.drawTriangle(canvas, x - cew + 12.0f, y - 38.0f, 20.0f)
                 }
-                if (calendarPattern.getDayNotes(dayOfYear) > 0) {
-                    Creator.drawCircle(canvas, x - cew + 20.0f, y + ceh - 50.0f, 5.0f)
-                }
+                Creator.notesDots(canvas, x - cew + 20.0f, y + ceh - 50.0f, 5.0f, calendarPattern.getDayNotes(dayOfYear))
 
                 xOffset++
                 if (xOffset > 6) {
@@ -270,9 +268,7 @@ class CalendarMonthPage : Creator {
             if (calendarPattern.getWeekPages(weekOfYear) > 0) {
                 Creator.drawTriangle(canvas, lo + 2.0f, to + 2.0f, 20.0f, Creator.fillWhite)
             }
-            if (calendarPattern.getWeekNotes(weekOfYear) > 0) {
-                Creator.drawCircle(canvas, lo + 10.0f, to + ceh - 10.0f, 5.0f, Creator.fillWhite)
-            }
+            Creator.notesDots(canvas, lo + 10.0f, to + ceh - 10.0f, 5.0f, calendarPattern.getWeekNotes(weekOfYear))
         }
     }
 }

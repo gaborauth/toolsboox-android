@@ -2,6 +2,7 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.R
@@ -158,9 +159,7 @@ class CalendarWeekPage : Creator {
                     if (calendarPattern.getDayPages(dayOfYear) > 0) {
                         Creator.drawTriangle(canvas, xo + 2.0f, yo + 2.0f, 10.0f, Creator.fillWhite)
                     }
-                    if (calendarPattern.getDayNotes(dayOfYear) > 0) {
-                        Creator.drawCircle(canvas, xo + 5.0f, yo + 45.0f, 2.5f, Creator.fillWhite)
-                    }
+                    Creator.notesDots(canvas, xo + 5.0f, yo + 45.0f, 2.5f, calendarPattern.getDayNotes(dayOfYear), Color.WHITE)
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.ot.Creator
@@ -184,9 +185,7 @@ class CalendarQuarterPage : Creator {
                 if (calendarPattern.getDayPages(dayOfYear) > 0) {
                     Creator.drawTriangle(canvas, lo + 77.0f, to + (i - 1) * ceh, 10.0f)
                 }
-                if (calendarPattern.getDayNotes(dayOfYear) > 0) {
-                    Creator.drawCircle(canvas, lo + 80.0f, to + (i - 1) * ceh - 5.0f, 2.5f)
-                }
+                Creator.notesDots(canvas, lo + 80.0f, to + (i - 1) * ceh - 5.0f, 2.5f, calendarPattern.getDayNotes(dayOfYear))
             }
         }
 
@@ -208,9 +207,7 @@ class CalendarQuarterPage : Creator {
             if (calendarPattern.getMonthPages(month) > 0) {
                 Creator.drawTriangle(canvas, lo + 2.0f, to - ceh + 2.0f, 20.0f, Creator.fillWhite)
             }
-            if (calendarPattern.getMonthNotes(month) > 0) {
-                Creator.drawCircle(canvas, lo + 10.0f, to - 10.0f, 5.0f, Creator.fillWhite)
-            }
+            Creator.notesDots(canvas, lo + 10.0f, to - 10.0f, 5.0f, calendarPattern.getMonthNotes(month), Color.WHITE)
         }
     }
 }
