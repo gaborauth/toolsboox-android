@@ -92,7 +92,7 @@ class CalendarMonthPage : Creator {
                         val yo = to + 50.0f + i * ceh
 
                         if (px >= xo && px <= xo + 50.0f && py >= yo && py <= yo + ceh) {
-                            CalendarNavigator.toWeek(fragment, localDate.plusWeeks(i.toLong()), locale, false)
+                            CalendarNavigator.toWeekPage(fragment, localDate.plusWeeks(i.toLong()), locale)
                             return true
                         }
                     }

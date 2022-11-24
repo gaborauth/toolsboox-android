@@ -8,7 +8,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarWeek
+import com.toolsboox.plugin.calendar.da.v2.CalendarWeek
 import com.toolsboox.plugin.calendar.ui.CalendarWeekFragment
 import java.time.LocalDate
 import java.time.temporal.WeekFields
@@ -61,7 +61,7 @@ class CalendarWeekPageNotes : Creator {
 
             when (gestureResult) {
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate, locale, false)
+                    CalendarNavigator.toWeekPage(fragment, startWeekDate, locale)
                     return true
                 }
 

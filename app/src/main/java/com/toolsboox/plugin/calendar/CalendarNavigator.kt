@@ -164,13 +164,13 @@ object CalendarNavigator {
     }
 
     /**
-     * Navigate to the weekly calendar.
+     * Navigate to the weekly calendar notes.
      *
      * @param fragment the fragment
      * @param localDate the local date
-     * @param notes navigate to the notes page
+     * @param notePage navigate to the note page
      */
-    fun toWeek(fragment: ScreenFragment, localDate: LocalDate, locale: Locale, notes: Boolean) {
+    fun toWeekNote(fragment: ScreenFragment, localDate: LocalDate, locale: Locale, notePage: String) {
         val year = localDate.year
         val weekOfWeekBasedYear = WeekFields.of(locale).weekOfWeekBasedYear()
         val weekOfYear = localDate.plusWeeks(0L).get(weekOfWeekBasedYear)
@@ -178,9 +178,32 @@ object CalendarNavigator {
         val bundle = bundleOf()
         bundle.putString("year", "$year")
         bundle.putString("weekOfYear", "$weekOfYear")
-        bundle.putString("notes", "$notes")
+        bundle.putString("notePage", notePage)
 
-        Timber.i("Navigate to the '$year-$weekOfYear' ($notes) weekly calendar")
+        Timber.i("Navigate to the '$year-$weekOfYear' ($notePage) weekly calendar")
+        fragment.findNavController().navigate(R.id.action_to_calendar_week, bundle)
+    }
+
+    /**
+     * Navigate to the weekly calendar page.
+     *
+     * @param fragment the fragment
+     * @param localDate the local date
+     * @param calendarStyle to the calendar style
+     */
+    fun toWeekPage(
+        fragment: ScreenFragment, localDate: LocalDate, locale: Locale, calendarStyle: String = CalendarMonth.DEFAULT_STYLE
+    ) {
+        val year = localDate.year
+        val weekOfWeekBasedYear = WeekFields.of(locale).weekOfWeekBasedYear()
+        val weekOfYear = localDate.plusWeeks(0L).get(weekOfWeekBasedYear)
+
+        val bundle = bundleOf()
+        bundle.putString("year", "$year")
+        bundle.putString("weekOfYear", "$weekOfYear")
+        bundle.putString("calendarStyle", calendarStyle)
+
+        Timber.i("Navigate to the '$year-$weekOfYear' ($calendarStyle) weekly calendar")
         fragment.findNavController().navigate(R.id.action_to_calendar_week, bundle)
     }
 

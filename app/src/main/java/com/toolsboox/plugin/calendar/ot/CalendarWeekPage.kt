@@ -9,7 +9,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarWeek
+import com.toolsboox.plugin.calendar.da.v2.CalendarWeek
 import com.toolsboox.plugin.calendar.ui.CalendarWeekFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -64,12 +64,12 @@ class CalendarWeekPage : Creator {
 
             when (gestureResult) {
                 OnGestureListener.LTR -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate.minusWeeks(1L), locale, false)
+                    CalendarNavigator.toWeekPage(fragment, startWeekDate.minusWeeks(1L), locale)
                     return true
                 }
 
                 OnGestureListener.RTL -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate.plusWeeks(1L), locale, false)
+                    CalendarNavigator.toWeekPage(fragment, startWeekDate.plusWeeks(1L), locale)
                     return true
                 }
 
@@ -79,7 +79,7 @@ class CalendarWeekPage : Creator {
                 }
 
                 OnGestureListener.DTU -> {
-                    CalendarNavigator.toWeek(fragment, startWeekDate, locale, true)
+                    CalendarNavigator.toWeekNote(fragment, startWeekDate, locale, "0")
                     return true
                 }
             }
@@ -95,7 +95,7 @@ class CalendarWeekPage : Creator {
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
                             if (i == 7) {
-                                CalendarNavigator.toWeek(fragment, startWeekDate, locale, false)
+                                CalendarNavigator.toWeekPage(fragment, startWeekDate, locale)
                             } else {
                                 CalendarNavigator.toDayPage(fragment, startWeekDate.plusDays(i.toLong()))
                             }

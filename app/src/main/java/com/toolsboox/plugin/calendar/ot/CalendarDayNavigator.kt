@@ -67,7 +67,7 @@ class CalendarDayNavigator {
                         return true
                     }
                     if (px >= lo + 3 * cew && px <= lo + 9 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toWeek(fragment, localDate, locale, false)
+                        CalendarNavigator.toWeekPage(fragment, localDate, locale)
                         return true
                     }
                     if (px >= lo + 9 * cew && px <= lo + 13 * cew && py >= to && py <= to + ceh) {
