@@ -5,6 +5,7 @@ import android.graphics.*
 import android.provider.MediaStore
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GestureDetectorCompat
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.data.note.TouchPoint
@@ -165,6 +166,26 @@ abstract class SurfaceFragment : ScreenFragment() {
             penState = false
             provideToolbarDrawing().toolbarEraser.background.setTint(Color.GRAY)
             provideToolbarDrawing().toolbarPen.background.setTint(Color.WHITE)
+        }
+
+        provideToolbarDrawing().toolbarTrash.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
+            builder.setTitle(R.string.calendar_drawing_toolbar_trash_dialog_title)
+                .setMessage(R.string.calendar_drawing_toolbar_trash_dialog_message)
+                .setPositiveButton(R.string.ok) { dialog, _ ->
+                    val strokesToRemove: MutableSet<UUID> = mutableSetOf()
+                    for (stroke in strokes) { strokesToRemove.add(stroke.strokeId) }
+                    strokes.clear()
+                    onStrokesDeleted(strokesToRemove.toList())
+
+                    applyStrokes(strokes, true)
+                    onStrokeChanged(strokes)
+                    dialog.cancel()
+                }
+                .setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.cancel()
+                }
+            builder.create().show()
         }
 
         provideToolbarDrawing().toolbarSettings.setOnClickListener {
