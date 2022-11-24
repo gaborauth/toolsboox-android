@@ -56,18 +56,10 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
         fragment: CalendarDayFragment, binding: FragmentCalendarBinding,
         currentDate: LocalDate, locale: Locale
     ) {
+        if (!checkPermissions(fragment, binding.root)) return
+
         if (!fragment.checkPermission(Manifest.permission.READ_CALENDAR)) {
             fragment.showError(null, R.string.main_read_calendar_permission_missing, binding.root)
-            return
-        }
-
-        if (!fragment.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            fragment.showError(null, R.string.main_read_external_storage_permission_missing, binding.root)
-            return
-        }
-
-        if (!fragment.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            fragment.showError(null, R.string.main_write_external_storage_permission_missing, binding.root)
             return
         }
 

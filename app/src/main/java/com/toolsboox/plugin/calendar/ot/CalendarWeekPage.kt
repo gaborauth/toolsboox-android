@@ -74,7 +74,7 @@ class CalendarWeekPage : Creator {
                 }
 
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toMonth(fragment, startWeekDate, false)
+                    CalendarNavigator.toMonthPage(fragment, startWeekDate)
                     return true
                 }
 

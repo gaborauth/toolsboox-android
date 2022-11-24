@@ -7,8 +7,8 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.v1.CalendarMonth
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
 import com.toolsboox.plugin.calendar.ui.CalendarMonthFragment
 import java.time.LocalDate
 import java.time.temporal.WeekFields
@@ -59,7 +59,7 @@ class CalendarMonthPageNotes : Creator {
 
             when (gestureResult) {
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toMonth(fragment, localDate, false)
+                    CalendarNavigator.toMonthPage(fragment, localDate)
                     return true
                 }
 

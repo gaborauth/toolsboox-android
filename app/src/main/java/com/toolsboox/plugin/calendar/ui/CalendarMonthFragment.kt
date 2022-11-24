@@ -11,9 +11,8 @@ import com.toolsboox.R
 import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
-import com.toolsboox.plugin.calendar.da.v1.Calendar
-import com.toolsboox.plugin.calendar.da.v1.CalendarMonth
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
 import com.toolsboox.plugin.calendar.ot.CalendarMonthNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarMonthPage
 import com.toolsboox.plugin.calendar.ot.CalendarMonthPageNotes
@@ -72,9 +71,14 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
     private var currentDate: LocalDate = LocalDate.now()
 
     /**
-     * Flag of notes view.
+     * Style of calendar view.
      */
-    private var notes: Boolean = false
+    private var calendarStyle: String? = null
+
+    /**
+     * Page of notes view.
+     */
+    private var notePage: String? = null
 
     /**
      * The current locale.
@@ -116,29 +120,20 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        val converted = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertFrom(strokes, UUID.randomUUID())
-        val year = currentDate.year
-        val month = currentDate.monthValue
-        val locale = calendarMonth.locale
+        val monthOfYear = currentDate.monthValue
 
-        calendarMonth =
-            if (notes) {
-                CalendarMonth(
-                    year, month, locale,
-                    Calendar.listDeepCopy(calendarMonth.strokes), Calendar.listDeepCopy(converted)
-                )
-            } else {
-                CalendarMonth(
-                    year, month, locale,
-                    Calendar.listDeepCopy(converted), Calendar.listDeepCopy(calendarMonth.notesStrokes)
-                )
-            }
+        val normalizedStrokes = surfaceFrom(strokes)
+        if (notePage != null) {
+            calendarMonth.noteStrokes[notePage!!] = normalizedStrokes
+        } else {
+            calendarMonth.calendarStrokes[calendarStyle ?: CalendarMonth.DEFAULT_STYLE] = normalizedStrokes
+        }
 
-        val pages = if (calendarMonth.strokes.isEmpty()) 0 else 1
-        val notes = if (calendarMonth.notesStrokes.isEmpty()) 0 else 1
-        calendarPattern.updateMonth(month, pages, notes)
+        val pages = calendarMonth.calendarStrokes.filter { it.value.isNotEmpty() }.size
+        val notes = calendarMonth.noteStrokes.filter { it.value.isNotEmpty() }.size
+        calendarPattern.updateMonth(monthOfYear, pages, notes)
 
-        presenter.save(this, binding, calendarMonth, calendarPattern, currentDate, getSurfaceSize())
+        presenter.save(this, binding, calendarMonth, calendarPattern, currentDate)
     }
 
     /**
@@ -169,7 +164,8 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
                 currentDate = LocalDate.of(year, month, 1)
             }
         }
-        notes = arguments?.getString("notes")?.toBoolean() ?: false
+        calendarStyle = arguments?.getString("calendarStyle")
+        notePage = arguments?.getString("notePage")
 
         calendarMonth = CalendarMonth(currentDate.year, currentDate.monthValue, locale)
 
@@ -180,7 +176,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
 
-            if (notes) {
+            if (notePage != null) {
                 CalendarMonthPageNotes.onTouchEvent(
                     view, motionEvent, gestureResult, this@CalendarMonthFragment, calendarMonth
                 )
@@ -207,7 +203,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
-            presenter.load(this@CalendarMonthFragment, binding, currentDate, getSurfaceSize(), locale)
+            presenter.load(this@CalendarMonthFragment, binding, currentDate, locale)
         }
     }
 
@@ -224,7 +220,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
     /**
      * Reload the current page.
      *
-     * @param calendarYear the data class
+     * @param calendarMonth the data class
      * @param calendarPattern the pattern data class
      */
     fun renderPage(calendarMonth: CalendarMonth, calendarPattern: CalendarPattern) {
@@ -232,14 +228,14 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         this.calendarPattern = calendarPattern
         updateNavigator()
 
-        if (notes) {
+        if (notePage != null) {
+            val noteStrokes = calendarMonth.noteStrokes[notePage] ?: listOf()
             CalendarMonthPageNotes.drawPage(this.requireContext(), templateCanvas, calendarMonth, calendarPattern)
-            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarMonth.notesStrokes)
-            applyStrokes(strokes, true)
+            applyStrokes(surfaceTo(noteStrokes), true)
         } else {
+            val calendarStrokes = calendarMonth.calendarStrokes[calendarStyle ?: CalendarMonth.DEFAULT_STYLE] ?: listOf()
             CalendarMonthPage.drawPage(this.requireContext(), templateCanvas, calendarMonth, calendarPattern)
-            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarMonth.strokes)
-            applyStrokes(strokes, true)
+            applyStrokes(surfaceTo(calendarStrokes), true)
         }
     }
 

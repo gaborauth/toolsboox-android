@@ -92,7 +92,7 @@ class CalendarQuarterPage : Creator {
                         val yo = to
 
                         if (px >= xo && px <= xo + cew && py >= yo && py <= yo + ceh) {
-                            CalendarNavigator.toMonth(fragment, localDate.plusMonths(i.toLong()), false)
+                            CalendarNavigator.toMonthPage(fragment, localDate.plusMonths(i.toLong()))
                             return true
                         }
 

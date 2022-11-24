@@ -3,6 +3,8 @@ package com.toolsboox.plugin.calendar
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
+import com.toolsboox.plugin.calendar.da.v2.CalendarDay
+import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
 import com.toolsboox.ui.plugin.ScreenFragment
 import timber.log.Timber
 import java.time.LocalDate
@@ -55,9 +57,11 @@ object CalendarNavigator {
      *
      * @param fragment the fragment
      * @param localDate the local date
-     * @param calendarStyle to the calendar page
+     * @param calendarStyle to the calendar style
      */
-    fun toDayPage(fragment: ScreenFragment, localDate: LocalDate, calendarStyle: String = "Default") {
+    fun toDayPage(
+        fragment: ScreenFragment, localDate: LocalDate, calendarStyle: String = CalendarDay.DEFAULT_STYLE
+    ) {
         val year = localDate.year
         val month = localDate.monthValue
         val day = localDate.dayOfMonth
@@ -73,22 +77,44 @@ object CalendarNavigator {
     }
 
     /**
-     * Navigate to the monthly calendar.
+     * Navigate to the monthly calendar notes.
      *
      * @param fragment the fragment
      * @param localDate the local date
-     * @param notes navigate to the notes page
+     * @param notePage navigate to the note page
      */
-    fun toMonth(fragment: ScreenFragment, localDate: LocalDate, notes: Boolean) {
+    fun toMonthNote(fragment: ScreenFragment, localDate: LocalDate, notePage: String) {
         val year = localDate.year
         val month = localDate.monthValue
 
         val bundle = bundleOf()
         bundle.putString("year", "$year")
         bundle.putString("month", "$month")
-        bundle.putString("notes", "$notes")
+        bundle.putString("notePage", notePage)
 
-        Timber.i("Navigate to the '$year-$month' ($notes) monthly calendar")
+        Timber.i("Navigate to the '$year-$month' ($notePage) monthly calendar")
+        fragment.findNavController().navigate(R.id.action_to_calendar_month, bundle)
+    }
+
+    /**
+     * Navigate to the monthly calendar page.
+     *
+     * @param fragment the fragment
+     * @param localDate the local date
+     * @param calendarStyle to the calendar style
+     */
+    fun toMonthPage(
+        fragment: ScreenFragment, localDate: LocalDate, calendarStyle: String = CalendarMonth.DEFAULT_STYLE
+    ) {
+        val year = localDate.year
+        val month = localDate.monthValue
+
+        val bundle = bundleOf()
+        bundle.putString("year", "$year")
+        bundle.putString("month", "$month")
+        bundle.putString("calendarStyle", calendarStyle)
+
+        Timber.i("Navigate to the '$year-$month' ($calendarStyle) monthly calendar")
         fragment.findNavController().navigate(R.id.action_to_calendar_month, bundle)
     }
 
