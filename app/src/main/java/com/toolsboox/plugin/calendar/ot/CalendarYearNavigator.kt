@@ -7,7 +7,7 @@ import android.view.View
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarYear
+import com.toolsboox.plugin.calendar.da.v2.CalendarYear
 import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import java.time.LocalDate
 
@@ -53,7 +53,7 @@ class CalendarYearNavigator {
                     val py = motionEvent.y * 140.4f / view.height
 
                     if (px >= lo + 0 * cew && px <= lo + 1 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toYear(fragment, localDate.minusYears(1L), false)
+                        CalendarNavigator.toYearPage(fragment, localDate.minusYears(1L))
                         return true
                     }
                     if (px >= lo + 1 * cew && px <= lo + 3 * cew && py >= to && py <= to + ceh) {
@@ -61,11 +61,11 @@ class CalendarYearNavigator {
                         return true
                     }
                     if (px >= lo + 15 * cew && px <= lo + 19 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toYear(fragment, localDate, false)
+                        CalendarNavigator.toYearPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 19 * cew && px <= lo + 20 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toYear(fragment, localDate.plusYears(1L), false)
+                        CalendarNavigator.toYearPage(fragment, localDate.plusYears(1L))
                         return true
                     }
                 }

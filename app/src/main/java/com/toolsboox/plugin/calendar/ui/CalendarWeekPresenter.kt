@@ -59,9 +59,7 @@ class CalendarWeekPresenter @Inject constructor() : FragmentPresenter() {
                     val calendarWeek = calendarWeekService.load(rootPath, currentDate, locale)
                     val calendarPattern = calendarPatternService.load(rootPath, currentDate, locale)
 
-                    withContext(Dispatchers.Main) {
-                        fragment.renderPage(calendarWeek, calendarPattern)
-                    }
+                    withContext(Dispatchers.Main) { fragment.renderPage(calendarWeek, calendarPattern) }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }

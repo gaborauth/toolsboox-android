@@ -8,7 +8,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarYear
+import com.toolsboox.plugin.calendar.da.v2.CalendarYear
 import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import java.time.LocalDate
 
@@ -54,7 +54,7 @@ class CalendarYearPageNotes : Creator {
             when (gestureResult) {
                 OnGestureListener.UTD -> {
                     val localDate = LocalDate.of(year, 1, 1)
-                    CalendarNavigator.toYear(fragment, localDate, false)
+                    CalendarNavigator.toYearPage(fragment, localDate)
                     return true
                 }
 

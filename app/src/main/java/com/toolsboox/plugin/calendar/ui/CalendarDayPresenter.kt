@@ -74,9 +74,7 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                     val calendarPattern = calendarPatternService.load(rootPath, currentDate, locale)
                     val googleCalendarEvents = googleCalendarService.loadEvents(fragment, currentDate)
 
-                    withContext(Dispatchers.Main) {
-                        fragment.renderPage(calendarDay, calendarPattern, googleCalendarEvents)
-                    }
+                    withContext(Dispatchers.Main) { fragment.renderPage(calendarDay, calendarPattern, googleCalendarEvents) }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }

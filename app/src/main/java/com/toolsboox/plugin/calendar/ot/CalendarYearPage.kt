@@ -10,7 +10,7 @@ import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarYear
+import com.toolsboox.plugin.calendar.da.v2.CalendarYear
 import com.toolsboox.plugin.calendar.ui.CalendarYearFragment
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -62,13 +62,13 @@ class CalendarYearPage : Creator {
             when (gestureResult) {
                 OnGestureListener.LTR -> {
                     val localDate = LocalDate.of(year, 1, 1)
-                    CalendarNavigator.toYear(fragment, localDate.minusYears(1L), false)
+                    CalendarNavigator.toYearPage(fragment, localDate.minusYears(1L))
                     return true
                 }
 
                 OnGestureListener.RTL -> {
                     val localDate = LocalDate.of(year, 1, 1)
-                    CalendarNavigator.toYear(fragment, localDate.plusYears(1L), false)
+                    CalendarNavigator.toYearPage(fragment, localDate.plusYears(1L))
                     return true
                 }
 
@@ -79,7 +79,7 @@ class CalendarYearPage : Creator {
 
                 OnGestureListener.DTU -> {
                     val localDate = LocalDate.of(year, 1, 1)
-                    CalendarNavigator.toYear(fragment, localDate, true)
+                    CalendarNavigator.toYearNote(fragment, localDate, "0")
                     return true
                 }
             }

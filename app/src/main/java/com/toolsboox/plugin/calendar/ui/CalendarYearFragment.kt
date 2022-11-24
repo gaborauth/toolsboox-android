@@ -10,9 +10,8 @@ import com.toolsboox.R
 import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
-import com.toolsboox.plugin.calendar.da.v1.Calendar
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.CalendarYear
+import com.toolsboox.plugin.calendar.da.v2.CalendarYear
 import com.toolsboox.plugin.calendar.ot.CalendarYearNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarYearPage
 import com.toolsboox.plugin.calendar.ot.CalendarYearPageNotes
@@ -71,9 +70,14 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     private var currentDate: LocalDate = LocalDate.now()
 
     /**
-     * Flag of notes view.
+     * Style of calendar view.
      */
-    private var notes: Boolean = false
+    private var calendarStyle: String? = null
+
+    /**
+     * Page of notes view.
+     */
+    private var notePage: String? = null
 
     /**
      * The current locale.
@@ -116,28 +120,18 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        val converted = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertFrom(strokes, UUID.randomUUID())
-        val year = currentDate.year
-        val locale = calendarYear.locale
+        val normalizedStrokes = surfaceFrom(strokes)
+        if (notePage != null) {
+            calendarYear.noteStrokes[notePage!!] = normalizedStrokes
+        } else {
+            calendarYear.calendarStrokes[calendarStyle ?: CalendarYear.DEFAULT_STYLE] = normalizedStrokes
+        }
 
-        calendarYear =
-            if (notes) {
-                CalendarYear(
-                    year, locale,
-                    Calendar.listDeepCopy(calendarYear.strokes), Calendar.listDeepCopy(converted)
-                )
-            } else {
-                CalendarYear(
-                    year, locale,
-                    Calendar.listDeepCopy(converted), Calendar.listDeepCopy(calendarYear.notesStrokes)
-                )
-            }
-
-        val pages = if (calendarYear.strokes.isEmpty()) 0 else 1
-        val notes = if (calendarYear.notesStrokes.isEmpty()) 0 else 1
+        val pages = calendarYear.calendarStrokes.filter { it.value.isNotEmpty() }.size
+        val notes = calendarYear.noteStrokes.filter { it.value.isNotEmpty() }.size
         calendarPattern.updateYear(pages, notes)
 
-        presenter.save(this, binding, calendarYear, calendarPattern, currentDate, getSurfaceSize())
+        presenter.save(this, binding, calendarYear, calendarPattern, currentDate)
     }
 
     /**
@@ -164,7 +158,8 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
             Timber.i("Set year to '$it' from parameter")
             currentDate = LocalDate.ofYearDay(it, 1)
         }
-        notes = arguments?.getString("notes")?.toBoolean() ?: false
+        calendarStyle = arguments?.getString("calendarStyle")
+        notePage = arguments?.getString("notePage")
 
         calendarYear = CalendarYear(currentDate.year, locale)
 
@@ -175,7 +170,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
 
-            if (notes) {
+            if (notePage != null) {
                 CalendarYearPageNotes.onTouchEvent(
                     view, motionEvent, gestureResult, this@CalendarYearFragment, calendarYear
                 )
@@ -202,7 +197,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator(true)
 
         timer = GlobalScope.launch(Dispatchers.Main) {
-            presenter.load(this@CalendarYearFragment, binding, currentDate, getSurfaceSize(), locale)
+            presenter.load(this@CalendarYearFragment, binding, currentDate, locale)
         }
     }
 
@@ -227,14 +222,14 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         this.calendarPattern = calendarPattern
         updateNavigator()
 
-        if (notes) {
+        if (notePage != null) {
+            val noteStrokes = calendarYear.noteStrokes[notePage] ?: listOf()
             CalendarYearPageNotes.drawPage(this.requireContext(), templateCanvas, calendarYear, calendarPattern)
-            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarYear.notesStrokes)
-            applyStrokes(strokes, true)
+            applyStrokes(surfaceTo(noteStrokes), true)
         } else {
+            val calendarStrokes = calendarYear.calendarStrokes[calendarStyle ?: CalendarYear.DEFAULT_STYLE] ?: listOf()
             CalendarYearPage.drawPage(this.requireContext(), templateCanvas, calendarYear, calendarPattern)
-            val strokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(calendarYear.notesStrokes)
-            applyStrokes(strokes, true)
+            applyStrokes(surfaceTo(calendarStrokes), true)
         }
     }
 

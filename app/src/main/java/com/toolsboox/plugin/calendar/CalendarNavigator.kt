@@ -3,9 +3,7 @@ package com.toolsboox.plugin.calendar
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.toolsboox.R
-import com.toolsboox.plugin.calendar.da.v2.CalendarDay
-import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
-import com.toolsboox.plugin.calendar.da.v2.CalendarQuarter
+import com.toolsboox.plugin.calendar.da.v2.*
 import com.toolsboox.ui.plugin.ScreenFragment
 import timber.log.Timber
 import java.time.LocalDate
@@ -192,7 +190,7 @@ object CalendarNavigator {
      * @param calendarStyle to the calendar style
      */
     fun toWeekPage(
-        fragment: ScreenFragment, localDate: LocalDate, locale: Locale, calendarStyle: String = CalendarMonth.DEFAULT_STYLE
+        fragment: ScreenFragment, localDate: LocalDate, locale: Locale, calendarStyle: String = CalendarWeek.DEFAULT_STYLE
     ) {
         val year = localDate.year
         val weekOfWeekBasedYear = WeekFields.of(locale).weekOfWeekBasedYear()
@@ -208,20 +206,40 @@ object CalendarNavigator {
     }
 
     /**
-     * Navigate to the yearly calendar.
+     * Navigate to the yearly calendar notes.
      *
      * @param fragment the fragment
      * @param localDate the local date
-     * @param notes navigate to the notes page
+     * @param notePage navigate to the note page
      */
-    fun toYear(fragment: ScreenFragment, localDate: LocalDate, notes: Boolean) {
+    fun toYearNote(fragment: ScreenFragment, localDate: LocalDate, notePage: String) {
         val year = localDate.year
 
         val bundle = bundleOf()
         bundle.putString("year", "$year")
-        bundle.putString("notes", "$notes")
+        bundle.putString("notePage", notePage)
 
-        Timber.i("Navigate to the '$year' ($notes) yearly calendar")
+        Timber.i("Navigate to the '$year' ($notePage) yearly calendar")
+        fragment.findNavController().navigate(R.id.action_to_calendar_year, bundle)
+    }
+
+    /**
+     * Navigate to the yearly calendar page.
+     *
+     * @param fragment the fragment
+     * @param localDate the local date
+     * @param calendarStyle to the calendar style
+     */
+    fun toYearPage(
+        fragment: ScreenFragment, localDate: LocalDate, calendarStyle: String = CalendarYear.DEFAULT_STYLE
+    ) {
+        val year = localDate.year
+
+        val bundle = bundleOf()
+        bundle.putString("year", "$year")
+        bundle.putString("calendarStyle", calendarStyle)
+
+        Timber.i("Navigate to the '$year' ($calendarStyle) yearly calendar")
         fragment.findNavController().navigate(R.id.action_to_calendar_year, bundle)
     }
 }

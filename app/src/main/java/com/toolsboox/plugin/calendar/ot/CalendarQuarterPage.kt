@@ -72,7 +72,7 @@ class CalendarQuarterPage : Creator {
                 }
 
                 OnGestureListener.UTD -> {
-                    CalendarNavigator.toYear(fragment, localDate, false)
+                    CalendarNavigator.toYearPage(fragment, localDate)
                     return true
                 }
 

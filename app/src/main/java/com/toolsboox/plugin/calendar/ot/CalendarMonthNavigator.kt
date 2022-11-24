@@ -72,7 +72,7 @@ class CalendarMonthNavigator {
                         return true
                     }
                     if (px >= lo + 15 * cew && px <= lo + 19 * cew && py >= to && py <= to + ceh) {
-                        CalendarNavigator.toYear(fragment, localDate, false)
+                        CalendarNavigator.toYearPage(fragment, localDate)
                         return true
                     }
                     if (px >= lo + 19 * cew && px <= lo + 20 * cew && py >= to && py <= to + ceh) {
