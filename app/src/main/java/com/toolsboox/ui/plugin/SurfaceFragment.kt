@@ -400,13 +400,6 @@ abstract class SurfaceFragment : ScreenFragment() {
     }
 
     /**
-     * Get the size of the surface.
-     *
-     * @return the size of the surface
-     */
-    protected fun getSurfaceSize(): Rect = surfaceSize
-
-    /**
      * The raw input callback of Onyx's pen library.
      */
     private val callback: RawInputCallback = object : RawInputCallback() {
