@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
@@ -103,9 +105,13 @@ class CalendarQuarterNavigator {
 
             canvas.drawRect(lo + 1 * cew, to + 0 * ceh, lo + 3 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 1 * cew, to + 0 * ceh, lo + 3 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
-            Creator.drawEllipsizedText(
-                canvas, "⏎", Creator.textBigBlackCenter, lo + 1 * cew, to + 1 * ceh - 30.0f, 2 * cew
-            )
+
+            val today = ContextCompat.getDrawable(context, R.drawable.ic_calendar_today)
+            canvas.save()
+            today?.setBounds(10, 10, (2 * cew).toInt() - 10, ceh.toInt() - 10)
+            canvas.translate(lo + 1 * cew, to)
+            today?.draw(canvas)
+            canvas.restore()
 
             canvas.drawRect(lo + 3 * cew, to + 0 * ceh, lo + 6 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
 
