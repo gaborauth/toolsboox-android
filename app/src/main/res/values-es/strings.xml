@@ -269,4 +269,8 @@ semanas plano"</string>
 esta semana"</string>
     <string name="calendar_settings_button_pattern_sync">"Actualizar marcas"</string>
     <string name="calendar_settings_pattern_sync_done">"Marcas del calendario actualizadas"</string>
+    <string name="cancel">"Cancelar"</string>
+    <string name="calendar_drawing_toolbar_trash">"Borrar página"</string>
+    <string name="calendar_drawing_toolbar_trash_dialog_title">"¿Seguro?"</string>
+    <string name="calendar_drawing_toolbar_trash_dialog_message">"¿Quieres borrar todo el contenido?"</string>
 </resources>
