@@ -267,4 +267,6 @@ comunidad"</string>
 semanas plano"</string>
     <string name="templates_item_this_weeks_title">"Calendario de
 esta semana"</string>
+    <string name="calendar_settings_button_pattern_sync">"Actualizar marcas"</string>
+    <string name="calendar_settings_pattern_sync_done">"Marcas del calendario actualizadas"</string>
 </resources>
