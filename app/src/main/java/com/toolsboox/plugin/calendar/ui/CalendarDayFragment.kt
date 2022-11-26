@@ -168,7 +168,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
                 }
             }
         }
-        calendarStyle = arguments?.getString("calendarStyle")
+        calendarStyle = arguments?.getString("calendarStyle") ?: CalendarDay.DEFAULT_STYLE
         notePage = arguments?.getString("notePage")
 
         calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, locale)

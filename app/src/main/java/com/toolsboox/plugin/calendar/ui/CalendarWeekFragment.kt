@@ -169,7 +169,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
                     .with(weekFields.dayOfWeek(), 1)
             }
         }
-        calendarStyle = arguments?.getString("calendarStyle")
+        calendarStyle = arguments?.getString("calendarStyle") ?: CalendarWeek.DEFAULT_STYLE
         notePage = arguments?.getString("notePage")
 
         val weekOfWeekBasedYear = WeekFields.of(locale).weekOfWeekBasedYear()

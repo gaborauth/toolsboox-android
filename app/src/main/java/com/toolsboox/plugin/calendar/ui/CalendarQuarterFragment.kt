@@ -165,7 +165,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
                 currentDate = LocalDate.of(year, (quarter - 1) * 3 + 1, 1)
             }
         }
-        calendarStyle = arguments?.getString("calendarStyle")
+        calendarStyle = arguments?.getString("calendarStyle") ?: CalendarQuarter.DEFAULT_STYLE
         notePage = arguments?.getString("notePage")
 
         calendarQuarter = CalendarQuarter(currentDate.year, (currentDate.monthValue - 1 / 3) + 1, locale)

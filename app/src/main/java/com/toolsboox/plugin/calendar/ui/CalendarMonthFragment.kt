@@ -164,7 +164,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
                 currentDate = LocalDate.of(year, month, 1)
             }
         }
-        calendarStyle = arguments?.getString("calendarStyle")
+        calendarStyle = arguments?.getString("calendarStyle") ?: CalendarMonth.DEFAULT_STYLE
         notePage = arguments?.getString("notePage")
 
         calendarMonth = CalendarMonth(currentDate.year, currentDate.monthValue, locale)

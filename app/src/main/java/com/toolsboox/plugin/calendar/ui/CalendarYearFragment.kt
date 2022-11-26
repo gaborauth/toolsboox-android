@@ -158,7 +158,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
             Timber.i("Set year to '$it' from parameter")
             currentDate = LocalDate.ofYearDay(it, 1)
         }
-        calendarStyle = arguments?.getString("calendarStyle")
+        calendarStyle = arguments?.getString("calendarStyle") ?: CalendarYear.DEFAULT_STYLE
         notePage = arguments?.getString("notePage")
 
         calendarYear = CalendarYear(currentDate.year, locale)
