@@ -90,10 +90,17 @@
     <string name="calendar_settings_week_number_of_first_day_value">W1</string>
     <string name="calendar_settings_week_number_of_last_day_text">Week number of last day:</string>
     <string name="calendar_settings_week_number_of_last_day_value">W52</string>
-    <string name="calendar_settings_button_backup">Export backup</string>
-    <string name="calendar_settings_backup_done">Calendar backup exported to the Downloads</string>
+    <string name="calendar_settings_button_shortcut">Create shortcut</string>
+    <string name="calendar_settings_shortcut_done">Calendar shortcut created</string>
+    <string name="calendar_settings_shortcut_failed">Calendar shortcut creation failed</string>
+    <string name="calendar_settings_shortcut_short_label">Calendar</string>
+    <string name="calendar_settings_shortcut_long_label">Calendar for Boox</string>
     <string name="calendar_settings_button_pattern_sync">Update marks</string>
     <string name="calendar_settings_pattern_sync_done">Calendar marks updated</string>
+    <string name="calendar_settings_button_backup">Export backup</string>
+    <string name="calendar_settings_backup_done">Calendar backup exported to the Downloads</string>
+    <string name="calendar_settings_button_restore">Import backup</string>
+    <string name="calendar_settings_restore_done">Calendar backup imported from the Downloads</string>
     <string name="calendar_settings_button_save">Save</string>
     <string name="calendar_settings_button_back">Back</string>
 

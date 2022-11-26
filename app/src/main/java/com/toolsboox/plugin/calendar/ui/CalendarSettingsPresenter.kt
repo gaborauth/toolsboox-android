@@ -1,12 +1,19 @@
 package com.toolsboox.plugin.calendar.ui
 
+import android.app.PendingIntent
+import android.content.Intent
+import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.squareup.moshi.Moshi
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarSettingsBinding
 import com.toolsboox.ot.ZipManager
 import com.toolsboox.plugin.calendar.da.v1.*
+import com.toolsboox.ui.main.MainActivity
 import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -63,6 +70,45 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
             }
         }
+    }
+
+    /**
+     * Create shortcut of calendar.
+     *
+     * @param fragment the fragment
+     * @param binding the data binding
+     */
+    fun createShortcut(fragment: CalendarSettingsFragment, binding: FragmentCalendarSettingsBinding) {
+        if (!checkPermissions(fragment, binding.root)) return
+
+        fragment.runOnActivity { fragment.showLoading() }
+
+        if (ShortcutManagerCompat.isRequestPinShortcutSupported(fragment.requireContext())) {
+            val shortcutIntent = Intent(fragment.requireContext(), MainActivity::class.java)
+            shortcutIntent.action = Intent.ACTION_VIEW
+            shortcutIntent.data = Uri.parse("toolsboox://app/calendar")
+
+            val shortcutInfo = ShortcutInfoCompat.Builder(fragment.requireContext(), "calendar")
+                .setIntent(shortcutIntent)
+                .setShortLabel(fragment.getString(R.string.calendar_settings_shortcut_short_label))
+                .setLongLabel(fragment.getString(R.string.calendar_settings_shortcut_long_label))
+                .setIcon(IconCompat.createWithResource(fragment.requireContext(), R.mipmap.ic_launcher_calendar))
+                .build()
+
+            val pinnedShortcutCallbackIntent = Intent()
+            val successCallback = PendingIntent.getBroadcast(fragment.requireContext(), 12345, pinnedShortcutCallbackIntent, 0)
+            ShortcutManagerCompat.requestPinShortcut(fragment.requireContext(), shortcutInfo, successCallback.intentSender)
+
+            Toast.makeText(
+                fragment.requireContext(), R.string.calendar_settings_shortcut_done, Toast.LENGTH_LONG
+            ).show()
+        } else {
+            Toast.makeText(
+                fragment.requireContext(), R.string.calendar_settings_shortcut_failed, Toast.LENGTH_LONG
+            ).show()
+        }
+
+        fragment.runOnActivity { fragment.hideLoading() }
     }
 
     /**
@@ -172,6 +218,4 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
             }
         }
     }
-
-
 }

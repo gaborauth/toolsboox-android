@@ -120,14 +120,19 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
             updateLocaleSettings(localeAdapter, position)
         }
 
-        // Export the calendar
-        binding.buttonBackup.setOnClickListener {
-            presenter.export(this@CalendarSettingsFragment, binding)
+        // Create shortcut of calendar
+        binding.buttonShortcut.setOnClickListener {
+            presenter.createShortcut(this@CalendarSettingsFragment, binding)
         }
 
         // Sync the patterns of the calendar
         binding.buttonPatternSync.setOnClickListener {
             presenter.patternSync(this@CalendarSettingsFragment, binding)
+        }
+
+        // Export the calendar
+        binding.buttonBackup.setOnClickListener {
+            presenter.export(this@CalendarSettingsFragment, binding)
         }
 
         // Save and back

@@ -1,6 +1,7 @@
 package com.toolsboox.ui.main
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
@@ -48,6 +49,12 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      */
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    /**
+     * The injected presenter.
+     */
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     /**
      * The view binding.
@@ -131,6 +138,40 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         }
 
         presenter.onViewCreated()
+    }
+
+    /**
+     * Activity onResume.
+     */
+    override fun onResume() {
+        super.onResume()
+
+        val host = intent?.data?.host
+        val path = intent?.data?.path
+        if (host == "app") {
+            if (path?.startsWith("/calendar") == true) {
+                val defaultCalendarStartActionId = when (sharedPreferences.getInt("calendarStartView", 0)) {
+                    0 -> R.id.action_to_calendar_day
+                    1 -> R.id.action_to_calendar_week
+                    2 -> R.id.action_to_calendar_month
+                    3 -> R.id.action_to_calendar_quarter
+                    4 -> R.id.action_to_calendar_year
+                    else -> R.id.action_to_calendar_day
+                }
+
+                val calendarStartActionId = when (path) {
+                    "/calendar/day" -> R.id.action_to_calendar_day
+                    "/calendar/week" -> R.id.action_to_calendar_week
+                    "/calendar/month" -> R.id.action_to_calendar_month
+                    "/calendar/quarter" -> R.id.action_to_calendar_quarter
+                    "/calendar/year" -> R.id.action_to_calendar_year
+                    else -> defaultCalendarStartActionId
+                }
+
+                val bundle = Bundle()
+                binding.fragmentContent.findNavController().navigate(calendarStartActionId, bundle)
+            }
+        }
     }
 
     /**
