@@ -185,7 +185,7 @@ class CalendarQuarterPage : Creator {
                 if (calendarPattern.getDayPages(dayOfYear) > 0) {
                     Creator.drawTriangle(canvas, lo + 77.0f, to + (i - 1) * ceh, 10.0f)
                 }
-                Creator.notesDots(canvas, lo + 80.0f, to + (i - 1) * ceh - 5.0f, 2.5f, calendarPattern.getDayNotes(dayOfYear))
+                Creator.notesDots(canvas, lo + 80.0f, to + i * ceh - 5.0f, 2.5f, calendarPattern.getDayNotes(dayOfYear))
             }
         }
 
