@@ -127,7 +127,9 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
 
         // Sync the patterns of the calendar
         binding.buttonPatternSync.setOnClickListener {
-            presenter.patternSync(this@CalendarSettingsFragment, binding)
+            val languageTag = sharedPreferences.getString("calendarLocale", null)
+            val locale = languageTag?.let { Locale.forLanguageTag(it) }
+            presenter.patternSync(this@CalendarSettingsFragment, binding, locale ?: Locale.getDefault())
         }
 
         // Export the calendar

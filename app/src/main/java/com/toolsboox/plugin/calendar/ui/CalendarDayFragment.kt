@@ -129,9 +129,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
             calendarDay.calendarStrokes[calendarStyle ?: CalendarDay.DEFAULT_STYLE] = normalizedStrokes
         }
 
-        val pages = calendarDay.calendarStrokes.filter { it.value.isNotEmpty() }.size
-        val notes = calendarDay.noteStrokes.filter { it.value.isNotEmpty() }.size
-        calendarPattern.updateDay(dayOfYear, pages, notes)
+        calendarPattern.updateDay(calendarDay)
 
         presenter.save(this, binding, calendarDay, calendarPattern, currentDate)
     }

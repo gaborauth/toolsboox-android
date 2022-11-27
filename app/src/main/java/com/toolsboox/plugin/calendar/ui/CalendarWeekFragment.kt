@@ -131,9 +131,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
             calendarWeek.calendarStrokes[calendarStyle ?: CalendarMonth.DEFAULT_STYLE] = normalizedStrokes
         }
 
-        val pages = calendarWeek.calendarStrokes.filter { it.value.isNotEmpty() }.size
-        val notes = calendarWeek.noteStrokes.filter { it.value.isNotEmpty() }.size
-        calendarPattern.updateWeek(weekOfYear, pages, notes)
+        calendarPattern.updateWeek(calendarWeek)
 
         presenter.save(this, binding, calendarWeek, calendarPattern, currentDate)
     }

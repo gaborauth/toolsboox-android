@@ -130,9 +130,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
             calendarQuarter.calendarStrokes[calendarStyle ?: CalendarQuarter.DEFAULT_STYLE] = normalizedStrokes
         }
 
-        val pages = calendarQuarter.calendarStrokes.filter { it.value.isNotEmpty() }.size
-        val notes = calendarQuarter.noteStrokes.filter { it.value.isNotEmpty() }.size
-        calendarPattern.updateQuarter(quarter, pages, notes)
+        calendarPattern.updateQuarter(calendarQuarter)
 
         presenter.save(this, binding, calendarQuarter, calendarPattern, currentDate)
     }

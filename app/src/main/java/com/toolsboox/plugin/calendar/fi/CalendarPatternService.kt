@@ -7,6 +7,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.PrintWriter
+import java.nio.file.Files
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -40,27 +41,33 @@ class CalendarPatternService @Inject constructor() {
 
         val calendarPattern = CalendarPattern(currentDate.year, locale).fill()
 
-        if (File(path, "$baseName-v1.json").exists()) {
-            Timber.i("Load from $baseName-v1.json")
-            FileReader(File(path, "$baseName-v1.json")).use { fileReader ->
-                moshi.adapter(CalendarPattern::class.java)
-                    .fromJson(fileReader.readText())?.let {
-                        return it
-                    }
-            }
-        }
-
-        if (File(path, "$baseName.json").exists()) {
-            Timber.i("Load from $baseName.json")
-            FileReader(File(path, "$baseName.json")).use { fileReader ->
-                moshi.adapter(CalendarPattern::class.java)
-                    .fromJson(fileReader.readText())?.let {
-                        return it
-                    }
-            }
-        }
+        load(File(path, "$baseName-v1.json"))?.let { return it }
+        load(File(path, "$baseName.json"))?.let { return it }
 
         return calendarPattern
+    }
+
+    /**
+     * Load the data class from JSON file on the specified path.
+     *
+     * @param item the file
+     * @return optional data class instance
+     */
+    fun load(item: File): CalendarPattern? {
+        if (item.exists()) {
+            FileReader(item).use { fileReader ->
+                Timber.i("Try to load from ${item.name}")
+                if (item.absolutePath.endsWith("-v1.json")) {
+                    moshi.adapter(CalendarPattern::class.java)
+                        .fromJson(fileReader.readText())?.let { return it }
+                } else {
+                    moshi.adapter(CalendarPattern::class.java)
+                        .fromJson(fileReader.readText())?.let { return it }
+                }
+            }
+        }
+
+        return null
     }
 
     /**
@@ -81,6 +88,12 @@ class CalendarPatternService @Inject constructor() {
         PrintWriter(FileWriter(File(path, "$baseName-v1.json"))).use {
             val adapter = moshi.adapter(CalendarPattern::class.java)
             it.write(adapter.toJson(calendarPattern))
+        }
+
+        // Try to rename the old file to .backup
+        val source = File(path, "$baseName.json")
+        if (source.exists()) {
+            Files.move(source.toPath(), source.toPath().resolveSibling("$baseName.json.backup"))
         }
     }
 }

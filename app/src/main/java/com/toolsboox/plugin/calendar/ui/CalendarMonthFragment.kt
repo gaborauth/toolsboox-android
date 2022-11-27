@@ -129,9 +129,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
             calendarMonth.calendarStrokes[calendarStyle ?: CalendarMonth.DEFAULT_STYLE] = normalizedStrokes
         }
 
-        val pages = calendarMonth.calendarStrokes.filter { it.value.isNotEmpty() }.size
-        val notes = calendarMonth.noteStrokes.filter { it.value.isNotEmpty() }.size
-        calendarPattern.updateMonth(monthOfYear, pages, notes)
+        calendarPattern.updateMonth(calendarMonth)
 
         presenter.save(this, binding, calendarMonth, calendarPattern, currentDate)
     }

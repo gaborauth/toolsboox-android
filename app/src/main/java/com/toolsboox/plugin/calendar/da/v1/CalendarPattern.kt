@@ -1,6 +1,12 @@
 package com.toolsboox.plugin.calendar.da.v1
 
 import com.squareup.moshi.JsonClass
+import com.toolsboox.plugin.calendar.da.v2.CalendarDay
+import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
+import com.toolsboox.plugin.calendar.da.v2.CalendarQuarter
+import com.toolsboox.plugin.calendar.da.v2.CalendarWeek
+import com.toolsboox.plugin.calendar.da.v2.CalendarYear
+import java.time.LocalDate
 import java.util.*
 
 /**
@@ -55,10 +61,12 @@ data class CalendarPattern(
     /**
      * Update year pattern.
      *
-     * @param pages the number of pages
-     * @param notes the number of notes
+     * @param calendarYear the data class
      */
-    fun updateYear(pages: Int, notes: Int) {
+    fun updateYear(calendarYear: CalendarYear) {
+        val pages = calendarYear.calendarStrokes.filter { it.value.isNotEmpty() }.size
+        val notes = calendarYear.noteStrokes.filter { it.value.isNotEmpty() }.size
+
         yearPage = setIndex(yearPage, 0, (pages + 48).toChar())
         yearNote = setIndex(yearNote, 0, (notes + 48).toChar())
     }
@@ -84,13 +92,14 @@ data class CalendarPattern(
     /**
      * Update quarter pattern.
      *
-     * @param quarter the quarter of year
-     * @param pages the number of pages
-     * @param notes the number of notes
+     * @param calendarQuarter the data class
      */
-    fun updateQuarter(quarter: Int, pages: Int, notes: Int) {
-        quarterPage = setIndex(quarterPage, quarter - 1, (pages + 48).toChar())
-        quarterNote = setIndex(quarterNote, quarter - 1, (notes + 48).toChar())
+    fun updateQuarter(calendarQuarter: CalendarQuarter) {
+        val pages = calendarQuarter.calendarStrokes.filter { it.value.isNotEmpty() }.size
+        val notes = calendarQuarter.noteStrokes.filter { it.value.isNotEmpty() }.size
+
+        quarterPage = setIndex(quarterPage, calendarQuarter.quarter - 1, (pages + 48).toChar())
+        quarterNote = setIndex(quarterNote, calendarQuarter.quarter - 1, (notes + 48).toChar())
     }
 
     /**
@@ -120,13 +129,14 @@ data class CalendarPattern(
     /**
      * Update month pattern.
      *
-     * @param month the month of year
-     * @param pages the number of pages
-     * @param notes the number of notes
+     * @param calendarMonth the data class
      */
-    fun updateMonth(month: Int, pages: Int, notes: Int) {
-        monthPage = setIndex(monthPage, month - 1, (pages + 48).toChar())
-        monthNote = setIndex(monthNote, month - 1, (notes + 48).toChar())
+    fun updateMonth(calendarMonth: CalendarMonth) {
+        val pages = calendarMonth.calendarStrokes.filter { it.value.isNotEmpty() }.size
+        val notes = calendarMonth.noteStrokes.filter { it.value.isNotEmpty() }.size
+
+        monthPage = setIndex(monthPage, calendarMonth.month - 1, (pages + 48).toChar())
+        monthNote = setIndex(monthNote, calendarMonth.month - 1, (notes + 48).toChar())
     }
 
     /**
@@ -156,13 +166,14 @@ data class CalendarPattern(
     /**
      * Update week pattern.
      *
-     * @param weekOfYear the week of year
-     * @param pages the number of pages
-     * @param notes the number of notes
+     * @param calendarWeek the data class
      */
-    fun updateWeek(weekOfYear: Int, pages: Int, notes: Int) {
-        weekPage = setIndex(weekPage, weekOfYear - 1, (pages + 48).toChar())
-        weekNote = setIndex(weekNote, weekOfYear - 1, (notes + 48).toChar())
+    fun updateWeek(calendarWeek: CalendarWeek) {
+        val pages = calendarWeek.calendarStrokes.filter { it.value.isNotEmpty() }.size
+        val notes = calendarWeek.noteStrokes.filter { it.value.isNotEmpty() }.size
+
+        weekPage = setIndex(weekPage, calendarWeek.weekOfYear - 1, (pages + 48).toChar())
+        weekNote = setIndex(weekNote, calendarWeek.weekOfYear - 1, (notes + 48).toChar())
     }
 
     /**
@@ -192,13 +203,15 @@ data class CalendarPattern(
     /**
      * Update day pattern.
      *
-     * @param dayOfYear the day of year
-     * @param pages the number of pages
-     * @param notes the number of notes
+     * @param calendarDay the data class
      */
-    fun updateDay(dayOfYear: Int, pages: Int, notes: Int) {
-        dayPage = setIndex(dayPage, dayOfYear - 1, (pages + 48).toChar())
-        dayNote = setIndex(dayNote, dayOfYear - 1, (notes + 48).toChar())
+    fun updateDay(calendarDay: CalendarDay) {
+        val pages = calendarDay.calendarStrokes.filter { it.value.isNotEmpty() }.size
+        val notes = calendarDay.noteStrokes.filter { it.value.isNotEmpty() }.size
+        val localDate = LocalDate.of(calendarDay.year, calendarDay.month, calendarDay.day)
+
+        dayPage = setIndex(dayPage, localDate.dayOfYear - 1, (pages + 48).toChar())
+        dayNote = setIndex(dayNote, localDate.dayOfYear - 1, (notes + 48).toChar())
     }
 
     /**

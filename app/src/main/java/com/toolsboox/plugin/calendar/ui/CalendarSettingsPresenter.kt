@@ -8,18 +8,18 @@ import android.widget.Toast
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import com.squareup.moshi.Moshi
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarSettingsBinding
 import com.toolsboox.ot.ZipManager
-import com.toolsboox.plugin.calendar.da.v1.*
+import com.toolsboox.plugin.calendar.fi.*
 import com.toolsboox.ui.main.MainActivity
 import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.*
+import java.io.File
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -35,10 +35,40 @@ import javax.inject.Inject
 class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
 
     /**
-     * The Moshi instance.
+     * The calendar day service.
      */
     @Inject
-    lateinit var moshi: Moshi
+    lateinit var calendarDayService: CalendarDayService
+
+    /**
+     * The calendar month service.
+     */
+    @Inject
+    lateinit var calendarMonthService: CalendarMonthService
+
+    /**
+     * The calendar quarter service.
+     */
+    @Inject
+    lateinit var calendarQuarterService: CalendarQuarterService
+
+    /**
+     * The calendar week service.
+     */
+    @Inject
+    lateinit var calendarWeekService: CalendarWeekService
+
+    /**
+     * The calendar year service.
+     */
+    @Inject
+    lateinit var calendarYearService: CalendarYearService
+
+    /**
+     * The calendar pattern service.
+     */
+    @Inject
+    lateinit var calendarPatternService: CalendarPatternService
 
     /**
      * Export the calendar to the storage.
@@ -99,13 +129,9 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
             val successCallback = PendingIntent.getBroadcast(fragment.requireContext(), 12345, pinnedShortcutCallbackIntent, 0)
             ShortcutManagerCompat.requestPinShortcut(fragment.requireContext(), shortcutInfo, successCallback.intentSender)
 
-            Toast.makeText(
-                fragment.requireContext(), R.string.calendar_settings_shortcut_done, Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(fragment.requireContext(), R.string.calendar_settings_shortcut_done, Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(
-                fragment.requireContext(), R.string.calendar_settings_shortcut_failed, Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(fragment.requireContext(), R.string.calendar_settings_shortcut_failed, Toast.LENGTH_LONG).show()
         }
 
         fragment.runOnActivity { fragment.hideLoading() }
@@ -116,9 +142,13 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
      *
      * @param fragment the fragment
      * @param binding the data binding
+     * @param locale the locale
      */
-    fun patternSync(fragment: CalendarSettingsFragment, binding: FragmentCalendarSettingsBinding) {
+    fun patternSync(fragment: CalendarSettingsFragment, binding: FragmentCalendarSettingsBinding, locale: Locale) {
         if (!checkPermissions(fragment, binding.root)) return
+
+        // Sync only the 2022.
+        val year = 2022
 
         GlobalScope.launch(Dispatchers.IO) {
             try {
@@ -126,84 +156,58 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
 
                 try {
                     val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
-                    val path = File(rootPath, "calendar/2022/")
+                    val path = File(rootPath, "calendar/$year/")
                     if (!path.exists()) return@launch
 
-                    val calendarPatternFile = File(path, "pattern-2022.json")
-                    val calendarPattern = CalendarPattern(2022, Locale.getDefault()).fill()
+                    val calendarPattern = calendarPatternService.load(rootPath, LocalDate.of(year, 1, 1), locale)
 
                     Files.walk(Paths.get(path.toURI())).use { stream ->
-                        stream.map(Path::toFile).filter(File::isFile).forEach { item ->
+                        stream.map(Path::toFile).filter(File::isFile).filter { it.name.endsWith(".json") }.forEach { item ->
                             if (item.name.startsWith("pattern-")) return@forEach
 
                             if (item.name.startsWith("year-")) {
-                                val adapter = moshi.adapter(CalendarYear::class.java)
-                                FileReader(item).use { fileReader ->
-                                    adapter.fromJson(fileReader.readText())?.let {
-                                        if (it.year == 2022) {
-                                            val pages = if (it.strokes.isEmpty()) 0 else 1
-                                            val notes = if (it.notesStrokes.isEmpty()) 0 else 1
-                                            calendarPattern.updateYear(pages, notes)
-                                        }
+                                calendarYearService.load(item)?.let { calendarYear ->
+                                    if (calendarYear.year == year) {
+                                        calendarPattern.updateYear(calendarYear)
                                     }
                                 }
                             }
+
                             if (item.name.startsWith("quarter-")) {
-                                val adapter = moshi.adapter(CalendarQuarter::class.java)
-                                FileReader(item).use { fileReader ->
-                                    adapter.fromJson(fileReader.readText())?.let {
-                                        if (it.year == 2022) {
-                                            val pages = if (it.strokes.isEmpty()) 0 else 1
-                                            val notes = if (it.notesStrokes.isEmpty()) 0 else 1
-                                            calendarPattern.updateQuarter(it.quarter, pages, notes)
-                                        }
+                                calendarQuarterService.load(item)?.let { calendarQuarter ->
+                                    if (calendarQuarter.year == year) {
+                                        calendarPattern.updateQuarter(calendarQuarter)
                                     }
                                 }
                             }
+
                             if (item.name.startsWith("month-")) {
-                                val adapter = moshi.adapter(CalendarMonth::class.java)
-                                FileReader(item).use { fileReader ->
-                                    adapter.fromJson(fileReader.readText())?.let {
-                                        if (it.year == 2022) {
-                                            val pages = if (it.strokes.isEmpty()) 0 else 1
-                                            val notes = if (it.notesStrokes.isEmpty()) 0 else 1
-                                            calendarPattern.updateMonth(it.month, pages, notes)
-                                        }
+                                calendarMonthService.load(item)?.let { calendarMonth ->
+                                    if (calendarMonth.year == year) {
+                                        calendarPattern.updateMonth(calendarMonth)
                                     }
                                 }
                             }
+
                             if (item.name.startsWith("week-")) {
-                                val adapter = moshi.adapter(CalendarWeek::class.java)
-                                FileReader(item).use { fileReader ->
-                                    adapter.fromJson(fileReader.readText())?.let {
-                                        if (it.year == 2022) {
-                                            val pages = if (it.strokes.isEmpty()) 0 else 1
-                                            val notes = if (it.notesStrokes.isEmpty()) 0 else 1
-                                            calendarPattern.updateWeek(it.weekOfYear, pages, notes)
-                                        }
+                                calendarWeekService.load(item)?.let { calendarWeek ->
+                                    if (calendarWeek.year == year) {
+                                        calendarPattern.updateWeek(calendarWeek)
                                     }
                                 }
                             }
+
                             if (item.name.startsWith("day-")) {
-                                val adapter = moshi.adapter(CalendarDay::class.java)
-                                FileReader(item).use { fileReader ->
-                                    adapter.fromJson(fileReader.readText())?.let {
-                                        if (it.year == 2022) {
-                                            val pages = if (it.strokes.isEmpty()) 0 else 1
-                                            val notes = if (it.notesStrokes.isEmpty()) 0 else 1
-                                            val localDate = LocalDate.of(it.year, it.month, it.day)
-                                            calendarPattern.updateDay(localDate.dayOfYear, pages, notes)
-                                        }
+                                calendarDayService.load(item)?.let { calendarDay ->
+                                    if (calendarDay.year == year) {
+                                        calendarPattern.updateDay(calendarDay)
                                     }
                                 }
                             }
                         }
                     }
 
-                    val adapter = moshi.adapter(CalendarPattern::class.java)
-                    PrintWriter(FileWriter(calendarPatternFile)).use {
-                        it.write(adapter.toJson(calendarPattern))
-                    }
+                    calendarPatternService.save(rootPath, LocalDate.of(year, 1, 1), calendarPattern)
 
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
