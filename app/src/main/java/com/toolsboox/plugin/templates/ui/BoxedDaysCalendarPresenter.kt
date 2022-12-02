@@ -34,7 +34,7 @@ class BoxedDaysCalendarPresenter @Inject constructor() : FragmentPresenter() {
      * @param fragment the fragment
      * @param binding the data binding
      */
-    fun export(fragment: BoxedDaysCalendarFragment, binding: FragmentTemplatesBoxedDaysCalendarBinding) {
+    fun export(fragment: BoxedDaysCalendarFragment, binding: FragmentTemplatesBoxedDaysCalendarBinding, currentDate: LocalDate) {
         if (!fragment.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             fragment.showError(null, R.string.main_read_external_storage_permission_missing, binding.root)
             return
@@ -49,7 +49,7 @@ class BoxedDaysCalendarPresenter @Inject constructor() : FragmentPresenter() {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
-                val localDate = LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1)
+                val localDate = currentDate.with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1)
                 val end = localDate.with(TemporalAdjusters.lastDayOfMonth())
 
                 val doc = PdfDocument()
@@ -59,7 +59,7 @@ class BoxedDaysCalendarPresenter @Inject constructor() : FragmentPresenter() {
                     BoxedDayCalendarCreator.drawPage(
                         fragment.requireContext(),
                         page.canvas,
-                        p,
+                        p, currentDate,
                         binding.settingsWithNotes.isChecked,
                         binding.settingsWithTasks.isChecked,
                         binding.settingsWithHours.isChecked
@@ -68,7 +68,7 @@ class BoxedDaysCalendarPresenter @Inject constructor() : FragmentPresenter() {
                 }
 
                 try {
-                    val file = createPath(fragment, LocalDate.now())
+                    val file = createPath(fragment, currentDate)
                     FileOutputStream(file).use { out -> doc.writeTo(out) }
                     withContext(Dispatchers.Main) {
                         binding.exportMessage.text = fragment.getString(

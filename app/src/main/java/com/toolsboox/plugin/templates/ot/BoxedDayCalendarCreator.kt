@@ -28,6 +28,7 @@ class BoxedDayCalendarCreator {
          * @param context the context
          * @param canvas the canvas
          * @param dm the day of month
+         * @param selectedDate the selected date
          * @param withNotes generate with notes
          * @param withTasks generate with tasks
          * @param withHours generate with hours
@@ -36,6 +37,7 @@ class BoxedDayCalendarCreator {
             context: Context,
             canvas: Canvas,
             dm: Long,
+            selectedDate: LocalDate,
             withNotes: Boolean,
             withTasks: Boolean,
             withHours: Boolean
@@ -60,7 +62,7 @@ class BoxedDayCalendarCreator {
             textPaint.color = Color.BLACK
             textPaint.textSize = 40.0f
 
-            val localDate = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
+            val localDate = LocalDate.of(selectedDate.year, selectedDate.monthValue, 1)
                 .with(TemporalAdjusters.firstDayOfMonth())
                 .plusDays(dm - 1)
             val date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant())

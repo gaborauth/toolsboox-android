@@ -1,5 +1,6 @@
 package com.toolsboox.plugin.templates.ui
 
+import android.app.DatePickerDialog
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
@@ -9,7 +10,10 @@ import com.toolsboox.databinding.FragmentTemplatesBoxedDaysCalendarBinding
 import com.toolsboox.plugin.templates.ot.BoxedDayCalendarCreator
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import javax.inject.Inject
 
 /**
@@ -43,6 +47,8 @@ class BoxedDaysCalendarFragment @Inject constructor() : ScreenFragment() {
      */
     private lateinit var bitmap: Bitmap
 
+    private var selectedDate = LocalDate.now()
+
     /**
      * OnViewCreated hook.
      *
@@ -72,12 +78,21 @@ class BoxedDaysCalendarFragment @Inject constructor() : ScreenFragment() {
             binding.settingsPane.visibility = View.GONE
             binding.exportPane.visibility = View.VISIBLE
 
-            presenter.export(this, binding)
+            presenter.export(this, binding, selectedDate)
         }
 
         binding.settingsWithNotes.isChecked = true
         binding.settingsWithTasks.isChecked = true
         binding.settingsWithHours.isChecked = true
+
+        binding.textSelectedDate.text = selectedDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+        binding.buttonDatePicker.setOnClickListener {
+            val dpd = DatePickerDialog(requireContext(), { view, year, monthOfYear, dayOfMonth ->
+                selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth)
+                binding.textSelectedDate.text = selectedDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+            }, selectedDate.year, selectedDate.monthValue - 1, selectedDate.dayOfMonth)
+            dpd.show()
+        }
 
         binding.preview.post {
             createPreview()
@@ -115,11 +130,12 @@ class BoxedDaysCalendarFragment @Inject constructor() : ScreenFragment() {
         bitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
         canvas = Canvas(bitmap)
 
-        val localDate = LocalDate.now()
+        Timber.i("$selectedDate")
         BoxedDayCalendarCreator.drawPage(
             this.requireContext(),
             canvas,
-            localDate.dayOfMonth.toLong(),
+            selectedDate.dayOfMonth.toLong(),
+            selectedDate,
             binding.settingsWithNotes.isChecked,
             binding.settingsWithTasks.isChecked,
             binding.settingsWithHours.isChecked,

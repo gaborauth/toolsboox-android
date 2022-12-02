@@ -230,6 +230,7 @@
     <string name="templates_boxed_days_calendar_settings_with_notes">Generate with notes</string>
     <string name="templates_boxed_days_calendar_settings_with_tasks">Generate with tasks</string>
     <string name="templates_boxed_days_calendar_settings_with_hours">Generate with prefilled hours</string>
+    <string name="templates_boxed_days_calendar_settings_date_picker_button">Set date</string>
     <string name="templates_boxed_day_calendar_creator_title">%s daily planner</string>
     <string name="templates_boxed_day_calendar_creator_notes">Notes</string>
     <string name="templates_boxed_day_calendar_creator_tasks">Tasks</string>
