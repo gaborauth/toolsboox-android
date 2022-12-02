@@ -155,7 +155,7 @@ dependencies {
 
     // Onyx SDK
     implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.38'
-    implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.14'
+    implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.15'
     implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.2'
 
     // OkHttp, Retrofit and GSON
