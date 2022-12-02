@@ -27,9 +27,10 @@ class BoxedWeekCalendarCreator {
          * @param context the context
          * @param canvas the canvas
          * @param we the week of year
+         * @param selectedDate the selected date
          * @param vertical the vertical day layout flag
          */
-        fun drawPage(context: Context, canvas: Canvas, we: Long, vertical: Boolean) {
+        fun drawPage(context: Context, canvas: Canvas, we: Long, selectedDate: LocalDate, vertical: Boolean) {
             val fillPaint = Paint()
             fillPaint.style = Paint.Style.FILL
             fillPaint.color = Color.WHITE
@@ -37,23 +38,23 @@ class BoxedWeekCalendarCreator {
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, fillPaint)
 
             if (vertical) {
-                drawCalendarRect(context, canvas, 0, 0, we, 0)
-                drawCalendarRect(context, canvas, 0, 1, we, 1)
-                drawCalendarRect(context, canvas, 0, 2, we, 2)
-                drawCalendarRect(context, canvas, 0, 3, we, 3)
-                drawCalendarRect(context, canvas, 1, 0, we, 4)
-                drawCalendarRect(context, canvas, 1, 1, we, 5)
-                drawCalendarRect(context, canvas, 1, 2, we, 6)
-                drawCalendarRect(context, canvas, 1, 3, we, 7)
+                drawCalendarRect(context, canvas, 0, 0, selectedDate, we, 0)
+                drawCalendarRect(context, canvas, 0, 1, selectedDate,we, 1)
+                drawCalendarRect(context, canvas, 0, 2, selectedDate,we, 2)
+                drawCalendarRect(context, canvas, 0, 3, selectedDate,we, 3)
+                drawCalendarRect(context, canvas, 1, 0, selectedDate,we, 4)
+                drawCalendarRect(context, canvas, 1, 1, selectedDate,we, 5)
+                drawCalendarRect(context, canvas, 1, 2, selectedDate,we, 6)
+                drawCalendarRect(context, canvas, 1, 3, selectedDate,we, 7)
             } else {
-                drawCalendarRect(context, canvas, 0, 0, we, 0)
-                drawCalendarRect(context, canvas, 1, 0, we, 1)
-                drawCalendarRect(context, canvas, 0, 1, we, 2)
-                drawCalendarRect(context, canvas, 1, 1, we, 3)
-                drawCalendarRect(context, canvas, 0, 2, we, 4)
-                drawCalendarRect(context, canvas, 1, 2, we, 5)
-                drawCalendarRect(context, canvas, 0, 3, we, 6)
-                drawCalendarRect(context, canvas, 1, 3, we, 7)
+                drawCalendarRect(context, canvas, 0, 0, selectedDate,we, 0)
+                drawCalendarRect(context, canvas, 1, 0, selectedDate,we, 1)
+                drawCalendarRect(context, canvas, 0, 1, selectedDate,we, 2)
+                drawCalendarRect(context, canvas, 1, 1, selectedDate,we, 3)
+                drawCalendarRect(context, canvas, 0, 2, selectedDate,we, 4)
+                drawCalendarRect(context, canvas, 1, 2, selectedDate,we, 5)
+                drawCalendarRect(context, canvas, 0, 3, selectedDate,we, 6)
+                drawCalendarRect(context, canvas, 1, 3, selectedDate,we, 7)
             }
         }
 
@@ -64,10 +65,11 @@ class BoxedWeekCalendarCreator {
          * @param canvas the canvas
          * @param xo the X offset
          * @param yo the Y offset
+         * @param selectedDate the selected date
          * @param we the week of year
          * @param dw the day offset in the week
          */
-        private fun drawCalendarRect(context: Context, canvas: Canvas, xo: Int, yo: Int, we: Long, dw: Long) {
+        private fun drawCalendarRect(context: Context, canvas: Canvas, xo: Int, yo: Int, selectedDate: LocalDate, we: Long, dw: Long) {
             val le = 50.0f  // Left offset
             val to = 100.0f // Top offset
             val wi = 630.0f // Width
@@ -109,7 +111,7 @@ class BoxedWeekCalendarCreator {
                 )
             }
 
-            val localDate = LocalDate.of(LocalDate.now().year, 1, 1).plusWeeks(we)
+            val localDate = LocalDate.of(selectedDate.year, 1, 1).plusWeeks(we)
                 .with(WeekFields.of(Locale.getDefault()).dayOfWeek(), (dw % 7L) + 1)
             val date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
 

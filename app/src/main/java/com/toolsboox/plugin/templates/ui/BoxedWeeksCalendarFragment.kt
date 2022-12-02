@@ -1,5 +1,6 @@
 package com.toolsboox.plugin.templates.ui
 
+import android.app.DatePickerDialog
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
@@ -10,6 +11,8 @@ import com.toolsboox.plugin.templates.ot.BoxedWeekCalendarCreator
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.time.temporal.WeekFields
 import java.util.*
 import javax.inject.Inject
@@ -45,6 +48,8 @@ class BoxedWeeksCalendarFragment @Inject constructor() : ScreenFragment() {
      */
     private lateinit var bitmap: Bitmap
 
+    private var selectedDate = LocalDate.now()
+
     /**
      * OnViewCreated hook.
      *
@@ -74,7 +79,16 @@ class BoxedWeeksCalendarFragment @Inject constructor() : ScreenFragment() {
             binding.settingsPane.visibility = View.GONE
             binding.exportPane.visibility = View.VISIBLE
 
-            presenter.export(this, binding)
+            presenter.export(this, binding, selectedDate)
+        }
+
+        binding.textSelectedDate.text = selectedDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+        binding.buttonDatePicker.setOnClickListener {
+            val dpd = DatePickerDialog(requireContext(), { view, year, monthOfYear, dayOfMonth ->
+                selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth)
+                binding.textSelectedDate.text = selectedDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+            }, selectedDate.year, selectedDate.monthValue - 1, selectedDate.dayOfMonth)
+            dpd.show()
         }
 
         binding.settingsVerticalDays.isChecked = true
@@ -115,12 +129,12 @@ class BoxedWeeksCalendarFragment @Inject constructor() : ScreenFragment() {
         bitmap = Bitmap.createBitmap(1404, 1872, Bitmap.Config.ARGB_8888)
         canvas = Canvas(bitmap)
 
-        val localDate = LocalDate.now().with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1)
+        val localDate = selectedDate
         val weekOfYear = localDate.get(WeekFields.of(Locale.getDefault()).weekOfYear())
         BoxedWeekCalendarCreator.drawPage(
             this.requireContext(),
             canvas,
-            weekOfYear.toLong() - 1,
+            weekOfYear.toLong() - 1, selectedDate,
             binding.settingsVerticalDays.isChecked
         )
 

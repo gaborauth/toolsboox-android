@@ -31,7 +31,7 @@ class BoxedWeeksCalendarPresenter @Inject constructor() : FragmentPresenter() {
      * @param fragment the fragment
      * @param binding the data binding
      */
-    fun export(fragment: BoxedWeeksCalendarFragment, binding: FragmentTemplatesBoxedWeeksCalendarBinding) {
+    fun export(fragment: BoxedWeeksCalendarFragment, binding: FragmentTemplatesBoxedWeeksCalendarBinding, selectedDate: LocalDate) {
         if (!fragment.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             fragment.showError(null, R.string.main_read_external_storage_permission_missing, binding.root)
             return
@@ -53,14 +53,14 @@ class BoxedWeeksCalendarPresenter @Inject constructor() : FragmentPresenter() {
                     BoxedWeekCalendarCreator.drawPage(
                         fragment.requireContext(),
                         page.canvas,
-                        p,
+                        p, selectedDate,
                         binding.settingsVerticalDays.isChecked
                     )
                     doc.finishPage(page)
                 }
 
                 try {
-                    val file = createPath(fragment, LocalDate.now())
+                    val file = createPath(fragment, selectedDate)
                     FileOutputStream(file).use { out -> doc.writeTo(out) }
                     withContext(Dispatchers.Main) {
                         binding.exportMessage.text = fragment.getString(

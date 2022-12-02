@@ -244,6 +244,7 @@
     <string name="templates_boxed_weeks_calendar_settings_days_layout_message">Layout of days in the week:</string>
     <string name="templates_boxed_weeks_calendar_settings_days_layout_vertical">Vertical</string>
     <string name="templates_boxed_weeks_calendar_settings_days_layout_horizontal">Horizontal</string>
+    <string name="templates_boxed_weeks_calendar_settings_date_picker_button">Set date</string>
     <string name="templates_boxed_week_calendar_creator_title">%dW%d</string>
     <string name="templates_boxed_week_calendar_creator_weekly_notes">Weekly notes</string>
 
