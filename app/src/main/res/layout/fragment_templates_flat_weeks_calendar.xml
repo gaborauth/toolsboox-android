@@ -101,6 +101,25 @@
                     android:text="@string/templates_flat_weeks_calendar_settings_with_days">
 
             </com.google.android.material.checkbox.MaterialCheckBox>
+
+            <Button
+                    android:id="@+id/button_date_picker"
+                    android:text="@string/templates_flat_weeks_calendar_settings_date_picker_button"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    android:layout_marginTop="24dp"/>
+
+            <TextView
+                    android:id="@+id/text_selected_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="20sp"/>
+
         </LinearLayout>
 
         <LinearLayout

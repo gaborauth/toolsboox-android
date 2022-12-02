@@ -26,11 +26,12 @@ class FlatWeekCalendarCreator {
          *
          * @param context the context
          * @param canvas the canvas
+         * @param selectedDate selected date
          * @param we the week of year
          * @param wr the width ratio of the vertical line (default 0.5f)
          * @param wd generate with days
          */
-        fun drawPage(context: Context, canvas: Canvas, we: Long, wr: Float, wd: Boolean) {
+        fun drawPage(context: Context, canvas: Canvas, selectedDate: LocalDate, we: Long, wr: Float, wd: Boolean) {
             val fillPaint = Paint()
             fillPaint.style = Paint.Style.FILL
             fillPaint.color = Color.WHITE
@@ -51,7 +52,7 @@ class FlatWeekCalendarCreator {
             textPaint.color = Color.BLACK
             textPaint.textSize = 40.0f
 
-            val localDate = LocalDate.of(LocalDate.now().year, 1, 1).plusWeeks(we)
+            val localDate = LocalDate.of(selectedDate.year, 1, 1).plusWeeks(we)
                 .with(WeekFields.of(Locale.getDefault()).dayOfWeek(), 1)
 
             val year = localDate.year

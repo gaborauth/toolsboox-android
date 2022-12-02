@@ -261,6 +261,7 @@
     <string name="templates_flat_weeks_calendar_message">Export this preview as multipage local PDF template</string>
     <string name="templates_flat_weeks_calendar_preview_export_message">Exported as %s</string>
     <string name="templates_flat_weeks_calendar_settings_with_days">Generate with dates</string>
+    <string name="templates_flat_weeks_calendar_settings_date_picker_button">Set date</string>
     <string name="templates_flat_week_calendar_creator_title">%dW%d</string>
 
     <!-- Strings related to templates 'this week's calendar' fragment -->
