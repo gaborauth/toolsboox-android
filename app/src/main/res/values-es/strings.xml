@@ -273,4 +273,14 @@ esta semana"</string>
     <string name="calendar_drawing_toolbar_trash">"Borrar página"</string>
     <string name="calendar_drawing_toolbar_trash_dialog_title">"¿Seguro?"</string>
     <string name="calendar_drawing_toolbar_trash_dialog_message">"¿Quieres borrar todo el contenido?"</string>
+    <string name="calendar_settings_button_shortcut">"Crear acceso directo"</string>
+    <string name="calendar_settings_shortcut_done">"Acceso directo a calendario creado"</string>
+    <string name="calendar_settings_shortcut_failed">"No se pudo crear el acceso directo"</string>
+    <string name="calendar_settings_shortcut_short_label">"Calendario"</string>
+    <string name="calendar_settings_shortcut_long_label">"Calendario para Boox"</string>
+    <string name="calendar_settings_button_restore">"Importar copia de seguridad"</string>
+    <string name="calendar_settings_restore_done">"Copia de seguridad importada desde Descargas"</string>
+    <string name="templates_boxed_days_calendar_settings_date_picker_button">"Definir fecha"</string>
+    <string name="templates_boxed_weeks_calendar_settings_date_picker_button">"Definir fecha"</string>
+    <string name="templates_flat_weeks_calendar_settings_date_picker_button">"Definir fecha"</string>
 </resources>
