@@ -12,6 +12,7 @@ import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
 import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -91,9 +92,11 @@ class CalendarDayPage {
          * @param canvas the canvas
          * @param calendarDay data class
          * @param googleCalendarEvents the list of Google calendar events
+         * @param startHour start hour
          */
         fun drawPage(
-            context: Context, canvas: Canvas, calendarDay: CalendarDay, googleCalendarEvents: List<GoogleCalendarEvent>
+            context: Context, canvas: Canvas, calendarDay: CalendarDay, googleCalendarEvents: List<GoogleCalendarEvent>,
+            startHour: Int
         ) {
             val schedulesText = context.getString(R.string.calendar_day_schedules)
             val tasksText = context.getString(R.string.calendar_day_tasks)
@@ -114,6 +117,10 @@ class CalendarDayPage {
                 if (i % 2 == 1) {
                     canvas.drawLine(lo, to + i * ceh, lo + cew, to + i * ceh, Creator.lineDefaultGrey50)
                     canvas.drawText(":00", lo + 115.0f, to + 35.0f + i * ceh, Creator.textSmallBlackRight)
+                    if (startHour > -1) {
+                        val hourText = LocalTime.of(i / 2 + startHour, 0, 0).format(DateTimeFormatter.ofPattern("HH"))
+                        canvas.drawText(hourText, lo + 40.0f, to + 20.0f + (i + 1) * ceh, Creator.text60BlackCenter)
+                    }
                 } else {
                     canvas.drawLine(lo + 80.0f, to + i * ceh, lo + cew, to + i * ceh, Creator.lineDefaultGrey50)
                     canvas.drawRect(lo + 80.0f, to + i * ceh, lo + cew, to + i * ceh + ceh, Creator.fillGrey20)

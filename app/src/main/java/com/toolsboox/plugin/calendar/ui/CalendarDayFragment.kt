@@ -232,13 +232,14 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         this.calendarPattern = calendarPattern
         updateNavigator()
 
+        val startHour = sharedPreferences.getInt("calendarStartHour", 0)
         if (notePage != null) {
             val noteStrokes = calendarDay.noteStrokes[notePage] ?: listOf()
             CalendarDayPageNotes.drawPage(this.requireContext(), templateCanvas, calendarDay, notePage!!)
             applyStrokes(surfaceTo(noteStrokes), true)
         } else {
             val calendarStrokes = calendarDay.calendarStrokes[calendarStyle ?: CalendarDay.DEFAULT_STYLE] ?: listOf()
-            CalendarDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, googleCalendarEvents)
+            CalendarDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, googleCalendarEvents, startHour)
             applyStrokes(surfaceTo(calendarStrokes), true)
         }
     }

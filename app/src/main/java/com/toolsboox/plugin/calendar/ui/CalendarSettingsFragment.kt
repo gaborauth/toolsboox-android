@@ -13,6 +13,8 @@ import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.time.temporal.WeekFields
 import java.util.*
@@ -65,6 +67,11 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
     private var selectedStartView: Int = 0
 
     /**
+     * The selected start hour.
+     */
+    private var selectedStartHour: Int = -1
+
+    /**
      * OnViewCreated hook.
      *
      * @param view the parent view
@@ -88,7 +95,9 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
         selectedLocaleLanguageTag = savedLocaleLanguageTag ?: Locale.getDefault().toLanguageTag()
 
         selectedStartView = sharedPreferences.getInt("calendarStartView", 0)
+        selectedStartHour = sharedPreferences.getInt("calendarStartHour", -1)
 
+        // Start view settings
         val listOfStartViews = mutableListOf<String>()
         listOfStartViews.add(getString(R.string.calendar_settings_start_view_day))
         listOfStartViews.add(getString(R.string.calendar_settings_start_view_week))
@@ -120,6 +129,27 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
             updateLocaleSettings(localeAdapter, position)
         }
 
+        // Start hour settings
+        val listOfStartHours = mutableListOf<String>()
+        listOfStartHours.add(getString(R.string.calendar_settings_select_start_hour_empty))
+        listOfStartHours.add(LocalTime.of(0, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
+        listOfStartHours.add(LocalTime.of(1, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
+        listOfStartHours.add(LocalTime.of(2, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
+        listOfStartHours.add(LocalTime.of(3, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
+        listOfStartHours.add(LocalTime.of(4, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
+        listOfStartHours.add(LocalTime.of(5, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
+        listOfStartHours.add(LocalTime.of(6, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
+        listOfStartHours.add(LocalTime.of(7, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
+
+        val startHourAdapter = NoFilterAdapter(this.requireContext(), R.layout.list_item_locale, listOfStartHours)
+        binding.startHourSpinner.setAdapter(startHourAdapter)
+        startHourAdapter.notifyDataSetChanged()
+
+        binding.startHourSpinner.inputType = 0
+        binding.startHourSpinner.setOnItemClickListener { _, _, position, _ ->
+            selectedStartHour = position - 1
+        }
+
         // Create shortcut of calendar
         binding.buttonShortcut.setOnClickListener {
             presenter.createShortcut(this@CalendarSettingsFragment, binding)
@@ -141,6 +171,7 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
         binding.buttonSave.setOnClickListener {
             sharedPreferences.edit().putString("calendarLocale", selectedLocaleLanguageTag).apply()
             sharedPreferences.edit().putInt("calendarStartView", selectedStartView).apply()
+            sharedPreferences.edit().putInt("calendarStartHour", selectedStartHour).apply()
             this@CalendarSettingsFragment.requireActivity().onBackPressed()
         }
 
@@ -155,6 +186,7 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
         }
 
         binding.startViewSpinner.setText(listOfStartViews[selectedStartView])
+        binding.startHourSpinner.setText(listOfStartHours[selectedStartHour + 1])
     }
 
     /**
