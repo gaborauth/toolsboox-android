@@ -31,6 +31,7 @@ interface Creator {
         val lineDefaultGrey50: Paint = Paint()
         val lineDefaultWhite: Paint = Paint()
 
+        val text60BlackCenter = TextPaint()
         val textBigBlackCenter = TextPaint()
         val textBigGray20Right = TextPaint()
         val textDefaultBlack = TextPaint()
@@ -76,6 +77,11 @@ interface Creator {
             lineDefaultWhite.style = Paint.Style.STROKE
 
             // Text styles
+            text60BlackCenter.color = colorBlack
+            text60BlackCenter.textAlign = Paint.Align.CENTER
+            text60BlackCenter.textSize = 60.0f
+            text60BlackCenter.typeface = Typeface.DEFAULT_BOLD
+
             textBigBlackCenter.color = colorBlack
             textBigBlackCenter.textAlign = Paint.Align.CENTER
             textBigBlackCenter.textSize = 80.0f
