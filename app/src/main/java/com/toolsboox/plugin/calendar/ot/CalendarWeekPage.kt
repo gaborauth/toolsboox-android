@@ -150,7 +150,8 @@ class CalendarWeekPage : Creator {
                 }
                 if (i == 7) {
                     val notes = context.getString(R.string.calendar_week_notes)
-                    canvas.drawText("W$weekOfYear", xo + 10.0f, yo + 40.0f, Creator.textDefaultWhite)
+                    val weekText = context.getString(R.string.week_abbreviation, weekOfYear)
+                    canvas.drawText( weekText, xo + 10.0f, yo + 40.0f, Creator.textDefaultWhite)
                     canvas.drawText(notes, xo + cew - 10.0f, yo + 40.0f, Creator.textDefaultWhiteRight)
                 } else {
                     canvas.drawText("$day", xo + 20.0f, yo + 40.0f, Creator.textDefaultWhite)

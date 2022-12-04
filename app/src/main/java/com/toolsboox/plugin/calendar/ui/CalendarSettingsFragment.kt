@@ -222,8 +222,8 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
         val lastWeek = LocalDate.of(localDate.year + 1, 1, 1).minusDays(1L)
             .get(WeekFields.of(locale).weekOfWeekBasedYear())
 
-        binding.calendarWeekNumberOfFirstDayValue.text = "W$firstWeek"
-        binding.calendarWeekNumberOfLastDayValue.text = "W$lastWeek"
+        binding.calendarWeekNumberOfFirstDayValue.text = requireContext().getString(R.string.week_abbreviation, firstWeek)
+        binding.calendarWeekNumberOfLastDayValue.text = requireContext().getString(R.string.week_abbreviation, lastWeek)
 
         selectedLocaleLanguageTag = localeItem.languageTag
     }

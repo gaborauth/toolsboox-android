@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
+import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
@@ -141,8 +142,9 @@ class CalendarDayNavigator {
 
             canvas.drawRect(lo + 6 * cew, to + 0 * ceh, lo + 9 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 6 * cew, to + 0 * ceh, lo + 9 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
+            val weekText = context.getString(R.string.week_abbreviation, weekOfYear)
             Creator.drawEllipsizedText(
-                canvas, "W$weekOfYear", Creator.textBigBlackCenter, lo + 6 * cew, to + 1 * ceh - 30.0f, 3 * cew
+                canvas, weekText, Creator.textBigBlackCenter, lo + 6 * cew, to + 1 * ceh - 30.0f, 3 * cew
             )
 
             if (calendarPattern.getWeekPages(weekOfYear) > 0) {
@@ -163,8 +165,9 @@ class CalendarDayNavigator {
 
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
+            val quarterText = context.getString(R.string.quarter_abbreviation, quarterOfYear)
             Creator.drawEllipsizedText(
-                canvas, "Q$quarterOfYear", Creator.textBigBlackCenter, lo + 13 * cew, to + 1 * ceh - 30.0f, 2 * cew
+                canvas, quarterText, Creator.textBigBlackCenter, lo + 13 * cew, to + 1 * ceh - 30.0f, 2 * cew
             )
 
             if (calendarPattern.getQuarterPages(quarterOfYear) > 0) {

@@ -17,6 +17,8 @@
     <!-- Common messages -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="week_abbreviation">W%d</string>
+    <string name="quarter_abbreviation">Q%d</string>
     <string name="list_loading">Loading the list…</string>
     <string name="list_empty">Empty list…</string>
     <string name="export_message">Exported as %s</string>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.View
+import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
@@ -151,7 +152,7 @@ class CalendarMonthPage : Creator {
 
             for (i in 0..5) {
                 val weekOfYear = currentDate.plusWeeks(i.toLong()).get(weekOfYearField)
-                drawWeekNames(canvas, lo, to + 50.0f + i * ceh, weekOfYear, calendarPattern)
+                drawWeekNames(context, canvas, lo, to + 50.0f + i * ceh, weekOfYear, calendarPattern)
             }
 
             drawDayNumbers(canvas, locale, lo + 50.0f, to + 50.0f, year, month, calendarPattern)
@@ -250,6 +251,7 @@ class CalendarMonthPage : Creator {
         /**
          * Draw the week names.
          *
+         * @param context the context
          * @param canvas the canvas
          * @param lo the left offset
          * @param to the top offset
@@ -257,12 +259,13 @@ class CalendarMonthPage : Creator {
          * @param calendarPattern the pattern data class
          */
         private fun drawWeekNames(
-            canvas: Canvas, lo: Float, to: Float, weekOfYear: Int, calendarPattern: CalendarPattern
+            context: Context, canvas: Canvas, lo: Float, to: Float, weekOfYear: Int, calendarPattern: CalendarPattern
         ) {
+            val weekText = context.getString(R.string.week_abbreviation, weekOfYear)
             canvas.drawRect(lo, to, lo + 50.0f, to + ceh, Creator.fillGrey80)
             canvas.save()
             canvas.rotate(-90.0f, lo + 45.0f, to + ceh / 2.0f)
-            canvas.drawText("W$weekOfYear", lo + 45.0f, to + ceh / 2.0f - 5.0f, Creator.textDefaultWhiteCenter)
+            canvas.drawText(weekText, lo + 45.0f, to + ceh / 2.0f - 5.0f, Creator.textDefaultWhiteCenter)
             canvas.restore()
 
             if (calendarPattern.getWeekPages(weekOfYear) > 0) {

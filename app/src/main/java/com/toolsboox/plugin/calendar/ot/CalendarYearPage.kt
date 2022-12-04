@@ -140,7 +140,7 @@ class CalendarYearPage : Creator {
                     val xo = lo + cew + x * 9 * cew
                     val yo = to + y * 9 * ceh
 
-                    drawQuarter(canvas, xo - 50.0f, yo, quarterNumber, calendarPattern)
+                    drawQuarter(context, canvas, xo - 50.0f, yo, quarterNumber, calendarPattern)
 
                     drawMonthGrid(canvas, xo, yo, firstDayOfWeek)
                     drawMonthName(canvas, xo, yo, monthNumber, calendarPattern)
@@ -300,6 +300,7 @@ class CalendarYearPage : Creator {
         /**
          * Draw the quarter background and text.
          *
+         * @param context the context
          * @param canvas the canvas
          * @param lo the left offset
          * @param to the top offset
@@ -307,12 +308,13 @@ class CalendarYearPage : Creator {
          * @param calendarPattern the pattern data class
          */
         private fun drawQuarter(
-            canvas: Canvas, lo: Float, to: Float, quarterNumber: Int, calendarPattern: CalendarPattern
+            context: Context, canvas: Canvas, lo: Float, to: Float, quarterNumber: Int, calendarPattern: CalendarPattern
         ) {
+            val quarterText = context.getString(R.string.quarter_abbreviation, quarterNumber)
             canvas.drawRect(lo + 0 * cew, to + 0 * ceh, lo + 1 * cew, to + 8 * ceh, Creator.fillGrey80)
             canvas.save()
             canvas.rotate(-90.0f, lo + cew - 5.0f, to + 4 * ceh)
-            canvas.drawText("Q$quarterNumber", lo + cew - 5.0f, to + 4 * ceh - 5.0f, Creator.textDefaultWhiteCenter)
+            canvas.drawText(quarterText, lo + cew - 5.0f, to + 4 * ceh - 5.0f, Creator.textDefaultWhiteCenter)
             canvas.restore()
 
             if (calendarPattern.getQuarterPages(quarterNumber) > 0) {

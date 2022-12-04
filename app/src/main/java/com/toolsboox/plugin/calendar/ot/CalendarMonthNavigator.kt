@@ -141,8 +141,9 @@ class CalendarMonthNavigator {
 
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.fillGrey20)
             canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
+            val quarterText = context.getString(R.string.quarter_abbreviation, quarterOfYear)
             Creator.drawEllipsizedText(
-                canvas, "Q$quarterOfYear", Creator.textBigBlackCenter, lo + 13 * cew, to + 1 * ceh - 30.0f, 2 * cew
+                canvas, quarterText, Creator.textBigBlackCenter, lo + 13 * cew, to + 1 * ceh - 30.0f, 2 * cew
             )
 
             if (calendarPattern.getQuarterPages(quarterOfYear) > 0) {
