@@ -220,8 +220,9 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator()
 
         if (notePage != null) {
+            val noteTemplate = sharedPreferences.getInt("calendarNoteTemplate", 0)
             val noteStrokes = calendarYear.noteStrokes[notePage] ?: listOf()
-            CalendarYearPageNotes.drawPage(this.requireContext(), templateCanvas, calendarYear, notePage!!)
+            CalendarYearPageNotes.drawPage(this.requireContext(), templateCanvas, calendarYear, noteTemplate, notePage!!)
             applyStrokes(surfaceTo(noteStrokes), true)
         } else {
             val calendarStrokes = calendarYear.calendarStrokes[calendarStyle ?: CalendarYear.DEFAULT_STYLE] ?: listOf()

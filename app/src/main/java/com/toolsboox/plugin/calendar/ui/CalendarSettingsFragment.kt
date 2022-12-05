@@ -1,8 +1,10 @@
 package com.toolsboox.plugin.calendar.ui
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.toolsboox.R
 import com.toolsboox.da.LocaleItem
@@ -72,6 +74,11 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
     private var selectedStartHour: Int = -1
 
     /**
+     * The selected note template.
+     */
+    private var selectedNoteTemplate: Int = 0
+
+    /**
      * OnViewCreated hook.
      *
      * @param view the parent view
@@ -91,11 +98,14 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
     override fun onResume() {
         super.onResume()
 
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         val savedLocaleLanguageTag = sharedPreferences.getString("calendarLocale", Locale.getDefault().toLanguageTag())
         selectedLocaleLanguageTag = savedLocaleLanguageTag ?: Locale.getDefault().toLanguageTag()
 
         selectedStartView = sharedPreferences.getInt("calendarStartView", 0)
         selectedStartHour = sharedPreferences.getInt("calendarStartHour", -1)
+        selectedNoteTemplate = sharedPreferences.getInt("calendarNoteTemplate", 0)
 
         // Start view settings
         val listOfStartViews = mutableListOf<String>()
@@ -109,7 +119,11 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
         binding.startViewSpinner.setAdapter(startViewAdapter)
         startViewAdapter.notifyDataSetChanged()
 
+        binding.startViewSpinner.inputType = 0
         binding.startViewSpinner.setOnItemClickListener { _, _, position, _ ->
+            requireActivity().currentFocus?.let {
+                imm.hideSoftInputFromWindow(it.windowToken, 0)
+            }
             selectedStartView = position
         }
 
@@ -126,6 +140,9 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
         localeAdapter.notifyDataSetChanged()
 
         binding.localesSpinner.setOnItemClickListener { _, _, position, _ ->
+            requireActivity().currentFocus?.let {
+                imm.hideSoftInputFromWindow(it.windowToken, 0)
+            }
             updateLocaleSettings(localeAdapter, position)
         }
 
@@ -147,7 +164,27 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
 
         binding.startHourSpinner.inputType = 0
         binding.startHourSpinner.setOnItemClickListener { _, _, position, _ ->
+            requireActivity().currentFocus?.let {
+                imm.hideSoftInputFromWindow(it.windowToken, 0)
+            }
             selectedStartHour = position - 1
+        }
+
+        // Note template
+        val listOfNoteTemplates = mutableListOf<String>()
+        listOfNoteTemplates.add(getString(R.string.calendar_settings_select_note_template_lines))
+        listOfNoteTemplates.add(getString(R.string.calendar_settings_select_note_template_grid))
+
+        val noteTemplateAdapter = NoFilterAdapter(this.requireContext(), R.layout.list_item_locale, listOfNoteTemplates)
+        binding.noteTemplateSpinner.setAdapter(noteTemplateAdapter)
+        noteTemplateAdapter.notifyDataSetChanged()
+
+        binding.noteTemplateSpinner.inputType = 0
+        binding.noteTemplateSpinner.setOnItemClickListener { _, _, position, _ ->
+            requireActivity().currentFocus?.let {
+                imm.hideSoftInputFromWindow(it.windowToken, 0)
+            }
+            selectedNoteTemplate = position
         }
 
         // Create shortcut of calendar
@@ -172,6 +209,7 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
             sharedPreferences.edit().putString("calendarLocale", selectedLocaleLanguageTag).apply()
             sharedPreferences.edit().putInt("calendarStartView", selectedStartView).apply()
             sharedPreferences.edit().putInt("calendarStartHour", selectedStartHour).apply()
+            sharedPreferences.edit().putInt("calendarNoteTemplate", selectedNoteTemplate).apply()
             this@CalendarSettingsFragment.requireActivity().onBackPressed()
         }
 
@@ -187,6 +225,7 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
 
         binding.startViewSpinner.setText(listOfStartViews[selectedStartView])
         binding.startHourSpinner.setText(listOfStartHours[selectedStartHour + 1])
+        binding.noteTemplateSpinner.setText(listOfNoteTemplates[selectedNoteTemplate])
     }
 
     /**

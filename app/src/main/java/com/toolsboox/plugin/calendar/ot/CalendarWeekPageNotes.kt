@@ -84,20 +84,35 @@ class CalendarWeekPageNotes : Creator {
          * @param context the context
          * @param canvas the canvas
          * @param calendarWeek data class
+         * @param template the template code
          * @param notePage current notePage
          */
-        fun drawPage(context: Context, canvas: Canvas, calendarWeek: CalendarWeek, notePage: String) {
+        fun drawPage(context: Context, canvas: Canvas, calendarWeek: CalendarWeek, template: Int, notePage: String) {
             val page = notePage.toIntOrNull() ?: 0
 
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)
 
             canvas.drawText("${page + 1}", lo + cew - 10.0f, to + 3 * ceh - 10.0f, Creator.textBigGray20Right)
 
-            canvas.drawLine(lo, to + 0 * ceh, lo + cew, to + 0 * ceh, Creator.lineDefaultBlack)
-            for (i in 1..34) {
-                canvas.drawLine(lo, to + i * ceh, lo + cew, to + i * ceh, Creator.lineDefaultGrey50)
+            if (template == 0) {
+                canvas.drawLine(lo, to + 0 * ceh, lo + cew, to + 0 * ceh, Creator.lineDefaultBlack)
+                for (i in 1..34) {
+                    canvas.drawLine(lo, to + i * ceh, lo + cew, to + i * ceh, Creator.lineDefaultGrey50)
+                }
+                canvas.drawLine(lo, to + 35 * ceh, lo + cew, to + 35 * ceh, Creator.lineDefaultBlack)
+            } else if (template == 1) {
+                canvas.drawLine(lo, to + 0 * ceh, lo + cew, to + 0 * ceh, Creator.lineDefaultBlack)
+                for (i in 1..34) {
+                    canvas.drawLine(lo, to + i * ceh, lo + cew, to + i * ceh, Creator.lineDefaultGrey50)
+                }
+                canvas.drawLine(lo, to + 35 * ceh, lo + cew, to + 35 * ceh, Creator.lineDefaultBlack)
+
+                canvas.drawLine(lo, to + 0 * ceh, lo, to + 35 * ceh, Creator.lineDefaultBlack)
+                for (i in 1..25) {
+                    canvas.drawLine(lo + i * 50.0f, to + 0 * ceh, lo + i * 50.0f, to + 35 * ceh, Creator.lineDefaultGrey50)
+                }
+                canvas.drawLine(lo + 26 * 50.0f, to + 0 * ceh, lo + 26 * 50.0f, to + 35 * ceh, Creator.lineDefaultBlack)
             }
-            canvas.drawLine(lo, to + 35 * ceh, lo + cew, to + 35 * ceh, Creator.lineDefaultBlack)
         }
     }
 }

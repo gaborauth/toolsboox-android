@@ -94,6 +94,9 @@
     <string name="calendar_settings_week_number_of_last_day_value">W52</string>
     <string name="calendar_settings_select_start_hour_text">Select the start hour of daily view:</string>
     <string name="calendar_settings_select_start_hour_empty">Leave empty</string>
+    <string name="calendar_settings_select_note_template_text">Select the template of the notes:</string>
+    <string name="calendar_settings_select_note_template_lines">Lines</string>
+    <string name="calendar_settings_select_note_template_grid">Grid</string>
     <string name="calendar_settings_button_shortcut">Create shortcut</string>
     <string name="calendar_settings_shortcut_done">Calendar shortcut created</string>
     <string name="calendar_settings_shortcut_failed">Calendar shortcut creation failed</string>

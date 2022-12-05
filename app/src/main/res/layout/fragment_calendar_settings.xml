@@ -46,282 +46,345 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-            android:id="@+id/start_view_spinner_text"
-            android:text="@string/calendar_settings_select_start_view_text"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+    <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
 
             app:layout_constraintTop_toBottomOf="@id/title_text"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-
-            android:id="@+id/start_view_spinner_layout"
-            android:spinnerMode="dropdown"
-
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintTop_toBottomOf="@id/start_view_spinner_text"
+            app:layout_constraintBottom_toTopOf="@id/button_save"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-        <AutoCompleteTextView
-                android:id="@+id/start_view_spinner"
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/start_view_spinner_text"
+                    android:text="@string/calendar_settings_select_start_view_text"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+
+                    android:id="@+id/start_view_spinner_layout"
+                    android:spinnerMode="dropdown"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/start_view_spinner_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <AutoCompleteTextView
+                        android:id="@+id/start_view_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#e0e0e0"
+
+                    app:layout_constraintTop_toBottomOf="@id/start_view_spinner_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                    android:id="@+id/locales_spinner_text"
+                    android:text="@string/calendar_settings_select_locale_text"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/start_view_spinner_layout"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+
+                    android:id="@+id/locales_spinner_layout"
+                    android:spinnerMode="dropdown"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/locales_spinner_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <AutoCompleteTextView
+                        android:id="@+id/locales_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:completionThreshold="1"
+                        android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                    android:id="@+id/calendar_first_day_of_the_week_text"
+                    android:text="@string/calendar_settings_first_day_of_the_week_text"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/locales_spinner_layout"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                    android:id="@+id/calendar_first_day_of_the_week_value"
+                    android:text="@string/calendar_settings_first_day_of_the_week_value"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/locales_spinner_layout"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                    android:id="@+id/calendar_week_number_of_first_day_text"
+                    android:text="@string/calendar_settings_week_number_of_first_day_text"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/calendar_first_day_of_the_week_value"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                    android:id="@+id/calendar_week_number_of_first_day_value"
+                    android:text="@string/calendar_settings_week_number_of_first_day_value"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/calendar_first_day_of_the_week_value"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                    android:id="@+id/calendar_week_number_of_last_day_text"
+                    android:text="@string/calendar_settings_week_number_of_last_day_text"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/calendar_week_number_of_first_day_value"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                    android:id="@+id/calendar_week_number_of_last_day_value"
+                    android:text="@string/calendar_settings_week_number_of_last_day_value"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/calendar_week_number_of_first_day_value"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#e0e0e0"
+
+                    app:layout_constraintTop_toBottomOf="@id/calendar_week_number_of_last_day_value"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                    android:id="@+id/start_hour_spinner_text"
+                    android:text="@string/calendar_settings_select_start_hour_text"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/calendar_week_number_of_last_day_value"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+
+                    android:id="@+id/start_hour_spinner_layout"
+                    android:spinnerMode="dropdown"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/start_hour_spinner_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <AutoCompleteTextView
+                        android:id="@+id/start_hour_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#e0e0e0"
+
+                    app:layout_constraintTop_toBottomOf="@id/start_hour_spinner_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                    android:id="@+id/note_template_spinner_text"
+                    android:text="@string/calendar_settings_select_note_template_text"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/start_hour_spinner_layout"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+
+                    android:id="@+id/note_template_spinner_layout"
+                    android:spinnerMode="dropdown"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/note_template_spinner_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <AutoCompleteTextView
+                        android:id="@+id/note_template_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#e0e0e0"
+
+                    app:layout_constraintTop_toBottomOf="@id/note_template_spinner_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <Button
+                    android:id="@+id/button_shortcut"
+                    android:text="@string/calendar_settings_button_shortcut"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/button_pattern_sync"
+                    app:layout_constraintTop_toBottomOf="@+id/note_template_spinner_layout"
+                    android:layout_marginTop="24dp"/>
+
+            <Button
+                    android:id="@+id/button_pattern_sync"
+                    android:text="@string/calendar_settings_button_pattern_sync"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintStart_toEndOf="@id/button_shortcut"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/note_template_spinner_layout"
+                    android:layout_marginTop="24dp"/>
+
+            <Button
+                    android:id="@+id/button_backup"
+                    android:text="@string/calendar_settings_button_backup"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/button_restore"
+                    app:layout_constraintTop_toBottomOf="@+id/button_shortcut"
+                    android:layout_marginTop="0dp"/>
+
+            <Button
+                    android:id="@+id/button_restore"
+                    android:text="@string/calendar_settings_button_restore"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintStart_toEndOf="@id/button_backup"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/button_pattern_sync"
+                    android:layout_marginTop="0dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:background="#e0e0e0"
 
-            app:layout_constraintTop_toBottomOf="@id/start_view_spinner_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-            android:id="@+id/locales_spinner_text"
-            android:text="@string/calendar_settings_select_locale_text"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintTop_toBottomOf="@id/start_view_spinner_layout"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-
-            android:id="@+id/locales_spinner_layout"
-            android:spinnerMode="dropdown"
-
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toBottomOf="@id/locales_spinner_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-        <AutoCompleteTextView
-                android:id="@+id/locales_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:completionThreshold="1"
-                android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-            android:id="@+id/calendar_first_day_of_the_week_text"
-            android:text="@string/calendar_settings_first_day_of_the_week_text"
-
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-
-            app:layout_constraintTop_toBottomOf="@id/locales_spinner_layout"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-            android:id="@+id/calendar_first_day_of_the_week_value"
-            android:text="@string/calendar_settings_first_day_of_the_week_value"
-
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintTop_toBottomOf="@id/locales_spinner_layout"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-            android:id="@+id/calendar_week_number_of_first_day_text"
-            android:text="@string/calendar_settings_week_number_of_first_day_text"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintTop_toBottomOf="@id/calendar_first_day_of_the_week_value"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-            android:id="@+id/calendar_week_number_of_first_day_value"
-            android:text="@string/calendar_settings_week_number_of_first_day_value"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintTop_toBottomOf="@id/calendar_first_day_of_the_week_value"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-            android:id="@+id/calendar_week_number_of_last_day_text"
-            android:text="@string/calendar_settings_week_number_of_last_day_text"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintTop_toBottomOf="@id/calendar_week_number_of_first_day_value"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-            android:id="@+id/calendar_week_number_of_last_day_value"
-            android:text="@string/calendar_settings_week_number_of_last_day_value"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintTop_toBottomOf="@id/calendar_week_number_of_first_day_value"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="8dp"
-            android:background="#e0e0e0"
-
-            app:layout_constraintTop_toBottomOf="@id/calendar_week_number_of_last_day_value"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-            android:id="@+id/start_hour_spinner_text"
-            android:text="@string/calendar_settings_select_start_hour_text"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintTop_toBottomOf="@id/calendar_week_number_of_last_day_value"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-
-            android:id="@+id/start_hour_spinner_layout"
-            android:spinnerMode="dropdown"
-
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintTop_toBottomOf="@id/start_hour_spinner_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-        <AutoCompleteTextView
-                android:id="@+id/start_hour_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="8dp"
-            android:background="#e0e0e0"
-
-            app:layout_constraintTop_toBottomOf="@id/start_hour_spinner_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    <Button
-            android:id="@+id/button_shortcut"
-            android:text="@string/calendar_settings_button_shortcut"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button_pattern_sync"
-            app:layout_constraintTop_toBottomOf="@+id/start_hour_spinner_layout"
-            android:layout_marginTop="24dp"/>
-
-    <Button
-            android:id="@+id/button_pattern_sync"
-            android:text="@string/calendar_settings_button_pattern_sync"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintStart_toEndOf="@id/button_shortcut"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/start_hour_spinner_layout"
-            android:layout_marginTop="24dp"/>
-
-    <Button
-            android:id="@+id/button_backup"
-            android:text="@string/calendar_settings_button_backup"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button_restore"
-            app:layout_constraintTop_toBottomOf="@+id/button_shortcut"
-            android:layout_marginTop="0dp"/>
-
-    <Button
-            android:id="@+id/button_restore"
-            android:text="@string/calendar_settings_button_restore"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintStart_toEndOf="@id/button_backup"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_pattern_sync"
-            android:layout_marginTop="0dp"/>
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="8dp"
-            android:background="#e0e0e0"
-
-            app:layout_constraintTop_toBottomOf="@id/button_backup"
+            app:layout_constraintTop_toTopOf="@id/button_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -334,8 +397,7 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/button_back"
-            app:layout_constraintTop_toBottomOf="@+id/button_backup"
-            android:layout_marginTop="24dp"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     <Button
             android:id="@+id/button_back"
@@ -346,7 +408,6 @@
 
             app:layout_constraintStart_toEndOf="@id/button_save"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_backup"
-            android:layout_marginTop="24dp"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
