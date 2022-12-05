@@ -283,4 +283,8 @@ esta semana"</string>
     <string name="templates_boxed_days_calendar_settings_date_picker_button">"Definir fecha"</string>
     <string name="templates_boxed_weeks_calendar_settings_date_picker_button">"Definir fecha"</string>
     <string name="templates_flat_weeks_calendar_settings_date_picker_button">"Definir fecha"</string>
+    <string name="week_abbreviation">"S%d"</string>
+    <string name="quarter_abbreviation">"%dT"</string>
+    <string name="calendar_settings_select_start_hour_text">"Hora de inicio de vista diaria:"</string>
+    <string name="calendar_settings_select_start_hour_empty">"Dejar vacía"</string>
 </resources>
