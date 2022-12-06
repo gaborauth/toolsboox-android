@@ -287,4 +287,7 @@ esta semana"</string>
     <string name="quarter_abbreviation">"%dT"</string>
     <string name="calendar_settings_select_start_hour_text">"Hora de inicio de vista diaria:"</string>
     <string name="calendar_settings_select_start_hour_empty">"Dejar vacía"</string>
+    <string name="calendar_settings_select_note_template_text">"Selecciona la plantilla de notas:"</string>
+    <string name="calendar_settings_select_note_template_lines">"Líneas"</string>
+    <string name="calendar_settings_select_note_template_grid">"Cuadrícula"</string>
 </resources>
