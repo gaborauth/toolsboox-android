@@ -10,8 +10,10 @@ import com.toolsboox.R
 import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.da.v2.CalendarYear
+import com.toolsboox.plugin.calendar.ot.CalendarUtils
 import com.toolsboox.plugin.calendar.ot.CalendarYearNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarYearPage
 import com.toolsboox.plugin.calendar.ot.CalendarYearPageNotes
@@ -52,6 +54,12 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      */
     @Inject
     lateinit var presenter: CalendarYearPresenter
+
+    /**
+     * The calendar utils.
+     */
+    @Inject
+    lateinit var utils: CalendarUtils
 
     /**
      * The inflated layout.
@@ -132,6 +140,18 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     }
 
     /**
+     * On side switched event.
+     */
+    override fun onSideSwitched() {
+        utils.updateToolbar(binding, true)
+
+        if (notePage != null)
+            CalendarNavigator.toYearNote(this, currentDate, notePage!!)
+        else
+            CalendarNavigator.toYearPage(this, currentDate, CalendarYear.DEFAULT_STYLE)
+    }
+
+    /**
      * OnViewCreated hook.
      *
      * @param view the parent view
@@ -180,6 +200,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
+        utils.updateToolbar(binding)
         initializeSurface(true)
     }
 

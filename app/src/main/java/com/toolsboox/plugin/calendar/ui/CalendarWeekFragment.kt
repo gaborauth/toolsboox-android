@@ -10,9 +10,11 @@ import com.toolsboox.R
 import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
 import com.toolsboox.plugin.calendar.da.v2.CalendarWeek
+import com.toolsboox.plugin.calendar.ot.CalendarUtils
 import com.toolsboox.plugin.calendar.ot.CalendarWeekNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarWeekPage
 import com.toolsboox.plugin.calendar.ot.CalendarWeekPageNotes
@@ -54,6 +56,12 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
      */
     @Inject
     lateinit var presenter: CalendarWeekPresenter
+
+    /**
+     * The calendar utils.
+     */
+    @Inject
+    lateinit var utils: CalendarUtils
 
     /**
      * The inflated layout.
@@ -121,9 +129,6 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        val weekOfYearField = WeekFields.of(calendarWeek.locale).weekOfWeekBasedYear()
-        val weekOfYear = currentDate.plusWeeks(0L).get(weekOfYearField)
-
         val normalizedStrokes = surfaceFrom(strokes)
         if (notePage != null) {
             calendarWeek.noteStrokes[notePage!!] = normalizedStrokes
@@ -134,6 +139,18 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
         calendarPattern.updateWeek(calendarWeek)
 
         presenter.save(this, binding, calendarWeek, calendarPattern, currentDate)
+    }
+
+    /**
+     * On side switched event.
+     */
+    override fun onSideSwitched() {
+        utils.updateToolbar(binding, true)
+
+        if (notePage != null)
+            CalendarNavigator.toWeekNote(this, currentDate, calendarWeek.locale, notePage!!)
+        else
+            CalendarNavigator.toWeekPage(this, currentDate, calendarWeek.locale, CalendarWeek.DEFAULT_STYLE)
     }
 
     /**
@@ -193,6 +210,7 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
+        utils.updateToolbar(binding)
         initializeSurface(true)
     }
 

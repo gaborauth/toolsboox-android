@@ -129,6 +129,11 @@ abstract class SurfaceFragment : ScreenFragment() {
     open fun onStrokesAdded(strokes: List<Stroke>) {}
 
     /**
+     * On side switched event.
+     */
+    open fun onSideSwitched() {}
+
+    /**
      * Delete strokes callback.
      *
      * @param strokeIds the list UUID of the strokes
@@ -186,6 +191,10 @@ abstract class SurfaceFragment : ScreenFragment() {
                     dialog.cancel()
                 }
             builder.create().show()
+        }
+
+        provideToolbarDrawing().toolbarSwitchSide.setOnClickListener {
+            onSideSwitched()
         }
 
         provideToolbarDrawing().toolbarSettings.setOnClickListener {

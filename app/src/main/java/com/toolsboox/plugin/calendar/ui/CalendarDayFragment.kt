@@ -10,12 +10,14 @@ import com.toolsboox.R
 import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
 import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.ot.CalendarDayNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarDayPage
 import com.toolsboox.plugin.calendar.ot.CalendarDayPageNotes
+import com.toolsboox.plugin.calendar.ot.CalendarUtils
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -54,6 +56,12 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
      */
     @Inject
     lateinit var presenter: CalendarDayPresenter
+
+    /**
+     * The calendar utils.
+     */
+    @Inject
+    lateinit var utils: CalendarUtils
 
     /**
      * The inflated layout.
@@ -120,8 +128,6 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        val dayOfYear = currentDate.dayOfYear
-
         val normalizedStrokes = surfaceFrom(strokes)
         if (notePage != null) {
             calendarDay.noteStrokes[notePage!!] = normalizedStrokes
@@ -132,6 +138,18 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         calendarPattern.updateDay(calendarDay)
 
         presenter.save(this, binding, calendarDay, calendarPattern, currentDate)
+    }
+
+    /**
+     * On side switched event.
+     */
+    override fun onSideSwitched() {
+        utils.updateToolbar(binding, true)
+
+        if (notePage != null)
+            CalendarNavigator.toDayNote(this, currentDate, notePage!!)
+        else
+            CalendarNavigator.toDayPage(this, currentDate, CalendarDay.DEFAULT_STYLE)
     }
 
     /**
@@ -190,6 +208,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
+        utils.updateToolbar(binding)
         initializeSurface(true)
     }
 

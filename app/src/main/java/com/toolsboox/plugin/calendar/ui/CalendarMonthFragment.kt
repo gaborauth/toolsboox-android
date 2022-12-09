@@ -11,11 +11,13 @@ import com.toolsboox.R
 import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
+import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
 import com.toolsboox.plugin.calendar.ot.CalendarMonthNavigator
 import com.toolsboox.plugin.calendar.ot.CalendarMonthPage
 import com.toolsboox.plugin.calendar.ot.CalendarMonthPageNotes
+import com.toolsboox.plugin.calendar.ot.CalendarUtils
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -54,6 +56,12 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
      */
     @Inject
     lateinit var presenter: CalendarMonthPresenter
+
+    /**
+     * The calendar utils.
+     */
+    @Inject
+    lateinit var utils: CalendarUtils
 
     /**
      * The inflated layout.
@@ -120,8 +128,6 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        val monthOfYear = currentDate.monthValue
-
         val normalizedStrokes = surfaceFrom(strokes)
         if (notePage != null) {
             calendarMonth.noteStrokes[notePage!!] = normalizedStrokes
@@ -132,6 +138,18 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
         calendarPattern.updateMonth(calendarMonth)
 
         presenter.save(this, binding, calendarMonth, calendarPattern, currentDate)
+    }
+
+    /**
+     * On side switched event.
+     */
+    override fun onSideSwitched() {
+        utils.updateToolbar(binding, true)
+
+        if (notePage != null)
+            CalendarNavigator.toMonthNote(this, currentDate, notePage!!)
+        else
+            CalendarNavigator.toMonthPage(this, currentDate, CalendarMonth.DEFAULT_STYLE)
     }
 
     /**
@@ -187,6 +205,7 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
+        utils.updateToolbar(binding)
         initializeSurface(true)
     }
 
