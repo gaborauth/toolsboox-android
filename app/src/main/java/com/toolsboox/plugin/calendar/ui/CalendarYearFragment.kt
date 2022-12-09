@@ -200,6 +200,25 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
+        binding.toolbarDrawing.toolbarSwipeUp.setOnClickListener {
+            if (notePage != null) {
+                val page = notePage!!.toIntOrNull() ?: 0
+                if (page == 0) {
+                    CalendarNavigator.toYearPage(this, currentDate, CalendarYear.DEFAULT_STYLE)
+                } else {
+                    CalendarNavigator.toYearNote(this, currentDate, "${page - 1}")
+                }
+            }
+        }
+        binding.toolbarDrawing.toolbarSwipeDown.setOnClickListener {
+            if (notePage != null) {
+                val page = notePage!!.toIntOrNull() ?: 0
+                CalendarNavigator.toYearNote(this, currentDate, "${page + 1}")
+            } else {
+                CalendarNavigator.toYearNote(this, currentDate, "0")
+            }
+        }
+
         utils.updateToolbar(binding)
         initializeSurface(true)
     }

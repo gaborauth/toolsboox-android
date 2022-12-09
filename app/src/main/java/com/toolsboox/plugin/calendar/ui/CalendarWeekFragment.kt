@@ -210,6 +210,27 @@ class CalendarWeekFragment @Inject constructor() : SurfaceFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
+        binding.toolbarDrawing.toolbarSwipeUp.setOnClickListener {
+            if (notePage != null) {
+                val page = notePage!!.toIntOrNull() ?: 0
+                if (page == 0) {
+                    CalendarNavigator.toWeekPage(this, currentDate, calendarWeek.locale, CalendarWeek.DEFAULT_STYLE)
+                } else {
+                    CalendarNavigator.toWeekNote(this, currentDate, calendarWeek.locale, "${page - 1}")
+                }
+            } else {
+                CalendarNavigator.toMonthPage(this, currentDate)
+            }
+        }
+        binding.toolbarDrawing.toolbarSwipeDown.setOnClickListener {
+            if (notePage != null) {
+                val page = notePage!!.toIntOrNull() ?: 0
+                CalendarNavigator.toWeekNote(this, currentDate, calendarWeek.locale, "${page + 1}")
+            } else {
+                CalendarNavigator.toWeekNote(this, currentDate, calendarWeek.locale, "0")
+            }
+        }
+
         utils.updateToolbar(binding)
         initializeSurface(true)
     }

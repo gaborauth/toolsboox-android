@@ -49,6 +49,30 @@
             android:contentDescription="@string/calendar_drawing_toolbar_trash"/>
 
     <ImageButton
+            android:id="@+id/toolbarSwipeUp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_toolbar_swipe_up"
+
+            app:layout_constraintBottom_toTopOf="@id/toolbarSwipeDown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/calendar_drawing_toolbar_swipe_down"/>
+
+    <ImageButton
+            android:id="@+id/toolbarSwipeDown"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_toolbar_swipe_down"
+
+            app:layout_constraintBottom_toTopOf="@id/toolbarSwitchSide"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/calendar_drawing_toolbar_swipe_down"/>
+
+    <ImageButton
             android:id="@+id/toolbarSwitchSide"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -58,7 +82,7 @@
             app:layout_constraintBottom_toTopOf="@id/toolbarSettings"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/calendar_drawing_toolbar_settings"/>
+            android:contentDescription="@string/calendar_drawing_toolbar_switch_side"/>
 
     <ImageButton
             android:id="@+id/toolbarSettings"

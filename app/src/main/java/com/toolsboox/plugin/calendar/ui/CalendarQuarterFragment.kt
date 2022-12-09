@@ -206,6 +206,27 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
+        binding.toolbarDrawing.toolbarSwipeUp.setOnClickListener {
+            if (notePage != null) {
+                val page = notePage!!.toIntOrNull() ?: 0
+                if (page == 0) {
+                    CalendarNavigator.toQuarterPage(this, currentDate, CalendarQuarter.DEFAULT_STYLE)
+                } else {
+                    CalendarNavigator.toQuarterNote(this, currentDate, "${page - 1}")
+                }
+            } else {
+                CalendarNavigator.toYearPage(this, currentDate)
+            }
+        }
+        binding.toolbarDrawing.toolbarSwipeDown.setOnClickListener {
+            if (notePage != null) {
+                val page = notePage!!.toIntOrNull() ?: 0
+                CalendarNavigator.toQuarterNote(this, currentDate, "${page + 1}")
+            } else {
+                CalendarNavigator.toQuarterNote(this, currentDate, "0")
+            }
+        }
+
         utils.updateToolbar(binding)
         initializeSurface(true)
     }

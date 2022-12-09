@@ -205,6 +205,27 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
+        binding.toolbarDrawing.toolbarSwipeUp.setOnClickListener {
+            if (notePage != null) {
+                val page = notePage!!.toIntOrNull() ?: 0
+                if (page == 0) {
+                    CalendarNavigator.toMonthPage(this, currentDate, CalendarMonth.DEFAULT_STYLE)
+                } else {
+                    CalendarNavigator.toMonthNote(this, currentDate, "${page - 1}")
+                }
+            } else {
+                CalendarNavigator.toQuarterPage(this, currentDate)
+            }
+        }
+        binding.toolbarDrawing.toolbarSwipeDown.setOnClickListener {
+            if (notePage != null) {
+                val page = notePage!!.toIntOrNull() ?: 0
+                CalendarNavigator.toMonthNote(this, currentDate, "${page + 1}")
+            } else {
+                CalendarNavigator.toMonthNote(this, currentDate, "0")
+            }
+        }
+
         utils.updateToolbar(binding)
         initializeSurface(true)
     }

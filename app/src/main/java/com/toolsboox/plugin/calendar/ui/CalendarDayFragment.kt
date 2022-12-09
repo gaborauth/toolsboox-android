@@ -208,6 +208,27 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
+        binding.toolbarDrawing.toolbarSwipeUp.setOnClickListener {
+            if (notePage != null) {
+                val page = notePage!!.toIntOrNull() ?: 0
+                if (page == 0) {
+                    CalendarNavigator.toDayPage(this, currentDate, CalendarDay.DEFAULT_STYLE)
+                } else {
+                    CalendarNavigator.toDayNote(this, currentDate, "${page - 1}")
+                }
+            } else {
+                CalendarNavigator.toWeekPage(this, currentDate, locale)
+            }
+        }
+        binding.toolbarDrawing.toolbarSwipeDown.setOnClickListener {
+            if (notePage != null) {
+                val page = notePage!!.toIntOrNull() ?: 0
+                CalendarNavigator.toDayNote(this, currentDate, "${page + 1}")
+            } else {
+                CalendarNavigator.toDayNote(this, currentDate, "0")
+            }
+        }
+
         utils.updateToolbar(binding)
         initializeSurface(true)
     }

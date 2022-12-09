@@ -116,6 +116,9 @@
     <string name="calendar_drawing_toolbar_trash">Trash page</string>
     <string name="calendar_drawing_toolbar_trash_dialog_title">Are you sure?</string>
     <string name="calendar_drawing_toolbar_trash_dialog_message">Do you want to erase the whole content?</string>
+    <string name="calendar_drawing_toolbar_swipe_up">Swipe up</string>
+    <string name="calendar_drawing_toolbar_swipe_down">Swipe down</string>
+    <string name="calendar_drawing_toolbar_switch_side">Switch side</string>
     <string name="calendar_drawing_toolbar_settings">Settings</string>
 
     <string name="calendar_navigator_prev_button_text">&lt;</string>
