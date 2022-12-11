@@ -163,10 +163,6 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
 
         binding = FragmentKanbanMainBinding.bind(view)
 
-        laneTitles.add(TextView(requireContext()))
-        laneTitles.add(TextView(requireContext()))
-        laneTitles.add(TextView(requireContext()))
-
         binding.gridLayout.post {
             width = resources.displayMetrics.widthPixels
             height = resources.displayMetrics.heightPixels
@@ -178,6 +174,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
             touchHelper = TouchHelper.create(binding.drawLayout, callback)
             initializeSurface()
 
+            laneTitles.clear()
             binding.titleLayout.removeAllViews()
             createLaneTitle(0, getString(R.string.kanban_planner_lane_dueSoonBacklogTitle, 0))
             createLaneTitle(1, getString(R.string.kanban_planner_lane_plannedTodayTitle, 0))
@@ -548,6 +545,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
      * @param title the title
      */
     private fun createLaneTitle(position: Int, title: String) {
+        laneTitles.add(TextView(requireContext()))
         laneTitles[position].text = title
         laneTitles[position].gravity = Gravity.CENTER
         laneTitles[position].textSize = margin * 2.5f
