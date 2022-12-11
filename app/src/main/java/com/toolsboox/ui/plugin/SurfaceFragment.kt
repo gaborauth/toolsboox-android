@@ -55,7 +55,7 @@ abstract class SurfaceFragment : ScreenFragment() {
     /**
      * The bitmap of the canvas.
      */
-    private lateinit var bitmap: Bitmap
+    private var bitmap: Bitmap? = null
 
     /**
      * The canvas of the surface view.
@@ -221,7 +221,7 @@ abstract class SurfaceFragment : ScreenFragment() {
         touchHelper.isRawDrawingRenderEnabled = false
 
         touchHelper.closeRawDrawing()
-        bitmap.recycle()
+        bitmap?.recycle()
     }
 
     /**
@@ -276,8 +276,8 @@ abstract class SurfaceFragment : ScreenFragment() {
                         provideSurfaceView().height,
                         Bitmap.Config.ARGB_8888
                     )
-                    bitmap.eraseColor(Color.TRANSPARENT)
-                    canvas = Canvas(bitmap)
+                    bitmap!!.eraseColor(Color.TRANSPARENT)
+                    canvas = Canvas(bitmap!!)
 
                     if (provideSurfaceView().holder == null) {
                         return
