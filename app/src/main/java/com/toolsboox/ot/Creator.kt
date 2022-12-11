@@ -80,7 +80,7 @@ interface Creator {
             text60BlackCenter.color = colorBlack
             text60BlackCenter.textAlign = Paint.Align.CENTER
             text60BlackCenter.textSize = 60.0f
-            text60BlackCenter.typeface = Typeface.DEFAULT_BOLD
+            text60BlackCenter.typeface = Typeface.DEFAULT
 
             textBigBlackCenter.color = colorBlack
             textBigBlackCenter.textAlign = Paint.Align.CENTER
