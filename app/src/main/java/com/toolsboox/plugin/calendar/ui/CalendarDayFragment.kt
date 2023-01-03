@@ -14,10 +14,7 @@ import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
 import com.toolsboox.plugin.calendar.da.v2.CalendarDay
-import com.toolsboox.plugin.calendar.ot.CalendarDayNavigator
-import com.toolsboox.plugin.calendar.ot.CalendarDayPage
-import com.toolsboox.plugin.calendar.ot.CalendarDayPageNotes
-import com.toolsboox.plugin.calendar.ot.CalendarUtils
+import com.toolsboox.plugin.calendar.ot.*
 import com.toolsboox.ui.plugin.SurfaceFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -81,7 +78,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     /**
      * Style of calendar view.
      */
-    private var calendarStyle: String? = null
+    private var calendarStyle: String = CalendarDay.DEFAULT_STYLE
 
     /**
      * Page of notes view.
@@ -132,7 +129,11 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         if (notePage != null) {
             calendarDay.noteStrokes[notePage!!] = normalizedStrokes
         } else {
-            calendarDay.calendarStrokes[calendarStyle ?: CalendarDay.DEFAULT_STYLE] = normalizedStrokes
+            calendarDay.calendarStrokes[calendarStyle] = normalizedStrokes
+        }
+
+        if (calendarStyle == CalendarDay.HEALTH_V1_STYLE) {
+            HealthDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay)
         }
 
         calendarPattern.updateDay(calendarDay)
@@ -200,10 +201,21 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
                 CalendarDayPageNotes.onTouchEvent(
                     view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay, notePage!!
                 )
-            else
-                CalendarDayPage.onTouchEvent(
-                    view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay
-                )
+            else {
+                when (calendarStyle) {
+                    CalendarDay.DEFAULT_STYLE -> {
+                        CalendarDayPage.onTouchEvent(
+                            view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay
+                        )
+                    }
+                    CalendarDay.HEALTH_V1_STYLE -> {
+                        HealthDayPage.onTouchEvent(
+                            view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay
+                        )
+                    }
+                    else -> return@setOnTouchListener true
+                }
+            }
         }
 
         toolbar.toolbarPager.visibility = View.GONE
@@ -227,6 +239,14 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
             } else {
                 CalendarNavigator.toDayNote(this, currentDate, "0")
             }
+        }
+        binding.toolbarDrawing.toolbarCalendarView.setOnClickListener {
+            calendarStyle = CalendarDay.DEFAULT_STYLE
+            presenter.load(this@CalendarDayFragment, binding, currentDate, locale)
+        }
+        binding.toolbarDrawing.toolbarHealthView.setOnClickListener {
+            calendarStyle = CalendarDay.HEALTH_V1_STYLE
+            presenter.load(this@CalendarDayFragment, binding, currentDate, locale)
         }
 
         utils.updateToolbar(binding)
@@ -279,8 +299,13 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
             applyStrokes(surfaceTo(noteStrokes), true)
         } else {
             val startHour = sharedPreferences.getInt("calendarStartHour", 0)
-            val calendarStrokes = calendarDay.calendarStrokes[calendarStyle ?: CalendarDay.DEFAULT_STYLE] ?: listOf()
-            CalendarDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, googleCalendarEvents, startHour)
+            val calendarStrokes = calendarDay.calendarStrokes[calendarStyle] ?: listOf()
+            if (calendarStyle == CalendarDay.DEFAULT_STYLE) {
+                CalendarDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, googleCalendarEvents, startHour)
+            }
+            if (calendarStyle == CalendarDay.HEALTH_V1_STYLE) {
+                HealthDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay)
+            }
             applyStrokes(surfaceTo(calendarStrokes), true)
         }
     }
