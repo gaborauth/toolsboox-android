@@ -114,6 +114,8 @@
     <string name="calendar_drawing_toolbar_pen">Pen</string>
     <string name="calendar_drawing_toolbar_eraser">Eraser</string>
     <string name="calendar_drawing_toolbar_trash">Trash page</string>
+    <string name="calendar_drawing_toolbar_health">Health view</string>
+    <string name="calendar_drawing_toolbar_calendar">Calendar view</string>
     <string name="calendar_drawing_toolbar_trash_dialog_title">Are you sure?</string>
     <string name="calendar_drawing_toolbar_trash_dialog_message">Do you want to erase the whole content?</string>
     <string name="calendar_drawing_toolbar_swipe_up">Swipe up</string>
@@ -168,6 +170,33 @@
     <string name="calendar_day_notes">Notes</string>
     <string name="calendar_day_notes_cals">Notes &amp; Calendar events</string>
     <string name="calendar_day_all_day">All day event</string>
+
+    <string name="calendar_health_day_start_it">Start it!</string>
+    <string name="calendar_health_day_do_it">Do it!</string>
+    <string name="calendar_health_day_rate_it">Rate it!</string>
+
+    <string name="calendar_health_day_wake_up">Wake up time</string>
+    <string name="calendar_health_day_sleep">Sleep hours</string>
+    <string name="calendar_health_day_weight">Weight</string>
+
+    <string name="calendar_health_day_breakfast">Breakfast</string>
+    <string name="calendar_health_day_lunch">Lunch</string>
+    <string name="calendar_health_day_dinner">Dinner</string>
+    <string name="calendar_health_day_snacks">Snacks</string>
+    <string name="calendar_health_day_activity">Activity</string>
+
+    <string name="calendar_health_day_water_dl">Water (dl)</string>
+    <string name="calendar_health_day_water_cup">Water (cup)</string>
+
+    <string name="calendar_health_day_motivation">Motivation</string>
+    <string name="calendar_health_day_energy">Energy</string>
+    <string name="calendar_health_day_happiness">Happiness</string>
+    <string name="calendar_health_day_stress">Stress</string>
+    <string name="calendar_health_day_condition">Condition</string>
+    <string name="calendar_health_day_mood">Mood</string>
+    <string name="calendar_health_day_pain">Pain</string>
+    <string name="calendar_health_day_productivity">Productivity</string>
+    <string name="calendar_health_day_overall">Overall</string>
 
     <!-- Strings related to dashboard plugin -->
     <!-- Strings related to dashboard fragment -->
