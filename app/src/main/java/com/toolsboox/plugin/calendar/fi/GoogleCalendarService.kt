@@ -8,6 +8,7 @@ import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
 import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
+import timber.log.Timber
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -18,7 +19,8 @@ import javax.inject.Inject
  * Google Calendar service.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
- */class GoogleCalendarService @Inject constructor() {
+ */
+class GoogleCalendarService @Inject constructor() {
     /**
      * Load daily calendar events of the user.
      *
@@ -69,5 +71,30 @@ import javax.inject.Inject
 
         googleCalendarEvents.sortBy { it.startDate }
         return googleCalendarEvents
+    }
+
+    /**
+     * List of calendars.
+     *
+     * @param fragment the fragment
+     */
+    private fun listOfCalendars(fragment: CalendarDayFragment) {
+        val contentResolver = fragment.requireActivity().contentResolver
+
+        val uriBuilder = CalendarContract.Calendars.CONTENT_URI.buildUpon()
+        val uri = uriBuilder.build()
+
+        val fields = arrayOf(
+            CalendarContract.Calendars._ID, CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, CalendarContract.Calendars.ACCOUNT_NAME
+        )
+
+        contentResolver.query(uri, fields, null, null, null)?.use { cursor ->
+            while (cursor.moveToNext()) {
+                val cid: String = cursor.getString(0)
+                val displayName: String = cursor.getString(1)
+                val accountName: String = cursor.getString(2)
+                Timber.i("Calendar id: $cid, display name: $displayName, account name: $accountName")
+            }
+        }
     }
 }
