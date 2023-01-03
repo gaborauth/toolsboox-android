@@ -290,4 +290,7 @@ esta semana"</string>
     <string name="calendar_settings_select_note_template_text">"Selecciona la plantilla de notas:"</string>
     <string name="calendar_settings_select_note_template_lines">"Líneas"</string>
     <string name="calendar_settings_select_note_template_grid">"Cuadrícula"</string>
+    <string name="calendar_drawing_toolbar_swipe_up">"Deslizar arriba"</string>
+    <string name="calendar_drawing_toolbar_swipe_down">"Deslizar abajo"</string>
+    <string name="calendar_drawing_toolbar_switch_side">"Cambiar lado"</string>
 </resources>
