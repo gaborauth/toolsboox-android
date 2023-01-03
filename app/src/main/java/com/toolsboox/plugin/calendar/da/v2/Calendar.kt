@@ -9,6 +9,7 @@ import com.toolsboox.da.Stroke
  */
 interface Calendar {
     val calendarStrokes: Map<String, List<Stroke>>
+    val calendarValues: Map<String, Map<String, Float?>>
     val noteStrokes: Map<String, List<Stroke>>
 
     companion object {
@@ -18,10 +19,22 @@ interface Calendar {
          * @param mapOfStrokes the map of strokes
          * @return the map of strokes
          */
-        fun mapDeepCopy(mapOfStrokes: Map<String, List<Stroke>>): MutableMap<String, List<Stroke>> {
+        fun strokesDeepCopy(mapOfStrokes: Map<String, List<Stroke>>): MutableMap<String, List<Stroke>> {
             val strokes = mutableMapOf<String, List<Stroke>>()
             mapOfStrokes.forEach { strokes[it.key] = Stroke.listDeepCopy(it.value) }
             return strokes
+        }
+
+        /**
+         * Deep copy of map of values.
+         *
+         * @param mapOfValues the map of values
+         * @return the map of values
+         */
+        fun valuesDeepCopy(mapOfValues: Map<String, Map<String, Float?>>): MutableMap<String, Map<String, Float?>> {
+            val values = mutableMapOf<String, Map<String, Float?>>()
+            mapOfValues.forEach { values[it.key] = it.value.toMap() }
+            return values
         }
     }
 }

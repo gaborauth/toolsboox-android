@@ -15,6 +15,7 @@ data class CalendarYear(
     val locale: Locale = Locale.getDefault(),
 
     override var calendarStrokes: MutableMap<String, List<Stroke>> = mutableMapOf(),
+    override var calendarValues: MutableMap<String, Map<String, Float?>> = mutableMapOf(),
     override var noteStrokes: MutableMap<String, List<Stroke>> = mutableMapOf()
 ) : Calendar {
 
@@ -35,9 +36,10 @@ data class CalendarYear(
             val notesStrokes = com.toolsboox.plugin.teamdrawer.nw.domain.Stroke.convertTo(v1.notesStrokes)
 
             val calendarStrokes = mutableMapOf(DEFAULT_STYLE to strokes)
+            val calendarValues = mutableMapOf(CalendarDay.DEFAULT_STYLE to mapOf<String, Float?>())
             val noteStrokes = mutableMapOf("0" to notesStrokes)
 
-            return CalendarYear(v1.year, v1.locale, calendarStrokes, noteStrokes)
+            return CalendarYear(v1.year, v1.locale, calendarStrokes, calendarValues, noteStrokes)
         }
     }
 
@@ -47,7 +49,7 @@ data class CalendarYear(
     fun deepCopy(): CalendarYear {
         return CalendarYear(
             this.year, this.locale,
-            Calendar.mapDeepCopy(calendarStrokes), Calendar.mapDeepCopy(noteStrokes)
+            Calendar.strokesDeepCopy(calendarStrokes), Calendar.valuesDeepCopy(calendarValues), Calendar.strokesDeepCopy(noteStrokes)
         )
     }
 }
