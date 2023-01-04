@@ -44,7 +44,7 @@ interface Creator {
         val textSmallBlack = TextPaint()
         val textSmallBlackCenter = TextPaint()
         val textSmallBlackRight = TextPaint()
-
+        val textSmallGray20Center = TextPaint()
 
         init {
             // Fill styles
@@ -141,6 +141,11 @@ interface Creator {
             textSmallBlackRight.textAlign = Paint.Align.RIGHT
             textSmallBlackRight.textSize = 25.0f
             textSmallBlackRight.typeface = Typeface.DEFAULT
+
+            textSmallGray20Center.color = colorGrey20
+            textSmallGray20Center.textAlign = Paint.Align.CENTER
+            textSmallGray20Center.textSize = 25.0f
+            textSmallGray20Center.typeface = Typeface.DEFAULT
         }
 
         /**
