@@ -136,9 +136,9 @@ class HealthDayPage {
             canvas.drawText(startDayText, lo - 5.0f, to + 3 * ceh - 5.0f, Creator.textDefaultWhiteCenter)
             canvas.restore()
 
-            drawWakeUp(canvas, lo, to + 0 * ceh, wakeUpText)
-            drawSleep(canvas, lo, to + 2 * ceh, sleepText)
-            drawWeight(canvas, lo, to + 4 * ceh, weightText)
+            healthValues["wakeUpHour"] = drawWakeUp(canvas, strokes, lo, to + 0 * ceh, wakeUpText)
+            healthValues["sleepHours"] = drawSleep(canvas, strokes, lo, to + 2 * ceh, sleepText)
+            healthValues["weight"] = drawWeight(canvas, strokes, lo, to + 4 * ceh, weightText)
 
             healthValues["motivation"] = drawTenPointGrid(canvas, strokes, lo + 2 * cew, to, motivationText)
             healthValues["energy"] = drawTenPointGrid(canvas, strokes, lo + 2 * cew, to + 2 * ceh, energyText)
@@ -222,34 +222,150 @@ class HealthDayPage {
             calendarDay.calendarValues[CalendarDay.HEALTH_V1_STYLE] = healthValues.toMap()
         }
 
-        private fun drawWakeUp(canvas: Canvas, xo: Float, yo: Float, text: String) {
+        /**
+         * Draw and calculates the wake up hour grid and return the value if checked.
+         *
+         * @param canvas the canvas
+         * @param strokes the strokes
+         * @param xo the left X coordinate
+         * @param yo the top Y coordinate
+         * @param text the text
+         * @return the checked value or null
+         */
+        private fun drawWakeUp(canvas: Canvas, strokes: List<Stroke>, xo: Float, yo: Float, text: String): Float? {
             canvas.drawLine(xo, yo + 2 * ceh, xo + 2 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 0 * cew, yo, xo + 0 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 1 * cew, yo, xo + 1 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 2 * cew, yo, xo + 2 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 2 * cew - 2 * ceh, yo, xo + 2 * cew - 2 * ceh, yo + 2 * ceh, Creator.lineDefaultBlack)
-
             canvas.drawText(text, xo + 20.0f, yo + 2 * ceh - 35.0f, Creator.textDefaultBlack)
+
+            val xgw = (cew - 2 * ceh) / 6.0f
+            canvas.drawLine(xo + cew + 1 * xgw, yo, xo + cew + 1 * xgw, yo + 2 * ceh, Creator.lineDefaultGrey50)
+            canvas.drawLine(xo + cew + 2 * xgw, yo, xo + cew + 2 * xgw, yo + 2 * ceh, Creator.lineDefaultGrey50)
+            canvas.drawLine(xo + cew + 3 * xgw, yo, xo + cew + 3 * xgw, yo + 2 * ceh, Creator.lineDefaultGrey50)
+            canvas.drawLine(xo + cew + 4 * xgw, yo, xo + cew + 4 * xgw, yo + 2 * ceh, Creator.lineDefaultGrey50)
+            canvas.drawLine(xo + cew + 5 * xgw, yo, xo + cew + 5 * xgw, yo + 2 * ceh, Creator.lineDefaultGrey50)
+            canvas.drawLine(xo + cew, yo + ceh, xo + cew + 6 * xgw, yo + ceh, Creator.lineDefaultGrey50)
+
+            var result: Float? = null
+            for (i in 0..5) {
+                canvas.drawText("$i", xo + cew + (i + 0.5f) * xgw, yo + 1 * ceh - 10.0f, Creator.textSmallGray20Center)
+                if (checkStroke(strokes, xo + cew + i * xgw, yo + 0 * ceh, xgw, ceh)) {
+                    result = i.toFloat()
+                }
+            }
+            for (i in 6..11) {
+                canvas.drawText("$i", xo + cew + (i - 5.5f) * xgw, yo + 2 * ceh - 10.0f, Creator.textSmallGray20Center)
+                if (checkStroke(strokes, xo + cew + (i - 6) * xgw, yo + 1 * ceh, xgw, ceh)) {
+                    result = i.toFloat()
+                }
+            }
+
+            if (result != null) {
+                canvas.drawText("${result.toInt()}", xo + 2 * cew - ceh, yo + 2 * ceh - 25.0f, Creator.text60BlackCenter)
+            }
+
+            return result
         }
 
-        private fun drawSleep(canvas: Canvas, xo: Float, yo: Float, text: String) {
+        /**
+         * Draw and calculates the sleep hours grid and return the value if checked.
+         *
+         * @param canvas the canvas
+         * @param strokes the strokes
+         * @param xo the left X coordinate
+         * @param yo the top Y coordinate
+         * @param text the text
+         * @return the checked value or null
+         */
+        private fun drawSleep(canvas: Canvas, strokes: List<Stroke>, xo: Float, yo: Float, text: String): Float? {
             canvas.drawLine(xo, yo + 2 * ceh, xo + 2 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 0 * cew, yo, xo + 0 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 1 * cew, yo, xo + 1 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 2 * cew, yo, xo + 2 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 2 * cew - 2 * ceh, yo, xo + 2 * cew - 2 * ceh, yo + 2 * ceh, Creator.lineDefaultBlack)
-
             canvas.drawText(text, xo + 20.0f, yo + 2 * ceh - 35.0f, Creator.textDefaultBlack)
+
+            val xgw = (cew - 2 * ceh) / 5.0f
+            canvas.drawLine(xo + cew + 1 * xgw, yo, xo + cew + 1 * xgw, yo + 2 * ceh, Creator.lineDefaultGrey50)
+            canvas.drawLine(xo + cew + 2 * xgw, yo, xo + cew + 2 * xgw, yo + 2 * ceh, Creator.lineDefaultGrey50)
+            canvas.drawLine(xo + cew + 3 * xgw, yo, xo + cew + 3 * xgw, yo + 2 * ceh, Creator.lineDefaultGrey50)
+            canvas.drawLine(xo + cew + 4 * xgw, yo, xo + cew + 4 * xgw, yo + 2 * ceh, Creator.lineDefaultGrey50)
+            canvas.drawLine(xo + cew, yo + ceh, xo + cew + 5 * xgw, yo + ceh, Creator.lineDefaultGrey50)
+
+            var result: Float? = null
+            for (i in 0..4) {
+                canvas.drawText("${i + 4}", xo + cew + (i + 0.5f) * xgw, yo + 1 * ceh - 10.0f, Creator.textSmallGray20Center)
+                if (checkStroke(strokes, xo + cew + i * xgw, yo + 0 * ceh, xgw, ceh)) {
+                    result = i.toFloat() + 4.0f
+                }
+            }
+            for (i in 5..9) {
+                canvas.drawText("${i + 4}", xo + cew + (i - 4.5f) * xgw, yo + 2 * ceh - 10.0f, Creator.textSmallGray20Center)
+                if (checkStroke(strokes, xo + cew + (i - 5) * xgw, yo + 1 * ceh, xgw, ceh)) {
+                    result = i.toFloat() + 4.0f
+                }
+            }
+
+            if (result != null) {
+                canvas.drawText("${result.toInt()}", xo + 2 * cew - ceh, yo + 2 * ceh - 25.0f, Creator.text60BlackCenter)
+            }
+
+            return result
         }
 
-        private fun drawWeight(canvas: Canvas, xo: Float, yo: Float, text: String) {
+        /**
+         * Draw and calculates the weight grid and return the value if checked.
+         *
+         * @param canvas the canvas
+         * @param strokes the strokes
+         * @param xo the left X coordinate
+         * @param yo the top Y coordinate
+         * @param text the text
+         * @return the checked value or null
+         */
+        private fun drawWeight(canvas: Canvas, strokes: List<Stroke>, xo: Float, yo: Float, text: String): Float? {
             canvas.drawLine(xo, yo + 2 * ceh, xo + 2 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 0 * cew, yo, xo + 0 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 1 * cew, yo, xo + 1 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 2 * cew, yo, xo + 2 * cew, yo + 2 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(xo + 2 * cew - 2 * ceh, yo, xo + 2 * cew - 2 * ceh, yo + 2 * ceh, Creator.lineDefaultBlack)
-
             canvas.drawText(text, xo + 20.0f, yo + 2 * ceh - 35.0f, Creator.textDefaultBlack)
+
+            val xgw = (cew - 2 * ceh) / 9.0f
+            val ygw = (2 * ceh) / 3.0f
+            for (i in 1..9) {
+                canvas.drawLine(xo + cew + i * xgw, yo, xo + cew + i * xgw, yo + 2 * ceh, Creator.lineDefaultGrey50)
+            }
+            canvas.drawLine(xo + cew, yo + 1 * ygw, xo + cew + 9 * xgw, yo + 1 * ygw, Creator.lineDefaultGrey50)
+            canvas.drawLine(xo + cew, yo + 2 * ygw, xo + cew + 9 * xgw, yo + 2 * ygw, Creator.lineDefaultGrey50)
+
+            var result: Float? = null
+            for (i in 1..9) {
+                canvas.drawText("$i", xo + cew + (i - 0.5f) * xgw, yo + 1 * ygw - 10.0f, Creator.textSmallGray20Center)
+                if (checkStroke(strokes, xo + cew + (i - 1) * xgw, yo + 0 * ygw, xgw, ygw)) {
+                    result = i.toFloat() * 100.0f
+                }
+            }
+            for (i in 1..9) {
+                canvas.drawText("$i", xo + cew + (i - 0.5f) * xgw, yo + 2 * ygw - 10.0f, Creator.textSmallGray20Center)
+                if (checkStroke(strokes, xo + cew + (i - 1) * xgw, yo + 1 * ygw, xgw, ygw)) {
+                    result = (result ?: 0.0f) + i.toFloat() * 10.0f
+                }
+            }
+            for (i in 1..9) {
+                canvas.drawText("$i", xo + cew + (i - 0.5f) * xgw, yo + 3 * ygw - 10.0f, Creator.textSmallGray20Center)
+                if (checkStroke(strokes, xo + cew + (i - 1) * xgw, yo + 2 * ygw, xgw, ygw)) {
+                    result = (result ?: 0.0f) + i.toFloat() * 1.0f
+                }
+            }
+
+            if (result != null) {
+                canvas.drawText("${result.toInt()}", xo + 2 * cew - ceh, yo + 2 * ceh - 25.0f, Creator.text60BlackCenter)
+            }
+
+            return result
         }
 
         /**

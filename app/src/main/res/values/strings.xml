@@ -175,7 +175,7 @@
     <string name="calendar_health_day_do_it">Do it!</string>
     <string name="calendar_health_day_rate_it">Rate it!</string>
 
-    <string name="calendar_health_day_wake_up">Wake up time</string>
+    <string name="calendar_health_day_wake_up">Wake up hour</string>
     <string name="calendar_health_day_sleep">Sleep hours</string>
     <string name="calendar_health_day_weight">Weight</string>
 
