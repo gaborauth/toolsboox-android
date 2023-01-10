@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.about.ui
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
@@ -31,6 +32,12 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
      */
     @Inject
     lateinit var presenter: AboutPresenter
+
+    /**
+     * The injected shared preferences.
+     */
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     /**
      * The inflated layout.
@@ -107,6 +114,16 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
                 Timber.i("onBillingServiceDisconnected")
             }
         })
+
+        binding.adSettingsButton.setOnClickListener {
+            if (sharedPreferences.getBoolean("advertisements", true)) {
+                sharedPreferences.edit().putBoolean("advertisements", false).apply()
+            } else {
+                sharedPreferences.edit().putBoolean("advertisements", true).apply()
+            }
+
+            updateAdButton()
+        }
     }
 
     /**
@@ -117,6 +134,8 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
 
         toolbar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.about_title))
+
+        updateAdButton()
     }
 
     /**
@@ -146,6 +165,17 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
         linkView.text = Html.fromHtml(linkHtml, Html.FROM_HTML_MODE_COMPACT)
         linkView.setOnClickListener {
             this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+        }
+    }
+
+    /**
+     * Update the state of the advertisement enable-disable button.
+     */
+    private fun updateAdButton() {
+        if (sharedPreferences.getBoolean("advertisements", true)) {
+            binding.adSettingsButton.text = getString(R.string.about_ad_settings_button_disable)
+        } else {
+            binding.adSettingsButton.text = getString(R.string.about_ad_settings_button_enable)
         }
     }
 }

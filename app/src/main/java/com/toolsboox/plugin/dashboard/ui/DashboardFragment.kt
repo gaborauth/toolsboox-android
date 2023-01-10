@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.gms.ads.AdRequest
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
 import com.toolsboox.da.SquareItem
@@ -81,6 +82,8 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentDashboardBinding.bind(view)
+
+        binding.adView.loadAd(AdRequest.Builder().build())
 
         binding.recyclerView.apply {
             layoutManager = GridLayoutManager(this@DashboardFragment.requireContext(), 4)
@@ -162,6 +165,12 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         askAppPermissions()
         deviceCheck()
         apiLevelCheck()
+
+        if (sharedPreferences.getBoolean("advertisements", true)) {
+            binding.adView.visibility = View.VISIBLE
+        } else {
+            binding.adView.visibility = View.GONE
+        }
     }
 
     /**
