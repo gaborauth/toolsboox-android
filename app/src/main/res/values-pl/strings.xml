@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drawer_title">"%s – %s"</string>
+    <string name="filter_title">"Filtry"</string>
+    <string name="fab_add_item">"Dodaj"</string>
+    <string name="something_happened_error">"Coś poszło nie tak... Sprawdź połączenie z siecią."</string>
+    <string name="something_happened_action">"Ok"</string>
+    <string name="logo_content_description">"Logo Tools for Boox"</string>
+    <string name="validation_field_required">"Pole wymagane"</string>
+    <string name="validation_field_value_too_small">"Za mała wartość, najmniejsza możliwa to %d"</string>
+
+    <!-- Strings related to toolbar and drawer menu -->
+    <string name="drawer_menu_dashboard">"Dashboard"</string>
+    <string name="drawer_menu_website">"Nasza strona "</string>
+    <string name="drawer_menu_forum">"Wsparcie"</string>
+    <string name="drawer_menu_facebook">"Facebook"</string>
+    <string name="drawer_menu_twitter">"Twitter"</string>
+    <string name="drawer_menu_logout">"Wyloguj się"</string>
+    <string name="toolbar_previous_image">"Poprzedni"</string>
+    <string name="toolbar_pages_placeholder">"1 / 1"</string>
+    <string name="toolbar_pages_template">"%d / %d"</string>
+    <string name="toolbar_next_image">"Następny"</string>
+    <string name="toolbar_back_image">"Wróć"</string>
+
+    <!-- Strings related to square item -->
+    <string name="square_item_image">"Obrazek kwadratowego elementu"</string>
+
+    <!-- Strings related to main activity -->
+    <string name="main_version">"%s–%s"</string>
+    <string name="main_update_not_now">"Nie teraz"</string>
+    <string name="main_update">"Aktualizuj"</string>
+    <string name="main_read_external_storage_permission_missing">"Brak uprawnień do odczytu pamięci zewnętrznej..."</string>
+    <string name="main_write_external_storage_permission_missing">"Brak uprawnień do zapisu w pamięci zewnętrznej..."</string>
+
+    <!-- Strings related to calendar plugin -->
+    <string name="calendar_main_title">"Kalendarz"</string>
+
+    <!-- Strings related to dashboard plugin
+Strings related to dashboard fragment -->
+    <string name="dashboard_title">"Dashboard"</string>
+    <string name="dashboard_new_version_title">"Nowa wersja"</string>
+    <string name="dashboard_new_version_message">"Dostępna jest nowa wersja 'Tools for Boox', rekomendowana jest aktualizacja, zanim niektóre funkcjonalności przestaną działać."</string>
+
+    <!-- Strings related to team drawer plugin -->
+    <string name="team_drawer_title">"TeamDrawer"</string>
+
+    <!-- Strings related to team drawer page fragment -->
+    <string name="team_drawer_page_title">"'%s' stron"</string>
+    <string name="team_drawer_page_text">"Witaj w naszym zespołowym rysowniku! :)"</string>
+    <string name="team_drawer_page_button_export_text">"Eksport"</string>
+    <string name="team_drawer_page_button_erase_text">"Wymaż stronę"</string>
+    <string name="team_drawer_page_export_message">"Wyeksportowano jako %s"</string>
+    <string name="team_drawer_page_add_new_page_dialog_title">"Dodaj stronę"</string>
+    <string name="team_drawer_page_add_new_page_dialog_message">"Chcesz dodać nową stronę?
+"</string>
+
+    <!-- Strings related to team drawer room fragment -->
+    <string name="team_drawer_room_title">"TeamDrawer - pokoje"</string>
+    <string name="team_drawer_room_item_image">"Obrazek elementu pokoju"</string>
+    <string name="team_drawer_room_add_dialog_title">"Dodaj nowy pokój"</string>
+
+    <!-- Strings related to team drawer note fragment -->
+    <string name="team_drawer_note_title">"Notatki '%s'"</string>
+    <string name="team_drawer_note_item_image">"Obraz elementu notatki"</string>
+    <string name="team_drawer_note_add_dialog_title">"Dodaj nową notatkę"</string>
+
+    <!-- Strings related to templates plugin -->
+    <string name="templates_main_title">"Szablony"</string>
+    <string name="templates_preview_button_text">"Podgląd"</string>
+    <string name="templates_settings_button_text">"Ustawienia"</string>
+    <string name="templates_export_button_text">"Eksport"</string>
+    <string name="templates_boxed_weeks_calendar_preview_description">"Podgląd obrazu"</string>
+    <string name="templates_boxed_weeks_calendar_button_export_text">"Eksport"</string>
+    <string name="templates_boxed_weeks_calendar_message">"Eksportuj ten podgląd jako wielostronicowy szablon PDF"</string>
+    <string name="templates_boxed_weeks_calendar_preview_export_message">"Wyeksportowano jako %s"</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_message">"Widok dni tygodnia:"</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_vertical">"Pionowo"</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_horizontal">"Poziomo"</string>
+
+    <!-- Strings related to templates 'this week's calendar' fragment -->
+    <string name="templates_this_weeks_calendar_title">"Kalendarz na bieżący tydzień"</string>
+    <string name="templates_this_weeks_calendar_preview_description">"Podgląd obrazu"</string>
+    <string name="templates_this_weeks_calendar_button_export_text">"Eksport"</string>
+    <string name="templates_this_weeks_calendar_message">"Eksportuj podgląd jako lokalny szablon"</string>
+    <string name="templates_this_weeks_calendar_preview_title">"%dW%d"</string>
+    <string name="templates_this_weeks_calendar_preview_weekly_notes">"Tygodniowe notatki"</string>
+    <string name="templates_this_weeks_calendar_preview_export_message">"Wyeksportowano jako %s"</string>
+
+    <!-- Strings related to utils -->
+    <string name="util_fluent_unknown">"nieznany"</string>
+    <string name="util_fluent_day">"dzień"</string>
+    <string name="util_fluent_hour">"godzina"</string>
+    <string name="util_fluent_minute">"minuta"</string>
+    <string name="util_fluent_second">"sekunda"</string>
+    <string name="templates_boxed_week_calendar_creator_title">"%dW%d"</string>
+    <string name="templates_boxed_week_calendar_creator_weekly_notes">"Notatki tygodniowe"</string>
+    <string name="templates_flat_weeks_calendar_preview_description">"Podgląd obrazu"</string>
+    <string name="templates_flat_weeks_calendar_button_export_text">"Eksport"</string>
+    <string name="templates_flat_weeks_calendar_preview_export_message">"Wyeksportowano jako %s"</string>
+    <string name="templates_flat_week_calendar_creator_title">"%dT%d"</string>
+    <string name="templates_flat_weeks_calendar_settings_with_days">"Generuj z datami"</string>
+    <string name="templates_boxed_days_calendar_preview_description">"Podgląd obrazu"</string>
+    <string name="templates_boxed_days_calendar_button_export_text">"Eksport"</string>
+    <string name="templates_boxed_days_calendar_preview_export_message">"Wyeksportowano jako %s"</string>
+    <string name="templates_boxed_days_calendar_settings_with_notes">"Wygeneruj z notatkami"</string>
+    <string name="templates_boxed_days_calendar_settings_with_tasks">"Wygeneruj z zadaniami"</string>
+    <string name="templates_boxed_day_calendar_creator_notes">"Notatki"</string>
+    <string name="templates_boxed_day_calendar_creator_tasks">"Zadania"</string>
+    <string name="templates_boxed_days_calendar_settings_with_hours">"Wygeneruj z godzinami"</string>
+    <string name="dashboard_item_cancel_alt">"Anuluj"</string>
+    <string name="dashboard_item_edit_alt">"Edytuj"</string>
+    <string name="dashboard_item_save_alt">"Zapisz"</string>
+    <string name="dashboard_item_settings_alt">"Ustawienia"</string>
+
+    <!-- Strings related to kanban planner plugin -->
+    <string name="kanban_planner_main_title">"Planer Kanban"</string>
+    <string name="kanban_planner_card_content">"Planer Kanban - podglad"</string>
+    <string name="templates_list_button_text">"Lista"</string>
+
+    <!-- Strings related to templates 'community' fragment -->
+    <string name="templates_community_title">"Szablony społeczności"</string>
+    <string name="dashboard_item_delete_alt">"Usuń"</string>
+    <string name="dashboard_item_erase_alt">"Wymaż"</string>
+    <string name="kanban_planner_lane_plannedTodayTitle">"Zaplanowane dzisiaj (%d)"</string>
+    <string name="kanban_planner_lane_doneTodayTitle">"Zrobione dzisiaj (%d)"</string>
+
+    <!-- Common messages -->
+    <string name="list_loading">"Ładowanie listy..."</string>
+    <string name="list_empty">"Pusta lista..."</string>
+    <string name="export_message">"Wyeksportowano jako %s"</string>
+    <string name="templates_community_list_thumbnail">"Miniatura społeczności"</string>
+    <string name="templates_community_list_icon_star">"Gwiazdka"</string>
+    <string name="templates_community_list_icon_starred">"Oznaczone gwiazką"</string>
+
+    <!-- Common messages -->
+    <string name="ok">"Ok"</string>
+    <string name="missing_feature_message">"Brakująca funkcjonalność, bądźcie czujni! :)"</string>
+    <string name="main_all_granted_message">"Wszystkie wymagane uprawnienia przyznane! Miłego dnia!"</string>
+    <string name="main_some_granted_message">"Część wymaganych uprawnień przyznana, brak niektórych z nich może powodować braki funkcjonalności!"</string>
+    <string name="main_ask_permissions_title">"Przyznaj uprawnienia"</string>
+    <string name="main_ask_permissions_message">"Musisz przyznać uprawnienia do %s"</string>
+    <string name="main_internet_permission_missing">"Brak uprawnienia dostępu do sieci..."</string>
+    <string name="main_read_calendar_permission_missing">"Brak uprawnienia odczytu kalendarza..."</string>
+    <string name="calendar_template_image">"Obraz szablonu kalendarza"</string>
+    <string name="calendar_navigator_prev_button_text">"&lt;"</string>
+    <string name="calendar_navigator_next_button_text">"&gt;"</string>
+    <string name="calendar_navigator_year_button_text">"2022"</string>
+    <string name="calendar_navigator_year_quarter_button_text">"2022 Q1"</string>
+    <string name="calendar_navigator_q1_button_text">"Q1"</string>
+    <string name="calendar_navigator_q2_button_text">"Q2"</string>
+    <string name="calendar_navigator_q3_button_text">"Q3"</string>
+    <string name="calendar_navigator_q4_button_text">"Q4"</string>
+    <string name="calendar_navigator_month_1_button_text">"Październik"</string>
+    <string name="calendar_navigator_week_1_button_text">"T39"</string>
+    <string name="calendar_navigator_week_2_button_text">"T40"</string>
+    <string name="calendar_navigator_week_3_button_text">"T41"</string>
+    <string name="calendar_navigator_week_4_button_text">"T42"</string>
+    <string name="calendar_navigator_week_5_button_text">"T43"</string>
+    <string name="calendar_navigator_week_6_button_text">"T44"</string>
+
+    <!-- @Gabor could be here 2-3 characters long strings? -->
+    <string name="calendar_navigator_day_of_week_1_button_text">"P"</string>
+    <string name="calendar_navigator_day_of_week_2_button_text">"W"</string>
+    <string name="calendar_navigator_day_of_week_3_button_text">"Ś"</string>
+    <string name="calendar_navigator_day_of_week_4_button_text">"C"</string>
+    <string name="calendar_navigator_day_of_week_5_button_text">"P"</string>
+    <string name="calendar_navigator_day_of_week_6_button_text">"S"</string>
+    <string name="calendar_navigator_day_of_week_7_button_text">"N"</string>
+    <string name="calendar_navigator_month_button_text">"Paź"</string>
+    <string name="calendar_navigator_day_button_text">"18"</string>
+    <string name="calendar_navigator_week_button_text">"T41"</string>
+    <string name="calendar_navigator_day_of_week_button_text">"Czw"</string>
+    <string name="calendar_year_title">"Planer roczny - %s"</string>
+    <string name="calendar_quarter_title">"Planer kwartalny - %s"</string>
+    <string name="calendar_month_title">"Planer miesięczny - %s"</string>
+    <string name="calendar_week_title">"Planer tygodniowy - %s tydzień %s"</string>
+    <string name="calendar_week_notes">"Notatki"</string>
+    <string name="calendar_day_title">"Planer dzienny - %s"</string>
+    <string name="calendar_day_schedules">"Harmonogram"</string>
+    <string name="calendar_day_tasks">"Zadania"</string>
+    <string name="calendar_day_notes">"Notatki"</string>
+    <string name="dashboard_device_mismatch_title">"Niezgodność urządzenia"</string>
+    <string name="about_about_me_title">"O mnie"</string>
+    <string name="about_about_me_message">"Nazywam się Gábor AUTH, jestem Android dweloperem i rozwijam tę aplikację na urządzenia Onyx Boox! :) "</string>
+    <string name="about_about_me_link">"Link:"</string>
+    <string name="about_project_home_message">"Projekt pochodzi z otwartego źródła, możesz go znaleźć w moim repozytorium na GitHub:"</string>
+    <string name="about_project_home_link">"Link:"</string>
+    <string name="about_other_links_title">"Linki"</string>
+    <string name="about_other_links_webpage_link">"Strona internetowa:"</string>
+    <string name="about_other_links_translate_link">"Tłumaczenia:"</string>
+    <string name="about_other_links_facebook_link">"Facebook:"</string>
+    <string name="about_other_links_discord_link">"Discord:"</string>
+    <string name="calendar_day_all_day">"Wydarzenie całodzienne"</string>
+    <string name="dashboard_api_level_warning_title">"Ostrzeżenie o wersji Android'a"</string>
+    <string name="dashboard_api_level_warning_message">"Wygląda na to, że twoje urządzenie korzysta z wersji Androida %s, która ogranicza korzystanie z pamięci zewnętrznej urządzenia, dlatego aplikacja nie może eksportować szablonów notatek bezpośrednio do katalogu noteTemplate."</string>
+    <string name="calendar_navigator_image">"Obrazek nawigacji kalendarza"</string>
+    <string name="util_fluent_days">"dni"</string>
+    <string name="util_fluent_hours">"godziny"</string>
+    <string name="util_fluent_minutes">"minuty"</string>
+    <string name="util_fluent_seconds">"sekundy"</string>
+    <string name="calendar_year_notes">"Notatki"</string>
+    <string name="calendar_quarter_notes">"Notatki"</string>
+    <string name="calendar_month_notes">"Notatki"</string>
+    <string name="calendar_day_notes_cals">"Notatki i wydarzenia z kalendarza"</string>
+    <string name="about_project_help_title">"Jak mogę pomóc?"</string>
+    <string name="calendar_settings_title">"Ustawienia"</string>
+    <string name="calendar_settings_first_day_of_the_week_text">"Pierwszy dzień tygodnia:"</string>
+    <string name="calendar_settings_first_day_of_the_week_value">"Poniedziałek"</string>
+    <string name="calendar_settings_week_number_of_first_day_text">"Numer tygodnia pierwszego dnia:"</string>
+    <string name="calendar_settings_week_number_of_first_day_value">"T1"</string>
+    <string name="calendar_settings_week_number_of_last_day_text">"Numer tygodnia ostatniego dnia:"</string>
+    <string name="calendar_settings_week_number_of_last_day_value">"T52"</string>
+    <string name="calendar_settings_button_save">"Zapisz"</string>
+    <string name="calendar_settings_button_back">"Powrót"</string>
+    <string name="calendar_drawing_toolbar_pen">"Długopis"</string>
+    <string name="calendar_drawing_toolbar_eraser">"Gumka"</string>
+    <string name="calendar_drawing_toolbar_settings">"Ustawienia"</string>
+    <string name="calendar_settings_select_start_view_text">"Wybierz początkowy widok kalendarza:"</string>
+    <string name="calendar_settings_start_view_year">"Planer roczny"</string>
+    <string name="calendar_settings_start_view_quarter">"Planer kwartalny"</string>
+    <string name="calendar_settings_start_view_month">"Planer miesięczny"</string>
+    <string name="calendar_settings_start_view_week">"Planer tygodniowy"</string>
+    <string name="calendar_settings_start_view_day">"Planer dzienny"</string>
+    <string name="calendar_settings_button_backup">"Eksportuj kopię zapasową"</string>
+    <string name="calendar_settings_backup_done">"Kopia zapasowa kalendarza została wyeksportowana do Downloads"</string>
+    <string name="about_this_translation_contributors_title">"Współautorzy niniejszego tłumaczenia"</string>
+    <string name="about_this_translation_contributors_list">"Anonimowy współtwórca"</string>
+    <string name="dashboard_item_calendar_title">"Kalendarz"</string>
+    <string name="dashboard_item_templates_title">"Szablony"</string>
+    <string name="dashboard_item_teamdrawer_title">"TeamDrawer"</string>
+    <string name="dashboard_item_kanban_planner_title">"Planer Kanban"</string>
+    <string name="templates_item_community_title">"Szablony 
+społeczności"</string>
+
+    <!-- translated into 'This week' to keep similar lenght of text -->
+    <string name="templates_item_this_weeks_title">"Bieżący tydzień"</string>
+    <string name="cancel">"Anuluj"</string>
+    <string name="calendar_drawing_toolbar_trash_dialog_title">"Na pewno?"</string>
+    <string name="calendar_drawing_toolbar_trash_dialog_message">"Czy chcesz wymazać całą zawartość?"</string>
+    <string name="calendar_settings_button_shortcut">"Utwórz skrót"</string>
+    <string name="calendar_settings_shortcut_done">"Utworzono skrót kalendarza"</string>
+    <string name="calendar_settings_shortcut_failed">"Nie udało się utworzyć skrótu kalendarza"</string>
+    <string name="calendar_settings_shortcut_short_label">"Kalendarz"</string>
+    <string name="calendar_settings_shortcut_long_label">"Kalendarz dla Boox"</string>
+    <string name="calendar_settings_button_restore">"Import kopii zapasowej"</string>
+    <string name="templates_boxed_days_calendar_settings_date_picker_button">"Ustaw datę"</string>
+    <string name="templates_boxed_weeks_calendar_settings_date_picker_button">"Ustaw datę"</string>
+    <string name="templates_flat_weeks_calendar_settings_date_picker_button">"Ustaw datę "</string>
+    <string name="week_abbreviation">"T%d"</string>
+    <string name="quarter_abbreviation">"Q%d"</string>
+    <string name="calendar_settings_select_start_hour_text">"Wybierz godzinę początkową widoku dziennego:"</string>
+    <string name="calendar_settings_select_start_hour_empty">"Pozostaw puste"</string>
+    <string name="calendar_settings_select_note_template_text">"Wybierz szablon notatek:"</string>
+    <string name="calendar_settings_select_note_template_lines">"Liniatura"</string>
+    <string name="calendar_settings_select_note_template_grid">"Kratka"</string>
+    <string name="calendar_drawing_toolbar_swipe_up">"Przesuń w górę"</string>
+    <string name="calendar_drawing_toolbar_swipe_down">"Przesuń w dół"</string>
+    <string name="calendar_drawing_toolbar_calendar">"Widok kalendarza"</string>
+    <string name="calendar_health_day_start_it">"Rozpocznij! "</string>
+    <string name="calendar_health_day_do_it">"Zrób to!"</string>
+    <string name="calendar_health_day_rate_it">"Oceń to!"</string>
+    <string name="calendar_health_day_wake_up">"Godzina pobudki"</string>
+    <string name="calendar_health_day_sleep">"Godziny snu"</string>
+    <string name="calendar_health_day_weight">"Waga"</string>
+    <string name="calendar_health_day_breakfast">"Śniadanie"</string>
+    <string name="calendar_health_day_lunch">"Obiad"</string>
+    <string name="calendar_health_day_dinner">"Kolacja"</string>
+    <string name="calendar_health_day_snacks">"Przekąski"</string>
+    <string name="calendar_health_day_activity">"Aktywności"</string>
+    <string name="calendar_health_day_water_dl">"Woda (100ml)"</string>
+    <string name="calendar_health_day_water_cup">"Woda (szkl.)"</string>
+    <string name="calendar_health_day_motivation">"Motywacja"</string>
+    <string name="calendar_health_day_energy">"Energia"</string>
+    <string name="calendar_health_day_happiness">"Szczęście"</string>
+    <string name="calendar_health_day_stress">"Stres"</string>
+    <string name="calendar_health_day_condition">"Kondycja"</string>
+    <string name="calendar_health_day_mood">"Nastrój"</string>
+    <string name="calendar_health_day_pain">"Ból"</string>
+    <string name="calendar_health_day_productivity">"Produktywność"</string>
+    <string name="calendar_health_day_overall">"Całokształt"</string>
+</resources>
