@@ -1,28 +1,11 @@
 <resources>
-
-    <style name="App.Theme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="colorError">@color/colorError</item>
-        <item name="colorBackgroundFloating">@color/colorBackgroundFloating</item>
-    </style>
-
-    <style name="App.TextView.InputLabel" parent="TextAppearance.AppCompat.Caption">
-        <item name="android:textColor">?android:textColorHint</item>
-        <item name="android:paddingStart">4dp</item>
-        <item name="android:paddingEnd">4dp</item>
-    </style>
-
-    <style name="App.Button" parent="@style/Widget.MaterialComponents.Button">
-        <item name="android:layout_marginTop">@dimen/button_top_margin</item>
-        <item name="android:layout_marginBottom">@dimen/button_bottom_margin</item>
-        <item name="android:layout_marginStart">@dimen/widget_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/widget_horizontal_margin</item>
+    <style name="App.Theme" parent="Theme.AppCompat.DayNight.NoActionBar">
     </style>
 
     <style name="App.FloatingActionButton" parent="@style/Widget.MaterialComponents.FloatingActionButton">
+        <item name="tint">@color/fgColor</item>
+        <item name="backgroundTint">@color/row_activated</item>
+
         <item name="android:layout_gravity">end|bottom</item>
         <item name="android:layout_marginBottom">@dimen/fab_fg_margin</item>
         <item name="android:layout_marginTop">@dimen/fab_fg_margin</item>
@@ -31,61 +14,6 @@
         <item name="android:adjustViewBounds">true</item>
     </style>
 
-    <style name="App.RedButton" parent="App.Button">
-        <item name="rippleColor">@android:color/holo_red_dark</item>
-        <item name="backgroundTint">@android:color/holo_red_light</item>
-    </style>
-
-    <style name="App.Checkbox" parent="@style/Widget.MaterialComponents.CompoundButton.CheckBox">
-        <item name="android:layout_marginStart">@dimen/widget_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/widget_horizontal_margin</item>
-    </style>
-
-    <style name="App.OutlinedButton" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="android:layout_marginStart">@dimen/widget_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/widget_horizontal_margin</item>
-    </style>
-
-    <style name="App.TextInputLayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:layout_marginStart">@dimen/widget_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/widget_horizontal_margin</item>
-    </style>
-
-    <style name="App.AutoCompleteTextView" parent="@style/Widget.AppCompat.TextView">
-        <item name="android:layout_marginStart">@dimen/widget_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/widget_horizontal_margin</item>
-        <item name="android:paddingStart">@dimen/widget_horizontal_padding</item>
-        <item name="android:paddingEnd">@dimen/widget_horizontal_padding</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/widget_height</item>
-    </style>
-
-    <style name="AppImageLogo">
-        <item name="android:adjustViewBounds">true</item>
-        <item name="android:scaleType">fitCenter</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_marginTop">4dp</item>
-        <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:layout_marginStart">@dimen/widget_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/widget_horizontal_margin</item>
-        <item name="android:contentDescription">@string/logo_content_description</item>
-        <item name="android:src">@mipmap/logo</item>
-    </style>
-
     <style name="App.Text.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
     </style>
-
-    <style name="App.Text.ErrorMessage" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">@color/colorError</item>
-        <item name="android:background">@color/colorBackgroundFloating</item>
-        <item name="android:paddingTop">@dimen/widget_vertical_padding</item>
-        <item name="android:paddingBottom">@dimen/widget_vertical_padding</item>
-        <item name="android:paddingStart">@dimen/widget_horizontal_padding</item>
-        <item name="android:paddingEnd">@dimen/widget_horizontal_padding</item>
-        <item name="android:layout_marginTop">@dimen/widget_vertical_margin</item>
-        <item name="android:layout_marginBottom">@dimen/widget_vertical_margin</item>
-        <item name="android:layout_marginStart">@dimen/widget_horizontal_margin</item>
-        <item name="android:layout_marginEnd">@dimen/widget_horizontal_margin</item>
-    </style>
-
 </resources>

@@ -34,7 +34,7 @@
                         android:layout_gravity="end|top"
                         android:contentDescription="@string/dashboard_item_cancel_alt"
 
-                        app:tint="@color/colorPrimaryDark"
+                        app:tint="@color/colorPrimary"
                         app:srcCompat="@drawable/ic_cancel"/>
 
                 <ImageView
@@ -45,7 +45,7 @@
                         android:layout_marginEnd="24dp"
                         android:contentDescription="@string/dashboard_item_save_alt"
 
-                        app:tint="@color/colorPrimaryDark"
+                        app:tint="@color/colorPrimary"
                         app:srcCompat="@drawable/ic_save"/>
 
                 <ImageView
@@ -56,7 +56,7 @@
                         android:layout_marginEnd="48dp"
                         android:contentDescription="@string/dashboard_item_erase_alt"
 
-                        app:tint="@color/colorPrimaryDark"
+                        app:tint="@color/colorPrimary"
                         app:srcCompat="@drawable/ic_erase"/>
 
                 <TextView
@@ -66,7 +66,7 @@
                         android:layout_gravity="start"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="72dp"
-                        android:tint="@color/colorPrimaryDark"
+                        android:tint="@color/colorPrimary"
 
                         android:text="in a day and three hours"
                         android:textAlignment="textStart"

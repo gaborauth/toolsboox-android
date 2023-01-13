@@ -35,7 +35,7 @@
                         android:contentDescription="@string/dashboard_item_settings_alt"
                         android:visibility="invisible"
 
-                        app:tint="@color/colorPrimaryDark"
+                        app:tint="@color/colorPrimary"
                         app:srcCompat="@drawable/ic_more_vert"/>
 
                 <ImageView
@@ -47,7 +47,7 @@
                         android:contentDescription="@string/dashboard_item_edit_alt"
                         android:visibility="invisible"
 
-                        app:tint="@color/colorPrimaryDark"
+                        app:tint="@color/colorPrimary"
                         app:srcCompat="@drawable/ic_edit"/>
 
                 <TextView
@@ -57,7 +57,7 @@
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="48dp"
-                        android:tint="@color/colorPrimaryDark"
+                        android:tint="@color/colorPrimary"
 
                         android:text="in a day and three hours"
                         android:textAlignment="textStart"
