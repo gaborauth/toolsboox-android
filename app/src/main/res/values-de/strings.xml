@@ -256,4 +256,64 @@ Strings related to dashboard fragment -->
     <string name="dashboard_item_teamdrawer_title">"Team Zeichungen"</string>
     <string name="dashboard_item_kanban_planner_title">"Kanban Planer"</string>
     <string name="dashboard_item_about_title">"Über"</string>
+    <string name="templates_item_boxed_days_title">"Kalender
+Tage (Rahmen)"</string>
+    <string name="templates_item_boxed_weeks_title">"Kalender
+Wochen (Rahmen)"</string>
+    <string name="templates_item_community_title">"Vorlagen
+Gemeinschaft"</string>
+    <string name="templates_item_flat_weeks_title">"Kalender
+Wochen"</string>
+    <string name="templates_item_this_weeks_title">"Kalender
+Aktuelle Woche"</string>
+    <string name="calendar_settings_button_pattern_sync">"Markierungen aktualisieren"</string>
+    <string name="calendar_settings_pattern_sync_done">"Markierungen aktualisiert"</string>
+    <string name="cancel">"Abbrechen"</string>
+    <string name="calendar_drawing_toolbar_trash">"Mülleimer"</string>
+    <string name="calendar_drawing_toolbar_trash_dialog_title">"Bist Du sicher?"</string>
+    <string name="calendar_drawing_toolbar_trash_dialog_message">"Willst Du alles löschen?"</string>
+    <string name="calendar_settings_button_shortcut">"Lesezeichen erstellen"</string>
+    <string name="calendar_settings_shortcut_done">"Lesezeichen erstellt"</string>
+    <string name="calendar_settings_shortcut_failed">"Lesezeichen setzen gescheitert"</string>
+    <string name="calendar_settings_shortcut_short_label">"Kalender"</string>
+    <string name="calendar_settings_shortcut_long_label">"Kalender für Boox"</string>
+    <string name="calendar_settings_button_restore">"Backup importieren"</string>
+    <string name="calendar_settings_restore_done">"Backup Import fertig"</string>
+    <string name="templates_boxed_days_calendar_settings_date_picker_button">"Datum setzen"</string>
+    <string name="templates_boxed_weeks_calendar_settings_date_picker_button">"Datum setzen"</string>
+    <string name="templates_flat_weeks_calendar_settings_date_picker_button">"Datum setzen"</string>
+    <string name="week_abbreviation">"W%d"</string>
+    <string name="quarter_abbreviation">"Q%d"</string>
+    <string name="calendar_settings_select_start_hour_text">"Wähle den Start des Tages"</string>
+    <string name="calendar_settings_select_start_hour_empty">"Leer lassen"</string>
+    <string name="calendar_settings_select_note_template_text">"Wähle die Vorlage für Notizen"</string>
+    <string name="calendar_settings_select_note_template_lines">"Linien"</string>
+    <string name="calendar_settings_select_note_template_grid">"Kästchen"</string>
+    <string name="calendar_drawing_toolbar_swipe_up">"Wische hoch"</string>
+    <string name="calendar_drawing_toolbar_swipe_down">"Wische runter"</string>
+    <string name="calendar_drawing_toolbar_switch_side">"Wische zur Seite"</string>
+    <string name="calendar_drawing_toolbar_health">"Gesundheit"</string>
+    <string name="calendar_drawing_toolbar_calendar">"Kalender"</string>
+    <string name="calendar_health_day_start_it">"Start!"</string>
+    <string name="calendar_health_day_do_it">"Tue es!"</string>
+    <string name="calendar_health_day_rate_it">"Bewertung!"</string>
+    <string name="calendar_health_day_wake_up">"Aufwachzeit"</string>
+    <string name="calendar_health_day_sleep">"Geschlafene Stunden"</string>
+    <string name="calendar_health_day_weight">"Gewicht"</string>
+    <string name="calendar_health_day_breakfast">"Frühstück"</string>
+    <string name="calendar_health_day_lunch">"Mittagessen"</string>
+    <string name="calendar_health_day_dinner">"Abendbrot"</string>
+    <string name="calendar_health_day_snacks">"Snacks"</string>
+    <string name="calendar_health_day_activity">"Aktivität"</string>
+    <string name="calendar_health_day_water_dl">"Wasser (dl)"</string>
+    <string name="calendar_health_day_water_cup">"Wasser (Gläser)"</string>
+    <string name="calendar_health_day_motivation">"Motivation"</string>
+    <string name="calendar_health_day_energy">"Energie"</string>
+    <string name="calendar_health_day_happiness">"Fröhlichkeit"</string>
+    <string name="calendar_health_day_stress">"Stress"</string>
+    <string name="calendar_health_day_condition">"Kondition"</string>
+    <string name="calendar_health_day_mood">"Stimmung"</string>
+    <string name="calendar_health_day_pain">"Schmerzen"</string>
+    <string name="calendar_health_day_productivity">"Produktivität"</string>
+    <string name="calendar_health_day_overall">"Gesamt"</string>
 </resources>
