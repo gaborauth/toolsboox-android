@@ -22,7 +22,8 @@ class CalendarUtils @Inject constructor() {
     /**
      * Update toolbar side.
      *
-     * @param save save the alternate
+     * @param binding the binding
+     * @param switch switch side
      */
     fun updateToolbar(binding: FragmentCalendarBinding, switch: Boolean = false) {
         val constraintSet = ConstraintSet()

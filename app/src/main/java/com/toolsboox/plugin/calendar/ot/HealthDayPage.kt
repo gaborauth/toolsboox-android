@@ -223,7 +223,7 @@ class HealthDayPage {
         }
 
         /**
-         * Draw and calculates the wake up hour grid and return the value if checked.
+         * Draw and calculates the wakeup hour grid and return the value if checked.
          *
          * @param canvas the canvas
          * @param strokes the strokes

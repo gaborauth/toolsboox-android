@@ -53,7 +53,7 @@ internal class LocaleItemAdapter(
      * @param position the position
      * @param convertView the convert view
      * @param parent the parent view
-     * @param the view
+     * @return the view
      */
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getView(position, convertView, parent) as TextView
@@ -69,7 +69,7 @@ internal class LocaleItemAdapter(
      * @param position the position
      * @param convertView the convert view
      * @param parent the parent view
-     * @param the view
+     * @return the view
      */
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getView(position, convertView, parent) as TextView
