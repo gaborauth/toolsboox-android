@@ -6,6 +6,8 @@ import android.view.View
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesCommunityBinding
 import com.toolsboox.di.NetworkModule
@@ -30,6 +32,12 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class CommunityFragment @Inject constructor() : ScreenFragment() {
+
+    /**
+     * The Firebase analytics.
+     */
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     @Inject
     lateinit var presenter: CommunityPresenter
@@ -117,6 +125,10 @@ class CommunityFragment @Inject constructor() : ScreenFragment() {
 
         toolbar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.templates_community_title))
+
+        firebaseAnalytics.logEvent("templates") {
+            param("view", "community")
+        }
     }
 
     /**

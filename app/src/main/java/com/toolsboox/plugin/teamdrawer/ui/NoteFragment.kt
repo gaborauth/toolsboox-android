@@ -8,6 +8,8 @@ import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTeamdrawerNoteBinding
 import com.toolsboox.plugin.teamdrawer.da.NoteItem
@@ -29,6 +31,12 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class NoteFragment @Inject constructor() : ScreenFragment() {
+
+    /**
+     * The Firebase analytics.
+     */
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     @Inject
     lateinit var presenter: NotePresenter
@@ -142,6 +150,10 @@ class NoteFragment @Inject constructor() : ScreenFragment() {
                 presenter.list(this@NoteFragment, roomId)
                 delay(30000L)
             }
+        }
+
+        firebaseAnalytics.logEvent("teamdrawer") {
+            param("view", "note")
         }
     }
 

@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTeamdrawerPageBinding
@@ -25,6 +27,12 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class PageFragment @Inject constructor() : SurfaceFragment() {
+
+    /**
+     * The Firebase analytics.
+     */
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     @Inject
     lateinit var presenter: PagePresenter
@@ -184,6 +192,10 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
                 presenter.last(this@PageFragment, roomId, noteId, pageId, false)
                 delay(if (BuildConfig.DEBUG) 10000L else 1000L)
             }
+        }
+
+        firebaseAnalytics.logEvent("teamdrawer") {
+            param("view", "page")
         }
     }
 

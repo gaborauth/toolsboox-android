@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesBoxedDaysCalendarBinding
 import com.toolsboox.plugin.templates.ot.BoxedDayCalendarCreator
@@ -23,6 +25,12 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class BoxedDaysCalendarFragment @Inject constructor() : ScreenFragment() {
+
+    /**
+     * The Firebase analytics.
+     */
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     @Inject
     lateinit var presenter: BoxedDaysCalendarPresenter
@@ -107,6 +115,10 @@ class BoxedDaysCalendarFragment @Inject constructor() : ScreenFragment() {
 
         toolbar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.templates_boxed_days_calendar_title))
+
+        firebaseAnalytics.logEvent("templates") {
+            param("view", "boxedDaysCalendar")
+        }
     }
 
     /**

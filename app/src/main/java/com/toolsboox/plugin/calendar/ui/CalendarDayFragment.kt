@@ -208,11 +208,13 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
                             view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay
                         )
                     }
+
                     CalendarDay.HEALTH_V1_STYLE -> {
                         HealthDayPage.onTouchEvent(
                             view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay
                         )
                     }
+
                     else -> return@setOnTouchListener true
                 }
             }
@@ -325,8 +327,15 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
 
         CalendarDayNavigator.draw(this.requireContext(), navigatorCanvas, calendarDay, calendarPattern)
 
-        firebaseAnalytics.logEvent("calendarDay") {
-            param("currentDate", currentDate.format(DateTimeFormatter.ISO_DATE))
+        if (calendarStyle == CalendarDay.DEFAULT_STYLE) {
+            firebaseAnalytics.logEvent("calendarDay") {
+                param("currentDate", currentDate.format(DateTimeFormatter.ISO_DATE))
+            }
+        }
+        if (calendarStyle == CalendarDay.HEALTH_V1_STYLE) {
+            firebaseAnalytics.logEvent("healthDay_v1") {
+                param("currentDate", currentDate.format(DateTimeFormatter.ISO_DATE))
+            }
         }
     }
 

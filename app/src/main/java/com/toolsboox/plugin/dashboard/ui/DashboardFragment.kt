@@ -14,6 +14,8 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.gms.ads.AdRequest
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
 import com.toolsboox.da.SquareItem
@@ -46,16 +48,22 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
     }
 
     /**
-     * The injected presenter.
+     * The Firebase analytics.
      */
     @Inject
-    lateinit var sharedPreferences: SharedPreferences
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     /**
      * The injected presenter.
      */
     @Inject
     lateinit var presenter: DashboardPresenter
+
+    /**
+     * The injected presenter.
+     */
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     /**
      * The inflated layout.
@@ -171,6 +179,8 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         } else {
             binding.adView.visibility = View.GONE
         }
+
+        firebaseAnalytics.logEvent("dashboard") {}
     }
 
     /**

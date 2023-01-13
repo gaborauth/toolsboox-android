@@ -12,6 +12,8 @@ import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PurchasesUpdatedListener
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentAboutBinding
 import com.toolsboox.ui.plugin.ScreenFragment
@@ -32,6 +34,12 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
      */
     @Inject
     lateinit var presenter: AboutPresenter
+
+    /**
+     * The Firebase analytics.
+     */
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     /**
      * The injected shared preferences.
@@ -118,8 +126,10 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
         binding.adSettingsButton.setOnClickListener {
             if (sharedPreferences.getBoolean("advertisements", true)) {
                 sharedPreferences.edit().putBoolean("advertisements", false).apply()
+                firebaseAnalytics.logEvent("advertisementSwitchOff") {}
             } else {
                 sharedPreferences.edit().putBoolean("advertisements", true).apply()
+                firebaseAnalytics.logEvent("advertisementSwitchOn") {}
             }
 
             updateAdButton()
