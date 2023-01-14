@@ -126,7 +126,7 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
                 .build()
 
             val pinnedShortcutCallbackIntent = Intent()
-            val successCallback = PendingIntent.getBroadcast(fragment.requireContext(), 12345, pinnedShortcutCallbackIntent, 0)
+            val successCallback = PendingIntent.getBroadcast(fragment.requireContext(), 12345, pinnedShortcutCallbackIntent, PendingIntent.FLAG_IMMUTABLE)
             ShortcutManagerCompat.requestPinShortcut(fragment.requireContext(), shortcutInfo, successCallback.intentSender)
 
             Toast.makeText(fragment.requireContext(), R.string.calendar_settings_shortcut_done, Toast.LENGTH_LONG).show()
