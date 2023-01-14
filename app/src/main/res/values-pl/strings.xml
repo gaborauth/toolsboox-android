@@ -201,7 +201,6 @@ Strings related to dashboard fragment -->
     <string name="calendar_year_notes">"Notatki"</string>
     <string name="calendar_quarter_notes">"Notatki"</string>
     <string name="calendar_month_notes">"Notatki"</string>
-    <string name="calendar_day_notes_cals">"Notatki i wydarzenia z kalendarza"</string>
     <string name="about_project_help_title">"Jak mogę pomóc?"</string>
     <string name="calendar_settings_title">"Ustawienia"</string>
     <string name="calendar_settings_first_day_of_the_week_text">"Pierwszy dzień tygodnia:"</string>

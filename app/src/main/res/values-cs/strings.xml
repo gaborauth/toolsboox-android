@@ -224,7 +224,6 @@ Strings related to dashboard fragment -->
     <string name="calendar_year_notes">"Poznámky"</string>
     <string name="calendar_quarter_notes">"Poznámky"</string>
     <string name="calendar_month_notes">"Poznámky"</string>
-    <string name="calendar_day_notes_cals">"Poznámky a události kalendáře"</string>
     <string name="about_project_help_title">"Jak můžete pomoci?"</string>
     <string name="about_project_help_message_1">"1, Pokud se vám tato aplikace líbí, dejte jí pár hvězdiček… pokud můžete, tak napište recenzi!"</string>
     <string name="about_project_help_message_2">"Mluvte o aplikaci na diskuzních fórech a skupinách, sdílejte zkušenosti!"</string>

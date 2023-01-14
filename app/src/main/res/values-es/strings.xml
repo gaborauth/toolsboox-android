@@ -223,7 +223,6 @@ Strings related to dashboard fragment -->
     <string name="calendar_year_notes">"Notas"</string>
     <string name="calendar_quarter_notes">"Notas"</string>
     <string name="calendar_month_notes">"Notas"</string>
-    <string name="calendar_day_notes_cals">"Notas y eventos del calendario"</string>
     <string name="about_project_help_title">"¿Cómo puedes contribuir?"</string>
     <string name="about_project_help_message_1">"1. Si te gusta, dale cinco estrellas; y si puedes, ¡publica una opinión!"</string>
     <string name="about_project_help_message_2">"2. Habla de la aplicación en foros y grupos, ¡dala a conocer!"</string>
