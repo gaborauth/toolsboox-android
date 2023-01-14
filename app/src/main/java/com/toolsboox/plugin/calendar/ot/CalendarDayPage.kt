@@ -101,7 +101,11 @@ class CalendarDayPage {
             val schedulesText = context.getString(R.string.calendar_day_schedules)
             val tasksText = context.getString(R.string.calendar_day_tasks)
             val notesText = context.getString(R.string.calendar_day_notes)
-            val notesCalsText = context.getString(R.string.calendar_day_notes_cals)
+            val notesCalsText = if (googleCalendarEvents.size > 8) {
+                context.getString(R.string.calendar_day_notes_events_ex).format(googleCalendarEvents.size)
+            } else {
+                context.getString(R.string.calendar_day_notes_events).format(googleCalendarEvents.size)
+            }
             val allDayText = context.getString(R.string.calendar_day_all_day)
             val locale = calendarDay.locale
 
