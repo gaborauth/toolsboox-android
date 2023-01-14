@@ -317,4 +317,6 @@ týdne"</string>
     <string name="calendar_health_day_pain">"Bolest"</string>
     <string name="calendar_health_day_productivity">"Produktivita"</string>
     <string name="calendar_health_day_overall">"Celek"</string>
+    <string name="calendar_day_notes_events">"Poznámky &amp; Události (%d)"</string>
+    <string name="calendar_day_notes_events_ex">"Poznámky &amp; Události (%d!)"</string>
 </resources>
