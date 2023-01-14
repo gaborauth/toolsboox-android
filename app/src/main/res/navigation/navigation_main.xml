@@ -6,42 +6,42 @@
             android:id="@+id/navigation_main"
             app:startDestination="@id/DashboardFragment">
 
+    <action
+            android:id="@+id/action_to_dashboard"
+            app:destination="@id/DashboardFragment"/>
+    <action
+            android:id="@+id/action_to_calendar_day"
+            app:destination="@id/CalendarDayFragment"/>
+    <action
+            android:id="@+id/action_to_calendar_week"
+            app:destination="@id/CalendarWeekFragment"/>
+    <action
+            android:id="@+id/action_to_calendar_month"
+            app:destination="@id/CalendarMonthFragment"/>
+    <action
+            android:id="@+id/action_to_calendar_quarter"
+            app:destination="@id/CalendarQuarterFragment"/>
+    <action
+            android:id="@+id/action_to_calendar_year"
+            app:destination="@id/CalendarYearFragment"/>
+    <action
+            android:id="@+id/action_to_kanban_main"
+            app:destination="@id/KanbanMainFragment"/>
+    <action
+            android:id="@+id/action_to_teamdrawer_room"
+            app:destination="@id/TeamDrawerRoomFragment"/>
+    <action
+            android:id="@+id/action_to_templates_main"
+            app:destination="@id/TemplatesMainFragment"/>
+    <action
+            android:id="@+id/action_to_about"
+            app:destination="@id/AboutFragment"/>
+
     <fragment
             android:id="@+id/DashboardFragment"
             android:name="com.toolsboox.plugin.dashboard.ui.DashboardFragment"
             android:label="DashboardFragment"
             tools:layout="@layout/fragment_dashboard">
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_day"
-                app:destination="@id/CalendarDayFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_week"
-                app:destination="@id/CalendarWeekFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_month"
-                app:destination="@id/CalendarMonthFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_quarter"
-                app:destination="@id/CalendarQuarterFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_year"
-                app:destination="@id/CalendarYearFragment"/>
-        <action
-                android:id="@+id/action_to_kanban_main"
-                app:destination="@id/KanbanMainFragment"/>
-        <action
-                android:id="@+id/action_to_teamdrawer_room"
-                app:destination="@id/TeamDrawerRoomFragment"/>
-        <action
-                android:id="@+id/action_to_templates_main"
-                app:destination="@id/TemplatesMainFragment"/>
-        <action
-                android:id="@+id/action_to_about"
-                app:destination="@id/AboutFragment"/>
     </fragment>
 
     <fragment
@@ -55,21 +55,6 @@
                 app:destination="@id/DashboardFragment"
                 app:popUpTo="@id/DashboardFragment"
                 app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_year"
-                app:destination="@id/CalendarYearFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_quarter"
-                app:destination="@id/CalendarQuarterFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_month"
-                app:destination="@id/CalendarMonthFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_week"
-                app:destination="@id/CalendarWeekFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_day"
-                app:destination="@id/CalendarDayFragment"/>
     </fragment>
 
     <fragment
@@ -100,15 +85,6 @@
                 app:destination="@id/CalendarYearFragment"
                 app:popUpTo="@id/CalendarYearFragment"
                 app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_quarter"
-                app:destination="@id/CalendarQuarterFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_month"
-                app:destination="@id/CalendarMonthFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_day"
-                app:destination="@id/CalendarDayFragment"/>
     </fragment>
 
     <fragment
@@ -148,15 +124,6 @@
                 app:destination="@id/CalendarQuarterFragment"
                 app:popUpTo="@id/CalendarQuarterFragment"
                 app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_month"
-                app:destination="@id/CalendarMonthFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_week"
-                app:destination="@id/CalendarWeekFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_day"
-                app:destination="@id/CalendarDayFragment"/>
     </fragment>
 
     <fragment
@@ -201,12 +168,6 @@
                 app:destination="@id/CalendarMonthFragment"
                 app:popUpTo="@id/CalendarMonthFragment"
                 app:popUpToInclusive="true"/>
-        <action
-                android:id="@+id/action_to_calendar_week"
-                app:destination="@id/CalendarWeekFragment"/>
-        <action
-                android:id="@+id/action_to_calendar_day"
-                app:destination="@id/CalendarDayFragment"/>
     </fragment>
 
     <fragment
@@ -324,13 +285,6 @@
             android:name="com.toolsboox.plugin.kanban.ui.KanbanMainFragment"
             android:label="KanbanMainFragment"
             tools:layout="@layout/fragment_kanban_main">
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
-        <action
-                android:id="@+id/action_to_kanban_main"
-                app:destination="@id/KanbanMainFragment"/>
     </fragment>
 
     <fragment
@@ -339,12 +293,6 @@
             android:label="TeamDrawerRoomFragment"
             tools:layout="@layout/fragment_teamdrawer_room">
 
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
-        <action
-                android:id="@+id/action_to_teamdrawer_room"
-                app:destination="@id/TeamDrawerRoomFragment"/>
         <action
                 android:id="@+id/action_to_teamdrawer_note"
                 app:destination="@id/TeamDrawerNoteFragment"/>
@@ -356,12 +304,6 @@
             android:label="TeamDrawerNoteFragment"
             tools:layout="@layout/fragment_teamdrawer_note">
 
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
-        <action
-                android:id="@+id/action_to_teamdrawer_room"
-                app:destination="@id/TeamDrawerRoomFragment"/>
         <action
                 android:id="@+id/action_to_teamdrawer_note"
                 app:destination="@id/TeamDrawerNoteFragment"/>
@@ -377,9 +319,6 @@
             tools:layout="@layout/fragment_teamdrawer_page">
 
         <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
-        <action
                 android:id="@+id/action_to_teamdrawer_note"
                 app:destination="@id/TeamDrawerNoteFragment"/>
     </fragment>
@@ -390,9 +329,6 @@
             android:label="TemplatesMainFragment"
             tools:layout="@layout/fragment_templates_main">
 
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
         <action
                 android:id="@+id/action_to_templates_boxed_days_calendar"
                 app:destination="@id/TemplatesBoxedDaysCalendarFragment"/>
@@ -415,10 +351,6 @@
             android:name="com.toolsboox.plugin.templates.ui.BoxedDaysCalendarFragment"
             android:label="TemplatesBoxedDaysCalendarFragment"
             tools:layout="@layout/fragment_templates_boxed_days_calendar">
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
     </fragment>
 
     <fragment
@@ -426,10 +358,6 @@
             android:name="com.toolsboox.plugin.templates.ui.BoxedWeeksCalendarFragment"
             android:label="TemplatesBoxedWeeksCalendarFragment"
             tools:layout="@layout/fragment_templates_boxed_weeks_calendar">
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
     </fragment>
 
     <fragment
@@ -437,10 +365,6 @@
             android:name="com.toolsboox.plugin.templates.ui.CommunityFragment"
             android:label="TemplatesCommunityFragment"
             tools:layout="@layout/fragment_templates_community">
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
     </fragment>
 
     <fragment
@@ -448,10 +372,6 @@
             android:name="com.toolsboox.plugin.templates.ui.FlatWeeksCalendarFragment"
             android:label="TemplatesFlatWeeksCalendarFragment"
             tools:layout="@layout/fragment_templates_flat_weeks_calendar">
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
     </fragment>
 
     <fragment
@@ -459,10 +379,6 @@
             android:name="com.toolsboox.plugin.templates.ui.ThisWeeksCalendarFragment"
             android:label="TemplatesThisWeeksCalendarFragment"
             tools:layout="@layout/fragment_templates_this_weeks_calendar">
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
     </fragment>
 
     <fragment
@@ -470,12 +386,5 @@
             android:name="com.toolsboox.plugin.about.ui.AboutFragment"
             android:label="KanbanAboutFragment"
             tools:layout="@layout/fragment_about">
-
-        <action
-                android:id="@+id/action_to_dashboard"
-                app:destination="@id/DashboardFragment"/>
-        <action
-                android:id="@+id/action_to_about"
-                app:destination="@id/AboutFragment"/>
     </fragment>
 </navigation>
