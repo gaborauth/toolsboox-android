@@ -31,6 +31,7 @@ class GoogleCalendarService @Inject constructor() {
     fun loadEvents(fragment: CalendarDayFragment, currentDate: LocalDate): List<GoogleCalendarEvent> {
         val googleCalendarEvents = mutableListOf<GoogleCalendarEvent>()
         if (!fragment.checkPermission(Manifest.permission.READ_CALENDAR)) return googleCalendarEvents
+        if (!fragment.isAdded) return googleCalendarEvents
 
         val contentResolver = fragment.requireActivity().contentResolver
         val startDate = currentDate.atStartOfDay(ZoneOffset.UTC).toEpochSecond() * 1000
