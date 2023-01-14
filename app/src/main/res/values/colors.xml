@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#000000</color>
 
     <color name="item_text_primary">#000000</color>
     <color name="item_text_secondary">#111111</color>
     <color name="item_text_tertiary">#222222</color>
 
     <color name="fgColor">#000000</color>
+    <color name="widgetColor">#E0E0E0</color>
     <color name="bgColor">#FFFFFF</color>
 
     <color name="starColor">@color/colorPrimary</color>
 
-    <color name="row_activated">#e0e0e0</color>
 </resources>
