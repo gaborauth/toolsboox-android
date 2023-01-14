@@ -316,4 +316,6 @@ esta semana"</string>
     <string name="calendar_health_day_pain">"Dolor"</string>
     <string name="calendar_health_day_productivity">"Productividad"</string>
     <string name="calendar_health_day_overall">"General"</string>
+    <string name="calendar_day_notes_events">"Notas y eventos (%d)"</string>
+    <string name="calendar_day_notes_events_ex">"Notas y eventos (%d!)"</string>
 </resources>
