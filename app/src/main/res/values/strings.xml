@@ -71,10 +71,6 @@
     <string name="about_other_links_translate_link">Translate:</string>
     <string name="about_other_links_facebook_link">Facebook:</string>
     <string name="about_other_links_discord_link">Discord:</string>
-    <string name="about_ad_settings_title">Advertisement settings</string>
-    <string name="about_ad_settings_message">There is a small banner of advertisements on the Dashboard, but you can simply switch it off an on.</string>
-    <string name="about_ad_settings_button_disable">Disable ads</string>
-    <string name="about_ad_settings_button_enable">Enable ads</string>
     <string name="about_this_translation_contributors_title">Contributors of the current translation</string>
     <string name="about_this_translation_contributors_list">anonymous contributor</string>
 
@@ -223,6 +219,8 @@
     <string name="dashboard_item_erase_alt">Erase</string>
     <string name="dashboard_item_save_alt">Save</string>
     <string name="dashboard_item_settings_alt">Settings</string>
+    <string name="dashboard_ad_settings_button_hide">Hide ads</string>
+    <string name="dashboard_ad_settings_button_show">Show ads</string>
 
     <!-- Strings related to kanban planner plugin -->
     <string name="kanban_planner_main_title">Kanban planner</string>

@@ -317,8 +317,4 @@ týdne"</string>
     <string name="calendar_health_day_pain">"Bolest"</string>
     <string name="calendar_health_day_productivity">"Produktivita"</string>
     <string name="calendar_health_day_overall">"Celek"</string>
-    <string name="about_ad_settings_title">"Nastavení reklamy"</string>
-    <string name="about_ad_settings_message">"Na dashboardu se zobrazuje malý banner s reklamami, ale můžete jej jednoduše vypnout."</string>
-    <string name="about_ad_settings_button_disable">"Vypnout reklamy"</string>
-    <string name="about_ad_settings_button_enable">"Zapnout reklamy"</string>
 </resources>

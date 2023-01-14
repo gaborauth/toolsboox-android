@@ -177,35 +177,6 @@
                 android:text="@string/about_project_help_message_3"/>
 
         <TextView
-                android:id="@+id/ad_settings_title"
-                android:layout_marginTop="20dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textSize="20sp"
-                android:maxLines="4"
-                android:singleLine="false"
-                android:text="@string/about_ad_settings_title"/>
-
-        <TextView
-                android:id="@+id/ad_settings_message"
-                android:layout_marginTop="10dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:maxLines="4"
-                android:singleLine="false"
-                android:text="@string/about_ad_settings_message"/>
-
-        <Button
-                android:id="@+id/ad_settings_button"
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/about_ad_settings_button_disable"/>
-
-        <TextView
                 android:id="@+id/this_translation_title"
                 android:layout_marginTop="20dp"
                 android:layout_width="fill_parent"

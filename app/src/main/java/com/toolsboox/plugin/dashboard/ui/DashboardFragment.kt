@@ -159,6 +159,18 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
                 Timber.e("Input %s supports stylus input", inputDevice.name)
             }
         }
+
+        binding.buttonToggleAd.setOnClickListener {
+            if (sharedPreferences.getBoolean("advertisements", true)) {
+                sharedPreferences.edit().putBoolean("advertisements", false).apply()
+                firebaseAnalytics.logEvent("advertisementSwitchOff") {}
+            } else {
+                sharedPreferences.edit().putBoolean("advertisements", true).apply()
+                firebaseAnalytics.logEvent("advertisementSwitchOn") {}
+            }
+
+            updateAdButton()
+        }
     }
 
     /**
@@ -181,6 +193,8 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         }
 
         firebaseAnalytics.logEvent("dashboard") {}
+
+        updateAdButton()
     }
 
     /**
@@ -279,5 +293,18 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      */
     override fun hideLoading() {
         binding.mainProgress.visibility = View.INVISIBLE
+    }
+
+    /**
+     * Update the state of the advertisement enable-disable button.
+     */
+    private fun updateAdButton() {
+        if (sharedPreferences.getBoolean("advertisements", true)) {
+            binding.buttonToggleAd.text = getString(R.string.dashboard_ad_settings_button_hide)
+            binding.adView.visibility = View.VISIBLE
+        } else {
+            binding.buttonToggleAd.text = getString(R.string.dashboard_ad_settings_button_show)
+            binding.adView.visibility = View.GONE
+        }
     }
 }
