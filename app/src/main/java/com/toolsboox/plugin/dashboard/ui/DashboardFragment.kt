@@ -91,8 +91,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
 
         binding = FragmentDashboardBinding.bind(view)
 
-        binding.adView.loadAd(AdRequest.Builder().build())
-
         binding.recyclerView.apply {
             layoutManager = GridLayoutManager(this@DashboardFragment.requireContext(), 4)
         }
@@ -182,17 +180,11 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         toolbar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.dashboard_title))
 
+        firebaseAnalytics.logEvent("dashboard") {}
+
         askAppPermissions()
         deviceCheck()
         apiLevelCheck()
-
-        if (sharedPreferences.getBoolean("advertisements", true)) {
-            binding.adView.visibility = View.VISIBLE
-        } else {
-            binding.adView.visibility = View.GONE
-        }
-
-        firebaseAnalytics.logEvent("dashboard") {}
 
         updateAdButton()
     }
@@ -301,10 +293,12 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
     private fun updateAdButton() {
         if (sharedPreferences.getBoolean("advertisements", true)) {
             binding.buttonToggleAd.text = getString(R.string.dashboard_ad_settings_button_hide)
+            binding.adView.loadAd(AdRequest.Builder().build())
             binding.adView.visibility = View.VISIBLE
         } else {
             binding.buttonToggleAd.text = getString(R.string.dashboard_ad_settings_button_show)
             binding.adView.visibility = View.GONE
+            binding.adView.destroy()
         }
     }
 }
