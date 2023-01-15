@@ -283,7 +283,7 @@ týdne"</string>
     <string name="templates_boxed_days_calendar_settings_date_picker_button">"Nastavit datum"</string>
     <string name="templates_boxed_weeks_calendar_settings_date_picker_button">"Nastavit datum"</string>
     <string name="templates_flat_weeks_calendar_settings_date_picker_button">"Nastavit datum"</string>
-    <string name="week_abbreviation">"W%d"</string>
+    <string name="week_abbreviation">"T%d"</string>
     <string name="quarter_abbreviation">"Q%d"</string>
     <string name="calendar_settings_select_start_hour_text">"Vyberte počáteční hodinu denního zobrazení:"</string>
     <string name="calendar_settings_select_start_hour_empty">"Ponechat prázdné"</string>
@@ -319,4 +319,6 @@ týdne"</string>
     <string name="calendar_health_day_overall">"Celek"</string>
     <string name="calendar_day_notes_events">"Poznámky &amp; Události (%d)"</string>
     <string name="calendar_day_notes_events_ex">"Poznámky &amp; Události (%d!)"</string>
+    <string name="dashboard_ad_settings_button_hide">"Schovat reklamy"</string>
+    <string name="dashboard_ad_settings_button_show">"Zobrazit reklamy"</string>
 </resources>
