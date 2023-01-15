@@ -2,6 +2,7 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.text.format.DateFormat
 import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.R
@@ -122,8 +123,16 @@ class CalendarDayPage {
                     canvas.drawLine(lo, to + i * ceh, lo + cew, to + i * ceh, Creator.lineDefaultGrey50)
                     canvas.drawText(":00", lo + 115.0f, to + 35.0f + i * ceh, Creator.textSmallBlackRight)
                     if (startHour > -1) {
-                        val hourText = LocalTime.of(i / 2 + startHour, 0, 0).format(DateTimeFormatter.ofPattern("HH"))
-                        canvas.drawText(hourText, lo + 40.0f, to + 20.0f + (i + 1) * ceh, Creator.text60BlackCenter)
+                        val localTime = LocalTime.of(i / 2 + startHour, 0, 0)
+                        if (DateFormat.is24HourFormat(context)) {
+                            val hourText = localTime.format(DateTimeFormatter.ofPattern("HH"))
+                            canvas.drawText(hourText, lo + 40.0f, to + 20.0f + (i + 1) * ceh, Creator.text60BlackCenter)
+                        } else {
+                            val hourText = localTime.format(DateTimeFormatter.ofPattern("h"))
+                            val ampmText = localTime.format(DateTimeFormatter.ofPattern("a"))
+                            canvas.drawText(hourText, lo + 70.0f, to + 40.0f + (i) * ceh, Creator.textDefaultBlackRight)
+                            canvas.drawText(ampmText, lo + 70.0f, to + 30.0f + (i + 1) * ceh, Creator.textDefaultBlackRight)
+                        }
                     }
                 } else {
                     canvas.drawLine(lo + 80.0f, to + i * ceh, lo + cew, to + i * ceh, Creator.lineDefaultGrey50)

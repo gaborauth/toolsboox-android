@@ -3,6 +3,7 @@ package com.toolsboox.plugin.calendar.ui
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -149,14 +150,15 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
         // Start hour settings
         val listOfStartHours = mutableListOf<String>()
         listOfStartHours.add(getString(R.string.calendar_settings_select_start_hour_empty))
-        listOfStartHours.add(LocalTime.of(0, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
-        listOfStartHours.add(LocalTime.of(1, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
-        listOfStartHours.add(LocalTime.of(2, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
-        listOfStartHours.add(LocalTime.of(3, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
-        listOfStartHours.add(LocalTime.of(4, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
-        listOfStartHours.add(LocalTime.of(5, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
-        listOfStartHours.add(LocalTime.of(6, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
-        listOfStartHours.add(LocalTime.of(7, 0, 0).format(DateTimeFormatter.ofPattern("HH")))
+        val hourPattern = if (DateFormat.is24HourFormat(context)) "HH" else "ha"
+        listOfStartHours.add(LocalTime.of(0, 0, 0).format(DateTimeFormatter.ofPattern(hourPattern)))
+        listOfStartHours.add(LocalTime.of(1, 0, 0).format(DateTimeFormatter.ofPattern(hourPattern)))
+        listOfStartHours.add(LocalTime.of(2, 0, 0).format(DateTimeFormatter.ofPattern(hourPattern)))
+        listOfStartHours.add(LocalTime.of(3, 0, 0).format(DateTimeFormatter.ofPattern(hourPattern)))
+        listOfStartHours.add(LocalTime.of(4, 0, 0).format(DateTimeFormatter.ofPattern(hourPattern)))
+        listOfStartHours.add(LocalTime.of(5, 0, 0).format(DateTimeFormatter.ofPattern(hourPattern)))
+        listOfStartHours.add(LocalTime.of(6, 0, 0).format(DateTimeFormatter.ofPattern(hourPattern)))
+        listOfStartHours.add(LocalTime.of(7, 0, 0).format(DateTimeFormatter.ofPattern(hourPattern)))
 
         val startHourAdapter = NoFilterAdapter(this.requireContext(), R.layout.list_item_locale, listOfStartHours)
         binding.startHourSpinner.setAdapter(startHourAdapter)
