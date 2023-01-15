@@ -28,6 +28,7 @@ interface Creator {
         val fillWhite = Paint()
 
         val lineDefaultBlack: Paint = Paint()
+        val lineDefaultGrey20: Paint = Paint()
         val lineDefaultGrey50: Paint = Paint()
         val lineDefaultWhite: Paint = Paint()
 
@@ -68,6 +69,10 @@ interface Creator {
             lineDefaultBlack.color = colorBlack
             lineDefaultBlack.strokeWidth = 2.0f
             lineDefaultBlack.style = Paint.Style.STROKE
+
+            lineDefaultGrey20.color = colorGrey20
+            lineDefaultGrey20.strokeWidth = 2.0f
+            lineDefaultGrey20.style = Paint.Style.STROKE
 
             lineDefaultGrey50.color = colorGrey50
             lineDefaultGrey50.strokeWidth = 2.0f
