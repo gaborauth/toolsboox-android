@@ -47,7 +47,7 @@ Strings related to dashboard fragment -->
     <string name="dashboard_new_version_message">"Je k dispozici nová verze 'Tools for Boox', pro plnou funkčnost upgradujte."</string>
 
     <!-- Strings related to team drawer plugin -->
-    <string name="team_drawer_title">"TýmováTabule"</string>
+    <string name="team_drawer_title">"Týmová Tabule"</string>
 
     <!-- Strings related to team drawer page fragment -->
     <string name="team_drawer_page_title">"'%s' stran"</string>
@@ -321,4 +321,9 @@ týdne"</string>
     <string name="calendar_day_notes_events_ex">"Poznámky &amp; Události (%d!)"</string>
     <string name="dashboard_ad_settings_button_hide">"Schovat reklamy"</string>
     <string name="dashboard_ad_settings_button_show">"Zobrazit reklamy"</string>
+    <string name="calendar_time_box_day_title">"Denní plánovač – %s"</string>
+    <string name="calendar_time_box_day_time_box">"Rozvrhy"</string>
+    <string name="calendar_time_box_day_tasks">"Prioritní úkoly"</string>
+    <string name="calendar_time_box_day_brain_dump">"Postřehy, nápady"</string>
+    <string name="calendar_time_box_day_notes">"Poznámky"</string>
 </resources>
