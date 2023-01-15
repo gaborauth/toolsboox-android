@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:width="512dp"
+            android:height="512dp"
+            android:top="0dp"
+            android:left="0dp"
+            android:drawable="@drawable/bg_list_row">
+    </item>
+    <item
+            android:width="192dp"
+            android:height="192dp"
+            android:top="16dp"
+            android:left="160dp"
+            android:drawable="@drawable/ic_clock_regular">
+    </item>
+    <item
+            android:width="384dp"
+            android:height="384dp"
+            android:top="192dp"
+            android:left="64dp"
+            android:drawable="@drawable/ic_box_open_solid">
+    </item>
+</layer-list>

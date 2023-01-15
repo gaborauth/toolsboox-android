@@ -33,6 +33,11 @@ data class CalendarDay(
         const val HEALTH_V1_STYLE = "Health.v1"
 
         /**
+         * Name of the TimeBox v1 page style.
+         */
+        const val TIME_BOX_V1_STYLE = "TimeBox.v1"
+
+        /**
          * Covert calendar day data class from v1 format to v2 format.
          *
          * @param v1 the v1 data class

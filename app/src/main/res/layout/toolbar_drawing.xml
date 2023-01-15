@@ -74,6 +74,18 @@
             android:contentDescription="@string/calendar_drawing_toolbar_health"/>
 
     <ImageButton
+            android:id="@+id/toolbarTimeboxView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_toolbar_time_box"
+
+            app:layout_constraintTop_toBottomOf="@id/toolbarHealthView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/calendar_drawing_toolbar_health"/>
+
+    <ImageButton
             android:id="@+id/toolbarSwipeUp"
             android:layout_width="50dp"
             android:layout_height="50dp"

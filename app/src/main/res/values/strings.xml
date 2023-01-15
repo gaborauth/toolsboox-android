@@ -199,6 +199,12 @@
     <string name="calendar_health_day_productivity">Productivity</string>
     <string name="calendar_health_day_overall">Overall</string>
 
+    <string name="calendar_time_box_day_title">Daily time-box planner &#8211; %s</string>
+    <string name="calendar_time_box_day_time_box">Time Box</string>
+    <string name="calendar_time_box_day_tasks">Priority tasks</string>
+    <string name="calendar_time_box_day_brain_dump">Brain Dump</string>
+    <string name="calendar_time_box_day_notes">Notes</string>
+
     <!-- Strings related to dashboard plugin -->
     <!-- Strings related to dashboard fragment -->
     <string name="dashboard_title">Dashboard</string>

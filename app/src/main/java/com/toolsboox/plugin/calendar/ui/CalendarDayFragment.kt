@@ -215,6 +215,12 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
                         )
                     }
 
+                    CalendarDay.TIME_BOX_V1_STYLE -> {
+                        TimeBoxDayPage.onTouchEvent(
+                            view, motionEvent, gestureResult, this@CalendarDayFragment, calendarDay
+                        )
+                    }
+
                     else -> return@setOnTouchListener true
                 }
             }
@@ -248,6 +254,10 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         }
         binding.toolbarDrawing.toolbarHealthView.setOnClickListener {
             calendarStyle = CalendarDay.HEALTH_V1_STYLE
+            presenter.load(this@CalendarDayFragment, binding, currentDate, locale)
+        }
+        binding.toolbarDrawing.toolbarTimeboxView.setOnClickListener {
+            calendarStyle = CalendarDay.TIME_BOX_V1_STYLE
             presenter.load(this@CalendarDayFragment, binding, currentDate, locale)
         }
 
@@ -308,6 +318,9 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
             if (calendarStyle == CalendarDay.HEALTH_V1_STYLE) {
                 HealthDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay)
             }
+            if (calendarStyle == CalendarDay.TIME_BOX_V1_STYLE) {
+                TimeBoxDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, startHour)
+            }
             applyStrokes(surfaceTo(calendarStrokes), true)
         }
     }
@@ -334,6 +347,11 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         }
         if (calendarStyle == CalendarDay.HEALTH_V1_STYLE) {
             firebaseAnalytics.logEvent("healthDay_v1") {
+                param("currentDate", currentDate.format(DateTimeFormatter.ISO_DATE))
+            }
+        }
+        if (calendarStyle == CalendarDay.TIME_BOX_V1_STYLE) {
+            firebaseAnalytics.logEvent("timeBoxDay_v1") {
                 param("currentDate", currentDate.format(DateTimeFormatter.ISO_DATE))
             }
         }
