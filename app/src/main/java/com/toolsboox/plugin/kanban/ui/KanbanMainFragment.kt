@@ -337,6 +337,13 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
             editedCard = DeepCopy.deepCopy(cardsByLane[lane][currentCarouselPositions[lane]])
             clearSurface()
             touchHelper.setRawDrawingEnabled(true)
+
+            val dueDate = binding.drawLayout.findViewById<TextView>(R.id.dueDate)
+            if (editedCard?.dueDate == null) {
+                dueDate.text = getString(R.string.kanban_planner_no_due_date)
+            } else {
+                dueDate.text = SimpleDateFormat("yyyy-MM-dd HH:mm").format(editedCard!!.dueDate)
+            }
         }
 
         val settingsButton = itemView.findViewById<ImageView>(R.id.settingsButton)

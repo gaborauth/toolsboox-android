@@ -234,6 +234,7 @@
     <string name="kanban_planner_lane_dueSoonBacklogTitle">Due soon backlog (%d)</string>
     <string name="kanban_planner_lane_plannedTodayTitle">Planned today (%d)</string>
     <string name="kanban_planner_lane_doneTodayTitle">Done today (%d)</string>
+    <string name="kanban_planner_no_due_date">no due date</string>
 
     <!-- Strings related to team drawer plugin -->
     <string name="team_drawer_title">TeamDrawer</string>
