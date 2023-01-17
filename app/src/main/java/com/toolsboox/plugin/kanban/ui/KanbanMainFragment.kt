@@ -20,7 +20,7 @@ import com.toolsboox.databinding.FragmentKanbanMainBinding
 import com.toolsboox.ot.DeepCopy
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.ot.PenRawInputCallback
-import com.toolsboox.plugin.kanban.da.CardItem
+import com.toolsboox.plugin.kanban.da.v1.CardItem
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint

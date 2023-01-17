@@ -1,4 +1,4 @@
-package com.toolsboox.plugin.kanban.da
+package com.toolsboox.plugin.kanban.da.v1
 
 import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import java.util.*

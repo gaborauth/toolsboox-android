@@ -2,7 +2,7 @@ package com.toolsboox.plugin.kanban.ui
 
 import com.google.gson.Gson
 import com.toolsboox.R
-import com.toolsboox.plugin.kanban.da.CardItem
+import com.toolsboox.plugin.kanban.da.v1.CardItem
 import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
