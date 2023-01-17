@@ -189,7 +189,9 @@ class NoteFragment @Inject constructor() : ScreenFragment() {
      */
     fun listResult(notes: List<Note>) {
         noteItems.clear()
-        notes.forEach {
+        notes.filter{
+            it.pages.isNotEmpty()
+        }.forEach {
             noteItems.add(
                 NoteItem(
                     it.roomId,
