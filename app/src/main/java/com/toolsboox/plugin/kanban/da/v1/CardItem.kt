@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.kanban.da.v1
 
-import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
+import com.squareup.moshi.JsonClass
+import com.toolsboox.da.Stroke
 import java.util.*
 
 /**
@@ -8,6 +9,7 @@ import java.util.*
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
+@JsonClass(generateAdapter = true)
 data class CardItem(
     var id: UUID,
     var version: Int,

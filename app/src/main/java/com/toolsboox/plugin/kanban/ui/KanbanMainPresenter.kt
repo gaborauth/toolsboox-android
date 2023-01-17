@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.kanban.ui
 
-import com.google.gson.Gson
+import android.os.Environment
+import com.squareup.moshi.Moshi
 import com.toolsboox.R
 import com.toolsboox.plugin.kanban.da.v1.CardItem
 import com.toolsboox.ui.plugin.FragmentPresenter
@@ -9,8 +10,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.File
-import java.io.IOException
+import java.io.*
+import java.nio.file.Files
 import java.util.*
 import javax.inject.Inject
 
@@ -21,8 +22,11 @@ import javax.inject.Inject
  */
 class KanbanMainPresenter @Inject constructor() : FragmentPresenter() {
 
+    /**
+     * The Moshi instance.
+     */
     @Inject
-    lateinit var gson: Gson
+    lateinit var moshi: Moshi
 
     /**
      * Load card items from local storage.
@@ -36,22 +40,26 @@ class KanbanMainPresenter @Inject constructor() : FragmentPresenter() {
 
                 val cardItems: MutableMap<UUID, CardItem> = mutableMapOf()
                 try {
-                    val kanbanDir = File(fragment.requireContext().filesDir, "kanban")
-                    kanbanDir.mkdirs()
+                    migrateData(fragment)
 
-                    //kanbanDir.list().forEach {
-                    //    val item = File(kanbanDir, it)
-                    //    item.delete()
-                    //    Timber.i("Item $it deleted.")
-                    //}
+                    val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
+                    val path = File(rootPath, "kanban")
 
-                    kanbanDir.list { d, n -> n.endsWith(".card.v1", true) }?.forEach {
-                        Timber.i("Processing of cardItem: $it")
-                        val cardItemJson = File(kanbanDir, it).readText(Charsets.UTF_8)
-                        if (cardItemJson.isNotEmpty()) {
-                            val cardItem = gson.fromJson(cardItemJson, CardItem::class.java)
-                            Timber.i("Card item: ${cardItem.lane}")
-                            cardItems[cardItem.id] = cardItem
+                    path.list { d, n -> n.endsWith("-card-v1.json", true) }?.forEach { fileName ->
+                        Timber.i("Processing of cardItem: $fileName")
+
+                        val item = File(path, fileName)
+                        if (item.exists()) {
+                            FileReader(item).use { fileReader ->
+                                Timber.i("Try to load from ${item.name}")
+                                if (item.absolutePath.endsWith("-v1.json")) {
+                                    moshi.adapter(CardItem::class.java)
+                                        .fromJson(fileReader.readText())?.let { cardItem ->
+                                            Timber.i("Card item: ${cardItem.id}")
+                                            cardItems[cardItem.id] = cardItem
+                                        }
+                                }
+                            }
                         }
                     }
 
@@ -77,11 +85,14 @@ class KanbanMainPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
 
                 try {
-                    val kanbanDir = File(fragment.requireContext().filesDir, "kanban")
-                    kanbanDir.mkdirs()
+                    val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
+                    val path = File(rootPath, "kanban")
+                    path.mkdirs()
 
-                    val cardItemFile = File(kanbanDir, "${cardItem.id}.card.v1")
-                    cardItemFile.writeText(gson.toJson(cardItem), Charsets.UTF_8)
+                    PrintWriter(FileWriter(File(path, "${cardItem.id}-card-v1.json"))).use {
+                        val adapter = moshi.adapter(CardItem::class.java)
+                        it.write(adapter.toJson(cardItem))
+                    }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.showError(e, R.string.something_happened_error) }
                 }
@@ -89,5 +100,30 @@ class KanbanMainPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
             }
         }
+    }
+
+    /**
+     * Migrate cards from old folder to new folder.
+     *
+     * @param fragment the kanban main fragment
+     */
+    private fun migrateData(fragment: KanbanMainFragment) {
+        val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
+        val path = File(rootPath, "kanban")
+        path.mkdirs()
+
+        val kanbanDir = File(fragment.requireContext().filesDir, "kanban")
+        kanbanDir.mkdirs()
+        if (File(kanbanDir, "migrated").exists()) return
+
+        kanbanDir.list { d, n -> n.endsWith(".card.v1", true) }?.forEach {
+            Timber.i("Migrating cardItem: $it")
+            val source = File(kanbanDir, it).toPath()
+            val destination = File(path, it.replace(".card.v1", "-card-v1.json")).toPath()
+            Files.move(source, destination)
+            Timber.i("Migrated: $it")
+        }
+
+        File(kanbanDir, "migrated").createNewFile()
     }
 }

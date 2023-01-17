@@ -15,13 +15,13 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.pen.TouchHelper
 import com.toolsboox.R
+import com.toolsboox.da.Stroke
 import com.toolsboox.da.StrokePoint
 import com.toolsboox.databinding.FragmentKanbanMainBinding
 import com.toolsboox.ot.DeepCopy
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.ot.PenRawInputCallback
 import com.toolsboox.plugin.kanban.da.v1.CardItem
-import com.toolsboox.plugin.teamdrawer.nw.domain.Stroke
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -646,7 +646,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
             for (stroke in strokes) {
                 offsetStrokes.add(StrokePoint(stroke.x - surfaceOffset.left, stroke.y - surfaceOffset.top, stroke.p))
             }
-            editedCard?.strokes?.add(Stroke(UUID.randomUUID(), UUID.randomUUID(), offsetStrokes))
+            editedCard?.strokes?.add(Stroke(UUID.randomUUID(), offsetStrokes))
         }
     }
 

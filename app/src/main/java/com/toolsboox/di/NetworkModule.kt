@@ -4,6 +4,7 @@ import com.google.gson.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.toolsboox.BuildConfig
+import com.toolsboox.ot.DateJsonAdapter
 import com.toolsboox.ot.LocaleJsonAdapter
 import com.toolsboox.ot.UUIDJsonAdapter
 import dagger.Module
@@ -83,6 +84,7 @@ object NetworkModule {
     fun provideMoshi(): Moshi {
         return Moshi.Builder()
             .add(LocaleJsonAdapter())
+            .add(DateJsonAdapter())
             .add(UUIDJsonAdapter())
             .build()
     }
