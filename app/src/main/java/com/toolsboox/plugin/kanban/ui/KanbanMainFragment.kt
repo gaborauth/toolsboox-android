@@ -444,7 +444,15 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
             override fun surfaceCreated(holder: SurfaceHolder) {
                 Timber.i("surfaceCreated")
                 surfaceView.getGlobalVisibleRect(surfaceOffset)
-                Timber.i("Limit: $surfaceOffset")
+                Timber.i("SurfaceOffset: $surfaceOffset")
+
+                val frameLayoutOffset = Rect()
+                binding.frameLayout.getGlobalVisibleRect(frameLayoutOffset)
+                Timber.i("FrameLayoutOffset: $frameLayoutOffset")
+
+                surfaceOffset.top = surfaceOffset.top - frameLayoutOffset.top
+                surfaceOffset.bottom = surfaceOffset.bottom - frameLayoutOffset.top
+                Timber.i("Final SurfaceOffset: $surfaceOffset")
 
                 editBitmap = Bitmap.createBitmap(
                     surfaceView.width,
