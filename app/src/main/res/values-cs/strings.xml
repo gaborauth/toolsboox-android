@@ -326,4 +326,5 @@ týdne"</string>
     <string name="calendar_time_box_day_tasks">"Prioritní úkoly"</string>
     <string name="calendar_time_box_day_brain_dump">"Postřehy, nápady"</string>
     <string name="calendar_time_box_day_notes">"Poznámky"</string>
+    <string name="kanban_planner_no_due_date">"bez datumu splatnosti"</string>
 </resources>
