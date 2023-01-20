@@ -23,6 +23,8 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
@@ -86,7 +88,8 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
                 try {
                     val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
                     val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    ZipManager.zip(File(rootPath, "calendar"), File(downloads, "toolsBoox-calendar-backup.zip"))
+                    val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault()).format(Instant.now())
+                    ZipManager.zip(File(rootPath, "calendar"), File(downloads, "toolsBoox-calendar-backup-$timestamp.zip"))
 
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
