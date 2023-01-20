@@ -88,7 +88,7 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
                 try {
                     val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
                     val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault()).format(Instant.now())
+                    val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault()).format(Date.from(Instant.now()))
                     ZipManager.zip(File(rootPath, "calendar"), File(downloads, "toolsBoox-calendar-backup-$timestamp.zip"))
 
                     withContext(Dispatchers.Main) {
