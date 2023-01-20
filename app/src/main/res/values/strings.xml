@@ -71,6 +71,14 @@
     <string name="about_other_links_translate_link">Translate:</string>
     <string name="about_other_links_facebook_link">Facebook:</string>
     <string name="about_other_links_discord_link">Discord:</string>
+    <string name="about_cloud_integration_title" translatable="false">Cloud integration</string>
+    <string name="about_cloud_integration_message" translatable="false">Backup personal data with encryption to cloud backend (experimental feature).</string>
+    <string name="about_cloud_integration_subscription_status" translatable="false">Your subscription status: <b>%s</b></string>
+    <string name="about_cloud_integration_subscription_status_subs" translatable="false">Subscribed</string>
+    <string name="about_cloud_integration_subscription_status_no_subs" translatable="false">Not subscribed</string>
+    <string name="about_cloud_integration_monthly_button" translatable="false">Monthly subscription\n(%s)</string>
+    <string name="about_cloud_integration_yearly_button" translatable="false">Yearly subscription\n(%s)</string>
+    <string name="about_cloud_integration_loading" translatable="false">loading</string>
     <string name="about_this_translation_contributors_title">Contributors of the current translation</string>
     <string name="about_this_translation_contributors_list">anonymous contributor</string>
 
