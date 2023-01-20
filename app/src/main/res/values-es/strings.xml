@@ -246,7 +246,7 @@ Strings related to dashboard fragment -->
     <string name="calendar_settings_start_view_month">"Agenda mensual"</string>
     <string name="calendar_settings_start_view_week">"Agenda semanal"</string>
     <string name="calendar_settings_start_view_day">"Agenda diaria"</string>
-    <string name="calendar_settings_button_backup">"Exportar copia de seguridad a Descargas"</string>
+    <string name="calendar_settings_button_backup">"Exportar copia de seguridad"</string>
     <string name="calendar_settings_backup_done">"Copia del calendario exportada a Descargas"</string>
     <string name="about_this_translation_contributors_title">"Contribuciones a la traducción actual"</string>
     <string name="about_this_translation_contributors_list">"Maira Belmonte"</string>
@@ -318,4 +318,12 @@ esta semana"</string>
     <string name="calendar_health_day_overall">"General"</string>
     <string name="calendar_day_notes_events">"Notas y eventos (%d)"</string>
     <string name="calendar_day_notes_events_ex">"Notas y eventos (%d!)"</string>
+    <string name="dashboard_ad_settings_button_hide">"Ocultar publicidad"</string>
+    <string name="dashboard_ad_settings_button_show">"Mostrar publicidad"</string>
+    <string name="calendar_time_box_day_title">"Planificador de bloques diario - %s"</string>
+    <string name="calendar_time_box_day_time_box">"Bloques de tiempo"</string>
+    <string name="calendar_time_box_day_tasks">"Tareas prioritarias"</string>
+    <string name="calendar_time_box_day_brain_dump">"Volcado mental"</string>
+    <string name="calendar_time_box_day_notes">"Notas"</string>
+    <string name="kanban_planner_no_due_date">"sin fecha final"</string>
 </resources>
