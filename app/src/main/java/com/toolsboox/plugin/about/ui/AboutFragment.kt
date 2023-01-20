@@ -14,9 +14,11 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentAboutBinding
+import com.toolsboox.ot.CryptoUtils
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -114,6 +116,18 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
                 Timber.i("onBillingServiceDisconnected")
             }
         })
+
+        // Test of crypto utility compatibility.
+        val encrypted = CryptoUtils.encrypt("test-data".toByteArray(), "pass1234")
+        Timber.e("Encrypted Android:    " + Base64.getEncoder().encodeToString(encrypted))
+        val decrypted = CryptoUtils.decrypt(encrypted, "pass1234")
+        Timber.e("Decrypted Android:    " + String(decrypted))
+        val encryptedJavaScript = "U2FsdGVkX19+eYEXdhMkJPCnPpCCU125gBbr+6/voJU="
+        val decryptedJavaScript = CryptoUtils.decrypt(Base64.getDecoder().decode(encryptedJavaScript), "pass1234")
+        Timber.e("Decrypted JavaScript: " + String(decryptedJavaScript))
+        val encryptedOpenSSL = "U2FsdGVkX19Ofjk/W1o+wr8TlKyVB+0XU1WbSkLTFvw="
+        val decryptedOpenSSL = CryptoUtils.decrypt(Base64.getDecoder().decode(encryptedOpenSSL), "pass1234")
+        Timber.e("Decrypted OpenSSL:    " + String(decryptedOpenSSL))
     }
 
     /**
