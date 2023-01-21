@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -89,8 +90,14 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
 
+        val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        sharedPreferences.edit().putString("androidId", androidId).apply()
+
         val headerEmail = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_email)
-        headerEmail.text = "unknown@unknown"
+        headerEmail.text = getString(R.string.main_not_logged_in)
+
+        val headerId = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_id)
+        headerId.text = androidId
 
         val headerVersion = binding.navigationView.getHeaderView(0)
             .findViewById<TextView>(R.id.navigation_header_version)

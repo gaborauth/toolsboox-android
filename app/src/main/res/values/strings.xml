@@ -42,6 +42,7 @@
 
     <!-- Strings related to main activity -->
     <string name="main_version">%s&#8211;%s</string>
+    <string name="main_not_logged_in">&lt;not logged in&gt;</string>
     <string name="main_update_not_now">Not now</string>
     <string name="main_update">Update</string>
     <string name="main_all_granted_message">All asked permissions granted! Have a nice day!</string>

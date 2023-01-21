@@ -6,24 +6,34 @@
         android:orientation="vertical">
 
     <TextView
-            android:id="@+id/navigation_header_version"
+            android:id="@+id/navigation_header_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
+            android:layout_gravity="start|top"
+            android:layout_marginTop="24dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+    <TextView
+            android:id="@+id/navigation_header_id"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
             android:layout_gravity="end|bottom"
-            android:paddingBottom="4dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
+            android:layout_marginBottom="20dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:gravity="end"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
 
     <TextView
-            android:id="@+id/navigation_header_email"
+            android:id="@+id/navigation_header_version"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|top"
-            android:paddingTop="24dp"
+            android:layout_height="20dp"
+            android:layout_gravity="end|bottom"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:gravity="end"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
 
 </FrameLayout>
