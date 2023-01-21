@@ -1,5 +1,5 @@
 <resources>
-    <string name="drawer_title">%s &#8211; %s</string>
+    <string name="drawer_title">%1$s &#8211; %2$s</string>
     <string name="filter_title">Intent filter</string>
     <string name="fab_add_item">Add item</string>
     <string name="something_happened_error">Something happened&#8230; please check your network status. :(</string>
@@ -33,7 +33,7 @@
     <string name="drawer_menu_logout">Logout</string>
     <string name="toolbar_previous_image">Previous</string>
     <string name="toolbar_pages_placeholder">1 / 1</string>
-    <string name="toolbar_pages_template">%d / %d</string>
+    <string name="toolbar_pages_template">%1$d / %2$d</string>
     <string name="toolbar_next_image">Next</string>
     <string name="toolbar_back_image">Back</string>
 
@@ -41,7 +41,7 @@
     <string name="square_item_image">Square item image</string>
 
     <!-- Strings related to main activity -->
-    <string name="main_version">%s&#8211;%s</string>
+    <string name="main_version">%1$s&#8211;%2$s</string>
     <string name="main_not_logged_in">&lt;not logged in&gt;</string>
     <string name="main_update_not_now">Not now</string>
     <string name="main_update">Update</string>
@@ -170,7 +170,7 @@
     <string name="calendar_month_title">Monthly planner &#8211; %s</string>
     <string name="calendar_month_notes">Notes</string>
 
-    <string name="calendar_week_title">Weekly planner &#8211; %s week %s</string>
+    <string name="calendar_week_title">Weekly planner &#8211; %1$s week %2$s</string>
     <string name="calendar_week_notes">Notes</string>
 
     <string name="calendar_day_title">Daily planner &#8211; %s</string>
@@ -220,7 +220,7 @@
     <string name="dashboard_new_version_title">New version</string>
     <string name="dashboard_new_version_message">There is a new version of \'Tools for Boox\' available, please upgrade it unless some functions may not work.</string>
     <string name="dashboard_device_mismatch_title">Device mismatch</string>
-    <string name="dashboard_device_mismatch_message">The \'Tools for Boox\' application is developed to Onyx Boox devices, your device doesn\'t look like an Onxy Boox (%s - %s), there may be bugs and crashes.</string>
+    <string name="dashboard_device_mismatch_message">The \'Tools for Boox\' application is developed to Onyx Boox devices, your device doesn\'t look like an Onxy Boox (%1$s - %2$s), there may be bugs and crashes.</string>
     <string name="dashboard_api_level_warning_title">Android version warning</string>
     <string name="dashboard_api_level_warning_message">It looks like your device based on Android %s, which is restricts the direct usage of the external storage, so that the application cannot export note templates directly to the noteTemplate folder.</string>
     <string name="dashboard_item_calendar_title">Calendar</string>
@@ -303,7 +303,7 @@
     <string name="templates_boxed_weeks_calendar_settings_days_layout_vertical">Vertical</string>
     <string name="templates_boxed_weeks_calendar_settings_days_layout_horizontal">Horizontal</string>
     <string name="templates_boxed_weeks_calendar_settings_date_picker_button">Set date</string>
-    <string name="templates_boxed_week_calendar_creator_title">%dW%d</string>
+    <string name="templates_boxed_week_calendar_creator_title">%1$dW%2$d</string>
     <string name="templates_boxed_week_calendar_creator_weekly_notes">Weekly notes</string>
 
     <!-- Strings related to templates 'community' fragment -->
@@ -320,14 +320,14 @@
     <string name="templates_flat_weeks_calendar_preview_export_message">Exported as %s</string>
     <string name="templates_flat_weeks_calendar_settings_with_days">Generate with dates</string>
     <string name="templates_flat_weeks_calendar_settings_date_picker_button">Set date</string>
-    <string name="templates_flat_week_calendar_creator_title">%dW%d</string>
+    <string name="templates_flat_week_calendar_creator_title">%1$dW%2$d</string>
 
     <!-- Strings related to templates 'this week's calendar' fragment -->
     <string name="templates_this_weeks_calendar_title">This week\'s calendar</string>
     <string name="templates_this_weeks_calendar_preview_description">Preview image</string>
     <string name="templates_this_weeks_calendar_button_export_text">Export</string>
     <string name="templates_this_weeks_calendar_message">Export this preview as local template</string>
-    <string name="templates_this_weeks_calendar_preview_title">%dW%d</string>
+    <string name="templates_this_weeks_calendar_preview_title">%1$dW%2$d</string>
     <string name="templates_this_weeks_calendar_preview_weekly_notes">Weekly notes</string>
     <string name="templates_this_weeks_calendar_preview_export_message">Exported as %s</string>
 
