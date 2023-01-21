@@ -147,6 +147,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
 
+        presenter.parameter(this, "earlyAdopterDeviceIds")
         presenter.version(this)
 
         val inputManager = requireContext().getSystemService(Context.INPUT_SERVICE) as InputManager?
@@ -236,6 +237,17 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
                 dialog.cancel()
             }
         builder.create().show()
+    }
+
+    /**
+     * Render the result of 'parameter' service call.
+     *
+     * @param key the key
+     * @param value the value
+     */
+    fun parameterResult(key: String, value: String) {
+        Timber.i("Store parameter in shared preferences: $key - $value")
+        sharedPreferences.edit().putString(key, value).apply()
     }
 
     /**

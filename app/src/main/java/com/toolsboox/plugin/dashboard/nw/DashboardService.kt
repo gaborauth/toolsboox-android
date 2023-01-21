@@ -13,6 +13,18 @@ import retrofit2.http.Path
  */
 interface DashboardService {
 
+
+    /**
+     * Get a value of the parameter by key.
+     *
+     * @param key the key
+     * @return the value of the parameter
+     */
+    @GET(value = "dashboard/parameter/{key}")
+    fun parameterAsync(
+        @Path("key") key: String
+    ): Deferred<Response<String>>
+
     /**
      * Get the server API version.
      *

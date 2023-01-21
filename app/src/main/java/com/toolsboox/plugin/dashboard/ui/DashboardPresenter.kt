@@ -16,6 +16,35 @@ class DashboardPresenter @Inject constructor() : FragmentPresenter() {
     lateinit var dashboardService: DashboardService
 
     /**
+     * Get a value of the parameter by key.
+     *
+     * @param fragment the fragment
+     * @param key the key
+     * @return the value of the parameter
+     */
+    fun parameter(fragment: DashboardFragment, key: String) {
+        coroutinesCallHelper(
+            fragment,
+            { dashboardService.parameterAsync(key) },
+            { response ->
+                when (response.code()) {
+                    200 -> {
+                        val body = response.body()
+                        if (body == null) {
+                            fragment.somethingHappened(true)
+                        } else {
+                            fragment.parameterResult(key, body)
+                        }
+                    }
+
+                    else -> fragment.somethingHappened(true)
+                }
+            },
+            true
+        )
+    }
+
+    /**
      * Get the server API version.
      *
      * @param fragment the fragment
