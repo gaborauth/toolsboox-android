@@ -1,8 +1,10 @@
 package com.toolsboox.plugin.about.ui
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Html
 import android.view.View
 import android.widget.TextView
@@ -12,6 +14,7 @@ import com.android.billingclient.api.BillingClient.ProductType
 import com.android.billingclient.api.QueryProductDetailsParams.Product
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentAboutBinding
 import com.toolsboox.ot.CryptoUtils
@@ -48,6 +51,12 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
      */
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    /**
+     * The injected shared preferences.
+     */
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     /**
      * The inflated layout.
@@ -206,8 +215,17 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
         binding.cloudIntegrationYearlyButton.text = getString(R.string.about_cloud_integration_yearly_button).format(loading)
         binding.cloudIntegrationSubscriptionStatus.text = getString(R.string.about_cloud_integration_subscription_status).format(loading)
 
-        // TODO: Hide it...
-        if (Math.random() <= 1.0) {
+        val androidId = Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ANDROID_ID);
+        sharedPreferences.edit().putString("androidId", androidId).apply()
+        Timber.i("Using AndroidId: $androidId")
+        val earlyAdopterDeviceIdsJson = sharedPreferences.getString("earlyAdopterDeviceIds", "[]");
+
+        val earlyAdopterDeviceIdsType = Types.newParameterizedType(MutableList::class.java, String::class.java)
+        val adapter = moshi.adapter<List<String>>(earlyAdopterDeviceIdsType)
+        val earlyAdopterDeviceIds = adapter.fromJson(earlyAdopterDeviceIdsJson!!)
+
+        // Hide the subscriptions in case of regular users.
+        if (earlyAdopterDeviceIds?.contains(androidId) == false) {
             binding.cloudIntegrationTitle.visibility = View.GONE
             binding.cloudIntegrationText.visibility = View.GONE
             binding.cloudIntegrationSubscriptionStatus.visibility = View.GONE
