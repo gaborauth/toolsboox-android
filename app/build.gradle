@@ -82,7 +82,7 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            zipAlignEnabled false
+            zipAlignEnabled true
             shrinkResources false
             debuggable true
 
