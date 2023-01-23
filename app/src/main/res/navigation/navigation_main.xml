@@ -37,6 +37,10 @@
             android:id="@+id/action_to_about"
             app:destination="@id/AboutFragment"/>
 
+    <action
+            android:id="@+id/action_to_cloud"
+            app:destination="@id/CloudFragment"/>
+
     <fragment
             android:id="@+id/DashboardFragment"
             android:name="com.toolsboox.plugin.dashboard.ui.DashboardFragment"
@@ -384,7 +388,14 @@
     <fragment
             android:id="@+id/AboutFragment"
             android:name="com.toolsboox.plugin.about.ui.AboutFragment"
-            android:label="KanbanAboutFragment"
+            android:label="AboutFragment"
             tools:layout="@layout/fragment_about">
+    </fragment>
+
+    <fragment
+            android:id="@+id/CloudFragment"
+            android:name="com.toolsboox.plugin.cloud.ui.CloudFragment"
+            android:label="CloudFragment"
+            tools:layout="@layout/fragment_cloud">
     </fragment>
 </navigation>

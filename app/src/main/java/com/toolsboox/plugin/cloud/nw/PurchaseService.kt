@@ -1,6 +1,6 @@
-package com.toolsboox.plugin.about.nw
+package com.toolsboox.plugin.cloud.nw
 
-import com.toolsboox.plugin.about.da.Purchase
+import com.toolsboox.plugin.cloud.da.Purchase
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.Body
@@ -19,8 +19,8 @@ interface PurchaseService {
      * Update the purchase.
      *
      * @param userId the user ID
-     * @param purchaseJson the purchase JSON
-     * @return the saved purchase JSON
+     * @param purchase the purchase
+     * @return the saved purchase
      */
     @POST(value = "purchase/update/{userId}")
     fun updateAsync(

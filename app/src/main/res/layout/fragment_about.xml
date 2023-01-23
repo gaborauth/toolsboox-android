@@ -177,57 +177,6 @@
                 android:text="@string/about_project_help_message_3"/>
 
         <TextView
-                android:id="@+id/cloud_integration_title"
-                android:layout_marginTop="20dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textSize="20sp"
-                android:maxLines="4"
-                android:singleLine="false"
-                android:text="@string/about_cloud_integration_title"/>
-
-        <TextView
-                android:id="@+id/cloud_integration_text"
-                android:layout_marginTop="10dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:maxLines="4"
-                android:singleLine="false"
-                android:text="@string/about_cloud_integration_message"/>
-
-        <TextView
-                android:id="@+id/cloud_integration_subscription_status"
-                android:layout_marginTop="10dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:maxLines="4"
-                android:singleLine="false"
-                android:text="@string/about_cloud_integration_subscription_status"/>
-
-        <Button
-                android:id="@+id/cloud_integration_monthly_button"
-                android:text="@string/about_cloud_integration_monthly_button"
-
-                android:layout_marginTop="8dp"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-
-                android:background="@color/widgetColor"/>
-
-        <Button
-                android:id="@+id/cloud_integration_yearly_button"
-                android:text="@string/about_cloud_integration_yearly_button"
-
-                android:layout_marginTop="8dp"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-
-                android:background="@color/widgetColor"/>
-
-        <TextView
                 android:id="@+id/this_translation_title"
                 android:layout_marginTop="20dp"
                 android:layout_width="fill_parent"

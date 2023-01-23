@@ -7,6 +7,7 @@ import android.hardware.input.InputManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.InputDevice
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.gms.ads.AdRequest
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
 import com.toolsboox.da.SquareItem
@@ -58,6 +61,12 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      */
     @Inject
     lateinit var presenter: DashboardPresenter
+
+    /**
+     * The Moshi instance.
+     */
+    @Inject
+    lateinit var moshi: Moshi
 
     /**
      * The injected presenter.
@@ -104,6 +113,15 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
             else -> R.id.action_to_calendar_day
         }
 
+        val androidId = Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ANDROID_ID)
+        sharedPreferences.edit().putString("androidId", androidId).apply()
+        Timber.i("Using AndroidId: $androidId")
+        val earlyAdopterDeviceIdsJson = sharedPreferences.getString("earlyAdopterDeviceIds", "[]")
+
+        val earlyAdopterDeviceIdsType = Types.newParameterizedType(MutableList::class.java, String::class.java)
+        val jsonAdapter = moshi.adapter<List<String>>(earlyAdopterDeviceIdsType)
+        val earlyAdopterDeviceIds = jsonAdapter.fromJson(earlyAdopterDeviceIdsJson!!)
+
         val squareItems = mutableListOf<SquareItem>()
         squareItems.add(
             SquareItem(
@@ -135,6 +153,16 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
                 R.id.action_to_about, bundleOf()
             )
         )
+
+        // Hide the cloud feature in case of regular users.
+        if (earlyAdopterDeviceIds?.contains(androidId) == true) {
+            squareItems.add(
+                SquareItem(
+                    getString(R.string.dashboard_item_cloud_title), R.drawable.ic_dashboard_item_cloud,
+                    R.id.action_to_cloud, bundleOf()
+                )
+            )
+        }
 
         val clickListener = object : SquareItemAdapter.OnItemClickListener {
             override fun onItemClicked(squareItem: SquareItem) {

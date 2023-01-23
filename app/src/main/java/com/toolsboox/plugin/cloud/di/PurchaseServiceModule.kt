@@ -1,6 +1,6 @@
-package com.toolsboox.plugin.about.di
+package com.toolsboox.plugin.cloud.di
 
-import com.toolsboox.plugin.about.nw.PurchaseService
+import com.toolsboox.plugin.cloud.nw.PurchaseService
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
