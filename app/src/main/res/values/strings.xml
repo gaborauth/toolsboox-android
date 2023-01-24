@@ -206,14 +206,22 @@
     <string name="calendar_time_box_day_brain_dump">Brain Dump</string>
     <string name="calendar_time_box_day_notes">Notes</string>
 
-    <string name="cloud_title" translatable="false">Cloud integration</string>
-    <string name="cloud_message" translatable="false">Backup personal data with strong AES-256 encryption to cloud backend (very experimental feature!). If you want to try it for free, please ask me about redeem coupon on Discord.</string>
+    <string name="cloud_title" translatable="false">Cloud</string>
+    <string name="cloud_loading" translatable="false">loading</string>
+
+    <string name="cloud_account_title" translatable="false">Account</string>
+    <string name="cloud_account_message" translatable="false">In order to use the cloud data backup, you must create an account. We do not store personal data, so you will get a generated ID that you must save.</string>
+    <string name="cloud_account_login_status" translatable="false">Your login ID: <b>%s</b></string>
+    <string name="cloud_account_sign_up_button" translatable="false">Sign up</string>
+    <string name="cloud_account_log_in_button" translatable="false">Log in</string>
+
+    <string name="cloud_subscription_title" translatable="false">Cloud subscription</string>
+    <string name="cloud_subscription_message" translatable="false">Backup personal data with strong encryption to cloud backend (very experimental feature!). If you want to try it for free, please ask me about redeem coupon on Discord.</string>
     <string name="cloud_subscription_status" translatable="false">Your subscription status: <b>%s</b></string>
     <string name="cloud_subscription_status_subs" translatable="false">Subscribed</string>
     <string name="cloud_subscription_status_no_subs" translatable="false">Not subscribed</string>
-    <string name="cloud_monthly_button" translatable="false">Monthly subscription\n(%s)</string>
-    <string name="cloud_yearly_button" translatable="false">Yearly subscription\n(%s)</string>
-    <string name="cloud_loading" translatable="false">loading</string>
+    <string name="cloud_subscription_monthly_button" translatable="false">Monthly subscription\n(%s)</string>
+    <string name="cloud_subscription_yearly_button" translatable="false">Yearly subscription\n(%s)</string>
 
     <!-- Strings related to dashboard plugin -->
     <!-- Strings related to dashboard fragment -->

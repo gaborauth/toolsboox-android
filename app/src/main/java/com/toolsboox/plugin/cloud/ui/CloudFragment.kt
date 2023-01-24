@@ -114,7 +114,7 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             )
         ).build()
 
-        binding.cloudIntegrationMonthlyButton.setOnClickListener {
+        binding.cloudMonthlyButton.setOnClickListener {
             Timber.i("Checking monthly offer of cloud_v1 product...")
             val offers = productDetails.subscriptionOfferDetails ?: return@setOnClickListener
             val offer = offers.firstOrNull { offer -> offer.basePlanId == "monthly" } ?: return@setOnClickListener
@@ -135,7 +135,7 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             Timber.i("BillingResult: $billingResult")
         }
 
-        binding.cloudIntegrationYearlyButton.setOnClickListener {
+        binding.cloudYearlyButton.setOnClickListener {
             Timber.i("Checking yearly offer of cloud_v1 product...")
             val offers = productDetails.subscriptionOfferDetails ?: return@setOnClickListener
             val offer = offers.firstOrNull { offer -> offer.basePlanId == "yearly" } ?: return@setOnClickListener
@@ -179,11 +179,14 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             .format(getString(R.string.app_name), getString(R.string.cloud_title))
 
         val loading = getString(R.string.cloud_loading)
-        binding.cloudIntegrationMonthlyButton.isEnabled = false
-        binding.cloudIntegrationMonthlyButton.text = getString(R.string.cloud_monthly_button).format(loading)
-        binding.cloudIntegrationYearlyButton.isEnabled = false
-        binding.cloudIntegrationYearlyButton.text = getString(R.string.cloud_yearly_button).format(loading)
-        binding.cloudIntegrationSubscriptionStatus.text = getString(R.string.cloud_subscription_status).format(loading)
+
+        binding.accountLoginStatus.text = getString(R.string.cloud_account_login_status).format(loading)
+
+        binding.cloudMonthlyButton.isEnabled = false
+        binding.cloudMonthlyButton.text = getString(R.string.cloud_subscription_monthly_button).format(loading)
+        binding.cloudYearlyButton.isEnabled = false
+        binding.cloudYearlyButton.text = getString(R.string.cloud_subscription_yearly_button).format(loading)
+        binding.cloudSubscriptionStatus.text = getString(R.string.cloud_subscription_status).format(loading)
 
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
@@ -199,15 +202,15 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                                     productDetails.subscriptionOfferDetails?.forEach { offer ->
                                         val price = offer.pricingPhases.pricingPhaseList[0].formattedPrice
                                         if (offer.basePlanId == "monthly") {
-                                            val buttonText = getString(R.string.cloud_monthly_button).format(price)
-                                            binding.cloudIntegrationMonthlyButton.isEnabled = true
-                                            binding.cloudIntegrationMonthlyButton.text = buttonText
+                                            val buttonText = getString(R.string.cloud_subscription_monthly_button).format(price)
+                                            binding.cloudMonthlyButton.isEnabled = true
+                                            binding.cloudMonthlyButton.text = buttonText
 
                                         }
                                         if (offer.basePlanId == "yearly") {
-                                            val buttonText = getString(R.string.cloud_yearly_button).format(price)
-                                            binding.cloudIntegrationYearlyButton.isEnabled = true
-                                            binding.cloudIntegrationYearlyButton.text = buttonText
+                                            val buttonText = getString(R.string.cloud_subscription_yearly_button).format(price)
+                                            binding.cloudYearlyButton.isEnabled = true
+                                            binding.cloudYearlyButton.text = buttonText
                                         }
                                     }
                                 }
@@ -237,7 +240,7 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                                 status = getString(R.string.cloud_subscription_status_no_subs)
                             }
                             val html = getString(R.string.cloud_subscription_status).format(status)
-                            binding.cloudIntegrationSubscriptionStatus.text = Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT)
+                            binding.cloudSubscriptionStatus.text = Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT)
                         } else {
                             Timber.w("queryPurchasesAsync: $purchasesResult")
                         }
