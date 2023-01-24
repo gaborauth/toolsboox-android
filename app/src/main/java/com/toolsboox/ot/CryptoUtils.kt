@@ -1,5 +1,7 @@
 package com.toolsboox.ot
 
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
@@ -17,7 +19,7 @@ class CryptoUtils {
         /**
          * The secure random instance.
          */
-        val random = SecureRandom()
+        private val random = SecureRandom()
 
         /**
          * Decrypt the encrypted message with the password.
@@ -51,6 +53,18 @@ class CryptoUtils {
             cipher.init(Cipher.ENCRYPT_MODE, keySpecs.secretKey, keySpecs.ivSpec)
 
             return "Salted__".toByteArray(Charsets.UTF_8) + keySpecs.salt + cipher.doFinal(clear)
+        }
+
+        /**
+         * Create MD5 hash of the byte array.
+         *
+         * @param clear the clear byte array
+         * @return the md5 hash in hex string
+         */
+        fun md5Hash(clear: ByteArray): String {
+            val md5 = MessageDigest.getInstance("MD5")
+            md5.update(clear)
+            return BigInteger(1, md5.digest()).toString(16)
         }
 
         /**
