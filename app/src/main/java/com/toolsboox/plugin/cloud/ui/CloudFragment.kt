@@ -1,16 +1,20 @@
 package com.toolsboox.plugin.cloud.ui
 
+import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Html
 import android.view.View
+import androidx.core.widget.addTextChangedListener
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClient.ProductType
 import com.android.billingclient.api.QueryProductDetailsParams.Product
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.squareup.moshi.Moshi
 import com.toolsboox.R
+import com.toolsboox.da.Credential
 import com.toolsboox.databinding.FragmentCloudBinding
 import com.toolsboox.ot.CryptoUtils
 import com.toolsboox.plugin.cloud.da.Purchase
@@ -97,7 +101,6 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
             if (billingResult.responseCode == BillingResponseCode.OK) {
                 Timber.i("PurchasesUpdatedListener: $purchases")
-                //[Purchase. Json: {"orderId":"GPA.3324-7264-6091-73699","packageName":"com.toolsboox","productId":"cloud_v1","purchaseTime":1674239658527,"purchaseState":0,"purchaseToken":"ckkhmodnlblplnpbinnebhod.AO-J1OzDkvfLPTaQeINPPQUuVIAxs_GN17Gq6y6EailfVOTPX0N1hm9-YBwkACbukFXo0StrvuB1phlcPobgw9gulhEUEVegZw","quantity":1,"autoRenewing":true,"acknowledged":false}]
             } else {
                 Timber.w("PurchasesUpdatedListener: $billingResult")
             }
@@ -113,6 +116,78 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                 Product.newBuilder().setProductId("cloud_v1").setProductType(ProductType.SUBS).build()
             )
         ).build()
+
+        binding.accountSignUpButton.setOnClickListener {
+            val signUpDialog = AlertDialog.Builder(requireContext())
+
+            val passwordView = requireActivity().layoutInflater.inflate(R.layout.fragment_cloud_sign_in_view, null)
+            val passwordEditText = passwordView.findViewById<TextInputEditText>(R.id.password_edit_text)
+
+            signUpDialog.setTitle(R.string.cloud_account_sign_up_dialog_title)
+            signUpDialog.setView(passwordView)
+
+            signUpDialog.setPositiveButton(R.string.cloud_account_sign_up_button) { dialog, _ ->
+                val password = passwordEditText.text.toString()
+
+                val hash = CryptoUtils.md5Hash(password.toByteArray(Charsets.UTF_8))
+                presenter.createCredential(this@CloudFragment, hash)
+
+                dialog.dismiss()
+            }
+
+            signUpDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+
+            val dialog = signUpDialog.show()
+            val signUpButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            signUpButton.isEnabled = false
+
+            passwordEditText.addTextChangedListener {
+                val password = passwordEditText.text.toString()
+                signUpButton.isEnabled = password.length >= 8
+            }
+        }
+
+        binding.accountLogInButton.setOnClickListener {
+            val logInDialog = AlertDialog.Builder(requireContext())
+
+            val logInView = requireActivity().layoutInflater.inflate(R.layout.fragment_cloud_log_in_view, null)
+            val userIdEditText = logInView.findViewById<TextInputEditText>(R.id.user_id_edit_text)
+            val passwordEditText = logInView.findViewById<TextInputEditText>(R.id.password_edit_text)
+
+            sharedPreferences.getString("userId", null)?.let { userIdEditText.setText(it) }
+
+            logInDialog.setTitle(R.string.cloud_account_sign_up_dialog_title)
+            logInDialog.setView(logInView)
+
+            logInDialog.setPositiveButton(R.string.cloud_account_log_in_button) { dialog, _ ->
+                val userId = userIdEditText.text.toString()
+                val password = passwordEditText.text.toString()
+
+                val hash = CryptoUtils.md5Hash(password.toByteArray(Charsets.UTF_8))
+                presenter.loginCredential(this@CloudFragment, UUID.fromString(userId), hash)
+
+                dialog.dismiss()
+            }
+
+            logInDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+
+            val dialog = logInDialog.show()
+            val logInButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            logInButton.isEnabled = false
+
+            userIdEditText.addTextChangedListener {
+                val userId = userIdEditText.text.toString()
+                val password = passwordEditText.text.toString()
+
+                logInButton.isEnabled = (password.length >= 8) and (userId.length == 36)
+            }
+            passwordEditText.addTextChangedListener {
+                val userId = userIdEditText.text.toString()
+                val password = passwordEditText.text.toString()
+
+                logInButton.isEnabled = (password.length >= 8) and (userId.length == 36)
+            }
+        }
 
         binding.cloudMonthlyButton.setOnClickListener {
             Timber.i("Checking monthly offer of cloud_v1 product...")
@@ -179,8 +254,25 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             .format(getString(R.string.app_name), getString(R.string.cloud_title))
 
         val loading = getString(R.string.cloud_loading)
+        val notLoggedIn = getString(R.string.cloud_not_logged_in)
 
-        binding.accountLoginStatus.text = getString(R.string.cloud_account_login_status).format(loading)
+        val userId = sharedPreferences.getString("userId", null)
+        if (userId == null) {
+            binding.accountLoginStatus.text = getString(R.string.cloud_account_login_status).format(notLoggedIn)
+            binding.accountSignUpButton.isClickable = true
+            binding.accountSignUpButton.alpha = 1.0f
+        } else {
+            binding.accountLoginStatus.text = getString(R.string.cloud_account_login_status).format(userId)
+            binding.accountSignUpButton.isEnabled = false
+            binding.accountSignUpButton.alpha = 0.5f
+        }
+
+        val refreshToken = sharedPreferences.getString("refreshToken", null)
+        if (refreshToken == null) {
+            binding.accountLogInButton.text = getString(R.string.cloud_account_log_in_button)
+        } else {
+            binding.accountLogInButton.text = getString(R.string.cloud_account_log_out_button)
+        }
 
         binding.cloudMonthlyButton.isEnabled = false
         binding.cloudMonthlyButton.text = getString(R.string.cloud_subscription_monthly_button).format(loading)
@@ -234,7 +326,7 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                                 Timber.i("ProductId: $productId, purchaseToken: $purchaseToken")
 
                                 moshi.adapter(Purchase::class.java).fromJson(purchase.originalJson)?.let {
-                                    presenter.update(this@CloudFragment, UUID.fromString("a01e8f50-9654-11ed-a7cc-dd953a7e666b"), it)
+                                    presenter.updatePurchase(this@CloudFragment, UUID.fromString("a01e8f50-9654-11ed-a7cc-dd953a7e666b"), it)
                                 }
                             } else {
                                 status = getString(R.string.cloud_subscription_status_no_subs)
@@ -257,11 +349,52 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
     }
 
     /**
+     * Create credential response.
+     *
+     * @param result the created credential result.
+     */
+    fun createCredentialResult(result: Credential) {
+        Timber.i("Create credential result: $result")
+
+        sharedPreferences.edit().putString("userId", result.userId.toString()).apply()
+        binding.accountLoginStatus.text = getString(R.string.cloud_account_login_status).format(result.userId)
+        binding.accountSignUpButton.isEnabled = false
+        binding.accountSignUpButton.alpha = 0.5f
+    }
+
+    /**
+     * Login credential failed.
+     *
+     * @param result the login result.
+     */
+    fun loginCredentialFailed(result: String?) {
+        Timber.i("Create credential result: $result")
+
+        val failedDialog = AlertDialog.Builder(requireContext())
+        failedDialog.setTitle(R.string.cloud_account_log_in_failed_dialog_title)
+        failedDialog.setMessage(R.string.cloud_account_log_in_failed_dialog_message)
+        failedDialog.setNeutralButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+        failedDialog.show()
+    }
+
+    /**
+     * Login credential response.
+     *
+     * @param result the login result.
+     */
+    fun loginCredentialResult(result: String) {
+        Timber.i("Create credential result: $result")
+
+        sharedPreferences.edit().putString("refreshToken", result).apply()
+        binding.accountLogInButton.text = getString(R.string.cloud_account_log_out_button)
+    }
+
+    /**
      * Update purchase response.
      *
      * @param result the purchase result.
      */
-    fun updateResult(result: Purchase) {
+    fun updatePurchaseResult(result: Purchase) {
         Timber.i("Update result: $result")
     }
 

@@ -55,13 +55,27 @@
             android:singleLine="false"/>
 
     <TextView
-            android:id="@+id/account_login_status"
-            android:text="@string/cloud_account_login_status"
+            android:id="@+id/account_login_status_message"
+            android:text="@string/cloud_account_login_status_message"
 
             android:layout_marginTop="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/account_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:gravity="start"
+            android:maxLines="4"
+            android:singleLine="false"/>
+
+    <TextView
+            android:id="@+id/account_login_status"
+            android:text="@string/cloud_account_login_status"
+
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/account_login_status_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
@@ -131,13 +145,27 @@
             android:singleLine="false"/>
 
     <TextView
-            android:id="@+id/cloud_subscription_status"
-            android:text="@string/cloud_subscription_status"
+            android:id="@+id/cloud_subscription_status_message"
+            android:text="@string/cloud_subscription_status_message"
 
             android:layout_marginTop="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/cloud_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:gravity="start"
+            android:maxLines="4"
+            android:singleLine="false"/>
+
+    <TextView
+            android:id="@+id/cloud_subscription_status"
+            android:text="@string/cloud_subscription_status"
+
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/cloud_subscription_status_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
