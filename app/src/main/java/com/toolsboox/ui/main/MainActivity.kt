@@ -93,11 +93,17 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         sharedPreferences.edit().putString("androidId", androidId).apply()
 
-        val headerEmail = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_email)
-        headerEmail.text = getString(R.string.main_not_logged_in)
+        val headerUserId = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_user_id)
 
-        val headerId = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_id)
-        headerId.text = androidId
+        val userId = sharedPreferences.getString("userId", null)
+        if (userId == null) {
+            headerUserId.text = getString(R.string.main_not_logged_in)
+        } else {
+            headerUserId.text = userId
+        }
+
+        val headerAndroidId = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_android_id)
+        headerAndroidId.text = androidId
 
         val headerVersion = binding.navigationView.getHeaderView(0)
             .findViewById<TextView>(R.id.navigation_header_version)

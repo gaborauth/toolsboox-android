@@ -6,7 +6,7 @@
         android:orientation="vertical">
 
     <TextView
-            android:id="@+id/navigation_header_email"
+            android:id="@+id/navigation_header_user_id"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_gravity="start|top"
@@ -16,7 +16,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
     <TextView
-            android:id="@+id/navigation_header_id"
+            android:id="@+id/navigation_header_android_id"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_gravity="end|bottom"
