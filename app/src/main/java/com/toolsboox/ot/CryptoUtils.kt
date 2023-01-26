@@ -1,8 +1,14 @@
 package com.toolsboox.ot
 
+import timber.log.Timber
 import java.math.BigInteger
+import java.nio.BufferOverflowException
+import java.nio.BufferUnderflowException
+import java.nio.ByteBuffer
 import java.security.MessageDigest
 import java.security.SecureRandom
+import java.util.*
+import java.util.regex.Pattern
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.IvParameterSpec
@@ -65,6 +71,51 @@ class CryptoUtils {
             val md5 = MessageDigest.getInstance("MD5")
             md5.update(clear)
             return BigInteger(1, md5.digest()).toString(16)
+        }
+
+        /**
+         * Get condensed key based on the UUID.
+         *
+         * @param uuid the UUID
+         * @return the condensed key
+         */
+        fun getKey(uuid: UUID?): String? {
+            if (uuid == null) {
+                return null
+            }
+
+            val buffer = ByteBuffer.allocate(java.lang.Long.BYTES * 2)
+            buffer.putLong(uuid.leastSignificantBits)
+            buffer.putLong(uuid.mostSignificantBits)
+            return Base64.getUrlEncoder().withoutPadding().encodeToString(buffer.array())
+        }
+
+        /**
+         * Get the UUID based of the condensed key.
+         *
+         * @param key the condensed key
+         * @return the UUID
+         */
+        fun getUUID(key: String?): UUID? {
+            if (key == null) {
+                return null
+            }
+
+            try {
+                val array = Base64.getUrlDecoder().decode(key)
+                val buffer = ByteBuffer.wrap(array)
+                val low = buffer.long
+                val high = buffer.long
+                return UUID(high, low)
+            } catch (ex: IllegalArgumentException) {
+                Timber.i(ex.message)
+            } catch (ex: BufferOverflowException) {
+                Timber.i(ex.message)
+            } catch (ex: BufferUnderflowException) {
+                Timber.i(ex.message)
+            }
+
+            return null
         }
 
         /**
