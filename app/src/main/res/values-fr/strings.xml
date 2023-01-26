@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="drawer_title">"%s – %s"</string>
-    <string name="filter_title">"Filtre d'intention"</string>
     <string name="fab_add_item">"Ajout"</string>
     <string name="something_happened_error">"Problème : vérifiez votre connexion"</string>
     <string name="something_happened_action">"Compris"</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="drawer_title">"%s – %s"</string>
-    <string name="filter_title">"Probar filtro"</string>
     <string name="fab_add_item">"Añadir elemento"</string>
     <string name="something_happened_error">"Ha habido un problema. Comprueba la conexión de red. :("</string>
     <string name="something_happened_action">"Vale"</string>
@@ -150,13 +149,11 @@ Strings related to dashboard fragment -->
 
     <!-- Common messages -->
     <string name="ok">"Aceptar"</string>
-    <string name="missing_feature_message">"Característica futura, ¡estamos en ello! :)"</string>
     <string name="main_all_granted_message">"Se han concedido los permisos solicitados. ¡Que tengas buen día!"</string>
     <string name="main_some_granted_message">"Se han denegado algunos permisos, ¡puedes perderte algunas características!"</string>
     <string name="main_all_denied_message">"Se han denegado todos los permisos, ¡puedes perderte algunas características!"</string>
     <string name="main_ask_permissions_title">"Solicitud de permisos"</string>
     <string name="main_ask_permissions_message">"Debes conceder acceso a %s."</string>
-    <string name="main_internet_permission_missing">"Falta el permiso de Internet…"</string>
     <string name="main_read_calendar_permission_missing">"Falta el permiso de lectura para el calendario…"</string>
     <string name="calendar_template_image">"Imagen de plantilla de calendario"</string>
     <string name="calendar_navigator_prev_button_text">"&lt;"</string>
@@ -326,4 +323,5 @@ esta semana"</string>
     <string name="calendar_time_box_day_brain_dump">"Volcado mental"</string>
     <string name="calendar_time_box_day_notes">"Notas"</string>
     <string name="kanban_planner_no_due_date">"sin fecha final"</string>
+    <string name="main_not_logged_in">"&lt;sin sesión iniciada&gt;"</string>
 </resources>

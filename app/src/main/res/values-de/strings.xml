@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="drawer_title">"%s – %s"</string>
-    <string name="filter_title">"Filter"</string>
     <string name="fab_add_item">"Eintrag hinzufügen"</string>
     <string name="something_happened_error">"Ein Fehler trat auf... Netzwerkverbindung prüfen :("</string>
     <string name="something_happened_action">"OK"</string>
@@ -150,13 +149,11 @@ Strings related to dashboard fragment -->
 
     <!-- Common messages -->
     <string name="ok">"OK"</string>
-    <string name="missing_feature_message">"Fehlende Funktion, bleib dran! :)"</string>
     <string name="main_all_granted_message">"Alle nötigen Rechte vergeben!"</string>
     <string name="main_some_granted_message">"Einige Rechte gewährt, fehlende Rechte verursachen den Verlust von Features!"</string>
     <string name="main_all_denied_message">"Alle Rechte gewährt, fehlende Rechte verursachen den Verlust von Features!"</string>
     <string name="main_ask_permissions_title">"Nach Rechten fragen"</string>
     <string name="main_ask_permissions_message">"Es müssen Rechte gewährt werden für %s."</string>
-    <string name="main_internet_permission_missing">"Fehlende Berechtigung für Internet..."</string>
     <string name="main_read_calendar_permission_missing">"Fehlende Berechtigung für Kalender..."</string>
     <string name="calendar_template_image">"Kalender Vorlage Bild"</string>
     <string name="calendar_navigator_prev_button_text">"&lt;"</string>

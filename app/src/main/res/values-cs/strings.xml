@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="drawer_title">"%s – %s"</string>
-    <string name="filter_title">"Intent filter"</string>
     <string name="fab_add_item">"Přidej položku"</string>
     <string name="something_happened_error">"Něco se stalo... prosím zkontrolujte připojení k síti. :("</string>
     <string name="something_happened_action">"OK"</string>
@@ -151,13 +150,11 @@ Strings related to dashboard fragment -->
 
     <!-- Common messages -->
     <string name="ok">"OK"</string>
-    <string name="missing_feature_message">"Chybějící funkce, vydržte! :)"</string>
     <string name="main_all_granted_message">"Všechna požadovaná oprávnění udělena! Pěkný den!"</string>
     <string name="main_some_granted_message">"Některá požadovaná oprávnění udělena, chybějící oprávnění mohou omezit funkce!"</string>
     <string name="main_all_denied_message">"Všechna oprávnění odepřena, odepření oprávnění může omezit funkce!"</string>
     <string name="main_ask_permissions_title">"Požádej o oprávnění"</string>
     <string name="main_ask_permissions_message">"Potřebuješ oprávnění k %s."</string>
-    <string name="main_internet_permission_missing">"Chybí oprávnění na internet..."</string>
     <string name="main_read_calendar_permission_missing">"Chybí oprávnění číst kalendář..."</string>
     <string name="calendar_template_image">"Obrázek šablony kalendáře"</string>
     <string name="calendar_navigator_prev_button_text">"&lt;"</string>
@@ -327,4 +324,5 @@ týdne"</string>
     <string name="calendar_time_box_day_brain_dump">"Postřehy, nápady"</string>
     <string name="calendar_time_box_day_notes">"Poznámky"</string>
     <string name="kanban_planner_no_due_date">"bez datumu splatnosti"</string>
+    <string name="main_not_logged_in">"&lt;nepřihlášen&gt;"</string>
 </resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="drawer_title">"%s – %s"</string>
-    <string name="filter_title">"Filtry"</string>
     <string name="fab_add_item">"Dodaj"</string>
     <string name="something_happened_error">"Coś poszło nie tak... Sprawdź połączenie z siecią."</string>
     <string name="something_happened_action">"Ok"</string>
@@ -134,12 +133,10 @@ Strings related to dashboard fragment -->
 
     <!-- Common messages -->
     <string name="ok">"Ok"</string>
-    <string name="missing_feature_message">"Brakująca funkcjonalność, bądźcie czujni! :)"</string>
     <string name="main_all_granted_message">"Wszystkie wymagane uprawnienia przyznane! Miłego dnia!"</string>
     <string name="main_some_granted_message">"Część wymaganych uprawnień przyznana, brak niektórych z nich może powodować braki funkcjonalności!"</string>
     <string name="main_ask_permissions_title">"Przyznaj uprawnienia"</string>
     <string name="main_ask_permissions_message">"Musisz przyznać uprawnienia do %s"</string>
-    <string name="main_internet_permission_missing">"Brak uprawnienia dostępu do sieci..."</string>
     <string name="main_read_calendar_permission_missing">"Brak uprawnienia odczytu kalendarza..."</string>
     <string name="calendar_template_image">"Obraz szablonu kalendarza"</string>
     <string name="calendar_navigator_prev_button_text">"&lt;"</string>
