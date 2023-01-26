@@ -159,20 +159,6 @@
             android:maxLines="4"
             android:singleLine="false"/>
 
-    <TextView
-            android:id="@+id/cloud_subscription_status"
-            android:text="@string/cloud_subscription_status"
-
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/cloud_subscription_status_message"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-
-            android:gravity="start"
-            android:maxLines="4"
-            android:singleLine="false"/>
-
     <Button
             android:id="@+id/cloud_monthly_button"
             android:text="@string/cloud_subscription_monthly_button"
@@ -182,7 +168,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toBottomOf="@id/cloud_subscription_status"
+            app:layout_constraintTop_toBottomOf="@id/cloud_subscription_status_message"
             app:layout_constraintBottom_toTopOf="@id/cloud_subscription_barrier"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/cloud_yearly_button"
@@ -198,7 +184,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toBottomOf="@id/cloud_subscription_status"
+            app:layout_constraintTop_toBottomOf="@id/cloud_subscription_status_message"
             app:layout_constraintBottom_toTopOf="@id/cloud_subscription_barrier"
             app:layout_constraintStart_toEndOf="@id/cloud_monthly_button"
             app:layout_constraintEnd_toEndOf="parent"

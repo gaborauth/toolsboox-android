@@ -3,7 +3,6 @@ package com.toolsboox.plugin.cloud.ui
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.Html
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
@@ -137,28 +136,11 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         }
 
         binding.cloudMonthlyButton.setOnClickListener {
-            subscriptionFlow()
+            subscriptionFlow("monthly")
         }
 
         binding.cloudYearlyButton.setOnClickListener {
-            Timber.i("Checking yearly offer of cloud_v1 product...")
-            val offers = productDetails.subscriptionOfferDetails ?: return@setOnClickListener
-            val offer = offers.firstOrNull { offer -> offer.basePlanId == "yearly" } ?: return@setOnClickListener
-
-            val productDetailsParamsList = listOf(
-                BillingFlowParams.ProductDetailsParams.newBuilder()
-                    .setProductDetails(productDetails)
-                    .setOfferToken(offer.offerToken)
-                    .build()
-            )
-
-            Timber.i("Starting billing flow...")
-            val billingFlowParams = BillingFlowParams.newBuilder()
-                .setProductDetailsParamsList(productDetailsParamsList)
-                .build()
-
-            val billingResult = billingClient.launchBillingFlow(requireActivity(), billingFlowParams)
-            Timber.i("BillingResult: $billingResult")
+            subscriptionFlow("yearly")
         }
 
         // Test of crypto utility compatibility.
@@ -226,7 +208,7 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                     { purchasesResult, purchaseList ->
                         if (purchasesResult.responseCode == BillingResponseCode.OK) {
                             Timber.i("queryPurchasesAsync: $purchaseList")
-                            var status = ""
+                            val status: String
                             if (purchaseList.isNotEmpty()) {
                                 status = getString(R.string.cloud_subscription_status_subs)
                                 val purchase = purchaseList[0]
@@ -241,8 +223,7 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                             } else {
                                 status = getString(R.string.cloud_subscription_status_no_subs)
                             }
-                            val html = getString(R.string.cloud_subscription_status).format(status)
-                            binding.cloudSubscriptionStatus.text = Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT)
+                            binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(status)
                         } else {
                             Timber.w("queryPurchasesAsync: $purchasesResult")
                         }
@@ -352,7 +333,7 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             binding.cloudYearlyButton.alpha = 0.5f
             binding.cloudYearlyButton.text = getString(R.string.cloud_subscription_yearly_button).format(loading)
 
-            binding.cloudSubscriptionStatus.text = getString(R.string.cloud_subscription_status).format(loading)
+            binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(loading)
         } else {
             if (refreshToken == null) {
                 binding.cloudMonthlyButton.isEnabled = false
@@ -372,11 +353,13 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
 
     /**
      * Start the subscription flow.
+     *
+     * @param basePlan the name of the base plan
      */
-    private fun subscriptionFlow() {
-        Timber.i("Checking monthly offer of cloud_v1 product...")
+    private fun subscriptionFlow(basePlan: String) {
+        Timber.i("Checking '%s' offer of cloud_v1 product...", basePlan)
         val offers = productDetails.subscriptionOfferDetails ?: return
-        val offer = offers.firstOrNull { offer -> offer.basePlanId == "monthly" } ?: return
+        val offer = offers.firstOrNull { offer -> offer.basePlanId == basePlan } ?: return
 
         val productDetailsParamsList = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()

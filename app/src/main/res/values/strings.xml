@@ -1,6 +1,5 @@
 <resources>
     <string name="drawer_title">%1$s &#8211; %2$s</string>
-    <string name="filter_title">Intent filter</string>
     <string name="fab_add_item">Add item</string>
     <string name="something_happened_error">Something happened&#8230; please check your network status. :(</string>
     <string name="something_happened_action">Okay</string>
@@ -22,7 +21,6 @@
     <string name="list_loading">Loading the list…</string>
     <string name="list_empty">Empty list…</string>
     <string name="export_message">Exported as %s</string>
-    <string name="missing_feature_message">Missing feature, stay tuned! :)</string>
 
     <!-- Strings related to toolbar and drawer menu -->
     <string name="drawer_menu_dashboard">Dashboard</string>
@@ -50,7 +48,6 @@
     <string name="main_all_denied_message">All asked permissions denied, denying permissions may cause feature loss!</string>
     <string name="main_ask_permissions_title">Ask for permissions</string>
     <string name="main_ask_permissions_message">You need to grant access to %s.</string>
-    <string name="main_internet_permission_missing">Missing permission of internet&#8230;</string>
     <string name="main_read_calendar_permission_missing">Missing permission of read calendar&#8230;</string>
     <string name="main_read_external_storage_permission_missing">Missing permission of read external storage&#8230;</string>
     <string name="main_write_external_storage_permission_missing">Missing permission of write external storage&#8230;</string>
@@ -230,8 +227,7 @@
 
     <string name="cloud_subscription_title" translatable="false">Cloud subscription</string>
     <string name="cloud_subscription_message" translatable="false">Backup personal data with strong encryption to cloud backend (very experimental feature!). If you want to try it for free, please ask me about redeem coupon on Discord.</string>
-    <string name="cloud_subscription_status_message" translatable="false">Your subscription status:</string>
-    <string name="cloud_subscription_status" translatable="false"><b>%s</b></string>
+    <string name="cloud_subscription_status_message" translatable="false">Your subscription status: %s</string>
     <string name="cloud_subscription_status_subs" translatable="false">Subscribed</string>
     <string name="cloud_subscription_status_no_subs" translatable="false">Not subscribed</string>
     <string name="cloud_subscription_monthly_button" translatable="false">Monthly subscription\n(%s)</string>
