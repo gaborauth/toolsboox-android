@@ -22,6 +22,7 @@ import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.internal.immutableListOf
 import timber.log.Timber
+import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 
@@ -217,13 +218,18 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                                 val productId = purchase.products[0]
                                 Timber.i("ProductId: $productId, purchaseToken: $purchaseToken")
 
-                                moshi.adapter(Purchase::class.java).fromJson(purchase.originalJson)?.let {
-                                    presenter.updatePurchase(this@CloudFragment, UUID.fromString("a01e8f50-9654-11ed-a7cc-dd953a7e666b"), it)
+                                val userId = sharedPreferences.getString("userId", null)
+                                if (userId != null) {
+                                    moshi.adapter(Purchase::class.java).fromJson(purchase.originalJson)?.let {
+                                        presenter.updatePurchase(this@CloudFragment, UUID.fromString(userId), it)
+                                    }
                                 }
                             } else {
                                 status = getString(R.string.cloud_subscription_status_no_subs)
                             }
-                            binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(status)
+                            requireActivity().runOnUiThread {
+                                binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(status)
+                            }
                         } else {
                             Timber.w("queryPurchasesAsync: $purchasesResult")
                         }
@@ -281,6 +287,7 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         sharedPreferences.edit().putString("userId", userId.toString()).apply()
         sharedPreferences.edit().putString("userIdKey", CryptoUtils.getKey(userId)).apply()
         sharedPreferences.edit().putString("refreshToken", result).apply()
+        sharedPreferences.edit().putLong("refreshTokenLastUpdate", Date.from(Instant.now()).time).apply()
 
         updateButtons()
     }
@@ -473,6 +480,7 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             sharedPreferences.edit().remove("userId").apply()
             sharedPreferences.edit().remove("userIdKey").apply()
             sharedPreferences.edit().remove("refreshToken").apply()
+            sharedPreferences.edit().remove("refreshTokenLastUpdate").apply()
             sharedPreferences.edit().remove("accessToken").apply()
 
             dialog.dismiss()

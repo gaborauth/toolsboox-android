@@ -3,9 +3,7 @@ package com.toolsboox.nw
 import com.toolsboox.da.Credential
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 import java.util.*
 
 /**
@@ -14,6 +12,17 @@ import java.util.*
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 interface CredentialService {
+
+    /**
+     * Refresh the access token.
+     *
+     * @param refreshToken the acutal refresh token
+     * @return the access token
+     */
+    @GET(value = "credential/accessToken")
+    fun accessTokenAsync(
+        @Header("Authorization") refreshToken: String
+    ): Deferred<Response<String>>
 
     /**
      * Sign up.
@@ -37,5 +46,16 @@ interface CredentialService {
     fun loginAsync(
         @Path("userId") userId: UUID,
         @Body hash: String
+    ): Deferred<Response<String>>
+
+    /**
+     * Refresh the refresh token.
+     *
+     * @param refreshToken the acutal refresh token
+     * @return the new refresh token
+     */
+    @GET(value = "credential/refreshToken")
+    fun refreshTokenAsync(
+        @Header("Authorization") refreshToken: String
     ): Deferred<Response<String>>
 }

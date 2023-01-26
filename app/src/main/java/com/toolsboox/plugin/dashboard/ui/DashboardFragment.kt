@@ -28,6 +28,8 @@ import com.toolsboox.plugin.dashboard.da.Version
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.time.Instant
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -218,6 +220,16 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         deviceCheck()
         apiLevelCheck()
 
+        val refreshToken = sharedPreferences.getString("refreshToken", null)
+        val refreshTokenLastUpdate = sharedPreferences.getLong("refreshTokenLastUpdate", 0L)
+        val now = Date.from(Instant.now()).time
+        if (refreshToken != null) {
+            presenter.accessTokenCredential(this, refreshToken)
+            if (refreshTokenLastUpdate + 86400 * 7L < now) {
+                presenter.refreshTokenCredential(this, refreshToken)
+            }
+        }
+
         updateAdButton()
     }
 
@@ -268,6 +280,27 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
                 dialog.cancel()
             }
         builder.create().show()
+    }
+
+    /**
+     * Render the result of acess token.
+     *
+     * @param accessToken the access token
+     */
+    fun accessTokenCredentialResult(accessToken: String) {
+        Timber.i("Store the new access token in shared preferences: $accessToken")
+        sharedPreferences.edit().putString("accessToken", accessToken).apply()
+    }
+
+    /**
+     * Render the result of refresh token.
+     *
+     * @param refreshToken the refresh token
+     */
+    fun refreshTokenCredentialResult(refreshToken: String) {
+        Timber.i("Store the new refresh token in shared preferences: $refreshToken")
+        sharedPreferences.edit().putString("refreshToken", refreshToken).apply()
+        sharedPreferences.edit().putLong("refreshTokenLastUpdate", Date.from(Instant.now()).time).apply()
     }
 
     /**
