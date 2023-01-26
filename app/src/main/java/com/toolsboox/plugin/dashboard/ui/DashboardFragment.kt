@@ -122,6 +122,8 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         val jsonAdapter = moshi.adapter<List<String>>(earlyAdopterDeviceIdsType)
         val earlyAdopterDeviceIds = jsonAdapter.fromJson(earlyAdopterDeviceIdsJson!!)
 
+        val cloudPluginEnabled = sharedPreferences.getString("cloudPluginEnabled", "false").toBoolean()
+
         val squareItems = mutableListOf<SquareItem>()
         squareItems.add(
             SquareItem(
@@ -154,8 +156,8 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
             )
         )
 
-        // Hide the cloud feature in case of regular users.
-        if (earlyAdopterDeviceIds?.contains(androidId) == true) {
+        // Hide the cloud feature in case of regular users or enable it generally.
+        if ((earlyAdopterDeviceIds?.contains(androidId) == true) or cloudPluginEnabled) {
             squareItems.add(
                 SquareItem(
                     getString(R.string.dashboard_item_cloud_title), R.drawable.ic_dashboard_item_cloud,
@@ -176,6 +178,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         adapter.notifyDataSetChanged()
 
         presenter.parameter(this, "earlyAdopterDeviceIds")
+        presenter.parameter(this, "cloudPluginEnabled")
         presenter.version(this)
 
         val inputManager = requireContext().getSystemService(Context.INPUT_SERVICE) as InputManager?

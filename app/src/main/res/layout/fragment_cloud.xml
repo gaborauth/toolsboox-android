@@ -25,12 +25,44 @@
             tools:visibility="visible"/>
 
     <TextView
-            android:id="@+id/account_title"
-            android:text="@string/cloud_account_title"
+            android:id="@+id/experimental_title"
+            android:text="@string/cloud_experimental_title"
 
+            android:layout_marginTop="16dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/main_progress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:gravity="start"
+            android:textSize="20sp"
+            android:maxLines="4"
+            android:singleLine="false"/>
+
+    <TextView
+            android:id="@+id/experiment_message"
+            android:text="@string/cloud_experimental_message"
+
+            android:layout_marginTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/experimental_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:gravity="start"
+            android:maxLines="4"
+            android:singleLine="false"/>
+
+    <TextView
+            android:id="@+id/account_title"
+            android:text="@string/cloud_account_title"
+
+            android:layout_marginTop="16dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/experiment_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
