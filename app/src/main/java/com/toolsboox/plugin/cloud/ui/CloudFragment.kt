@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Html
 import android.view.View
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClient.ProductType
@@ -88,6 +89,11 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
     private lateinit var billingClient: BillingClient
 
     /**
+     * Flag of billing client finished.
+     */
+    private var billingClientFinished = false
+
+    /**
      * OnViewCreated hook.
      *
      * @param view the parent view
@@ -118,96 +124,20 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         ).build()
 
         binding.accountSignUpButton.setOnClickListener {
-            val signUpDialog = AlertDialog.Builder(requireContext())
-
-            val passwordView = requireActivity().layoutInflater.inflate(R.layout.fragment_cloud_sign_in_view, null)
-            val passwordEditText = passwordView.findViewById<TextInputEditText>(R.id.password_edit_text)
-
-            signUpDialog.setTitle(R.string.cloud_account_sign_up_dialog_title)
-            signUpDialog.setView(passwordView)
-
-            signUpDialog.setPositiveButton(R.string.cloud_account_sign_up_button) { dialog, _ ->
-                val password = passwordEditText.text.toString()
-
-                val hash = CryptoUtils.md5Hash(password.toByteArray(Charsets.UTF_8))
-                presenter.createCredential(this@CloudFragment, hash)
-
-                dialog.dismiss()
-            }
-
-            signUpDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
-
-            val dialog = signUpDialog.show()
-            val signUpButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            signUpButton.isEnabled = false
-
-            passwordEditText.addTextChangedListener {
-                val password = passwordEditText.text.toString()
-                signUpButton.isEnabled = password.length >= 8
-            }
+            signUpDialog()
         }
 
         binding.accountLogInButton.setOnClickListener {
-            val logInDialog = AlertDialog.Builder(requireContext())
-
-            val logInView = requireActivity().layoutInflater.inflate(R.layout.fragment_cloud_log_in_view, null)
-            val userIdEditText = logInView.findViewById<TextInputEditText>(R.id.user_id_edit_text)
-            val passwordEditText = logInView.findViewById<TextInputEditText>(R.id.password_edit_text)
-
-            sharedPreferences.getString("userId", null)?.let { userIdEditText.setText(it) }
-
-            logInDialog.setTitle(R.string.cloud_account_sign_up_dialog_title)
-            logInDialog.setView(logInView)
-
-            logInDialog.setPositiveButton(R.string.cloud_account_log_in_button) { dialog, _ ->
-                val userId = userIdEditText.text.toString()
-                val password = passwordEditText.text.toString()
-
-                val hash = CryptoUtils.md5Hash(password.toByteArray(Charsets.UTF_8))
-                presenter.loginCredential(this@CloudFragment, UUID.fromString(userId), hash)
-
-                dialog.dismiss()
-            }
-
-            logInDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
-
-            val dialog = logInDialog.show()
-            val logInButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            logInButton.isEnabled = false
-
-            userIdEditText.addTextChangedListener {
-                val userId = userIdEditText.text.toString()
-                val password = passwordEditText.text.toString()
-
-                logInButton.isEnabled = (password.length >= 8) and (userId.length == 36)
-            }
-            passwordEditText.addTextChangedListener {
-                val userId = userIdEditText.text.toString()
-                val password = passwordEditText.text.toString()
-
-                logInButton.isEnabled = (password.length >= 8) and (userId.length == 36)
+            val refreshToken = sharedPreferences.getString("refreshToken", null)
+            if (refreshToken == null) {
+                logInDialog()
+            } else {
+                logOutDialog()
             }
         }
 
         binding.cloudMonthlyButton.setOnClickListener {
-            Timber.i("Checking monthly offer of cloud_v1 product...")
-            val offers = productDetails.subscriptionOfferDetails ?: return@setOnClickListener
-            val offer = offers.firstOrNull { offer -> offer.basePlanId == "monthly" } ?: return@setOnClickListener
-
-            val productDetailsParamsList = listOf(
-                BillingFlowParams.ProductDetailsParams.newBuilder()
-                    .setProductDetails(productDetails)
-                    .setOfferToken(offer.offerToken)
-                    .build()
-            )
-
-            Timber.i("Starting billing flow...")
-            val billingFlowParams = BillingFlowParams.newBuilder()
-                .setProductDetailsParamsList(productDetailsParamsList)
-                .build()
-
-            val billingResult = billingClient.launchBillingFlow(requireActivity(), billingFlowParams)
-            Timber.i("BillingResult: $billingResult")
+            subscriptionFlow()
         }
 
         binding.cloudYearlyButton.setOnClickListener {
@@ -232,16 +162,18 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         }
 
         // Test of crypto utility compatibility.
-        val encrypted = CryptoUtils.encrypt("test-data".toByteArray(), "pass1234")
-        Timber.e("Encrypted Android:    " + Base64.getEncoder().encodeToString(encrypted))
-        val decrypted = CryptoUtils.decrypt(encrypted, "pass1234")
-        Timber.e("Decrypted Android:    " + String(decrypted))
-        val encryptedJavaScript = "U2FsdGVkX19+eYEXdhMkJPCnPpCCU125gBbr+6/voJU="
-        val decryptedJavaScript = CryptoUtils.decrypt(Base64.getDecoder().decode(encryptedJavaScript), "pass1234")
-        Timber.e("Decrypted JavaScript: " + String(decryptedJavaScript))
-        val encryptedOpenSSL = "U2FsdGVkX19Ofjk/W1o+wr8TlKyVB+0XU1WbSkLTFvw="
-        val decryptedOpenSSL = CryptoUtils.decrypt(Base64.getDecoder().decode(encryptedOpenSSL), "pass1234")
-        Timber.e("Decrypted OpenSSL:    " + String(decryptedOpenSSL))
+        lifecycleScope.launchWhenResumed {
+            val encrypted = CryptoUtils.encrypt("test-data".toByteArray(), "pass1234")
+            Timber.e("Encrypted Android:    " + Base64.getEncoder().encodeToString(encrypted))
+            val decrypted = CryptoUtils.decrypt(encrypted, "pass1234")
+            Timber.e("Decrypted Android:    " + String(decrypted))
+            val encryptedJavaScript = "U2FsdGVkX19+eYEXdhMkJPCnPpCCU125gBbr+6/voJU="
+            val decryptedJavaScript = CryptoUtils.decrypt(Base64.getDecoder().decode(encryptedJavaScript), "pass1234")
+            Timber.e("Decrypted JavaScript: " + String(decryptedJavaScript))
+            val encryptedOpenSSL = "U2FsdGVkX19Ofjk/W1o+wr8TlKyVB+0XU1WbSkLTFvw="
+            val decryptedOpenSSL = CryptoUtils.decrypt(Base64.getDecoder().decode(encryptedOpenSSL), "pass1234")
+            Timber.e("Decrypted OpenSSL:    " + String(decryptedOpenSSL))
+        }
     }
 
     /**
@@ -253,33 +185,10 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         toolbar.root.title = getString(R.string.drawer_title)
             .format(getString(R.string.app_name), getString(R.string.cloud_title))
 
-        val loading = getString(R.string.cloud_loading)
-        val notLoggedIn = getString(R.string.cloud_not_logged_in)
+        // Update state of the buttons.
+        updateButtons()
 
-        val userId = sharedPreferences.getString("userId", null)
-        if (userId == null) {
-            binding.accountLoginStatus.text = getString(R.string.cloud_account_login_status).format(notLoggedIn)
-            binding.accountSignUpButton.isClickable = true
-            binding.accountSignUpButton.alpha = 1.0f
-        } else {
-            binding.accountLoginStatus.text = getString(R.string.cloud_account_login_status).format(userId)
-            binding.accountSignUpButton.isEnabled = false
-            binding.accountSignUpButton.alpha = 0.5f
-        }
-
-        val refreshToken = sharedPreferences.getString("refreshToken", null)
-        if (refreshToken == null) {
-            binding.accountLogInButton.text = getString(R.string.cloud_account_log_in_button)
-        } else {
-            binding.accountLogInButton.text = getString(R.string.cloud_account_log_out_button)
-        }
-
-        binding.cloudMonthlyButton.isEnabled = false
-        binding.cloudMonthlyButton.text = getString(R.string.cloud_subscription_monthly_button).format(loading)
-        binding.cloudYearlyButton.isEnabled = false
-        binding.cloudYearlyButton.text = getString(R.string.cloud_subscription_yearly_button).format(loading)
-        binding.cloudSubscriptionStatus.text = getString(R.string.cloud_subscription_status).format(loading)
-
+        // Start the billing client async connection.
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingResponseCode.OK) {
@@ -295,21 +204,22 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                                         val price = offer.pricingPhases.pricingPhaseList[0].formattedPrice
                                         if (offer.basePlanId == "monthly") {
                                             val buttonText = getString(R.string.cloud_subscription_monthly_button).format(price)
-                                            binding.cloudMonthlyButton.isEnabled = true
                                             binding.cloudMonthlyButton.text = buttonText
-
                                         }
                                         if (offer.basePlanId == "yearly") {
                                             val buttonText = getString(R.string.cloud_subscription_yearly_button).format(price)
-                                            binding.cloudYearlyButton.isEnabled = true
                                             binding.cloudYearlyButton.text = buttonText
                                         }
                                     }
                                 }
                             }
+                            billingClientFinished = true
                         } else {
                             Timber.w("queryProductDetailsAsync: $queryResult")
+                            billingClientFinished = false
                         }
+
+                        requireActivity().runOnUiThread { updateButtons() }
                     }
 
                     billingClient.queryPurchasesAsync(QueryPurchasesParams.newBuilder().setProductType(ProductType.SUBS).build())
@@ -340,6 +250,8 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                 } else {
                     Timber.w("onBillingSetupFinished: $billingResult")
                 }
+
+                requireActivity().runOnUiThread { updateButtons() }
             }
 
             override fun onBillingServiceDisconnected() {
@@ -357,9 +269,8 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         Timber.i("Create credential result: $result")
 
         sharedPreferences.edit().putString("userId", result.userId.toString()).apply()
-        binding.accountLoginStatus.text = getString(R.string.cloud_account_login_status).format(result.userId)
-        binding.accountSignUpButton.isEnabled = false
-        binding.accountSignUpButton.alpha = 0.5f
+        sharedPreferences.edit().putString("userIdKey", CryptoUtils.getKey(result.userId)).apply()
+        updateButtons()
     }
 
     /**
@@ -380,13 +291,17 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
     /**
      * Login credential response.
      *
+     * @param userId the user ID
      * @param result the login result.
      */
-    fun loginCredentialResult(result: String) {
+    fun loginCredentialResult(userId: UUID, result: String) {
         Timber.i("Create credential result: $result")
 
+        sharedPreferences.edit().putString("userId", userId.toString()).apply()
+        sharedPreferences.edit().putString("userIdKey", CryptoUtils.getKey(userId)).apply()
         sharedPreferences.edit().putString("refreshToken", result).apply()
-        binding.accountLogInButton.text = getString(R.string.cloud_account_log_out_button)
+
+        updateButtons()
     }
 
     /**
@@ -396,6 +311,195 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
      */
     fun updatePurchaseResult(result: Purchase) {
         Timber.i("Update result: $result")
+    }
+
+    /**
+     * Update button states.
+     */
+    private fun updateButtons() {
+        val loading = getString(R.string.cloud_loading)
+        val loggedIn = getString(R.string.cloud_logged_in)
+        val notLoggedIn = getString(R.string.cloud_not_logged_in)
+
+        val userIdKey = sharedPreferences.getString("userIdKey", null)
+        if (userIdKey == null) {
+            binding.accountLoginUserIdMessage.text = getString(R.string.cloud_account_login_user_id_message).format(notLoggedIn)
+            binding.accountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(notLoggedIn)
+            binding.accountSignUpButton.isEnabled = true
+            binding.accountSignUpButton.alpha = 1.0f
+        } else {
+            binding.accountLoginUserIdMessage.text = getString(R.string.cloud_account_login_user_id_message).format(userIdKey)
+            binding.accountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(notLoggedIn)
+            binding.accountSignUpButton.isEnabled = false
+            binding.accountSignUpButton.alpha = 0.5f
+        }
+
+        val refreshToken = sharedPreferences.getString("refreshToken", null)
+        if (refreshToken == null) {
+            binding.accountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(notLoggedIn)
+            binding.accountLogInButton.text = getString(R.string.cloud_account_log_in_button)
+        } else {
+            binding.accountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(loggedIn)
+            binding.accountLogInButton.text = getString(R.string.cloud_account_log_out_button)
+        }
+
+        if (!billingClientFinished) {
+            binding.cloudMonthlyButton.isEnabled = false
+            binding.cloudMonthlyButton.alpha = 0.5f
+            binding.cloudMonthlyButton.text = getString(R.string.cloud_subscription_monthly_button).format(loading)
+
+            binding.cloudYearlyButton.isEnabled = false
+            binding.cloudYearlyButton.alpha = 0.5f
+            binding.cloudYearlyButton.text = getString(R.string.cloud_subscription_yearly_button).format(loading)
+
+            binding.cloudSubscriptionStatus.text = getString(R.string.cloud_subscription_status).format(loading)
+        } else {
+            if (refreshToken == null) {
+                binding.cloudMonthlyButton.isEnabled = false
+                binding.cloudMonthlyButton.alpha = 0.5f
+
+                binding.cloudYearlyButton.isEnabled = false
+                binding.cloudYearlyButton.alpha = 0.5f
+            } else {
+                binding.cloudMonthlyButton.isEnabled = true
+                binding.cloudMonthlyButton.alpha = 1.0f
+
+                binding.cloudYearlyButton.isEnabled = true
+                binding.cloudYearlyButton.alpha = 1.0f
+            }
+        }
+    }
+
+    /**
+     * Start the subscription flow.
+     */
+    private fun subscriptionFlow() {
+        Timber.i("Checking monthly offer of cloud_v1 product...")
+        val offers = productDetails.subscriptionOfferDetails ?: return
+        val offer = offers.firstOrNull { offer -> offer.basePlanId == "monthly" } ?: return
+
+        val productDetailsParamsList = listOf(
+            BillingFlowParams.ProductDetailsParams.newBuilder()
+                .setProductDetails(productDetails)
+                .setOfferToken(offer.offerToken)
+                .build()
+        )
+
+        Timber.i("Starting billing flow...")
+        val billingFlowParams = BillingFlowParams.newBuilder()
+            .setProductDetailsParamsList(productDetailsParamsList)
+            .build()
+
+        val billingResult = billingClient.launchBillingFlow(requireActivity(), billingFlowParams)
+        Timber.i("BillingResult: $billingResult")
+    }
+
+    /**
+     * Displays the sign-up dialog.
+     */
+    private fun signUpDialog() {
+        val signUpDialog = AlertDialog.Builder(requireContext())
+
+        val passwordView = requireActivity().layoutInflater.inflate(R.layout.fragment_cloud_sign_in_view, null)
+        val passwordEditText = passwordView.findViewById<TextInputEditText>(R.id.password_edit_text)
+
+        signUpDialog.setTitle(R.string.cloud_account_sign_up_dialog_title)
+        signUpDialog.setView(passwordView)
+
+        signUpDialog.setPositiveButton(R.string.cloud_account_sign_up_button) { dialog, _ ->
+            val password = passwordEditText.text.toString()
+
+            val hash = CryptoUtils.md5Hash(password.toByteArray(Charsets.UTF_8))
+            presenter.createCredential(this@CloudFragment, hash)
+
+            dialog.dismiss()
+            updateButtons()
+        }
+
+        signUpDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+
+        val dialog = signUpDialog.show()
+        val signUpButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        signUpButton.isEnabled = false
+
+        passwordEditText.addTextChangedListener {
+            val password = passwordEditText.text.toString()
+            signUpButton.isEnabled = password.length >= 8
+        }
+    }
+
+    /**
+     * Displays the log in dialog.
+     */
+    private fun logInDialog() {
+        val logInDialog = AlertDialog.Builder(requireContext())
+
+        val logInView = requireActivity().layoutInflater.inflate(R.layout.fragment_cloud_log_in_view, null)
+        val userIdKeyEditText = logInView.findViewById<TextInputEditText>(R.id.user_id_key_edit_text)
+        val passwordEditText = logInView.findViewById<TextInputEditText>(R.id.password_edit_text)
+
+        sharedPreferences.getString("userIdKey", null)?.let { userIdKeyEditText.setText(it) }
+
+        logInDialog.setTitle(R.string.cloud_account_log_in_dialog_title)
+        logInDialog.setView(logInView)
+
+        logInDialog.setPositiveButton(R.string.cloud_account_log_in_button) { dialog, _ ->
+            val userIdKey = userIdKeyEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            val userId = CryptoUtils.getUUID(userIdKey)
+            val hash = CryptoUtils.md5Hash(password.toByteArray(Charsets.UTF_8))
+            presenter.loginCredential(this@CloudFragment, userId!!, hash)
+
+            dialog.dismiss()
+            updateButtons()
+        }
+
+        logInDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+
+        val dialog = logInDialog.show()
+        val logInButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        logInButton.isEnabled = false
+
+        userIdKeyEditText.addTextChangedListener {
+            val userIdKey = userIdKeyEditText.text.toString()
+            val userId = CryptoUtils.getUUID(userIdKey)
+            val password = passwordEditText.text.toString()
+
+            logInButton.isEnabled = (password.length >= 8) and (userId != null)
+        }
+        passwordEditText.addTextChangedListener {
+            val userIdKey = userIdKeyEditText.text.toString()
+            val userId = CryptoUtils.getUUID(userIdKey)
+            val password = passwordEditText.text.toString()
+
+            logInButton.isEnabled = (password.length >= 8) and (userId != null)
+        }
+    }
+
+    /**
+     * Displays the log-out dialog.
+     */
+    private fun logOutDialog() {
+        val logOutDialog = AlertDialog.Builder(requireContext())
+
+        logOutDialog.setTitle(R.string.cloud_account_log_out_dialog_title)
+        logOutDialog.setMessage(R.string.cloud_account_log_out_dialog_message)
+
+        logOutDialog.setPositiveButton(R.string.cloud_account_log_out_button) { dialog, _ ->
+            sharedPreferences.edit().remove("userId").apply()
+            sharedPreferences.edit().remove("userIdKey").apply()
+            sharedPreferences.edit().remove("refreshToken").apply()
+            sharedPreferences.edit().remove("accessToken").apply()
+
+            dialog.dismiss()
+
+            updateButtons()
+        }
+
+        logOutDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+
+        logOutDialog.show()
     }
 
     /**

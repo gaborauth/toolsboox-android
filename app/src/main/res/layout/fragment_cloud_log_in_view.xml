@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:hint="@string/cloud_account_log_in_view_user_id_hint"
+            android:hint="@string/cloud_account_log_in_view_user_id_key_hint"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/password_layout"
@@ -19,7 +19,7 @@
             app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/user_id_edit_text"
+                android:id="@+id/user_id_key_edit_text"
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

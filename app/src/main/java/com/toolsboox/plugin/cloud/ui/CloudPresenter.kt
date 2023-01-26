@@ -73,9 +73,10 @@ class CloudPresenter @Inject constructor() : FragmentPresenter() {
                         if (body == null) {
                             fragment.somethingHappened(true)
                         } else {
-                            fragment.loginCredentialResult(body)
+                            fragment.loginCredentialResult(userId, body)
                         }
                     }
+
                     403 -> {
                         fragment.loginCredentialFailed(response.body())
                     }

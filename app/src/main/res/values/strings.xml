@@ -208,22 +208,25 @@
 
     <string name="cloud_title" translatable="false">Cloud</string>
     <string name="cloud_loading" translatable="false">loading</string>
+    <string name="cloud_logged_in" translatable="false">logged in</string>
     <string name="cloud_not_logged_in" translatable="false">not logged in</string>
 
     <string name="cloud_account_title" translatable="false">Account</string>
     <string name="cloud_account_message" translatable="false">In order to use the cloud data backup, you must create an account. We do not store personal data, so you will get a generated ID that you must save.</string>
-    <string name="cloud_account_login_status_message" translatable="false">Your user ID:</string>
-    <string name="cloud_account_login_status" translatable="false"><b>%s</b></string>
+    <string name="cloud_account_login_user_id_message" translatable="false">Your user ID: %s</string>
+    <string name="cloud_account_login_status_message" translatable="false">Your log in status: %s</string>
     <string name="cloud_account_sign_up_button" translatable="false">Sign up</string>
     <string name="cloud_account_log_in_button" translatable="false">Log in</string>
     <string name="cloud_account_log_out_button" translatable="false">Log out</string>
     <string name="cloud_account_sign_up_dialog_title" translatable="false">Set your password</string>
-    <string name="cloud_account_sign_up_view_password_hint" translatable="false">minimum 8 characters</string>
-    <string name="cloud_account_log_in_dialog_title" translatable="false">Fill up your login</string>
-    <string name="cloud_account_log_in_view_user_id_hint" translatable="false">exactly 36 characters</string>
-    <string name="cloud_account_log_in_view_password_hint" translatable="false">minimum 8 characters</string>
+    <string name="cloud_account_sign_up_view_password_hint" translatable="false">Password (minimum 8 characters)</string>
+    <string name="cloud_account_log_in_dialog_title" translatable="false">Log in</string>
+    <string name="cloud_account_log_in_view_user_id_key_hint" translatable="false">User ID</string>
+    <string name="cloud_account_log_in_view_password_hint" translatable="false">Password (minimum 8 characters)</string>
     <string name="cloud_account_log_in_failed_dialog_title" translatable="false">Log in failed</string>
     <string name="cloud_account_log_in_failed_dialog_message" translatable="false">Check your user ID and password.</string>
+    <string name="cloud_account_log_out_dialog_title" translatable="false">Log out</string>
+    <string name="cloud_account_log_out_dialog_message" translatable="false">Are you sure?</string>
 
     <string name="cloud_subscription_title" translatable="false">Cloud subscription</string>
     <string name="cloud_subscription_message" translatable="false">Backup personal data with strong encryption to cloud backend (very experimental feature!). If you want to try it for free, please ask me about redeem coupon on Discord.</string>
