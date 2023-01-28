@@ -1,5 +1,6 @@
 package com.toolsboox.di
 
+import android.content.SharedPreferences
 import com.google.gson.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
@@ -10,7 +11,8 @@ import com.toolsboox.ot.UUIDJsonAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ActivityComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,7 +28,7 @@ import javax.inject.Named
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityComponent::class)
 object NetworkModule {
 
     /**
@@ -52,6 +54,36 @@ object NetworkModule {
 
         return OkHttpClient.Builder()
             .addInterceptor(loggerInterceptor)
+            .connectTimeout(10000, TimeUnit.MILLISECONDS)
+            .writeTimeout(10000, TimeUnit.MILLISECONDS)
+            .readTimeout(10000, TimeUnit.MILLISECONDS)
+            .build()
+    }
+
+    /**
+     * Provides the OkHttpClient with access token header.
+     *
+     * @return the client
+     */
+    @Provides
+    @Named("accessToken")
+    fun provideOkHttpClientWithAccessToken(sharedPreferences: SharedPreferences): OkHttpClient {
+        val loggerInterceptor = HttpLoggingInterceptor()
+        loggerInterceptor.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+
+        val bearerInterceptor = Interceptor { chain ->
+            val requestBuilder = chain.request().newBuilder()
+
+            sharedPreferences.getString("accessToken", null)?.let { accessToken ->
+                requestBuilder.addHeader("Authorization", "Bearer $accessToken")
+            }
+
+            return@Interceptor chain.proceed(requestBuilder.build())
+        }
+
+        return OkHttpClient.Builder()
+            .addInterceptor(loggerInterceptor)
+            .addInterceptor(bearerInterceptor)
             .connectTimeout(10000, TimeUnit.MILLISECONDS)
             .writeTimeout(10000, TimeUnit.MILLISECONDS)
             .readTimeout(10000, TimeUnit.MILLISECONDS)
@@ -119,6 +151,23 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .baseUrl(GITHUB_BASE_URL)
+            .client(okHttpClient)
+            .build()
+    }
+
+    /**
+     * Provides the Retrofit instance with GSON converter with access token header.
+     *
+     * @param okHttpClient the OkHttpClient instance
+     * @return the instance
+     */
+    @Provides
+    @Named("accessToken")
+    fun provideGsonRetrofitWithAccessToken(gson: Gson, @Named("accessToken") okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .baseUrl(SERVICE_BASE_URL)
             .client(okHttpClient)
             .build()
     }

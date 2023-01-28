@@ -25,10 +25,12 @@ import com.toolsboox.R
 import com.toolsboox.databinding.ActivityMainBinding
 import com.toolsboox.databinding.ToolbarBinding
 import com.toolsboox.di.MainSharedPreferencesModule
+import com.toolsboox.nw.CredentialService
 import com.toolsboox.ui.BaseActivity
 import com.toolsboox.utils.ReleaseTree
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 
@@ -53,10 +55,16 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     /**
-     * The injected presenter.
+     * The injected shared preferences.
      */
     @Inject
     lateinit var sharedPreferences: SharedPreferences
+
+    /**
+     * The credential service.
+     */
+    @Inject
+    lateinit var credentialService: CredentialService
 
     /**
      * The view binding.
@@ -187,6 +195,44 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
                 binding.fragmentContent.findNavController().navigate(calendarStartActionId, bundle)
             }
         }
+
+        val refreshToken = sharedPreferences.getString("refreshToken", null)
+        val refreshTokenLastUpdate = sharedPreferences.getLong("refreshTokenLastUpdate", 0L)
+        val accessTokenLastUpdate = sharedPreferences.getLong("accessTokenLastUpdate", 0L)
+        val now = Date.from(Instant.now()).time
+
+        if (refreshToken != null) {
+            // Request new access token after 8 hours.
+            if (accessTokenLastUpdate + 60 * 60 * 8L * 1000L < now) {
+                presenter.accessToken(this, refreshToken)
+            }
+            // Request new refresh token after 7 days.
+            if (refreshTokenLastUpdate + 60 * 60 * 24 * 7L * 1000L < now) {
+                presenter.refreshToken(this, refreshToken)
+            }
+        }
+    }
+
+    /**
+     * Process access token result.
+     *
+     * @param accessToken the access token
+     */
+    fun accessTokenResult(accessToken: String) {
+        sharedPreferences.edit().putString("accessToken", accessToken).apply()
+        sharedPreferences.edit().putLong("accessTokenLastUpdate", Date.from(Instant.now()).time).apply()
+        Timber.i("Store the new access token in shared preferences: $accessToken")
+    }
+
+    /**
+     * Process refresh token result.
+     *
+     * @param refreshToken the refresh token
+     */
+    fun refreshTokenResult(refreshToken: String) {
+        sharedPreferences.edit().putString("refreshToken", refreshToken).apply()
+        sharedPreferences.edit().putLong("refreshTokenLastUpdate", Date.from(Instant.now()).time).apply()
+        Timber.i("Store the new refresh token in shared preferences: $refreshToken")
     }
 
     /**
@@ -231,7 +277,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      * Instantiate the presenter.
      */
     override fun presenter(): MainPresenter {
-        return MainPresenter(this)
+        return MainPresenter(this, credentialService)
     }
 
     /**
