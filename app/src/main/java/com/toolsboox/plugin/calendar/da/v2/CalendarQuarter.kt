@@ -17,7 +17,8 @@ data class CalendarQuarter(
 
     override var calendarStrokes: MutableMap<String, List<Stroke>> = mutableMapOf(),
     override var calendarValues: MutableMap<String, Map<String, Float?>> = mutableMapOf(),
-    override var noteStrokes: MutableMap<String, List<Stroke>> = mutableMapOf()
+    override var noteStrokes: MutableMap<String, List<Stroke>> = mutableMapOf(),
+    override val cloudUpdated: Date? = null
 ) : Calendar {
 
     companion object {

@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.calendar.da.v2
 
 import com.toolsboox.da.Stroke
+import java.util.*
 
 /**
  * Calendar interface, common data and methods.
@@ -11,6 +12,7 @@ interface Calendar {
     val calendarStrokes: Map<String, List<Stroke>>
     val calendarValues: Map<String, Map<String, Float?>>
     val noteStrokes: Map<String, List<Stroke>>
+    val cloudUpdated: Date?
 
     companion object {
         /**
