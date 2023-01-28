@@ -5,7 +5,6 @@ import android.graphics.*
 import android.text.TextPaint
 import android.text.TextUtils
 import androidx.core.content.res.ResourcesCompat
-import timber.log.Timber
 import kotlin.math.min
 
 /**
@@ -244,7 +243,6 @@ interface Creator {
          * @param color optional fill color
          */
         fun notesDots(canvas: Canvas, x: Float, y: Float, size: Float, notePages: Int, color: Int = Color.BLACK) {
-            Timber.i("$notePages")
             for (i in 0 until min(notePages, 5)) {
                 if (color == Color.BLACK) {
                     drawCircle(canvas, x + 2 * i * size, y, size, fillBlack)
