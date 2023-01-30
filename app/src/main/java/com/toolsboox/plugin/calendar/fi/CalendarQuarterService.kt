@@ -54,16 +54,17 @@ class CalendarQuarterService @Inject constructor() {
      * @return optional data class instance
      */
     fun load(item: File): CalendarQuarter? {
-        if (item.exists()) {
-            FileReader(item).use { fileReader ->
-                Timber.i("Try to load from ${item.name}")
-                if (item.absolutePath.endsWith("-v2.json")) {
-                    moshi.adapter(CalendarQuarter::class.java)
-                        .fromJson(fileReader.readText())?.let { return it }
-                } else {
-                    moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarQuarter::class.java)
-                        .fromJson(fileReader.readText())?.let { return CalendarQuarter.convert(it) }
-                }
+        if (!item.exists()) return null
+        if (!item.name.startsWith("quarter-")) return null
+
+        FileReader(item).use { fileReader ->
+            Timber.i("Try to load from ${item.name}")
+            if (item.absolutePath.endsWith("-v2.json")) {
+                moshi.adapter(CalendarQuarter::class.java)
+                    .fromJson(fileReader.readText())?.let { return it }
+            } else {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarQuarter::class.java)
+                    .fromJson(fileReader.readText())?.let { return CalendarQuarter.convert(it) }
             }
         }
 

@@ -53,16 +53,17 @@ class CalendarMonthService @Inject constructor() {
      * @return optional data class instance
      */
     fun load(item: File): CalendarMonth? {
-        if (item.exists()) {
-            FileReader(item).use { fileReader ->
-                Timber.i("Try to load from ${item.name}")
-                if (item.absolutePath.endsWith("-v2.json")) {
-                    moshi.adapter(CalendarMonth::class.java)
-                        .fromJson(fileReader.readText())?.let { return it }
-                } else {
-                    moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarMonth::class.java)
-                        .fromJson(fileReader.readText())?.let { return CalendarMonth.convert(it) }
-                }
+        if (!item.exists()) return null
+        if (!item.name.startsWith("month-")) return null
+
+        FileReader(item).use { fileReader ->
+            Timber.i("Try to load from ${item.name}")
+            if (item.absolutePath.endsWith("-v2.json")) {
+                moshi.adapter(CalendarMonth::class.java)
+                    .fromJson(fileReader.readText())?.let { return it }
+            } else {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarMonth::class.java)
+                    .fromJson(fileReader.readText())?.let { return CalendarMonth.convert(it) }
             }
         }
 

@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.calendar.fi
 
 import com.squareup.moshi.Moshi
+import com.toolsboox.plugin.calendar.da.v1.CalendarItem
 import com.toolsboox.plugin.calendar.da.v2.CalendarYear
 import timber.log.Timber
 import java.io.File
@@ -52,16 +53,17 @@ class CalendarYearService @Inject constructor() {
      * @return optional data class instance
      */
     fun load(item: File): CalendarYear? {
-        if (item.exists()) {
-            FileReader(item).use { fileReader ->
-                Timber.i("Try to load from ${item.name}")
-                if (item.absolutePath.endsWith("-v2.json")) {
-                    moshi.adapter(CalendarYear::class.java)
-                        .fromJson(fileReader.readText())?.let { return it }
-                } else {
-                    moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarYear::class.java)
-                        .fromJson(fileReader.readText())?.let { return CalendarYear.convert(it) }
-                }
+        if (!item.exists()) return null
+        if (!item.name.startsWith("year-")) return null
+
+        FileReader(item).use { fileReader ->
+            Timber.i("Try to load from ${item.name}")
+            if (item.absolutePath.endsWith("-v2.json")) {
+                moshi.adapter(CalendarYear::class.java)
+                    .fromJson(fileReader.readText())?.let { return it }
+            } else {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarYear::class.java)
+                    .fromJson(fileReader.readText())?.let { return CalendarYear.convert(it) }
             }
         }
 

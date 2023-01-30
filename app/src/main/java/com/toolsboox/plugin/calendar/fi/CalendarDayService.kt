@@ -55,16 +55,17 @@ class CalendarDayService @Inject constructor() {
      * @return optional data class instance
      */
     fun load(item: File): CalendarDay? {
-        if (item.exists()) {
-            FileReader(item).use { fileReader ->
-                Timber.i("Try to load from ${item.name}")
-                if (item.absolutePath.endsWith("-v2.json")) {
-                    moshi.adapter(CalendarDay::class.java)
-                        .fromJson(fileReader.readText())?.let { return it }
-                } else {
-                    moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarDay::class.java)
-                        .fromJson(fileReader.readText())?.let { return CalendarDay.convert(it) }
-                }
+        if (!item.exists()) return null
+        if (!item.name.startsWith("day-")) return null
+
+        FileReader(item).use { fileReader ->
+            Timber.i("Try to load from ${item.name}")
+            if (item.absolutePath.endsWith("-v2.json")) {
+                moshi.adapter(CalendarDay::class.java)
+                    .fromJson(fileReader.readText())?.let { return it }
+            } else {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarDay::class.java)
+                    .fromJson(fileReader.readText())?.let { return CalendarDay.convert(it) }
             }
         }
 

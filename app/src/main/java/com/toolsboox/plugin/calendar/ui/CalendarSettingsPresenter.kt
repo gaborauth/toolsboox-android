@@ -168,43 +168,36 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
                         stream.map(Path::toFile).filter(File::isFile).filter { it.name.endsWith(".json") }.forEach { item ->
                             if (item.name.startsWith("pattern-")) return@forEach
 
-                            if (item.name.startsWith("year-")) {
-                                calendarYearService.load(item)?.let { calendarYear ->
-                                    if (calendarYear.year == year) {
-                                        calendarPattern.updateYear(calendarYear)
-                                    }
+                            calendarYearService.load(item)?.let { calendarYear ->
+                                if (calendarYear.year == year) {
+                                    calendarPattern.updateYear(calendarYear)
                                 }
                             }
 
-                            if (item.name.startsWith("quarter-")) {
-                                calendarQuarterService.load(item)?.let { calendarQuarter ->
-                                    if (calendarQuarter.year == year) {
-                                        calendarPattern.updateQuarter(calendarQuarter)
-                                    }
+                            calendarQuarterService.load(item)?.let { calendarQuarter ->
+                                if (calendarQuarter.year == year) {
+                                    calendarPattern.updateQuarter(calendarQuarter)
                                 }
                             }
 
-                            if (item.name.startsWith("month-")) {
-                                calendarMonthService.load(item)?.let { calendarMonth ->
-                                    if (calendarMonth.year == year) {
-                                        calendarPattern.updateMonth(calendarMonth)
-                                    }
+
+                            calendarMonthService.load(item)?.let { calendarMonth ->
+                                if (calendarMonth.year == year) {
+                                    calendarPattern.updateMonth(calendarMonth)
                                 }
                             }
 
-                            if (item.name.startsWith("week-")) {
-                                calendarWeekService.load(item)?.let { calendarWeek ->
-                                    if (calendarWeek.year == year) {
-                                        calendarPattern.updateWeek(calendarWeek)
-                                    }
+
+                            calendarWeekService.load(item)?.let { calendarWeek ->
+                                if (calendarWeek.year == year) {
+                                    calendarPattern.updateWeek(calendarWeek)
                                 }
                             }
 
-                            if (item.name.startsWith("day-")) {
-                                calendarDayService.load(item)?.let { calendarDay ->
-                                    if (calendarDay.year == year) {
-                                        calendarPattern.updateDay(calendarDay)
-                                    }
+
+                            calendarDayService.load(item)?.let { calendarDay ->
+                                if (calendarDay.year == year) {
+                                    calendarPattern.updateDay(calendarDay)
                                 }
                             }
                         }

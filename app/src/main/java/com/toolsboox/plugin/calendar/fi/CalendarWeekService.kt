@@ -56,16 +56,17 @@ class CalendarWeekService @Inject constructor() {
      * @return optional data class instance
      */
     fun load(item: File): CalendarWeek? {
-        if (item.exists()) {
-            FileReader(item).use { fileReader ->
-                Timber.i("Try to load from ${item.name}")
-                if (item.absolutePath.endsWith("-v2.json")) {
-                    moshi.adapter(CalendarWeek::class.java)
-                        .fromJson(fileReader.readText())?.let { return it }
-                } else {
-                    moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarWeek::class.java)
-                        .fromJson(fileReader.readText())?.let { return CalendarWeek.convert(it) }
-                }
+        if (!item.exists()) return null
+        if (!item.name.startsWith("week-")) return null
+
+        FileReader(item).use { fileReader ->
+            Timber.i("Try to load from ${item.name}")
+            if (item.absolutePath.endsWith("-v2.json")) {
+                moshi.adapter(CalendarWeek::class.java)
+                    .fromJson(fileReader.readText())?.let { return it }
+            } else {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarWeek::class.java)
+                    .fromJson(fileReader.readText())?.let { return CalendarWeek.convert(it) }
             }
         }
 
