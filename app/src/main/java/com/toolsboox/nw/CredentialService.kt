@@ -16,7 +16,7 @@ interface CredentialService {
     /**
      * Refresh the access token.
      *
-     * @param refreshToken the acutal refresh token
+     * @param refreshToken the actual refresh token
      * @return the access token
      */
     @GET(value = "credential/accessToken")
@@ -51,7 +51,7 @@ interface CredentialService {
     /**
      * Refresh the refresh token.
      *
-     * @param refreshToken the acutal refresh token
+     * @param refreshToken the actual refresh token
      * @return the new refresh token
      */
     @GET(value = "credential/refreshToken")
