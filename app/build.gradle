@@ -154,8 +154,8 @@ dependencies {
     // Dagger and Hilt DI and its dependency
     kapt 'com.google.dagger:dagger-compiler:2.45'
     implementation 'com.google.dagger:dagger:2.44.2'
-    kapt 'com.google.dagger:hilt-android-compiler:2.44.2'
-    implementation 'com.google.dagger:hilt-android:2.44.2'
+    kapt 'com.google.dagger:hilt-android-compiler:2.45'
+    implementation 'com.google.dagger:hilt-android:2.45'
 
     // Onyx SDK
     implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.40'
