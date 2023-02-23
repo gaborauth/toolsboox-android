@@ -19,8 +19,8 @@ data class CalendarDay(
     override var calendarStrokes: MutableMap<String, List<Stroke>> = mutableMapOf(),
     override var calendarValues: MutableMap<String, Map<String, Float?>> = mutableMapOf(),
     override var noteStrokes: MutableMap<String, List<Stroke>> = mutableMapOf(),
-    override val cloudCreated: Date? = null,
-    override val cloudUpdated: Date? = null
+    override var created: Date? = null,
+    override var updated: Date? = null
 ) : Calendar {
 
     companion object {

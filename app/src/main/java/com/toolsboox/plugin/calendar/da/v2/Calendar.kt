@@ -12,8 +12,8 @@ interface Calendar {
     val calendarStrokes: Map<String, List<Stroke>>
     val calendarValues: Map<String, Map<String, Float?>>
     val noteStrokes: Map<String, List<Stroke>>
-    val cloudCreated: Date?
-    val cloudUpdated: Date?
+    val created: Date?
+    val updated: Date?
 
     companion object {
         /**
