@@ -1,8 +1,40 @@
 package com.toolsboox.plugin.calendar.nw
 
+import com.toolsboox.plugin.calendar.da.v1.CalendarItem
+import kotlinx.coroutines.Deferred
+import retrofit2.Response
+import retrofit2.http.*
+import java.util.*
+
 /**
  * Calendar service interface.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-interface CalendarService
+interface CalendarService {
+
+    /**
+     * List the cloud calendar items.
+     *
+     * @return the list of calendar items
+     */
+    @GET(value = "calendarItem/list")
+    fun listAsync(): Deferred<Response<List<CalendarItem>>>
+
+    /**
+     * Upload an encrypted calendar page.
+     *
+     * @param path the path of the file
+     * @param baseName the base name of the file
+     * @param version the version of the file
+     * @param encoded the encoded data
+     * @return the saved calendar item
+     */
+    @POST(value = "calendarItem/update/{path}/{baseName}/{version}")
+    fun updateAsync(
+        @Path("path") path: String,
+        @Path("baseName") baseName: String,
+        @Path("version") version: String,
+        @Body encoded: String
+    ): Deferred<Response<CalendarItem>>
+}

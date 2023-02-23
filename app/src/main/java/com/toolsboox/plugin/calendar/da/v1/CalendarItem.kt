@@ -9,8 +9,9 @@ import java.util.*
  */
 data class CalendarItem(
     val userId: UUID,
+    val path: String,
     val baseName: String,
     val version: String,
     val created: Date?,
-    val updated: Date?,
+    val updated: Date?
 )
