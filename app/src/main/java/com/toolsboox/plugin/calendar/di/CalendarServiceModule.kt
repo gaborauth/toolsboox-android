@@ -7,6 +7,7 @@ import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import retrofit2.Retrofit
+import javax.inject.Named
 
 /**
  * Calendar service module, provides services.
@@ -24,7 +25,7 @@ object CalendarServiceModule {
      */
     @Provides
     @Reusable
-    fun provideCalendarService(retrofit: Retrofit): CalendarService {
+    fun provideCalendarService(@Named("accessToken") retrofit: Retrofit): CalendarService {
         return retrofit.create(CalendarService::class.java)
     }
 }
