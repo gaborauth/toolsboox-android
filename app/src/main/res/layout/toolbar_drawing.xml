@@ -116,10 +116,22 @@
             android:scaleType="fitXY"
             app:srcCompat="@drawable/ic_toolbar_switch_side"
 
-            app:layout_constraintBottom_toTopOf="@id/toolbarSettings"
+            app:layout_constraintBottom_toTopOf="@id/toolbarCloudSync"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:contentDescription="@string/calendar_drawing_toolbar_switch_side"/>
+
+    <ImageButton
+            android:id="@+id/toolbarCloudSync"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_toolbar_cloud_sync"
+
+            app:layout_constraintBottom_toTopOf="@id/toolbarSettings"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/calendar_drawing_toolbar_cloud_sync"/>
 
     <ImageButton
             android:id="@+id/toolbarSettings"

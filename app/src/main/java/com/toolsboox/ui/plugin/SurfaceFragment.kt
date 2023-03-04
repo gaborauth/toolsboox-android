@@ -197,6 +197,10 @@ abstract class SurfaceFragment : ScreenFragment() {
             onSideSwitched()
         }
 
+        provideToolbarDrawing().toolbarCloudSync.setOnClickListener {
+            CalendarNavigator.toCloudSync(this)
+        }
+
         provideToolbarDrawing().toolbarSettings.setOnClickListener {
             CalendarNavigator.toSettings(this)
         }

@@ -76,6 +76,20 @@
     <string name="calendar_navigator_image">Calendar navigator image</string>
     <string name="calendar_template_image">Calendar template image</string>
 
+    <string name="calendar_cloud_title">Cloud sync</string>
+    <string name="calendar_cloud_passphrase_text">Your passphrase:</string>
+    <string name="calendar_cloud_passphrase_hint">Passphrase, minimum 8 characters</string>
+    <string name="calendar_cloud_sync_button">Sync</string>
+    <plurals name="calendar_cloud_to_cloud_text">
+        <item quantity="one">Sync to cloud (only %d item at a time):</item>
+        <item quantity="other">Sync to cloud (only %d items at a time):</item>
+    </plurals>
+    <plurals name="calendar_cloud_from_cloud_text">
+        <item quantity="one">Sync from cloud (only %d item at a time):</item>
+        <item quantity="other">Sync from cloud (only %d items at a time):</item>
+    </plurals>
+    <string name="calendar_cloud_nothing_to_sync">Nothing to sync…</string>
+
     <string name="calendar_settings_title">Settings</string>
     <string name="calendar_settings_select_start_view_text">Select the start view of the Calendar:</string>
     <string name="calendar_settings_start_view_year">Yearly planner</string>
@@ -119,6 +133,7 @@
     <string name="calendar_drawing_toolbar_swipe_up">Swipe up</string>
     <string name="calendar_drawing_toolbar_swipe_down">Swipe down</string>
     <string name="calendar_drawing_toolbar_switch_side">Switch side</string>
+    <string name="calendar_drawing_toolbar_cloud_sync">Cloud sync</string>
     <string name="calendar_drawing_toolbar_settings">Settings</string>
 
     <string name="calendar_navigator_prev_button_text">&lt;</string>

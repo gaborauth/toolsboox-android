@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.calendar.fi
 
 import com.squareup.moshi.Moshi
+import com.toolsboox.plugin.calendar.da.v1.CalendarItem
 import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
 import timber.log.Timber
 import java.io.File
@@ -8,6 +9,7 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.io.PrintWriter
 import java.nio.file.Files
+import java.time.Instant
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -26,6 +28,19 @@ class CalendarMonthService @Inject constructor() {
     lateinit var moshi: Moshi
 
     /**
+     * Returns with the item of the data class.
+     *
+     * @param userId the user ID
+     * @param calendarMonth the data class
+     * @return the calendar item data class
+     */
+    fun getItem(userId: UUID, calendarMonth: CalendarMonth): CalendarItem {
+        val year = "%04d".format(calendarMonth.year)
+        val month = "%02d".format(calendarMonth.month)
+        return CalendarItem(userId, "$year/$month/", "month-$year-$month", "v2", calendarMonth.created, calendarMonth.updated)
+    }
+
+    /**
      * Load the data class from JSON file on the specified path.
      *
      * @param rootPath the root path
@@ -37,13 +52,24 @@ class CalendarMonthService @Inject constructor() {
         val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
         val calendarMonth = CalendarMonth(currentDate.year, currentDate.monthValue, locale)
 
-        val path = File(rootPath, "calendar/$year/$month/")
-        val baseName = "month-$year-$month"
+        return load(rootPath, "$year/$month/", "month-$year-$month") ?: calendarMonth
+    }
 
-        load(File(path, "$baseName-v2.json"))?.let { return it }
-        load(File(path, "$baseName.json"))?.let { return it }
+    /**
+     * Load the data class from JSON file on the specified path.
+     *
+     * @param rootPath the root path
+     * @param path the path
+     * @param baseName the base name
+     * @return the data class
+     */
+    fun load(rootPath: File, path: String, baseName: String): CalendarMonth? {
+        val fullPath = File(rootPath, "calendar/$path")
 
-        return calendarMonth
+        load(File(fullPath, "$baseName-v2.json"))?.let { return it }
+        load(File(fullPath, "$baseName.json"))?.let { return it }
+
+        return null
     }
 
     /**
@@ -71,6 +97,17 @@ class CalendarMonthService @Inject constructor() {
     }
 
     /**
+     * Convert the data class to JSON.
+     *
+     * @param calendarMonth the calendar month
+     * @return the JSON
+     */
+    fun json(calendarMonth: CalendarMonth): String {
+        val adapter = moshi.adapter(CalendarMonth::class.java)
+        return adapter.toJson(calendarMonth)
+    }
+
+    /**
      * Save the data class to JSON file on the specified path.
      *
      * @param rootPath the root path
@@ -81,19 +118,20 @@ class CalendarMonthService @Inject constructor() {
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
         val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
 
-        val path = File(rootPath, "calendar/$year/$month/")
-        path.mkdirs()
+        calendarMonth.created = calendarMonth.created ?: Date.from(Instant.now())
+        calendarMonth.updated = Date.from(Instant.now())
+        save(rootPath, "$year/$month/", "month-$year-$month", calendarMonth)
+    }
 
-        val baseName = "month-$year-$month"
+    fun save(rootPath: File, path: String, baseName: String, calendarMonth: CalendarMonth) {
+        val fullPath = File(rootPath, "calendar/$path")
+        fullPath.mkdirs()
 
         // Try to save to v2
-        PrintWriter(FileWriter(File(path, "$baseName-v2.json"))).use {
-            val adapter = moshi.adapter(CalendarMonth::class.java)
-            it.write(adapter.toJson(calendarMonth))
-        }
+        PrintWriter(FileWriter(File(fullPath, "$baseName-v2.json"))).use { it.write(json(calendarMonth)) }
 
         // Try to rename the old file to .backup
-        val source = File(path, "$baseName.json")
+        val source = File(fullPath, "$baseName.json")
         if (source.exists()) {
             Files.move(source.toPath(), source.toPath().resolveSibling("$baseName.json.backup"))
         }
