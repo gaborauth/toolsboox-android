@@ -160,7 +160,7 @@ dependencies {
     // Onyx SDK
     implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.40'
     implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.20'
-    implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.2'
+    implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.3'
 
     // OkHttp, Retrofit and GSON
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.14.0'
