@@ -131,7 +131,7 @@ dependencies {
 
     // Billing client
     implementation 'com.android.billingclient:billing:5.1.0'
-    implementation 'com.android.billingclient:billing-ktx:5.1.0'
+    implementation 'com.android.billingclient:billing-ktx:5.2.0'
 
     // AndroidX dependencies
     implementation 'androidx.appcompat:appcompat:1.6.1'
