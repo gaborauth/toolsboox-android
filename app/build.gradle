@@ -8,17 +8,17 @@ apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.dagger.hilt.android'
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kapt {
         javacOptions {
-            option("-source", "8")
-            option("-target", "8")
+            option("-source", "11")
+            option("-target", "11")
         }
     }
     kapt.includeCompileClasspath = false
@@ -36,7 +36,7 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-    applicationVariants.all {
+    applicationVariants.configureEach {
         variant ->
             variant.outputs.each {
                 output ->
