@@ -163,8 +163,8 @@ dependencies {
     implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.6'
 
     // OkHttp, Retrofit and GSON
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.14.0'
-    implementation 'com.squareup.moshi:moshi:1.14.0'
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.15.0'
+    implementation 'com.squareup.moshi:moshi:1.15.0'
 
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
