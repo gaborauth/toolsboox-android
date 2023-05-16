@@ -175,7 +175,7 @@ dependencies {
 
     // Kotlin and extensions
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
 
     // Firebase integrations
     implementation platform('com.google.firebase:firebase-bom:32.0.0')
