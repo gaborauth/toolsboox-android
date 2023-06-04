@@ -210,6 +210,14 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             if (refreshTokenLastUpdate + 60 * 60 * 24 * 7L * 1000L < now) {
                 presenter.refreshToken(this, refreshToken)
             }
+
+            // Remove all tokens after 30 days.
+            if (refreshTokenLastUpdate + 60 * 60 * 24 * 30L * 1000L < now) {
+                sharedPreferences.edit().remove("refreshToken").apply()
+                sharedPreferences.edit().remove("refreshTokenLastUpdate").apply()
+                sharedPreferences.edit().remove("accessToken").apply()
+                sharedPreferences.edit().remove("accessTokenLastUpdate").apply()
+            }
         }
     }
 
