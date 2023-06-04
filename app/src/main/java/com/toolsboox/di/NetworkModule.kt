@@ -5,6 +5,7 @@ import com.google.gson.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.toolsboox.BuildConfig
+import com.toolsboox.ProductConstants
 import com.toolsboox.ot.DateJsonAdapter
 import com.toolsboox.ot.LocaleJsonAdapter
 import com.toolsboox.ot.UUIDJsonAdapter
@@ -30,11 +31,6 @@ import javax.inject.Named
 @Module
 @InstallIn(ActivityComponent::class)
 object NetworkModule {
-
-    /**
-     * Base URL of the service.
-     */
-    private const val SERVICE_BASE_URL = "https://api.toolsboox.com/"
 
     /**
      * Base URL of GitHub raw.
@@ -133,7 +129,7 @@ object NetworkModule {
         return Retrofit.Builder()
             .addConverterFactory(ScalarsConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
-            .baseUrl(SERVICE_BASE_URL)
+            .baseUrl(ProductConstants.SERVICE_BASE_URL)
             .client(okHttpClient)
             .build()
     }
@@ -167,7 +163,7 @@ object NetworkModule {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
-            .baseUrl(SERVICE_BASE_URL)
+            .baseUrl(ProductConstants.SERVICE_BASE_URL)
             .client(okHttpClient)
             .build()
     }
@@ -183,7 +179,7 @@ object NetworkModule {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
-            .baseUrl(SERVICE_BASE_URL)
+            .baseUrl(ProductConstants.SERVICE_BASE_URL)
             .client(okHttpClient)
             .build()
     }

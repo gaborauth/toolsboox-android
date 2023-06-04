@@ -53,8 +53,13 @@ android {
         appName = 'toolboox'
     }
 
-    flavorDimensions 'tier'
+    flavorDimensions = ['tier']
     productFlavors {
+        dev {
+            resValue "string", "app_name", "Tools for Boox - Dev"
+            applicationIdSuffix ""
+            dimension 'tier'
+        }
         prod {
             resValue "string", "app_name", "Tools for Boox"
             applicationIdSuffix ""
