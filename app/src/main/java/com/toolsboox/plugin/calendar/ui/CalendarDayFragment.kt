@@ -1,6 +1,5 @@
 package com.toolsboox.plugin.calendar.ui
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
@@ -35,12 +34,6 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
-
-    /**
-     * The shared preferences.
-     */
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
 
     /**
      * The Firebase analytics.

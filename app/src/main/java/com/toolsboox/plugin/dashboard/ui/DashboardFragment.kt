@@ -18,7 +18,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
 import com.toolsboox.da.SquareItem
@@ -28,8 +27,6 @@ import com.toolsboox.plugin.dashboard.da.Version
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import java.time.Instant
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -117,14 +114,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
 
         val androidId = Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ANDROID_ID)
         sharedPreferences.edit().putString("androidId", androidId).apply()
-        Timber.i("Using AndroidId: $androidId")
-        val earlyAdopterDeviceIdsJson = sharedPreferences.getString("earlyAdopterDeviceIds", "[]")
-
-        val earlyAdopterDeviceIdsType = Types.newParameterizedType(MutableList::class.java, String::class.java)
-        val jsonAdapter = moshi.adapter<List<String>>(earlyAdopterDeviceIdsType)
-        val earlyAdopterDeviceIds = jsonAdapter.fromJson(earlyAdopterDeviceIdsJson!!)
-
-        val cloudPluginEnabled = sharedPreferences.getString("cloudPluginEnabled", "false").toBoolean()
+        Timber.i("Stored androidId: $androidId")
 
         val squareItems = mutableListOf<SquareItem>()
         squareItems.add(
@@ -158,15 +148,12 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
             )
         )
 
-        // Hide the cloud feature in case of regular users or enable it generally.
-        if ((earlyAdopterDeviceIds?.contains(androidId) == true) or cloudPluginEnabled) {
-            squareItems.add(
-                SquareItem(
-                    getString(R.string.dashboard_item_cloud_title), R.drawable.ic_dashboard_item_cloud,
-                    R.id.action_to_cloud, bundleOf()
-                )
+        squareItems.add(
+            SquareItem(
+                getString(R.string.dashboard_item_cloud_title), R.drawable.ic_dashboard_item_cloud,
+                R.id.action_to_cloud, bundleOf()
             )
-        }
+        )
 
         val clickListener = object : SquareItemAdapter.OnItemClickListener {
             override fun onItemClicked(squareItem: SquareItem) {

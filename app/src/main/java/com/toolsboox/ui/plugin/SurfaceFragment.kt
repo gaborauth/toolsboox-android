@@ -1,10 +1,12 @@
 package com.toolsboox.ui.plugin
 
 import android.Manifest
+import android.content.SharedPreferences
 import android.graphics.*
 import android.provider.MediaStore
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GestureDetectorCompat
 import com.onyx.android.sdk.api.device.epd.EpdController
@@ -12,6 +14,8 @@ import com.onyx.android.sdk.data.note.TouchPoint
 import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.pen.data.TouchPointList
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import com.toolsboox.R
 import com.toolsboox.da.Stroke
 import com.toolsboox.da.StrokePoint
@@ -21,6 +25,7 @@ import com.toolsboox.plugin.calendar.CalendarNavigator
 import timber.log.Timber
 import java.time.Instant
 import java.util.*
+import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
@@ -31,6 +36,18 @@ import kotlin.math.sqrt
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 abstract class SurfaceFragment : ScreenFragment() {
+
+    /**
+     * The injected presenter.
+     */
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+
+    /**
+     * The Moshi instance.
+     */
+    @Inject
+    lateinit var moshi: Moshi
 
     /**
      * The paint in the bitmap.
@@ -179,7 +196,9 @@ abstract class SurfaceFragment : ScreenFragment() {
                 .setMessage(R.string.calendar_drawing_toolbar_trash_dialog_message)
                 .setPositiveButton(R.string.ok) { dialog, _ ->
                     val strokesToRemove: MutableSet<UUID> = mutableSetOf()
-                    for (stroke in strokes) { strokesToRemove.add(stroke.strokeId) }
+                    for (stroke in strokes) {
+                        strokesToRemove.add(stroke.strokeId)
+                    }
                     strokes.clear()
                     onStrokesDeleted(strokesToRemove.toList())
 
@@ -199,6 +218,27 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         provideToolbarDrawing().toolbarCloudSync.setOnClickListener {
             CalendarNavigator.toCloudSync(this)
+        }
+
+        // Hide the cloud sync feature in case of regular users or enable it generally.
+        val androidId = sharedPreferences.getString("androidId", "")
+        val earlyAdopterDeviceIdsJson = sharedPreferences.getString("earlyAdopterDeviceIds", "[]")
+
+        val earlyAdopterDeviceIdsType = Types.newParameterizedType(MutableList::class.java, String::class.java)
+        val jsonAdapter = moshi.adapter<List<String>>(earlyAdopterDeviceIdsType)
+        val earlyAdopterDeviceIds = jsonAdapter.fromJson(earlyAdopterDeviceIdsJson!!)
+
+        val cloudPluginEnabled = sharedPreferences.getString("cloudPluginEnabled", "false").toBoolean()
+        Timber.i("Cloud plugin enabled: $cloudPluginEnabled")
+
+        val earlyAdopter = earlyAdopterDeviceIds?.contains(androidId) ?: false
+        Timber.i("Early adopter: $earlyAdopter")
+
+        // Show the cloud sync feature in case of early adopter or enable it generally.
+        if (earlyAdopter or cloudPluginEnabled) {
+            provideToolbarDrawing().toolbarCloudSync.visibility = View.VISIBLE
+        } else {
+            provideToolbarDrawing().toolbarCloudSync.visibility = View.GONE
         }
 
         provideToolbarDrawing().toolbarSettings.setOnClickListener {
