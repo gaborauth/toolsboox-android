@@ -27,26 +27,28 @@ interface CredentialService {
     /**
      * Sign up.
      *
+     * @param username the username
      * @param hash the MD5 hash of the password
      * @return the user ID
      */
-    @POST(value = "credential/create")
+    @POST(value = "credential/create/{username}")
     fun createAsync(
+        @Path("username") username: String,
         @Body hash: String
     ): Deferred<Response<Credential>>
 
     /**
      * Log in.
      *
-     * @param userId the user ID
+     * @param username the username
      * @param hash the MD5 hash of the password
      * @return the refresh token
      */
-    @POST(value = "credential/login/{userId}")
+    @POST(value = "credential/login/{username}")
     fun loginAsync(
-        @Path("userId") userId: UUID,
+        @Path("username") username: String,
         @Body hash: String
-    ): Deferred<Response<String>>
+    ): Deferred<Response<Credential>>
 
     /**
      * Refresh the refresh token.

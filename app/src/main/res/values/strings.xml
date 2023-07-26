@@ -228,18 +228,21 @@
 
     <string name="cloud_account_title">Account</string>
     <string name="cloud_account_message">In order to use the cloud data backup, you must create an account. We do not store personal data, so you will get a generated ID that you must save.</string>
+    <string name="cloud_account_login_username_message">Your username: %s</string>
     <string name="cloud_account_login_user_id_message">Your user ID: %s</string>
     <string name="cloud_account_login_status_message">Your log in status: %s</string>
     <string name="cloud_account_sign_up_button">Sign up</string>
     <string name="cloud_account_log_in_button">Log in</string>
     <string name="cloud_account_log_out_button">Log out</string>
-    <string name="cloud_account_sign_up_dialog_title">Set your password</string>
+    <string name="cloud_account_sign_up_dialog_title">Set your account</string>
+    <string name="cloud_account_sign_up_view_username_hint">Username (5–25 lowercase characters)</string>
+    <string name="cloud_account_sign_up_view_username_conflict_error">Username already taken</string>
     <string name="cloud_account_sign_up_view_password_hint">Password (minimum 8 characters)</string>
-    <string name="cloud_account_log_in_dialog_title">Log in</string>
-    <string name="cloud_account_log_in_view_user_id_key_hint">User ID</string>
+    <string name="cloud_account_log_in_view_username_hint">Username (5–25 lowercase characters)</string>
     <string name="cloud_account_log_in_view_password_hint">Password (minimum 8 characters)</string>
+    <string name="cloud_account_log_in_dialog_title">Log in</string>
     <string name="cloud_account_log_in_failed_dialog_title">Log in failed</string>
-    <string name="cloud_account_log_in_failed_dialog_message">Check your user ID and password.</string>
+    <string name="cloud_account_log_in_failed_dialog_message">Check your username or password.</string>
     <string name="cloud_account_log_out_dialog_title">Log out</string>
     <string name="cloud_account_log_out_dialog_message">Are you sure?</string>
 

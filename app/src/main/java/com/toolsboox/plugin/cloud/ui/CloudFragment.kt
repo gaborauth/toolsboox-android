@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.cloud.ui
 
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -24,6 +25,7 @@ import okhttp3.internal.immutableListOf
 import timber.log.Timber
 import java.time.Instant
 import java.util.*
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 /**
@@ -127,12 +129,12 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             signUpDialog()
         }
 
-        binding.accountLogInButton.setOnClickListener {
+        binding.accountLoginButton.setOnClickListener {
             val refreshToken = sharedPreferences.getString("refreshToken", null)
             if (refreshToken == null) {
-                logInDialog()
+                loginDialog()
             } else {
-                logOutDialog()
+                logoutDialog()
             }
         }
 
@@ -248,46 +250,80 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
     }
 
     /**
-     * Create credential response.
+     * Create credential response (success).
      *
+     * @param signUpDialog the sign-up dialog.
+     * @param signUpView the sign-up view.
      * @param result the created credential result.
      */
-    fun createCredentialResult(result: Credential) {
+    fun createCredentialResult(signUpDialog: DialogInterface, signUpView: View, result: Credential) {
         Timber.i("Create credential result: $result")
+
+        val usernameEditText = signUpView.findViewById<TextInputEditText>(R.id.username_edit_text)
+        usernameEditText.error = null
 
         sharedPreferences.edit().putString("userId", result.userId.toString()).apply()
         sharedPreferences.edit().putString("userIdKey", CryptoUtils.getKey(result.userId)).apply()
+
+        sharedPreferences.edit().putString("username", result.username).apply()
+
         updateButtons()
+        signUpDialog.dismiss()
+    }
+
+    /**
+     * Create credential response (conflict).
+     *
+     * @param signUpView the sign-up view.
+     */
+    fun createCredentialConflict(signUpView: View) {
+        Timber.i("Create credential result: conflict")
+
+        val usernameEditText = signUpView.findViewById<TextInputEditText>(R.id.username_edit_text)
+        usernameEditText.error = getString(R.string.cloud_account_sign_up_view_username_conflict_error)
+        usernameEditText.requestFocus()
+
+        updateButtons()
+    }
+
+    /**
+     * Login credential response (success).
+     *
+     * @param loginDialog the login dialog.
+     * @param loginView the login view.
+     * @param credential the login result
+     */
+    fun loginCredentialResult(loginDialog: DialogInterface, loginView: View, credential: Credential) {
+        Timber.i("Login credential result: $credential")
+
+        val usernameEditText = loginView.findViewById<TextInputEditText>(R.id.username_edit_text)
+        usernameEditText.error = null
+
+        sharedPreferences.edit().putString("userId", credential.userId.toString()).apply()
+        sharedPreferences.edit().putString("userIdKey", CryptoUtils.getKey(credential.userId)).apply()
+
+        sharedPreferences.edit().putString("username", credential.username).apply()
+
+        sharedPreferences.edit().putString("refreshToken", credential.refreshToken).apply()
+        sharedPreferences.edit().putLong("refreshTokenLastUpdate", Date.from(Instant.now()).time).apply()
+        sharedPreferences.edit().putString("accessToken", credential.accessToken).apply()
+        sharedPreferences.edit().putLong("accessTokenLastUpdate", Date.from(Instant.now()).time).apply()
+
+        updateButtons()
+        loginDialog.dismiss()
     }
 
     /**
      * Login credential failed.
      *
-     * @param result the login result.
+     * @param loginView the login view.
      */
-    fun loginCredentialFailed(result: String?) {
-        Timber.i("Create credential result: $result")
+    fun loginCredentialFailed(loginView: View, result: Credential?) {
+        Timber.i("Login credential result: failed ($result)")
 
-        val failedDialog = AlertDialog.Builder(requireContext())
-        failedDialog.setTitle(R.string.cloud_account_log_in_failed_dialog_title)
-        failedDialog.setMessage(R.string.cloud_account_log_in_failed_dialog_message)
-        failedDialog.setNeutralButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
-        failedDialog.show()
-    }
-
-    /**
-     * Login credential response.
-     *
-     * @param userId the user ID
-     * @param result the login result.
-     */
-    fun loginCredentialResult(userId: UUID, result: String) {
-        Timber.i("Create credential result: $result")
-
-        sharedPreferences.edit().putString("userId", userId.toString()).apply()
-        sharedPreferences.edit().putString("userIdKey", CryptoUtils.getKey(userId)).apply()
-        sharedPreferences.edit().putString("refreshToken", result).apply()
-        sharedPreferences.edit().putLong("refreshTokenLastUpdate", Date.from(Instant.now()).time).apply()
+        val usernameEditText = loginView.findViewById<TextInputEditText>(R.id.username_edit_text)
+        usernameEditText.error = getString(R.string.cloud_account_log_in_failed_dialog_message)
+        usernameEditText.requestFocus()
 
         updateButtons()
     }
@@ -310,25 +346,26 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         val notLoggedIn = getString(R.string.cloud_not_logged_in)
 
         val userIdKey = sharedPreferences.getString("userIdKey", null)
-        if (userIdKey == null) {
+        val username = sharedPreferences.getString("username", null)
+        if (userIdKey == null || username == null) {
             binding.accountLoginUserIdMessage.text = getString(R.string.cloud_account_login_user_id_message).format(notLoggedIn)
-            binding.accountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(notLoggedIn)
-            binding.accountSignUpButton.isEnabled = true
-            binding.accountSignUpButton.alpha = 1.0f
+            binding.accountLoginUsernameMessage.text = getString(R.string.cloud_account_login_username_message).format(notLoggedIn)
         } else {
             binding.accountLoginUserIdMessage.text = getString(R.string.cloud_account_login_user_id_message).format(userIdKey)
-            binding.accountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(notLoggedIn)
-            binding.accountSignUpButton.isEnabled = false
-            binding.accountSignUpButton.alpha = 0.5f
+            binding.accountLoginUsernameMessage.text = getString(R.string.cloud_account_login_username_message).format(username)
         }
 
         val refreshToken = sharedPreferences.getString("refreshToken", null)
         if (refreshToken == null) {
             binding.accountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(notLoggedIn)
-            binding.accountLogInButton.text = getString(R.string.cloud_account_log_in_button)
+            binding.accountLoginButton.text = getString(R.string.cloud_account_log_in_button)
+            binding.accountSignUpButton.isEnabled = true
+            binding.accountSignUpButton.alpha = 1.0f
         } else {
             binding.accountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(loggedIn)
-            binding.accountLogInButton.text = getString(R.string.cloud_account_log_out_button)
+            binding.accountLoginButton.text = getString(R.string.cloud_account_log_out_button)
+            binding.accountSignUpButton.isEnabled = false
+            binding.accountSignUpButton.alpha = 0.5f
         }
 
         if (!billingClientFinished) {
@@ -390,98 +427,103 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
     private fun signUpDialog() {
         val signUpDialog = AlertDialog.Builder(requireContext())
 
-        val passwordView = requireActivity().layoutInflater.inflate(R.layout.fragment_cloud_sign_in_view, null)
-        val passwordEditText = passwordView.findViewById<TextInputEditText>(R.id.password_edit_text)
+        val signUpView = requireActivity().layoutInflater.inflate(R.layout.fragment_cloud_sign_up_view, null)
+        val usernameEditText = signUpView.findViewById<TextInputEditText>(R.id.username_edit_text)
+        val passwordEditText = signUpView.findViewById<TextInputEditText>(R.id.password_edit_text)
 
         signUpDialog.setTitle(R.string.cloud_account_sign_up_dialog_title)
-        signUpDialog.setView(passwordView)
+        signUpDialog.setView(signUpView)
 
-        signUpDialog.setPositiveButton(R.string.cloud_account_sign_up_button) { dialog, _ ->
-            val password = passwordEditText.text.toString()
-
-            val hash = CryptoUtils.md5Hash(password.toByteArray(Charsets.UTF_8))
-            presenter.createCredential(this@CloudFragment, hash)
-
-            dialog.dismiss()
-            updateButtons()
-        }
-
+        signUpDialog.setPositiveButton(R.string.cloud_account_sign_up_button) { _, _ -> }
         signUpDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
 
         val dialog = signUpDialog.show()
         val signUpButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         signUpButton.isEnabled = false
 
-        passwordEditText.addTextChangedListener {
+        // Redefine onClick to prevent dialog from closing
+        signUpButton.setOnClickListener {
             val password = passwordEditText.text.toString()
-            signUpButton.isEnabled = password.length >= 8
+
+            val username = usernameEditText.text.toString()
+            val hash = CryptoUtils.md5Hash(password.toByteArray(Charsets.UTF_8))
+            presenter.createCredential(this@CloudFragment, dialog, signUpView, username, hash)
+        }
+
+        val usernamePattern = Pattern.compile("^[a-z]{5}[a-z0-9]{0,20}$")
+        val passwordPattern = Pattern.compile("^.{8,}$")
+
+        usernameEditText.addTextChangedListener {
+            signUpButton.isEnabled = usernamePattern.matcher(usernameEditText.text.toString()).matches() &&
+                    passwordPattern.matcher(passwordEditText.text.toString()).matches()
+        }
+        passwordEditText.addTextChangedListener {
+            signUpButton.isEnabled = usernamePattern.matcher(usernameEditText.text.toString()).matches() &&
+                    passwordPattern.matcher(passwordEditText.text.toString()).matches()
         }
     }
 
     /**
      * Displays the log in dialog.
      */
-    private fun logInDialog() {
-        val logInDialog = AlertDialog.Builder(requireContext())
+    private fun loginDialog() {
+        val loginDialog = AlertDialog.Builder(requireContext())
 
-        val logInView = requireActivity().layoutInflater.inflate(R.layout.fragment_cloud_log_in_view, null)
-        val userIdKeyEditText = logInView.findViewById<TextInputEditText>(R.id.user_id_key_edit_text)
-        val passwordEditText = logInView.findViewById<TextInputEditText>(R.id.password_edit_text)
+        val loginView = requireActivity().layoutInflater.inflate(R.layout.fragment_cloud_log_in_view, null)
+        val usernameEditText = loginView.findViewById<TextInputEditText>(R.id.username_edit_text)
+        val passwordEditText = loginView.findViewById<TextInputEditText>(R.id.password_edit_text)
 
-        sharedPreferences.getString("userIdKey", null)?.let { userIdKeyEditText.setText(it) }
+        sharedPreferences.getString("username", null)?.let { usernameEditText.setText(it) }
 
-        logInDialog.setTitle(R.string.cloud_account_log_in_dialog_title)
-        logInDialog.setView(logInView)
+        loginDialog.setTitle(R.string.cloud_account_log_in_dialog_title)
+        loginDialog.setView(loginView)
 
-        logInDialog.setPositiveButton(R.string.cloud_account_log_in_button) { dialog, _ ->
-            val userIdKey = userIdKeyEditText.text.toString()
+        loginDialog.setPositiveButton(R.string.cloud_account_log_in_button) { _, _ -> }
+        loginDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+
+        val dialog = loginDialog.show()
+        val loginButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        loginButton.isEnabled = false
+
+        // Redefine onClick to prevent dialog from closing
+        loginButton.setOnClickListener {
+            val username = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
 
-            val userId = CryptoUtils.getUUID(userIdKey)
             val hash = CryptoUtils.md5Hash(password.toByteArray(Charsets.UTF_8))
-            presenter.loginCredential(this@CloudFragment, userId!!, hash)
+            presenter.loginCredential(this@CloudFragment, dialog, loginView, username, hash)
 
             dialog.dismiss()
             updateButtons()
         }
 
-        logInDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+        val usernamePattern = Pattern.compile("^[a-z]{5}[a-z0-9]{0,20}$")
+        val passwordPattern = Pattern.compile("^.{8,}$")
 
-        val dialog = logInDialog.show()
-        val logInButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-        logInButton.isEnabled = false
-
-        userIdKeyEditText.addTextChangedListener {
-            val userIdKey = userIdKeyEditText.text.toString()
-            val userId = CryptoUtils.getUUID(userIdKey)
-            val password = passwordEditText.text.toString()
-
-            logInButton.isEnabled = (password.length >= 8) and (userId != null)
+        usernameEditText.addTextChangedListener {
+            loginButton.isEnabled = usernamePattern.matcher(usernameEditText.text.toString()).matches() &&
+                    passwordPattern.matcher(passwordEditText.text.toString()).matches()
         }
         passwordEditText.addTextChangedListener {
-            val userIdKey = userIdKeyEditText.text.toString()
-            val userId = CryptoUtils.getUUID(userIdKey)
-            val password = passwordEditText.text.toString()
-
-            logInButton.isEnabled = (password.length >= 8) and (userId != null)
+            loginButton.isEnabled = usernamePattern.matcher(usernameEditText.text.toString()).matches() &&
+                    passwordPattern.matcher(passwordEditText.text.toString()).matches()
         }
     }
 
     /**
      * Displays the log-out dialog.
      */
-    private fun logOutDialog() {
+    private fun logoutDialog() {
         val logOutDialog = AlertDialog.Builder(requireContext())
 
         logOutDialog.setTitle(R.string.cloud_account_log_out_dialog_title)
         logOutDialog.setMessage(R.string.cloud_account_log_out_dialog_message)
 
         logOutDialog.setPositiveButton(R.string.cloud_account_log_out_button) { dialog, _ ->
-            sharedPreferences.edit().remove("userId").apply()
-            sharedPreferences.edit().remove("userIdKey").apply()
             sharedPreferences.edit().remove("refreshToken").apply()
             sharedPreferences.edit().remove("refreshTokenLastUpdate").apply()
             sharedPreferences.edit().remove("accessToken").apply()
+            sharedPreferences.edit().remove("accessTokenLastUpdate").apply()
 
             dialog.dismiss()
 
