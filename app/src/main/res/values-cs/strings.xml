@@ -4,7 +4,6 @@
     <string name="fab_add_item">"Přidej položku"</string>
     <string name="something_happened_error">"Něco se stalo... prosím zkontrolujte připojení k síti. :("</string>
     <string name="something_happened_action">"OK"</string>
-    <string name="logo_content_description">"Tools for Boox"</string>
     <string name="validation_field_required">"Povinné pole"</string>
     <plurals name="validation_field_too_long">
         <item quantity="one">"Příliš dlouhý, povoleno maximálně %d znaků"</item>
@@ -325,4 +324,35 @@ týdne"</string>
     <string name="calendar_time_box_day_notes">"Poznámky"</string>
     <string name="kanban_planner_no_due_date">"bez datumu splatnosti"</string>
     <string name="main_not_logged_in">"&lt;nepřihlášen&gt;"</string>
+    <string name="cloud_title">"Cloud"</string>
+    <string name="cloud_loading">"načítání"</string>
+    <string name="cloud_logged_in">"přihlášen"</string>
+    <string name="cloud_not_logged_in">"nepřihlášen"</string>
+    <string name="cloud_experimental_title">"Experimentální funkce"</string>
+    <string name="cloud_experimental_message">"Upozornění: Toto je experimentální funkce. Tyto funkce nejsou určené pro normální používání a mohou mít omezené fungování."</string>
+    <string name="cloud_account_title">"Účet"</string>
+    <string name="cloud_account_message">"Abyste mohli využívat zálohování dat do cloudu, tak si musíte předem vytvořit účet. Neuchováváme osobní údaje, takže získáte vygenerované ID, které si musíte uložit."</string>
+    <string name="cloud_account_login_user_id_message">"Vaše uživatelské ID: %s"</string>
+    <string name="cloud_account_login_status_message">"Stav vašeho přihlášení: %s"</string>
+    <string name="cloud_account_sign_up_button">"Zaregistrovat se"</string>
+    <string name="cloud_account_log_in_button">"Přihlásit se"</string>
+    <string name="cloud_account_log_out_button">"Odhlásit se"</string>
+    <string name="cloud_account_sign_up_dialog_title">"Nastavit heslo"</string>
+    <string name="cloud_account_sign_up_view_password_hint">"Heslo (min 8 znaků)"</string>
+    <string name="cloud_account_log_in_dialog_title">"Přihlásit se"</string>
+    <string name="cloud_account_log_in_view_password_hint">"Heslo (min 8 znaků)"</string>
+    <string name="cloud_account_log_in_failed_dialog_title">"Chyba přihlášení"</string>
+    <string name="cloud_account_log_in_failed_dialog_message">"Zkontrolujte vaše ID a heslo"</string>
+    <string name="cloud_account_log_out_dialog_title">"Odhlásit se"</string>
+    <string name="cloud_account_log_out_dialog_message">"Jste si jisti?"</string>
+    <string name="cloud_subscription_title">"Předplatné Cloudu"</string>
+    <string name="cloud_subscription_message">"Zálohujte osobní data s pomocí silného šifrování do cloudového úložiště (velmi experimentální funkce!). Pokud si tuto funkci chcete vyzkoušet zdarma, tak mě kontaktujte přes aplikaci Discord."</string>
+    <string name="cloud_subscription_status_message">"Stav vašeho předplatného: %s"</string>
+    <string name="cloud_subscription_status_subs">"Předplaceno"</string>
+    <string name="cloud_subscription_status_no_subs">"Nepředplaceno"</string>
+    <string name="cloud_subscription_monthly_button">"Měsíční předplatné
+(%s)"</string>
+    <string name="cloud_subscription_yearly_button">"Roční předplatné
+(%s)"</string>
+    <string name="dashboard_item_cloud_title">"Cloud"</string>
 </resources>

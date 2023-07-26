@@ -92,6 +92,7 @@
 
                 <AutoCompleteTextView
                         android:id="@+id/start_view_spinner"
+                        android:labelFor="@id/start_view_spinner_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="text"/>
@@ -137,6 +138,7 @@
 
                 <AutoCompleteTextView
                         android:id="@+id/locales_spinner"
+                        android:labelFor="@id/locales_spinner_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:completionThreshold="1"
@@ -262,6 +264,7 @@
 
                 <AutoCompleteTextView
                         android:id="@+id/start_hour_spinner"
+                        android:labelFor="@id/start_hour_spinner_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="text"/>
@@ -308,6 +311,7 @@
 
                 <AutoCompleteTextView
                         android:id="@+id/note_template_spinner"
+                        android:labelFor="@id/note_template_spinner_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="text"/>

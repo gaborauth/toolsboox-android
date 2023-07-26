@@ -3,7 +3,6 @@
     <string name="fab_add_item">Add item</string>
     <string name="something_happened_error">Something happened&#8230; please check your network status. :(</string>
     <string name="something_happened_action">Okay</string>
-    <string name="logo_content_description">Tools for Boox logo</string>
 
     <string name="validation_field_required">This field is required</string>
     <plurals name="validation_field_too_long">

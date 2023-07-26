@@ -4,7 +4,6 @@
     <string name="fab_add_item">"Añadir elemento"</string>
     <string name="something_happened_error">"Ha habido un problema. Comprueba la conexión de red. :("</string>
     <string name="something_happened_action">"Vale"</string>
-    <string name="logo_content_description">"Logotipo de Tools for Boox"</string>
     <string name="validation_field_required">"Este campo es necesario."</string>
     <plurals name="validation_field_too_long">
         <item quantity="one">"Demasiado largo. El límite es de %d carácter."</item>
@@ -324,4 +323,35 @@ esta semana"</string>
     <string name="calendar_time_box_day_notes">"Notas"</string>
     <string name="kanban_planner_no_due_date">"sin fecha final"</string>
     <string name="main_not_logged_in">"&lt;sin sesión iniciada&gt;"</string>
+    <string name="cloud_title">"Nube"</string>
+    <string name="cloud_loading">"cargando"</string>
+    <string name="cloud_logged_in">"sesión iniciada"</string>
+    <string name="cloud_not_logged_in">"sin sesión iniciada"</string>
+    <string name="cloud_experimental_title">"Característica experimental"</string>
+    <string name="cloud_experimental_message">"Advertencia: Esta es una característica experimental. No se recomienda su uso en entornos de producción. Sujeta a cambios eventuales."</string>
+    <string name="cloud_account_title">"Cuenta"</string>
+    <string name="cloud_account_message">"La copia de seguridad de datos en la nube requiere la creación de una cuenta. No almacenamos datos personales; se generará un ID que debes guardar."</string>
+    <string name="cloud_account_login_user_id_message">"ID de usuario: %s"</string>
+    <string name="cloud_account_login_status_message">"Estado de sesión: %s"</string>
+    <string name="cloud_account_sign_up_button">"Registrarse"</string>
+    <string name="cloud_account_log_in_button">"Iniciar sesión"</string>
+    <string name="cloud_account_log_out_button">"Cerrar sesión"</string>
+    <string name="cloud_account_sign_up_dialog_title">"Elige la contraseña"</string>
+    <string name="cloud_account_sign_up_view_password_hint">"Contraseña (mínimo de 8 caracteres)"</string>
+    <string name="cloud_account_log_in_dialog_title">"Iniciar sesión"</string>
+    <string name="cloud_account_log_in_view_password_hint">"Contraseña (mínimo de 8 caracteres)"</string>
+    <string name="cloud_account_log_in_failed_dialog_title">"Error al iniciar sesión"</string>
+    <string name="cloud_account_log_in_failed_dialog_message">"Comprueba el ID de usuario y la contraseña"</string>
+    <string name="cloud_account_log_out_dialog_title">"Cerrar sesión"</string>
+    <string name="cloud_account_log_out_dialog_message">"¿Seguro?"</string>
+    <string name="cloud_subscription_title">"Suscripción a la nube"</string>
+    <string name="cloud_subscription_message">"Haz una copia de seguridad de tus datos con un cifrado potente en la nube (¡muy experimental!). Si quieres probarlo de forma gratuita, puedes pedirme un cupón en Discord."</string>
+    <string name="cloud_subscription_status_message">"Estado de suscripción: %s"</string>
+    <string name="cloud_subscription_status_subs">"Suscrito"</string>
+    <string name="cloud_subscription_status_no_subs">"No suscrito"</string>
+    <string name="cloud_subscription_monthly_button">"Suscripción mensual
+(%s)"</string>
+    <string name="cloud_subscription_yearly_button">"Suscripción anual
+(%s)"</string>
+    <string name="dashboard_item_cloud_title">"Nube"</string>
 </resources>
