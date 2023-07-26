@@ -4,7 +4,6 @@
     <string name="fab_add_item">"Dodaj"</string>
     <string name="something_happened_error">"Coś poszło nie tak... Sprawdź połączenie z siecią."</string>
     <string name="something_happened_action">"Ok"</string>
-    <string name="logo_content_description">"Logo Tools for Boox"</string>
     <string name="validation_field_required">"Pole wymagane"</string>
     <string name="validation_field_value_too_small">"Za mała wartość, najmniejsza możliwa to %d"</string>
 

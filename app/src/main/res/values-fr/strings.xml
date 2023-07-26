@@ -4,7 +4,6 @@
     <string name="fab_add_item">"Ajout"</string>
     <string name="something_happened_error">"Problème : vérifiez votre connexion"</string>
     <string name="something_happened_action">"Compris"</string>
-    <string name="logo_content_description">"Logo"</string>
     <string name="validation_field_required">"Champ obligatoire"</string>
     <plurals name="validation_field_too_long">
         <item quantity="one">"Trop long : %d caractère max"</item>

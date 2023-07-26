@@ -157,13 +157,13 @@ dependencies {
     implementation 'com.android.support:support-annotations:28.0.0'
 
     // Dagger and Hilt DI and its dependency
-    kapt 'com.google.dagger:dagger-compiler:2.46.1'
-    implementation 'com.google.dagger:dagger:2.46.1'
+    kapt 'com.google.dagger:dagger-compiler:2.47'
+    implementation 'com.google.dagger:dagger:2.47'
     kapt 'com.google.dagger:hilt-android-compiler:2.47'
-    implementation 'com.google.dagger:hilt-android:2.46.1'
+    implementation 'com.google.dagger:hilt-android:2.47'
 
     // Onyx SDK
-    implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.47'
+    implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.47.1'
     implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.23'
     implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.6'
 
@@ -179,8 +179,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
 
     // Kotlin and extensions
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 
     // Firebase integrations
     implementation platform('com.google.firebase:firebase-bom:32.2.0')

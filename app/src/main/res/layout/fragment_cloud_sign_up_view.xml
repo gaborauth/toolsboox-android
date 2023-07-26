@@ -7,13 +7,38 @@
         android:layout_height="match_parent">
 
     <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/username_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:hint="@string/cloud_account_sign_up_view_username_hint"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/password_text_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/username_edit_text"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:inputType="textFilter"
+                android:digits="0123456789abcdefghijklmnopqrstuvwxyz"
+                android:ems="15"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             android:hint="@string/cloud_account_sign_up_view_password_hint"
             app:passwordToggleEnabled="true"
 
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/username_text_layout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">

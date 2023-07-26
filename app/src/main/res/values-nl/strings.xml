@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="drawer_title">"%1$s – %2$s"</string>
+    <string name="fab_add_item">"Voeg item toe"</string>
+    <string name="something_happened_error">"Er is iets gebeurd... controleer je netwerk status. :("</string>
+    <string name="something_happened_action">"Ok"</string>
+    <string name="validation_field_required">"Dit veld is verplicht"</string>
+    <plurals name="validation_field_too_long">
+        <item quantity="one">"Te lang, maximum %d karakter toegestaan"</item>
+        <item quantity="other">"Te lang, maximum %d karakters toegestaan "</item>
+    </plurals>
+    <string name="validation_field_value_too_small">"de waarde is te klein, de kleinste waarde mag %d zijn"</string>
+
+    <!-- Strings related to toolbar and drawer menu -->
+    <string name="drawer_menu_dashboard">"Dashboard"</string>
+    <string name="drawer_menu_website">"Onze website"</string>
+    <string name="drawer_menu_forum">"Forum voor steun"</string>
+    <string name="drawer_menu_facebook">"Facebook"</string>
+    <string name="drawer_menu_twitter">"Twitter"</string>
+    <string name="drawer_menu_logout">"Log uit"</string>
+    <string name="toolbar_previous_image">"Vorige"</string>
+    <string name="toolbar_pages_placeholder">"1 / 1"</string>
+    <string name="toolbar_pages_template">"%1$d / %2$d"</string>
+    <string name="toolbar_next_image">"Volgende"</string>
+    <string name="toolbar_back_image">"Terug"</string>
+
+    <!-- Strings related to square item -->
+    <string name="square_item_image">"vierkant item afbeelding"</string>
+
+    <!-- Strings related to main activity -->
+    <string name="main_version">"%1$s–%2$s"</string>
+    <string name="main_update_not_now">"Niet nu"</string>
+    <string name="main_update">"Update"</string>
+    <string name="main_read_external_storage_permission_missing">"De toestemming om uit externe opslag te lezen ontbreekt"</string>
+    <string name="main_write_external_storage_permission_missing">"De toestemming om naar externe opslag te schrijven ontbreekt"</string>
+
+    <!-- Strings related to calendar plugin -->
+    <string name="calendar_main_title">"Kalender"</string>
+
+    <!-- Strings related to dashboard plugin
+Strings related to dashboard fragment -->
+    <string name="dashboard_title">"Dashboard"</string>
+    <string name="dashboard_new_version_title">"Nieuwe versie"</string>
+    <string name="dashboard_new_version_message">"Er is een nieuwe versie van 'Tools for Boox' beschikbaar, gelieve te upgraden, tenzij bepaalde functies niet werken."</string>
+
+    <!-- Strings related to team drawer plugin -->
+    <string name="team_drawer_title">"Tekenaarsteam"</string>
+
+    <!-- Strings related to team drawer page fragment -->
+    <string name="team_drawer_page_title">"'%s' pagina's"</string>
+    <string name="team_drawer_page_text">"Welkom in ons tekenaarsteam! :)"</string>
+    <string name="team_drawer_page_button_export_text">"Exporteer"</string>
+    <string name="team_drawer_page_button_erase_text">"Wis pagina"</string>
+    <string name="team_drawer_page_export_message">"Geëxporteerd als %s"</string>
+    <string name="team_drawer_page_add_new_page_dialog_title">"voeg pagina toe"</string>
+    <string name="team_drawer_page_add_new_page_dialog_message">"wil je een nieuwe pagina toevoegen?"</string>
+
+    <!-- Strings related to team drawer room fragment -->
+    <string name="team_drawer_room_title">"TekenTeam - Ruimtes"</string>
+    <string name="team_drawer_room_item_image">"Ruimte item afbeelding"</string>
+    <string name="team_drawer_room_add_dialog_title">"voeg nieuwe ruimte toe"</string>
+
+    <!-- Strings related to team drawer note fragment -->
+    <string name="team_drawer_note_title">"'%s' notities"</string>
+    <string name="team_drawer_note_item_image">"Notitie item afbeelding"</string>
+    <string name="team_drawer_note_add_dialog_title">"Voeg nieuwe notitie toe"</string>
+
+    <!-- Strings related to templates plugin -->
+    <string name="templates_main_title">"Sjablonen"</string>
+    <string name="templates_preview_button_text">"Voorbeeld"</string>
+    <string name="templates_settings_button_text">"Instellingen"</string>
+    <string name="templates_export_button_text">"Exporteer"</string>
+
+    <!-- Strings related to templates 'boxed week's calendar' fragment -->
+    <string name="templates_boxed_weeks_calendar_title">"Weken van het jaar kalender sjabloon in kader"</string>
+    <string name="templates_boxed_weeks_calendar_preview_description">"Voorbeeld afbeelding"</string>
+    <string name="templates_boxed_weeks_calendar_button_export_text">"Exporteer"</string>
+    <string name="templates_boxed_weeks_calendar_message">"Exporteer dit voorbeeld als lokaal PDF sjabloon met meerdere pagina's"</string>
+    <string name="templates_boxed_weeks_calendar_preview_export_message">"Geëxporteerd als %s"</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_message">"Opmaak van de weekdagen:"</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_vertical">"Vertikaal"</string>
+    <string name="templates_boxed_weeks_calendar_settings_days_layout_horizontal">"Horizontaal"</string>
+
+    <!-- Strings related to templates 'this week's calendar' fragment -->
+    <string name="templates_this_weeks_calendar_title">"Kalender van deze week"</string>
+    <string name="templates_this_weeks_calendar_preview_description">"Voorbeeld afbeelding"</string>
+    <string name="templates_this_weeks_calendar_button_export_text">"Export"</string>
+    <string name="templates_this_weeks_calendar_message">"Exporteer dit voorbeeld als lokaal sjabloon"</string>
+    <string name="templates_this_weeks_calendar_preview_title">"%1$dW%2$d"</string>
+    <string name="templates_this_weeks_calendar_preview_weekly_notes">"Week notities"</string>
+    <string name="templates_this_weeks_calendar_preview_export_message">"Geëxporteerd als %s"</string>
+
+    <!-- Strings related to utils -->
+    <string name="util_fluent_unknown">"Ongekend"</string>
+    <string name="util_fluent_day">"Dag"</string>
+    <string name="util_fluent_hour">"Uur"</string>
+    <string name="util_fluent_minute">"Minuut"</string>
+    <string name="util_fluent_second">"Seconde"</string>
+    <string name="templates_boxed_week_calendar_creator_title">"%1$dW%2$d"</string>
+    <string name="templates_boxed_week_calendar_creator_weekly_notes">"Week notities"</string>
+
+    <!-- Strings related to templates 'flat week's calendar' fragment -->
+    <string name="templates_flat_weeks_calendar_title">"Vlakke weken van het jaar sjabloon"</string>
+    <string name="templates_flat_weeks_calendar_preview_description">"Voorbeeld afbeelding"</string>
+    <string name="templates_flat_weeks_calendar_button_export_text">"Exporteer"</string>
+    <string name="templates_flat_weeks_calendar_message">"Exporteer dit voorbeeld als lokaal PDF sjabloon met meerdere pagina's"</string>
+    <string name="templates_flat_weeks_calendar_preview_export_message">"Geëxporteerd als %s"</string>
+    <string name="templates_flat_week_calendar_creator_title">"%1$dW%2$d"</string>
+    <string name="templates_flat_weeks_calendar_settings_with_days">"Aangemaakt met datums"</string>
+
+    <!-- Strings related to templates 'boxed week's calendar' fragment -->
+    <string name="templates_boxed_days_calendar_title">"Dagen van het jaar kalender sjabloon in kader"</string>
+    <string name="templates_boxed_days_calendar_preview_description">"Voorbeeld afbeelding"</string>
+    <string name="templates_boxed_days_calendar_button_export_text">"Exporteer"</string>
+    <string name="templates_boxed_days_calendar_message">"Exporteer dit voorbeeld als lokaal PDF sjabloon met meerdere pagina's"</string>
+    <string name="templates_boxed_days_calendar_preview_export_message">"Geëxporteerd als %s"</string>
+    <string name="templates_boxed_days_calendar_settings_with_notes">"Maak aan met notities"</string>
+    <string name="templates_boxed_days_calendar_settings_with_tasks">"Maak aan met taken"</string>
+    <string name="templates_boxed_day_calendar_creator_title">"%s dagelijkse planner"</string>
+    <string name="templates_boxed_day_calendar_creator_notes">"Notities"</string>
+    <string name="templates_boxed_day_calendar_creator_tasks">"Taken"</string>
+    <string name="templates_boxed_days_calendar_settings_with_hours">"Maak aan met ingevulde uren"</string>
+    <string name="dashboard_item_cancel_alt">"Annuleer"</string>
+    <string name="dashboard_item_edit_alt">"Wijzig"</string>
+    <string name="dashboard_item_save_alt">"Bewaar"</string>
+    <string name="dashboard_item_settings_alt">"Instellingen"</string>
+
+    <!-- Strings related to kanban planner plugin -->
+    <string name="kanban_planner_main_title">"Kanban planner"</string>
+    <string name="kanban_planner_card_content">"Kanban planner voorbeeld inhoud"</string>
+    <string name="templates_list_button_text">"Lijst"</string>
+
+    <!-- Strings related to templates 'community' fragment -->
+    <string name="templates_community_title">"Sjablonen van de community"</string>
+    <string name="dashboard_item_delete_alt">"Verwijder"</string>
+    <string name="dashboard_item_erase_alt">"Wis"</string>
+    <string name="kanban_planner_lane_dueSoonBacklogTitle">"Binnenkort verwacht (%d)"</string>
+    <string name="kanban_planner_lane_plannedTodayTitle">"Vandaag gepland (%d)"</string>
+    <string name="kanban_planner_lane_doneTodayTitle">"Vandaag gedaan (%d)"</string>
+
+    <!-- Common messages -->
+    <string name="list_loading">"Lijst is aan het laden..."</string>
+    <string name="list_empty">"Lege lijst"</string>
+    <string name="export_message">"Geëxporteerd als %s"</string>
+    <string name="templates_community_list_thumbnail">"Community thumbnail"</string>
+    <string name="templates_community_list_icon_star">"Ster"</string>
+    <string name="templates_community_list_icon_starred">"met een ster"</string>
+
+    <!-- Common messages -->
+    <string name="ok">"OK"</string>
+    <string name="main_all_granted_message">"Alle gevraagde toestemmingen zijn goedgekeurd! Prettige dag!"</string>
+    <string name="main_some_granted_message">"Sommige gevraagde toestemmingen zijn goedgekeurd, goedkeuringen weigeren kan leiden tot verlies van functionaliteiten!"</string>
+    <string name="main_all_denied_message">"Alle gevraagde toestemmingen zijn geweigerd, toestemmingen weigeren kan leiden tot verlies van functionaliteiten!"</string>
+    <string name="main_ask_permissions_title">"Vraag Toestemmingen"</string>
+    <string name="main_ask_permissions_message">"Je moet toegang toestaan tot %s."</string>
+    <string name="main_read_calendar_permission_missing">"Toestemming om kalender te lezen ontbreekt…"</string>
+    <string name="calendar_template_image">"Kalender sjabloon afbeelding"</string>
+    <string name="calendar_navigator_prev_button_text">"&lt;"</string>
+    <string name="calendar_navigator_next_button_text">"&gt;"</string>
+    <string name="calendar_navigator_year_button_text">"2022"</string>
+    <string name="calendar_navigator_year_quarter_button_text">"2022 Q4"</string>
+    <string name="calendar_navigator_q1_button_text">"Q1"</string>
+    <string name="calendar_navigator_q2_button_text">"Q2"</string>
+    <string name="calendar_navigator_q3_button_text">"Q3"</string>
+    <string name="calendar_navigator_q4_button_text">"Q4"</string>
+    <string name="calendar_navigator_month_1_button_text">"Oktober"</string>
+    <string name="calendar_navigator_month_2_button_text">"November"</string>
+    <string name="calendar_navigator_month_3_button_text">"December"</string>
+    <string name="calendar_navigator_week_1_button_text">"W39"</string>
+    <string name="calendar_navigator_week_2_button_text">"W40"</string>
+    <string name="calendar_navigator_week_3_button_text">"W41"</string>
+    <string name="calendar_navigator_week_4_button_text">"W42"</string>
+    <string name="calendar_navigator_week_5_button_text">"W43"</string>
+    <string name="calendar_navigator_week_6_button_text">"W44"</string>
+    <string name="calendar_navigator_day_of_week_1_button_text">"M"</string>
+    <string name="calendar_navigator_day_of_week_2_button_text">"D"</string>
+    <string name="calendar_navigator_day_of_week_3_button_text">"W"</string>
+    <string name="calendar_navigator_day_of_week_4_button_text">"D"</string>
+    <string name="calendar_navigator_day_of_week_5_button_text">"V"</string>
+    <string name="calendar_navigator_day_of_week_6_button_text">"Z"</string>
+    <string name="calendar_navigator_day_of_week_7_button_text">"Z"</string>
+    <string name="calendar_navigator_month_button_text">"Okt"</string>
+    <string name="calendar_navigator_day_button_text">"18"</string>
+    <string name="calendar_navigator_week_button_text">"W41"</string>
+    <string name="calendar_navigator_day_of_week_button_text">"Don"</string>
+    <string name="calendar_year_title">"Jaarlijkse planner - %s"</string>
+    <string name="calendar_quarter_title">"kwartaal planner - %s"</string>
+    <string name="calendar_month_title">"Maand planner - %s"</string>
+    <string name="calendar_week_title">"Week planner – %1$s week %2$s"</string>
+    <string name="calendar_week_notes">"Notities"</string>
+    <string name="calendar_day_title">"Dag planner - %s"</string>
+    <string name="calendar_day_schedules">"Planningen"</string>
+    <string name="calendar_day_tasks">"Taken"</string>
+    <string name="calendar_day_notes">"Notities"</string>
+    <string name="dashboard_device_mismatch_title">"Toestel mismatch"</string>
+    <string name="dashboard_device_mismatch_message">"De 'Tools for Boox' applicatie is ontwikkeld voor Onyx Boox toestellen, uw toestel lijkt geen Onxy Boox (%1$s - %2$s), er kunnen bugs en crashes zijn."</string>
+
+    <!-- Strings related to about plugin -->
+    <string name="about_title">"Over"</string>
+    <string name="about_about_me_title">"Over mij"</string>
+    <string name="about_about_me_message">"Mijn naam is Gábor AUTH, ik ben een Android ontwikkelaar, en ik ben deze applicatie aan het ontwikkelen voor Onyx Boox toestellen! :)"</string>
+    <string name="about_about_me_link">"Link:"</string>
+    <string name="about_project_home_title">"Project thuis"</string>
+    <string name="about_project_home_message">"Het project is open source, je kan het vinden in mijn GitHub archief:"</string>
+    <string name="about_project_home_link">"Link:"</string>
+    <string name="about_other_links_title">"Links"</string>
+    <string name="about_other_links_webpage_link">"Wep pagina:"</string>
+    <string name="about_other_links_translate_link">"Vertaal:"</string>
+    <string name="about_other_links_facebook_link">"Facebook:"</string>
+    <string name="about_other_links_discord_link">"Discord:"</string>
+    <string name="calendar_day_all_day">"De hele dag"</string>
+    <string name="dashboard_api_level_warning_title">"waarschuwing android versie"</string>
+    <string name="dashboard_api_level_warning_message">"Het lijkt erop dat uw toestel gebaseerd is op Android %s, wat het directe gebruik van de externe opslag beperkt, zodat de toepassing geen notitiesjablonen rechtstreeks naar de map notitie sjablonen kan exporteren."</string>
+    <string name="calendar_navigator_image">"Kalender navigatie afbeelding"</string>
+    <string name="util_fluent_days">"Dagen"</string>
+    <string name="util_fluent_hours">"Uren"</string>
+    <string name="util_fluent_minutes">"Minuten"</string>
+    <string name="util_fluent_seconds">"Seconden"</string>
+    <string name="calendar_year_notes">"Notities"</string>
+    <string name="calendar_quarter_notes">"Notities"</string>
+    <string name="calendar_month_notes">"Notities"</string>
+    <string name="about_project_help_title">"Hoe kan je helpen?"</string>
+    <string name="about_project_help_message_1">"1, Als je het leuk vindt, geef het een paar sterren... als je kunt, geef dan ook een recensie!"</string>
+    <string name="about_project_help_message_2">"2, Praat erover in forums en groepen, deel de kennis!"</string>
+    <string name="about_project_help_message_3">"3, geef feedback en neem deel aan discussies op GitHub!"</string>
+    <string name="calendar_settings_title">"Instellingen"</string>
+    <string name="calendar_settings_select_locale_text">"stel locatie van de kalender in:"</string>
+    <string name="calendar_settings_first_day_of_the_week_text">"Start van de week:"</string>
+    <string name="calendar_settings_first_day_of_the_week_value">"Maandag"</string>
+    <string name="calendar_settings_week_number_of_first_day_text">"Week nummer van de eerste dag:"</string>
+    <string name="calendar_settings_week_number_of_first_day_value">"W1"</string>
+    <string name="calendar_settings_week_number_of_last_day_text">"Week nummer van de laatste dag:"</string>
+    <string name="calendar_settings_week_number_of_last_day_value">"W52"</string>
+    <string name="calendar_settings_button_save">"Bewaar"</string>
+    <string name="calendar_settings_button_back">"Terug"</string>
+    <string name="calendar_drawing_toolbar_pen">"Pen"</string>
+    <string name="calendar_drawing_toolbar_eraser">"Gom"</string>
+    <string name="calendar_drawing_toolbar_settings">"Instellingen"</string>
+    <string name="calendar_settings_select_start_view_text">"Selecteer de start weergave van de kalender:"</string>
+    <string name="calendar_settings_start_view_year">"Jaar planner"</string>
+    <string name="calendar_settings_start_view_quarter">"Kwartaal planner"</string>
+    <string name="calendar_settings_start_view_month">"Maand planner"</string>
+    <string name="calendar_settings_start_view_week">"Week planner"</string>
+    <string name="calendar_settings_start_view_day">"Dag planner"</string>
+    <string name="calendar_settings_button_backup">"Exporteer backup"</string>
+    <string name="calendar_settings_backup_done">"kalender backup geëxporteerd naar downloads"</string>
+    <string name="about_this_translation_contributors_title">"medewerkers aan de huidige vertaling"</string>
+    <string name="about_this_translation_contributors_list">"anonieme medewerker"</string>
+    <string name="dashboard_item_calendar_title">"Kalender"</string>
+    <string name="dashboard_item_templates_title">"Sjablonen"</string>
+    <string name="dashboard_item_teamdrawer_title">"Tekenteam"</string>
+    <string name="dashboard_item_kanban_planner_title">"Kanban
+planner"</string>
+    <string name="dashboard_item_about_title">"Over"</string>
+    <string name="templates_item_boxed_days_title">"Dag kalender
+in kader"</string>
+    <string name="templates_item_boxed_weeks_title">"Week kalender
+in kader"</string>
+    <string name="templates_item_community_title">"Sjablonen van de community"</string>
+    <string name="templates_item_flat_weeks_title">"vlakke week kalender"</string>
+    <string name="templates_item_this_weeks_title">"Kalender van deze week"</string>
+    <string name="calendar_settings_button_pattern_sync">"Markeringen bijwerken"</string>
+    <string name="calendar_settings_pattern_sync_done">"Kalender markeringen bijgewerkt"</string>
+    <string name="cancel">"Annuleer"</string>
+    <string name="calendar_drawing_toolbar_trash">"Prullenbak pagina"</string>
+    <string name="calendar_drawing_toolbar_trash_dialog_title">"Ben je zeker?"</string>
+    <string name="calendar_drawing_toolbar_trash_dialog_message">"Wil je de volledige inhoud wissen?"</string>
+    <string name="calendar_settings_button_shortcut">"Maak shortcut"</string>
+    <string name="calendar_settings_shortcut_done">"Kalender shortcut aangemaakt"</string>
+    <string name="calendar_settings_shortcut_failed">"Aanmaken kalender short mislukt"</string>
+    <string name="calendar_settings_shortcut_short_label">"Kalender"</string>
+    <string name="calendar_settings_shortcut_long_label">"Kalender voor Boox"</string>
+    <string name="calendar_settings_button_restore">"Importeer backup"</string>
+    <string name="calendar_settings_restore_done">"Backup kalender geimporteerd van Downloads"</string>
+    <string name="templates_boxed_days_calendar_settings_date_picker_button">"Stel datum in"</string>
+    <string name="templates_boxed_weeks_calendar_settings_date_picker_button">"Stel datum in"</string>
+    <string name="templates_flat_weeks_calendar_settings_date_picker_button">"Stel datum in"</string>
+    <string name="week_abbreviation">"W%d"</string>
+    <string name="quarter_abbreviation">"Q%d"</string>
+    <string name="calendar_settings_select_start_hour_text">"Selecteer het start-uur van de dag weergave"</string>
+    <string name="calendar_settings_select_start_hour_empty">"Laat leeg"</string>
+    <string name="calendar_settings_select_note_template_text">"Selecteer het sjabloon voor de notities:"</string>
+    <string name="calendar_settings_select_note_template_lines">"Lijnen"</string>
+    <string name="calendar_settings_select_note_template_grid">"Rooster"</string>
+    <string name="calendar_drawing_toolbar_swipe_up">"Swipe omhoog"</string>
+    <string name="calendar_drawing_toolbar_swipe_down">"Swipe omlaag"</string>
+    <string name="calendar_drawing_toolbar_switch_side">"Wissel van kant"</string>
+    <string name="calendar_drawing_toolbar_health">"Gezondheid weergave"</string>
+    <string name="calendar_drawing_toolbar_calendar">"Kalender weergave"</string>
+    <string name="calendar_health_day_start_it">"Start!"</string>
+    <string name="calendar_health_day_do_it">"Doe!"</string>
+    <string name="calendar_health_day_rate_it">"Evalueer!"</string>
+    <string name="calendar_health_day_wake_up">"ontwaak uur"</string>
+    <string name="calendar_health_day_sleep">"Uren slaap"</string>
+    <string name="calendar_health_day_weight">"Gewicht"</string>
+    <string name="calendar_health_day_breakfast">"Ontbijt"</string>
+    <string name="calendar_health_day_lunch">"Lunch"</string>
+    <string name="calendar_health_day_dinner">"Avondmaal"</string>
+    <string name="calendar_health_day_snacks">"Tussendoortjes"</string>
+    <string name="calendar_health_day_activity">"Activiteit"</string>
+    <string name="calendar_health_day_water_dl">"Water (dl)"</string>
+    <string name="calendar_health_day_water_cup">"Water (cup)"</string>
+    <string name="calendar_health_day_motivation">"Motivatie"</string>
+    <string name="calendar_health_day_energy">"Energie"</string>
+    <string name="calendar_health_day_happiness">"geluk"</string>
+    <string name="calendar_health_day_stress">"Stress"</string>
+    <string name="calendar_health_day_condition">"Conditie"</string>
+    <string name="calendar_health_day_mood">"Stemming"</string>
+    <string name="calendar_health_day_pain">"Pijn"</string>
+    <string name="calendar_health_day_productivity">"Productiviteit"</string>
+    <string name="calendar_health_day_overall">"Algemeen"</string>
+    <string name="calendar_day_notes_events">"Notities &amp; Gebeurtenissen (%d)"</string>
+    <string name="calendar_day_notes_events_ex">"Notities &amp; Gebeurtenissen (%d!)"</string>
+    <string name="dashboard_ad_settings_button_hide">"Verberg advertenties"</string>
+    <string name="dashboard_ad_settings_button_show">"Toon advertenties"</string>
+    <string name="calendar_time_box_day_title">"Dagelijkse tijdvak planner - %s"</string>
+    <string name="calendar_time_box_day_time_box">"Tijdvak"</string>
+    <string name="calendar_time_box_day_tasks">"Prioritaire Taken"</string>
+    <string name="calendar_time_box_day_brain_dump">"Brain Dump"</string>
+    <string name="calendar_time_box_day_notes">"Notities"</string>
+    <string name="kanban_planner_no_due_date">"Geen einddatum"</string>
+    <string name="main_not_logged_in">"&lt;niet ingelogd&gt;"</string>
+    <string name="cloud_title">"Cloud"</string>
+    <string name="cloud_loading">"Aan het laden"</string>
+    <string name="cloud_logged_in">"Ingelogd"</string>
+    <string name="cloud_not_logged_in">"Niet ingelogd"</string>
+    <string name="cloud_experimental_title">"Experimentele functie"</string>
+    <string name="cloud_experimental_message">"Waarschuwing: dit is een experimentele functie, wordt niet aanbevolen voor operationeel gebruik en kan elk moment veranderen"</string>
+    <string name="cloud_account_title">"Account"</string>
+    <string name="cloud_account_message">"Om de cloud data back-up te gebruiken, moet u een account aanmaken. Wij slaan geen persoonlijke gegevens op, dus u krijgt een aangemaakt ID die u moet bewaren."</string>
+    <string name="cloud_account_login_user_id_message">"Jouw gebruiks-ID: %s"</string>
+    <string name="cloud_account_login_status_message">"Jouw log-in status: %s"</string>
+    <string name="cloud_account_sign_up_button">"Schrijf je in"</string>
+    <string name="cloud_account_log_in_button">"Log in"</string>
+    <string name="cloud_account_log_out_button">"Log uit"</string>
+    <string name="cloud_account_sign_up_dialog_title">"stel je wachtwoord in"</string>
+    <string name="cloud_account_sign_up_view_password_hint">"Wachtwoord (minimum 8 karakters)"</string>
+    <string name="cloud_account_log_in_dialog_title">"Log in"</string>
+    <string name="cloud_account_log_in_view_password_hint">"Wachtwoord (minimum 8 karakters)"</string>
+    <string name="cloud_account_log_in_failed_dialog_title">"Log in mislukt"</string>
+    <string name="cloud_account_log_in_failed_dialog_message">"kijk jouw gebruikers ID en wachtwoord na."</string>
+    <string name="cloud_account_log_out_dialog_title">"Log uit"</string>
+    <string name="cloud_account_log_out_dialog_message">"Ben je zeker?"</string>
+    <string name="cloud_subscription_title">"Cloud abonnement"</string>
+    <string name="cloud_subscription_message">"Back-up persoonlijke gegevens met sterke encryptie naar cloud backend (zeer experimentele functie!). Als je het gratis wilt proberen, vraag me dan naar een coupon op Discord."</string>
+    <string name="cloud_subscription_status_message">"Jouw abonnementsstatus: %s"</string>
+    <string name="cloud_subscription_status_subs">"Geabonneerd"</string>
+    <string name="cloud_subscription_status_no_subs">"Niet geabonneerd"</string>
+    <string name="cloud_subscription_monthly_button">"Maandelijks abonnement
+(%s)"</string>
+    <string name="cloud_subscription_yearly_button">"Jaarlijks abonnement
+(%s)"</string>
+    <string name="dashboard_item_cloud_title">"Cloud"</string>
+</resources>

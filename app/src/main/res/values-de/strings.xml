@@ -4,7 +4,6 @@
     <string name="fab_add_item">"Eintrag hinzufügen"</string>
     <string name="something_happened_error">"Ein Fehler trat auf... Netzwerkverbindung prüfen :("</string>
     <string name="something_happened_action">"OK"</string>
-    <string name="logo_content_description">"Tools für Boox Logo"</string>
     <string name="validation_field_required">"Dieses Feld ist erforderlich"</string>
     <plurals name="validation_field_too_long">
         <item quantity="one">"Zu lang, maximale Anzahl Zeichen: %d"</item>

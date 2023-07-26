@@ -102,12 +102,26 @@
             android:singleLine="false"/>
 
     <TextView
+            android:id="@+id/account_login_username_message"
+            android:text="@string/cloud_account_login_username_message"
+
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/account_login_status_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:gravity="start"
+            android:maxLines="4"
+            android:singleLine="false"/>
+
+    <TextView
             android:id="@+id/account_login_user_id_message"
             android:text="@string/cloud_account_login_user_id_message"
 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/account_login_status_message"
+            app:layout_constraintTop_toBottomOf="@id/account_login_username_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
@@ -126,12 +140,12 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintTop_toBottomOf="@id/account_login_user_id_message"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/account_log_in_button"
+            app:layout_constraintEnd_toStartOf="@id/account_login_button"
 
             android:background="@color/widgetColor"/>
 
     <Button
-            android:id="@+id/account_log_in_button"
+            android:id="@+id/account_login_button"
             android:text="@string/cloud_account_log_in_button"
 
             android:layout_width="0dp"
