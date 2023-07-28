@@ -492,9 +492,6 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
 
             val hash = CryptoUtils.md5Hash(password.toByteArray(Charsets.UTF_8))
             presenter.loginCredential(this@CloudFragment, dialog, loginView, username, hash)
-
-            dialog.dismiss()
-            updateButtons()
         }
 
         val usernamePattern = Pattern.compile("^[a-z]{5}[a-z0-9]{0,20}$")
