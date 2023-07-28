@@ -226,7 +226,7 @@
     <string name="cloud_experimental_message">"Warning: this is an experimental feature, isn't recommended for production use and likely to change at any time."</string>
 
     <string name="cloud_account_title">Account</string>
-    <string name="cloud_account_message">In order to use the cloud data backup, you must create an account. We do not store personal data, so you will get a generated ID that you must save.</string>
+    <string name="cloud_account_message">In order to use the cloud data backup, you must create an account. Your username will be used as your personal [https://toolsboox.com/u/username] page, in addition, we do not store any personal data.</string>
     <string name="cloud_account_login_username_message">Your username: %s</string>
     <string name="cloud_account_login_user_id_message">Your user ID: %s</string>
     <string name="cloud_account_login_status_message">Your log in status: %s</string>
