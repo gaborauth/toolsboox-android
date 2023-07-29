@@ -57,7 +57,7 @@
 
             app:layout_constraintTop_toBottomOf="@id/title_text"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button_sync">
+            app:layout_constraintEnd_toStartOf="@id/button_compare">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passphrase_edit_text"
@@ -71,14 +71,27 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-            android:id="@+id/button_sync"
-            android:text="@string/calendar_cloud_sync_button"
+            android:id="@+id/button_compare"
+            android:text="@string/calendar_cloud_compare_button"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
+            app:layout_constraintTop_toTopOf="@id/passphrase_layout"
             app:layout_constraintBottom_toBottomOf="@id/passphrase_layout"
             app:layout_constraintStart_toEndOf="@id/passphrase_layout"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <CheckBox
+            android:id="@+id/remember_passphrase_checkbox"
+            android:text="@string/calendar_cloud_sync_remember_passphrase"
+            android:checked="true"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintTop_toBottomOf="@id/button_compare"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
     <View
@@ -87,88 +100,99 @@
             android:layout_marginTop="4dp"
             android:background="#808080"
 
-            app:layout_constraintTop_toBottomOf="@id/passphrase_layout"
+            app:layout_constraintTop_toBottomOf="@id/remember_passphrase_checkbox"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-            android:id="@+id/to_cloud_text"
-            android:text="@plurals/calendar_cloud_to_cloud_text"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-
-            app:layout_constraintTop_toBottomOf="@id/passphrase_layout"
-            app:layout_constraintBottom_toTopOf="@id/to_cloud_list_view_layout"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    <RelativeLayout
-            android:id="@+id/to_cloud_list_view_layout"
-
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
 
-            app:layout_constraintTop_toBottomOf="@id/to_cloud_text"
-            app:layout_constraintBottom_toTopOf="@id/from_cloud_text">
-
-        <ListView
-                android:id="@+id/to_cloud_list_view"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-        </ListView>
+            app:layout_constraintTop_toBottomOf="@id/remember_passphrase_checkbox"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-                android:id="@+id/to_cloud_list_empty"
+                android:id="@+id/to_cloud_text"
+                android:text="@string/calendar_cloud_to_cloud_text"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/to_cloud_list_view_layout"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        <RelativeLayout
+                android:id="@+id/to_cloud_list_view_layout"
 
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
 
-                android:gravity="center"
-                android:text="@string/calendar_cloud_nothing_to_sync"/>
-    </RelativeLayout>
+                app:layout_constraintTop_toBottomOf="@id/to_cloud_text"
+                app:layout_constraintBottom_toTopOf="@id/from_cloud_text">
 
-    <TextView
-            android:id="@+id/from_cloud_text"
-            android:text="@plurals/calendar_cloud_from_cloud_text"
+            <ListView
+                    android:id="@+id/to_cloud_list_view"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </ListView>
 
-            app:layout_constraintTop_toBottomOf="@id/to_cloud_list_view_layout"
-            app:layout_constraintBottom_toTopOf="@id/from_cloud_list_view_layout"
-            app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                    android:id="@+id/to_cloud_list_empty"
 
-    <RelativeLayout
-            android:id="@+id/from_cloud_list_view_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
 
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-
-            app:layout_constraintTop_toBottomOf="@id/from_cloud_text"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-        <ListView
-                android:id="@+id/from_cloud_list_view"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-        </ListView>
+                    android:gravity="center"
+                    android:text="@string/calendar_cloud_nothing_to_sync"/>
+        </RelativeLayout>
 
         <TextView
-                android:id="@+id/from_cloud_list_empty"
+                android:id="@+id/from_cloud_text"
+                android:text="@string/calendar_cloud_from_cloud_text"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+
+                app:layout_constraintTop_toBottomOf="@id/to_cloud_list_view_layout"
+                app:layout_constraintBottom_toTopOf="@id/from_cloud_list_view_layout"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        <RelativeLayout
+                android:id="@+id/from_cloud_list_view_layout"
 
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
 
-                android:gravity="center"
-                android:text="@string/calendar_cloud_nothing_to_sync"/>
-    </RelativeLayout>
+                app:layout_constraintTop_toBottomOf="@id/from_cloud_text"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            <ListView
+                    android:id="@+id/from_cloud_list_view"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            </ListView>
+
+            <TextView
+                    android:id="@+id/from_cloud_list_empty"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:gravity="center"
+                    android:text="@string/calendar_cloud_nothing_to_sync"/>
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

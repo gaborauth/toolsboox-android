@@ -78,15 +78,11 @@
     <string name="calendar_cloud_title">Cloud sync</string>
     <string name="calendar_cloud_passphrase_text">Your passphrase:</string>
     <string name="calendar_cloud_passphrase_hint">Passphrase, minimum 8 characters</string>
-    <string name="calendar_cloud_sync_button">Sync</string>
-    <plurals name="calendar_cloud_to_cloud_text">
-        <item quantity="one">Sync to cloud (only %d item at a time):</item>
-        <item quantity="other">Sync to cloud (only %d items at a time):</item>
-    </plurals>
-    <plurals name="calendar_cloud_from_cloud_text">
-        <item quantity="one">Sync from cloud (only %d item at a time):</item>
-        <item quantity="other">Sync from cloud (only %d items at a time):</item>
-    </plurals>
+    <string name="calendar_cloud_passphrase_mismatch">Passphrase mismatch, cannot decrypt calendar items</string>
+    <string name="calendar_cloud_compare_button">Compare</string>
+    <string name="calendar_cloud_sync_remember_passphrase">Remember passphrase (not secure!)</string>
+    <string name="calendar_cloud_to_cloud_text">Sync to cloud (touch item to sync):</string>
+    <string name="calendar_cloud_from_cloud_text">Sync from cloud (touch item to sync):</string>
     <string name="calendar_cloud_nothing_to_sync">Nothing to sync…</string>
 
     <string name="calendar_settings_title">Settings</string>

@@ -213,6 +213,67 @@ class CalendarCloudSyncPresenter @Inject constructor() : FragmentPresenter() {
     }
 
     /**
+     * Retrieve the encrypted credential content.
+     *
+     * @param fragment the fragment
+     * @return the encrypted credential content
+     */
+    fun authenticateGet(fragment: CalendarCloudSyncFragment) {
+        coroutinesCallHelper(
+            fragment,
+            { calendarService.authenticateGetAsync() },
+            { response ->
+                when (response.code()) {
+                    200 -> {
+                        val body = response.body()
+                        if (body == null) {
+                            fragment.somethingHappened()
+                        } else {
+                            fragment.authenticateGetResult(body)
+                        }
+                    }
+
+                    204 -> {
+                        fragment.authenticateGetNoContent()
+                    }
+
+                    else -> fragment.somethingHappened()
+                }
+            },
+            true
+        )
+    }
+
+    /**
+     * Store the encrypted credential content.
+     *
+     * @param fragment the fragment
+     * @param data the encrypted credential content
+     * @return the encrypted credential content
+     */
+    fun authenticatePost(fragment: CalendarCloudSyncFragment, data: String) {
+        coroutinesCallHelper(
+            fragment,
+            { calendarService.authenticatePostAsync(data) },
+            { response ->
+                when (response.code()) {
+                    200 -> {
+                        val body = response.body()
+                        if (body == null) {
+                            fragment.somethingHappened()
+                        } else {
+                            fragment.authenticatePostResult()
+                        }
+                    }
+
+                    else -> fragment.somethingHappened()
+                }
+            },
+            true
+        )
+    }
+
+    /**
      * Get a list of the cloud calendar items.
      *
      * @param fragment the fragment

@@ -14,6 +14,25 @@ import java.util.*
 interface CalendarService {
 
     /**
+     * Retrieve the encrypted credential content.
+     *
+     * @return the stored credential content
+     */
+    @GET(value = "calendarItem/authenticate")
+    fun authenticateGetAsync(): Deferred<Response<String>>
+
+    /**
+     * Store the encrypted credential content.
+     *
+     * @param data the JSON encoded credential content
+     * @return the stored credential content
+     */
+    @POST(value = "calendarItem/authenticate")
+    fun authenticatePostAsync(
+        @Body data: String
+    ): Deferred<Response<String>>
+
+    /**
      * List the cloud calendar items.
      *
      * @return the list of calendar items

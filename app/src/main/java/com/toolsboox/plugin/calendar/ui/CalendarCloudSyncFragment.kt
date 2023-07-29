@@ -49,11 +49,6 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
     override val view = R.layout.fragment_calendar_cloud_sync
 
     /**
-     * Maximum number of items to sync.
-     */
-    private val maximumSyncItems = 1
-
-    /**
      * Stored items in the cloud.
      */
     private val cloudList: MutableList<CalendarItem> = mutableListOf()
@@ -77,11 +72,6 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
      * The view binding.
      */
     private lateinit var binding: FragmentCalendarCloudSyncBinding
-
-    /**
-     * The selected passphrase.
-     */
-    private var passphrase: String? = null
 
     /**
      * Flag of cloud list finished.
@@ -108,22 +98,21 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
 
         sharedPreferences.getString("userId", null)?.let { userId ->
             requireActivity().runOnUiThread {
-                presenter.cloudList(this@CalendarCloudSyncFragment)
                 presenter.fileList(this@CalendarCloudSyncFragment, UUID.fromString(userId), binding)
             }
         }
 
-        binding.buttonSync.isEnabled = false
-        binding.buttonSync.alpha = 0.5f
+        binding.buttonCompare.isEnabled = false
+        binding.buttonCompare.alpha = 0.5f
         binding.passphraseEditText.addTextChangedListener {
             val password = binding.passphraseEditText.text.toString()
-            binding.buttonSync.isEnabled = password.length >= 8
-            binding.buttonSync.alpha = if (password.length >= 8) 1.0f else 0.5f
+            binding.buttonCompare.isEnabled = password.length >= 8
+            binding.buttonCompare.alpha = if (password.length >= 8) 1.0f else 0.5f
         }
 
-        binding.toCloudText.text = resources.getQuantityString(R.plurals.calendar_cloud_to_cloud_text, maximumSyncItems).format(maximumSyncItems)
+        binding.toCloudText.text = resources.getString(R.string.calendar_cloud_to_cloud_text)
         binding.toCloudListView.emptyView = binding.toCloudListEmpty
-        binding.fromCloudText.text = resources.getQuantityString(R.plurals.calendar_cloud_from_cloud_text, maximumSyncItems).format(maximumSyncItems)
+        binding.fromCloudText.text = resources.getString(R.string.calendar_cloud_from_cloud_text)
         binding.fromCloudListView.emptyView = binding.fromCloudListEmpty
     }
 
@@ -133,15 +122,37 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
     override fun onResume() {
         super.onResume()
 
-        // Sync the calendar
-        binding.buttonSync.setOnClickListener {
-            if (toCloudList.isEmpty()) return@setOnClickListener
+        // Query the encrypted credential content from the cloud when compare button is clicked.
+        binding.buttonCompare.setOnClickListener {
+            presenter.authenticateGet(this@CalendarCloudSyncFragment)
 
-            Timber.i("Try to upload: %s", toCloudList.first())
-            presenter.fileLoadJson(this@CalendarCloudSyncFragment, toCloudList.first(), binding)
+            // Save the remember passphrase checkbox state.
+            if (binding.rememberPassphraseCheckbox.isChecked) {
+                sharedPreferences.edit().putBoolean("calendarItemRememberPassphrase", true).apply()
+            } else {
+                sharedPreferences.edit().remove("calendarItemRememberPassphrase").apply()
+            }
         }
 
-        passphrase?.let {
+        // Set the remember passphrase checkbox state.
+        binding.rememberPassphraseCheckbox.isChecked = sharedPreferences.getBoolean("calendarItemRememberPassphrase", false)
+
+        // Set the to-cloud list adapter.
+        binding.toCloudListView.setOnItemClickListener { parent, view, position, id ->
+            if (toCloudList.isEmpty()) return@setOnItemClickListener
+            Timber.i("Try to upload: %s", toCloudList[position])
+            presenter.fileLoadJson(this@CalendarCloudSyncFragment, toCloudList[position], binding)
+        }
+
+        // Set the from-cloud list adapter.
+        binding.fromCloudListView.setOnItemClickListener { parent, view, position, id ->
+            if (fromCloudList.isEmpty()) return@setOnItemClickListener
+            Timber.i("Try to download: %s", fromCloudList[position])
+            // TODO: presenter method to download and update the calendar item
+        }
+
+        // Prefill the passphrase edit text if it is remembered.
+        sharedPreferences.getString("calendarItemPassphrase", null)?.let {
             binding.passphraseEditText.setText(it)
         }
     }
@@ -153,6 +164,46 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
         super.onPause()
 
         toolbar.toolbarPager.visibility = View.GONE
+    }
+
+    /**
+     * Result of the authenticate GET method.
+     *
+     * @param data the encrypted credential content
+     */
+    fun authenticateGetResult(data: String) {
+        try {
+            val decrypted = CryptoUtils.decrypt(Base64.getDecoder().decode(data), binding.passphraseEditText.text.toString())
+            if (String(decrypted) == "data") {
+                binding.passphraseEditText.error = null
+                presenter.cloudList(this@CalendarCloudSyncFragment)
+                if (binding.rememberPassphraseCheckbox.isChecked) {
+                    sharedPreferences.edit().putString("calendarItemPassphrase", binding.passphraseEditText.text.toString()).apply()
+                } else {
+                    sharedPreferences.edit().remove("calendarItemPassphrase").apply()
+                }
+            } else {
+                binding.passphraseEditText.error = getString(R.string.calendar_cloud_passphrase_mismatch)
+            }
+        } catch (e: Exception) {
+            binding.passphraseEditText.error = getString(R.string.calendar_cloud_passphrase_mismatch)
+        }
+    }
+
+    /**
+     * No-content result of the authenticate GET method.
+     */
+    fun authenticateGetNoContent() {
+        val encrypted = CryptoUtils.encrypt("data".toByteArray(), binding.passphraseEditText.text.toString())
+        val encryptedBase64 = Base64.getEncoder().encodeToString(encrypted)
+        presenter.authenticatePost(this@CalendarCloudSyncFragment, encryptedBase64)
+    }
+
+    /**
+     * Result of the authenticate POST method.
+     */
+    fun authenticatePostResult() {
+        presenter.cloudList(this@CalendarCloudSyncFragment)
     }
 
     /**
@@ -218,33 +269,45 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
     }
 
     /**
-     * Update the list view of sync.
+     * Update the list view of sync items.
      */
     private fun updateListViews() {
         if (!cloudListFinished or !fileListFinished) return
 
         toCloudList.clear()
         fileList.forEach { fci ->
+            // If the file is not in the cloud, add it.
             if (fci.updated == null) {
                 toCloudList.add(fci)
                 return@forEach
             }
 
+            // If the file is in the cloud, checks the path, the baseName and the version.
             val cloudItem = cloudList
+                .filter { it.path == fci.path }
                 .filter { it.baseName == fci.baseName }
-                .filter { it.version == fci.version }
-                .filter { it.updated != null }
-                .firstOrNull { it.updated!! < fci.updated }
+                .firstOrNull { it.version == fci.version }
 
-            if (cloudItem != null) {
+            // If the file is not in the cloud, add it.
+            if (cloudItem == null) {
                 toCloudList.add(fci)
+                return@forEach
+            }
+
+            // If the file is in the cloud, checks the updated date.
+            if ((cloudItem.updated != null) and (cloudItem.updated!! < fci.updated)) {
+                toCloudList.add(fci)
+                return@forEach
             }
         }
 
-        toCloudList.sortWith { ci1, ci2 -> ci1.baseName.compareTo(ci2.baseName) }
+        toCloudList.sortWith { ci1, ci2 -> ci2.baseName.compareTo(ci1.baseName) }
         Timber.i("To cloud list: $toCloudList")
         requireActivity().runOnUiThread {
-            val toCloudAdapter = StringArrayAdapter(this.requireContext(), R.layout.list_item_locale, toCloudList) { i -> i.baseName }
+            val toCloudAdapter = StringArrayAdapter(
+                this.requireContext(),
+                R.layout.list_item_locale, toCloudList
+            ) { i -> "${i.path}${i.baseName}.${i.version}" }
             binding.toCloudListView.adapter = toCloudAdapter
             toCloudAdapter.notifyDataSetChanged()
         }
@@ -257,6 +320,7 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
             }
 
             val fileItem = fileList
+                .filter { it.path == cci.path }
                 .filter { it.baseName == cci.baseName }
                 .firstOrNull { it.version == cci.version }
 
@@ -269,10 +333,13 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
             }
         }
 
-        fromCloudList.sortWith { ci1, ci2 -> ci1.baseName.compareTo(ci2.baseName) }
+        fromCloudList.sortWith { ci1, ci2 -> ci2.baseName.compareTo(ci1.baseName) }
         Timber.i("From cloud list: $fromCloudList")
         requireActivity().runOnUiThread {
-            val fromCloudAdapter = StringArrayAdapter(this.requireContext(), R.layout.list_item_locale, fromCloudList) { i -> i.baseName }
+            val fromCloudAdapter = StringArrayAdapter(
+                this.requireContext(),
+                R.layout.list_item_locale, fromCloudList
+            ) { i -> "${i.path}${i.baseName}.${i.version}" }
             binding.fromCloudListView.adapter = fromCloudAdapter
             fromCloudAdapter.notifyDataSetChanged()
         }
