@@ -157,10 +157,10 @@ dependencies {
     implementation 'com.android.support:support-annotations:28.0.0'
 
     // Dagger and Hilt DI and its dependency
-    kapt 'com.google.dagger:dagger-compiler:2.47'
-    implementation 'com.google.dagger:dagger:2.47'
-    kapt 'com.google.dagger:hilt-android-compiler:2.47'
-    implementation 'com.google.dagger:hilt-android:2.47'
+    kapt 'com.google.dagger:dagger-compiler:2.48.1'
+    implementation 'com.google.dagger:dagger:2.48.1'
+    kapt 'com.google.dagger:hilt-android-compiler:2.48.1'
+    implementation 'com.google.dagger:hilt-android:2.48.1'
 
     // Onyx SDK
     implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.50'
