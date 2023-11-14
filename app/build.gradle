@@ -8,7 +8,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.dagger.hilt.android'
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -26,7 +26,7 @@ android {
     defaultConfig {
         applicationId "com.toolsboox"
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         versionCode parentVersionCode
         versionName parentVersionName
@@ -147,8 +147,8 @@ dependencies {
     implementation 'androidx.hilt:hilt-navigation-fragment:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.5'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
 
     // Material design
