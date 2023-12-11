@@ -135,7 +135,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     // Billing client
-    implementation 'com.android.billingclient:billing:6.0.1'
+    implementation 'com.android.billingclient:billing:6.1.0'
     implementation 'com.android.billingclient:billing-ktx:6.1.0'
 
     // AndroidX dependencies
