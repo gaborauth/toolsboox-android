@@ -174,7 +174,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         val inputs = inputManager!!.inputDeviceIds
         for (i in inputs.indices) {
             val inputDevice = inputManager.getInputDevice(inputs[i])
-            if (inputDevice.supportsSource(InputDevice.SOURCE_STYLUS)) {
+            if (inputDevice?.supportsSource(InputDevice.SOURCE_STYLUS) == true) {
                 Timber.e("Input %s supports stylus input", inputDevice.name)
             }
         }
