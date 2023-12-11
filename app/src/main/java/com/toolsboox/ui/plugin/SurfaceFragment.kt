@@ -463,8 +463,8 @@ abstract class SurfaceFragment : ScreenFragment() {
     fun callback(motionEvent: MotionEvent): Boolean {
         // TODO: check on other devices (stylus extra button)
         val ACTION_ERASE_DOWN = 211
-        val ACTION_ERASE_MOVE = 212
-        val ACTION_ERASE_UP = 213
+        val ACTION_ERASE_UP = 212
+        val ACTION_ERASE_MOVE = 213
 
         if (motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS) {
             val x = (10.0f * motionEvent.x).roundToInt() / 10.0f
@@ -552,18 +552,16 @@ abstract class SurfaceFragment : ScreenFragment() {
 
             applyStrokes(strokes, true)
             onStrokeChanged(strokes)
+        } else {
+            val stroke = Stroke(UUID.randomUUID(), stylusPointList.toList())
+            strokes.add(stroke)
+            strokesToAdd.add(stroke)
+            applyStrokes(strokes, false)
+            onStrokeChanged(strokes)
 
-            return
+            onStrokesAdded(strokesToAdd.toList())
+            strokesToAdd.clear()
         }
-
-        val stroke = Stroke(UUID.randomUUID(), stylusPointList.toList())
-        strokes.add(stroke)
-        strokesToAdd.add(stroke)
-        applyStrokes(strokes, false)
-        onStrokeChanged(strokes)
-
-        onStrokesAdded(strokesToAdd.toList())
-        strokesToAdd.clear()
 
         lastPoint = null
         stylusPointList.clear()
