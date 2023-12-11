@@ -12,15 +12,12 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.GestureDetectorCompat
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.onyx.android.sdk.api.device.epd.EpdController
-import com.onyx.android.sdk.pen.TouchHelper
 import com.toolsboox.R
 import com.toolsboox.da.Stroke
 import com.toolsboox.da.StrokePoint
 import com.toolsboox.databinding.FragmentKanbanMainBinding
 import com.toolsboox.ot.DeepCopy
 import com.toolsboox.ot.OnGestureListener
-import com.toolsboox.ot.PenRawInputCallback
 import com.toolsboox.plugin.kanban.da.v1.CardItem
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,9 +25,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sign
+import kotlin.math.*
 
 /**
  * Kanban planner main fragment.
@@ -126,14 +121,9 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
     private var editedCard: CardItem? = null
 
     /**
-     * The pen raw input callback class.
+     * The line paint.
      */
-    private lateinit var callback: PenRawInputCallback
-
-    /**
-     * TouchHelper of the Onyx's pen.
-     */
-    private lateinit var touchHelper: TouchHelper
+    private var linePaint = Paint()
 
     /**
      * The surface view.
@@ -178,8 +168,6 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
             gridSize = (width / 9.0f).toInt()
 
             surfaceView = createEditCard()
-            callback = PenRawInputCallback(penCallback, eraseCallback)
-            touchHelper = TouchHelper.create(binding.drawLayout, callback)
             initializeSurface()
 
             laneTitles.clear()
@@ -336,7 +324,6 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
 
             editedCard = DeepCopy.deepCopy(cardsByLane[lane][currentCarouselPositions[lane]])
             clearSurface()
-            touchHelper.setRawDrawingEnabled(true)
 
             val dueDate = binding.drawLayout.findViewById<TextView>(R.id.dueDate)
             if (editedCard?.dueDate == null) {
@@ -484,12 +471,6 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
                 }
 
                 clearSurface()
-
-                touchHelper.closeRawDrawing()
-                touchHelper.setLimitRect(listOf(surfaceOffset), listOf())
-                touchHelper.setStrokeWidth(3.0f)
-                touchHelper.setStrokeStyle(TouchHelper.STROKE_STYLE_NEO_BRUSH)
-                touchHelper.openRawDrawing()
             }
 
             override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -505,6 +486,8 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
 
         surfaceView.holder.addCallback(surfaceCallback)
         surfaceView.invalidate()
+
+        surfaceView.setOnTouchListener { v, e -> callback(e) }
     }
 
     /**
@@ -512,7 +495,6 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
      */
     private fun clearSurface() {
         val lockerCanvas = surfaceView.holder.lockCanvas() ?: return
-        EpdController.enablePost(surfaceView, 1)
 
         if (editedCard != null) {
             drawStroke(editedCard!!, lockerCanvas)
@@ -528,7 +510,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
      * @param lockerCanvas the canvas
      */
     private fun drawStroke(cardItem: CardItem, lockerCanvas: Canvas) {
-        val linePaint = Paint()
+        linePaint = Paint()
         linePaint.isAntiAlias = true
         linePaint.style = Paint.Style.STROKE
         linePaint.color = Color.BLACK
@@ -606,7 +588,6 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
             binding.drawLayout.visibility = View.INVISIBLE
             binding.gridLayout.visibility = View.VISIBLE
             binding.titleLayout.visibility = View.VISIBLE
-            touchHelper.setRawDrawingEnabled(false)
 
             if (editedCard != null) {
                 val deepCardCopy = DeepCopy.deepCopy(editedCard!!)
@@ -636,7 +617,6 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
             binding.drawLayout.visibility = View.INVISIBLE
             binding.gridLayout.visibility = View.VISIBLE
             binding.titleLayout.visibility = View.VISIBLE
-            touchHelper.setRawDrawingEnabled(false)
         }
 
         binding.drawLayout.requestLayout()
@@ -645,25 +625,94 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
     }
 
     /**
-     * Pen callback of the raw input callback.
+     * The last point of the stroke.
      */
-    private val penCallback = object : PenRawInputCallback.PenCallback {
-        override fun addStrokes(strokes: List<StrokePoint>) {
-            val offsetStrokes = mutableListOf<StrokePoint>()
-            for (stroke in strokes) {
-                offsetStrokes.add(StrokePoint(stroke.x - surfaceOffset.left, stroke.y - surfaceOffset.top, stroke.p))
+    private var lastPoint: StrokePoint? = null
+
+    /**
+     * The list of touch points.
+     */
+    private val touchPointList: MutableList<StrokePoint> = mutableListOf()
+
+    /**
+     * The input callback of stylus events.
+     */
+    fun callback(motionEvent: MotionEvent): Boolean {
+        if (motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS) {
+            val x = (10.0f * motionEvent.x).roundToInt() / 10.0f
+            val y = (10.0f * motionEvent.y).roundToInt() / 10.0f
+            val p = (10.0f * motionEvent.pressure).roundToInt() / 10.0f
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                onBeginRawDrawing(StrokePoint(x, y, p))
+            } else if (motionEvent.action == MotionEvent.ACTION_MOVE) {
+                onRawDrawingTouchPointMoveReceived(StrokePoint(x, y, p))
+            } else if (motionEvent.action == MotionEvent.ACTION_UP) {
+                onEndRawDrawing(StrokePoint(x, y, p))
             }
-            editedCard?.strokes?.add(Stroke(UUID.randomUUID(), offsetStrokes))
+
+            return true
+        }
+
+        return false
+    }
+
+    private fun epsilon(touchPoint: StrokePoint, lastPoint: StrokePoint, epsilon: Float): Boolean {
+        return epsilon(touchPoint.x, touchPoint.y, lastPoint.x, lastPoint.y, epsilon)
+    }
+
+    private fun epsilon(x1: Float, y1: Float, x2: Float, y2: Float, epsilon: Float): Boolean {
+        val dx = abs(x1 - x2).toDouble()
+        val dy = abs(y1 - y2).toDouble()
+        val d = sqrt(dx * dx + dy * dy)
+        return d <= epsilon
+    }
+
+    private fun onBeginRawDrawing(touchPoint: StrokePoint) {
+        Timber.i("onBeginRawDrawing (${touchPoint.x}/${touchPoint.y})")
+        lastPoint = touchPoint
+        touchPointList.add(touchPoint)
+    }
+
+    private fun onRawDrawingTouchPointMoveReceived(touchPoint: StrokePoint) {
+        if (!epsilon(touchPoint, lastPoint!!, 3.0f)) {
+            Timber.d("onRawDrawingTouchPointMoveReceived (${touchPoint.x}/${touchPoint.y} - ${touchPoint.p})")
+
+            val sigma = linePaint.strokeWidth
+            val rectLeft = (Math.min(lastPoint!!.x, touchPoint.x) - sigma).toInt()
+            val rectRight = (Math.max(lastPoint!!.x, touchPoint.x) + sigma).toInt()
+            val rectTop = (Math.min(lastPoint!!.y, touchPoint.y) - sigma).toInt()
+            val rectBottom = (Math.max(lastPoint!!.y, touchPoint.y) + sigma).toInt()
+            val rect = Rect(rectLeft, rectTop, rectRight, rectBottom)
+
+            val lockCanvas = surfaceView.holder.lockCanvas(rect)
+            val path = Path()
+            path.moveTo(touchPointList[0].x, touchPointList[0].y)
+            touchPointList.forEach {
+                path.lineTo(it.x, it.y)
+            }
+            path.lineTo(touchPoint.x, touchPoint.y)
+            lockCanvas?.drawPath(path, linePaint)
+            surfaceView.holder.unlockCanvasAndPost(lockCanvas)
+
+            lastPoint = touchPoint
+            touchPointList.add(touchPoint)
         }
     }
 
-    /**
-     * Pen callback of the raw input callback.
-     */
-    private val eraseCallback = object : PenRawInputCallback.EraseCallback {
-        override fun removeStroke(strokeId: UUID) {
-            Timber.i("Not implemented yet.")
-        }
+    private fun onEndRawDrawing(touchPoint: StrokePoint) {
+        Timber.i("onEndRawDrawing (${touchPoint.x}/${touchPoint.y})")
+
+        onRawDrawingTouchPointListReceived(touchPointList)
+
+        lastPoint = null
+        touchPointList.clear()
+    }
+
+    private fun onRawDrawingTouchPointListReceived(touchPointList: MutableList<StrokePoint>) {
+        Timber.i("onRawDrawingTouchPointListReceived (${touchPointList.size})")
+
+        editedCard?.strokes?.add(Stroke(UUID.randomUUID(), touchPointList.toList()))
+        Timber.e("editedCard strokes: ${editedCard?.strokes}")
     }
 
     /**

@@ -4,16 +4,12 @@ import android.Manifest
 import android.content.SharedPreferences
 import android.graphics.*
 import android.provider.MediaStore
+import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GestureDetectorCompat
-import com.onyx.android.sdk.api.device.epd.EpdController
-import com.onyx.android.sdk.data.note.TouchPoint
-import com.onyx.android.sdk.pen.RawInputCallback
-import com.onyx.android.sdk.pen.TouchHelper
-import com.onyx.android.sdk.pen.data.TouchPointList
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.toolsboox.R
@@ -55,11 +51,6 @@ abstract class SurfaceFragment : ScreenFragment() {
     private var paint = Paint()
 
     /**
-     * TouchHelper of the Onyx's pen.
-     */
-    private lateinit var touchHelper: TouchHelper
-
-    /**
      * The gesture detector
      */
     protected lateinit var gestureDetector: GestureDetectorCompat
@@ -83,6 +74,16 @@ abstract class SurfaceFragment : ScreenFragment() {
      * The callback of the surface holder.
      */
     private var surfaceCallback: SurfaceHolder.Callback? = null
+
+    /**
+     * The last point of the stroke.
+     */
+    private var lastPoint: StrokePoint? = null
+
+    /**
+     * The list of stylus points.
+     */
+    private val stylusPointList: MutableList<StrokePoint> = mutableListOf()
 
     /**
      * The list of strokes.
@@ -171,8 +172,6 @@ abstract class SurfaceFragment : ScreenFragment() {
         super.onResume()
 
         initializeSurface()
-        touchHelper.setRawDrawingEnabled(true)
-        touchHelper.isRawDrawingRenderEnabled = true
 
         penState = true
         provideToolbarDrawing().toolbarPen.background.setTint(Color.GRAY)
@@ -261,10 +260,6 @@ abstract class SurfaceFragment : ScreenFragment() {
     override fun onPause() {
         super.onPause()
 
-        touchHelper.setRawDrawingEnabled(false)
-        touchHelper.isRawDrawingRenderEnabled = false
-
-        touchHelper.closeRawDrawing()
         bitmap?.recycle()
     }
 
@@ -299,7 +294,6 @@ abstract class SurfaceFragment : ScreenFragment() {
      */
     fun initializeSurface(first: Boolean = false) {
         if (first) {
-            touchHelper = TouchHelper.create(provideSurfaceView(), callback)
             provideSurfaceView().setZOrderOnTop(true)
             provideSurfaceView().holder.setFormat(PixelFormat.TRANSPARENT)
         }
@@ -328,11 +322,6 @@ abstract class SurfaceFragment : ScreenFragment() {
                     }
 
                     clearSurface()
-
-                    touchHelper.setLimitRect(limit, ArrayList())
-                        .setStrokeWidth(3.0f)
-                        .openRawDrawing()
-                    touchHelper.setStrokeStyle(TouchHelper.STROKE_STYLE_PENCIL)
                 }
 
                 override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -356,7 +345,6 @@ abstract class SurfaceFragment : ScreenFragment() {
      */
     fun clearSurface() {
         val lockerCanvas = provideSurfaceView().holder.lockCanvas() ?: return
-        EpdController.enablePost(provideSurfaceView(), 1)
         val paint = Paint()
         paint.style = Paint.Style.FILL
         paint.color = Color.TRANSPARENT
@@ -419,11 +407,7 @@ abstract class SurfaceFragment : ScreenFragment() {
             }
         }
 
-        touchHelper.setRawDrawingEnabled(false)
-        touchHelper.isRawDrawingRenderEnabled = false
         provideSurfaceView().holder.unlockCanvasAndPost(lockCanvas)
-        touchHelper.setRawDrawingEnabled(true)
-        touchHelper.isRawDrawingRenderEnabled = true
     }
 
     /**
@@ -474,113 +458,87 @@ abstract class SurfaceFragment : ScreenFragment() {
     }
 
     /**
-     * The raw input callback of Onyx's pen library.
+     * The input callback of stylus events.
      */
-    private val callback: RawInputCallback = object : RawInputCallback() {
-        var lastPoint: TouchPoint? = null
+    fun callback(motionEvent: MotionEvent): Boolean {
+        // TODO: check on other devices (stylus extra button)
+        val ACTION_ERASE_DOWN = 211
+        val ACTION_ERASE_MOVE = 212
+        val ACTION_ERASE_UP = 213
 
-        private fun epsilon(touchPoint: TouchPoint, lastPoint: TouchPoint, epsilon: Float): Boolean {
-            return epsilon(touchPoint.x, touchPoint.y, lastPoint.x, lastPoint.y, epsilon)
+        if (motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS) {
+            val x = (10.0f * motionEvent.x).roundToInt() / 10.0f
+            val y = (10.0f * motionEvent.y).roundToInt() / 10.0f
+            val p = (10.0f * motionEvent.pressure).roundToInt() / 10.0f
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                onBeginDrawing(StrokePoint(x, y, p))
+            } else if (motionEvent.action == MotionEvent.ACTION_MOVE) {
+                onMoveDrawing(StrokePoint(x, y, p))
+            } else if (motionEvent.action == MotionEvent.ACTION_UP) {
+                onEndDrawing(StrokePoint(x, y, p))
+            } else if (motionEvent.action == ACTION_ERASE_DOWN) {
+                onBeginDrawing(StrokePoint(x, y, p))
+            } else if (motionEvent.action == ACTION_ERASE_MOVE) {
+                onMoveDrawing(StrokePoint(x, y, p))
+            } else if (motionEvent.action == ACTION_ERASE_UP) {
+                onEndDrawing(StrokePoint(x, y, p), true)
+            }
+
+            return true
         }
 
-        private fun epsilon(x1: Float, y1: Float, x2: Float, y2: Float, epsilon: Float): Boolean {
-            val dx = abs(x1 - x2).toDouble()
-            val dy = abs(y1 - y2).toDouble()
-            val d = sqrt(dx * dx + dy * dy)
-            return d <= epsilon
-        }
+        return false
+    }
 
-        override fun onPenActive(touchPoint: TouchPoint) {
-            super.onPenActive(touchPoint)
-        }
+    private fun epsilon(touchPoint: StrokePoint, lastPoint: StrokePoint, epsilon: Float): Boolean {
+        return epsilon(touchPoint.x, touchPoint.y, lastPoint.x, lastPoint.y, epsilon)
+    }
 
-        override fun onPenUpRefresh(refreshRect: RectF) {
-            super.onPenUpRefresh(refreshRect)
-            Timber.i("onPenUpRefresh (${refreshRect.top}x${refreshRect.left}/${refreshRect.bottom}x${refreshRect.right} )")
-            onStrokesAdded(strokesToAdd.toList())
-            strokesToAdd.clear()
+    private fun epsilon(x1: Float, y1: Float, x2: Float, y2: Float, epsilon: Float): Boolean {
+        val dx = abs(x1 - x2).toDouble()
+        val dy = abs(y1 - y2).toDouble()
+        val d = sqrt(dx * dx + dy * dy)
+        return d <= epsilon
+    }
 
-            applyStrokes(strokes, false)
-            onStrokeChanged(strokes)
-        }
+    private fun onBeginDrawing(touchPoint: StrokePoint) {
+        Timber.i("onBeginDrawing (${touchPoint.x}/${touchPoint.y})")
+        lastPoint = touchPoint
+        stylusPointList.add(touchPoint)
+    }
 
-        override fun onBeginRawDrawing(b: Boolean, touchPoint: TouchPoint) {
-            Timber.i("onBeginRawDrawing (${touchPoint.x}/${touchPoint.y})")
+    private fun onMoveDrawing(touchPoint: StrokePoint) {
+        if (!epsilon(touchPoint, lastPoint!!, 3.0f)) {
+            Timber.d("onMoveDrawing (${touchPoint.x}/${touchPoint.y} - ${touchPoint.p})")
+
+            val sigma = paint.strokeWidth
+            val rectLeft = (Math.min(lastPoint!!.x, touchPoint.x) - sigma).toInt()
+            val rectRight = (Math.max(lastPoint!!.x, touchPoint.x) + sigma).toInt()
+            val rectTop = (Math.min(lastPoint!!.y, touchPoint.y) - sigma).toInt()
+            val rectBottom = (Math.max(lastPoint!!.y, touchPoint.y) + sigma).toInt()
+            val rect = Rect(rectLeft, rectTop, rectRight, rectBottom)
+
+            val lockCanvas = provideSurfaceView().holder.lockCanvas(rect)
+            val path = Path()
+            path.moveTo(stylusPointList[0].x, stylusPointList[0].y)
+            stylusPointList.forEach {
+                path.lineTo(it.x, it.y)
+            }
+            path.lineTo(touchPoint.x, touchPoint.y)
+            lockCanvas?.drawPath(path, paint)
+            provideSurfaceView().holder.unlockCanvasAndPost(lockCanvas)
+
             lastPoint = touchPoint
+            stylusPointList.add(touchPoint)
         }
+    }
 
-        override fun onEndRawDrawing(b: Boolean, touchPoint: TouchPoint) {
-            Timber.i("onEndRawDrawing (${touchPoint.x}/${touchPoint.y})")
-            lastPoint = null
-        }
+    private fun onEndDrawing(touchPoint: StrokePoint, erasing: Boolean = false) {
+        Timber.i("onEndDrawing (${touchPoint.x}/${touchPoint.y})")
 
-        override fun onRawDrawingTouchPointMoveReceived(touchPoint: TouchPoint) {
-            Timber.d("onRawDrawingTouchPointMoveReceived (${touchPoint.x}/${touchPoint.y} - ${touchPoint.pressure})")
-        }
-
-        override fun onRawDrawingTouchPointListReceived(touchPointList: TouchPointList) {
-            Timber.i("onRawDrawingTouchPointListReceived (${touchPointList.size()})")
-
-            if (!penState) {
-                onRawErasingTouchPointListReceived(touchPointList)
-                return
-            }
-
-            val strokePoints: MutableList<StrokePoint> = mutableListOf()
-            var prevPoint: TouchPoint = touchPointList[0]
-            strokePoints.add(
-                StrokePoint(
-                    (10 * prevPoint.x).roundToInt() / 10.0f,
-                    (10 * prevPoint.y).roundToInt() / 10.0f,
-                    (10 * prevPoint.pressure).roundToInt() / 10.0f
-                )
-            )
-            for (tp in touchPointList) {
-                if (!epsilon(tp, prevPoint, 3.0f) and epsilon(tp, prevPoint, 30.0f)) {
-                    prevPoint = tp
-                    strokePoints.add(
-                        StrokePoint(
-                            (10 * tp.x).roundToInt() / 10.0f,
-                            (10 * tp.y).roundToInt() / 10.0f,
-                            (10 * tp.pressure).roundToInt() / 10.0f
-                        )
-                    )
-                }
-            }
-            val stroke = Stroke(UUID.randomUUID(), strokePoints)
-            strokes.add(stroke)
-            strokesToAdd.add(stroke)
-        }
-
-        override fun onBeginRawErasing(b: Boolean, touchPoint: TouchPoint) {
-            Timber.i("onBeginRawErasing (${touchPoint.x} - ${touchPoint.y})")
-        }
-
-        override fun onEndRawErasing(b: Boolean, touchPoint: TouchPoint) {
-            Timber.d("onEndRawErasing (${touchPoint.x} - ${touchPoint.y})")
-        }
-
-        override fun onRawErasingTouchPointMoveReceived(touchPoint: TouchPoint) {
-            Timber.d("onRawErasingTouchPointMoveReceived (${touchPoint.x} - ${touchPoint.y})")
-        }
-
-        override fun onRawErasingTouchPointListReceived(touchPointList: TouchPointList) {
-            Timber.d("onRawErasingTouchPointListReceived (${touchPointList.size()})")
-
-            val eraserPoints: MutableList<TouchPoint> = mutableListOf()
-            var prevPoint: TouchPoint = touchPointList[0]
-            eraserPoints.add(prevPoint)
-            for (tp in touchPointList) {
-                if (!epsilon(tp, prevPoint, 5.0f)) {
-                    prevPoint = tp
-                    eraserPoints.add(prevPoint)
-                }
-            }
-
-            Timber.i("onRawErasingTouchPointListReceived ($eraserPoints)")
-
+        if (!penState || erasing) {
             val strokesToRemove: MutableSet<UUID> = mutableSetOf()
-            for (ep in eraserPoints) {
+            for (ep in stylusPointList) {
                 for (stroke in strokes) {
                     for (tp in stroke.strokePoints) {
                         if (epsilon(ep.x, ep.y, tp.x, tp.y, 10.0f)) {
@@ -594,6 +552,20 @@ abstract class SurfaceFragment : ScreenFragment() {
 
             applyStrokes(strokes, true)
             onStrokeChanged(strokes)
+
+            return
         }
+
+        val stroke = Stroke(UUID.randomUUID(), stylusPointList.toList())
+        strokes.add(stroke)
+        strokesToAdd.add(stroke)
+        applyStrokes(strokes, false)
+        onStrokeChanged(strokes)
+
+        onStrokesAdded(strokesToAdd.toList())
+        strokesToAdd.clear()
+
+        lastPoint = null
+        stylusPointList.clear()
     }
 }

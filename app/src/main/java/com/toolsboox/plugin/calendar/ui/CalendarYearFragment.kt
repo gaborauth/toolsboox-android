@@ -178,6 +178,8 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         }
 
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
+            if (callback(motionEvent)) return@setOnTouchListener true
+
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
 
             if (notePage != null) {
