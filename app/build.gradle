@@ -8,7 +8,7 @@ apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.dagger.hilt.android'
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -26,7 +26,7 @@ android {
     defaultConfig {
         applicationId "com.toolsboox"
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         versionCode parentVersionCode
         versionName parentVersionName
@@ -153,7 +153,7 @@ dependencies {
 
     // Material design
     implementation 'com.google.android.gms:play-services-ads:22.5.0'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.10.0'
     implementation 'com.android.support:support-annotations:28.0.0'
 
     // Dagger and Hilt DI and its dependency
@@ -183,7 +183,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 
     // Firebase integrations
-    implementation platform('com.google.firebase:firebase-bom:32.2.2')
+    implementation platform('com.google.firebase:firebase-bom:32.7.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-perf-ktx'

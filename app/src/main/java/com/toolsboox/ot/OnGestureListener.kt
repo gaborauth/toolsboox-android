@@ -52,7 +52,9 @@ class OnGestureListener : GestureDetector.SimpleOnGestureListener() {
         return NONE
     }
 
-    override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        if (e1 == null) return false
+
         if (abs(distanceX) + abs(distanceY) < 10) return false
 
         val angle = Math.toDegrees(atan2((e1.y - e2.y).toDouble(), (e2.x - e1.x).toDouble())).toFloat()
