@@ -164,8 +164,10 @@ dependencies {
 
     // Onyx SDK
     implementation 'com.onyx.android.sdk:onyxsdk-base:1.6.51'
-    implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.26'
+    implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.27'
     implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.8'
+    // Temporary (?) fix for https://github.com/gaborauth/toolsboox-android/issues/305
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
 
     // OkHttp, Retrofit and GSON
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.15.0'
