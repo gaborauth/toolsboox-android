@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.MenuItem
@@ -29,6 +30,7 @@ import com.toolsboox.nw.CredentialService
 import com.toolsboox.ui.BaseActivity
 import com.toolsboox.utils.ReleaseTree
 import dagger.hilt.android.AndroidEntryPoint
+import org.lsposed.hiddenapibypass.HiddenApiBypass
 import timber.log.Timber
 import java.time.Instant
 import java.util.*
@@ -96,6 +98,11 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         actionbar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu)
+        }
+
+        // Temporary (?) fix for https://github.com/gaborauth/toolsboox-android/issues/305
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            HiddenApiBypass.addHiddenApiExemptions("")
         }
 
         val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
