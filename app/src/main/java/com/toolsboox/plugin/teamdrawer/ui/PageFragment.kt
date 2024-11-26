@@ -182,7 +182,7 @@ class PageFragment @Inject constructor() : SurfaceFragment() {
 
         val note = noteRepository.getNote(roomId, noteId)!!
         val pageTitle = getString(R.string.team_drawer_page_title).format(note.title)
-        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.team_drawer_title), pageTitle)
+        toolbar.root.title = getString(R.string.drawer_title, getString(R.string.team_drawer_title), pageTitle)
 
         toolbar.toolbarPages.text = getString(R.string.toolbar_pages_template).format(1, pageNumbers)
         toolbar.toolbarPager.visibility = View.VISIBLE

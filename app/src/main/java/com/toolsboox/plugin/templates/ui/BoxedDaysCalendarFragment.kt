@@ -113,8 +113,7 @@ class BoxedDaysCalendarFragment @Inject constructor() : ScreenFragment() {
     override fun onResume() {
         super.onResume()
 
-        toolbar.root.title = getString(R.string.drawer_title)
-            .format(getString(R.string.app_name), getString(R.string.templates_boxed_days_calendar_title))
+        toolbar.root.title = getString(R.string.drawer_title, getString(R.string.app_name), getString(R.string.templates_boxed_days_calendar_title))
 
         firebaseAnalytics.logEvent("templates") {
             param("view", "boxedDaysCalendar")

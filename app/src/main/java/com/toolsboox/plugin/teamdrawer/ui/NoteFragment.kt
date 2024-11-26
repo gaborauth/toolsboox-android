@@ -142,7 +142,7 @@ class NoteFragment @Inject constructor() : ScreenFragment() {
 
         val roomName = roomRepository.getRoom(roomId)!!.name
         val noteTitle = getString(R.string.team_drawer_note_title).format(roomName)
-        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.team_drawer_title), noteTitle)
+        toolbar.root.title = getString(R.string.drawer_title, getString(R.string.team_drawer_title), noteTitle)
 
         listResult(noteRepository.getNotesList(roomId))
         timer = GlobalScope.launch(Dispatchers.Main) {
