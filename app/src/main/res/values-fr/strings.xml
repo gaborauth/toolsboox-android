@@ -32,7 +32,7 @@
     <string name="main_write_external_storage_permission_missing">"Permission d'écriture manquante"</string>
 
     <!-- Strings related to calendar plugin -->
-    <string name="calendar_main_title">"Calendrier"</string>
+    <string name="calendar_main_title">"Calendrier – %1$s"</string>
 
     <!-- Strings related to dashboard plugin
 Strings related to dashboard fragment -->
@@ -41,7 +41,7 @@ Strings related to dashboard fragment -->
     <string name="dashboard_new_version_message">"Nouvelle version dispo : mettez à jour pour profiter de toutes les fonctionnalités"</string>
 
     <!-- Strings related to team drawer plugin -->
-    <string name="team_drawer_title">"Dessin collaboratif"</string>
+    <string name="team_drawer_title">"Dessin collaboratif – %1$s"</string>
 
     <!-- Strings related to team drawer page fragment -->
     <string name="team_drawer_page_title">"'%s' pages"</string>

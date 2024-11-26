@@ -36,7 +36,7 @@
     <string name="main_write_external_storage_permission_missing">"Nemáte oprávnění ukládat na externí úložiště..."</string>
 
     <!-- Strings related to calendar plugin -->
-    <string name="calendar_main_title">"Kalendář"</string>
+    <string name="calendar_main_title">"Kalendář – %1$s"</string>
 
     <!-- Strings related to dashboard plugin
 Strings related to dashboard fragment -->
@@ -45,7 +45,7 @@ Strings related to dashboard fragment -->
     <string name="dashboard_new_version_message">"Je k dispozici nová verze 'Tools for Boox', pro plnou funkčnost upgradujte."</string>
 
     <!-- Strings related to team drawer plugin -->
-    <string name="team_drawer_title">"Týmová Tabule"</string>
+    <string name="team_drawer_title">"Týmová Tabule – %1$s"</string>
 
     <!-- Strings related to team drawer page fragment -->
     <string name="team_drawer_page_title">"'%s' stran"</string>
@@ -355,4 +355,18 @@ týdne"</string>
     <string name="cloud_subscription_yearly_button">"Roční předplatné
 (%s)"</string>
     <string name="dashboard_item_cloud_title">"Cloud"</string>
+    <string name="calendar_cloud_title">"Synchr. cloudu"</string>
+    <string name="calendar_cloud_passphrase_text">"Vaše přístupová fráze:"</string>
+    <string name="calendar_cloud_passphrase_hint">"Přístupová fráze, minimálně 8 znaků"</string>
+    <string name="calendar_cloud_to_cloud_text">"Synchr. do cloudu (synchronizaci provedete dotykem na položku):"</string>
+    <string name="calendar_cloud_from_cloud_text">"Synchr. z cloudu (synchronizaci provedete dotykem na položku):"</string>
+    <string name="calendar_cloud_nothing_to_sync">"Nic k synchronizaci"</string>
+    <string name="calendar_drawing_toolbar_cloud_sync">"Synchr. cloudu"</string>
+    <string name="cloud_account_login_username_message">"Uživ. jméno: %s"</string>
+    <string name="cloud_account_sign_up_view_username_hint">"Uživatelské jméno (5-25 znaků malým písmem)"</string>
+    <string name="cloud_account_sign_up_view_username_conflict_error">"Uživatelské jméno již existuje"</string>
+    <string name="cloud_account_log_in_view_username_hint">"Uživatelské jméno (5-25 znaků malým písmem)"</string>
+    <string name="calendar_cloud_passphrase_mismatch">"Přístupová fráze nesouhlasí, nelze dešifrovat položky kalendáře"</string>
+    <string name="calendar_cloud_compare_button">"Porovnat"</string>
+    <string name="calendar_cloud_sync_remember_passphrase">"Zapamatovat přístupovou frázi (není bezpečné!)"</string>
 </resources>

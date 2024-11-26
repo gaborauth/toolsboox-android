@@ -35,7 +35,7 @@
     <string name="main_write_external_storage_permission_missing">"De toestemming om naar externe opslag te schrijven ontbreekt"</string>
 
     <!-- Strings related to calendar plugin -->
-    <string name="calendar_main_title">"Kalender"</string>
+    <string name="calendar_main_title">"Kalender – %1$s"</string>
 
     <!-- Strings related to dashboard plugin
 Strings related to dashboard fragment -->
@@ -44,7 +44,7 @@ Strings related to dashboard fragment -->
     <string name="dashboard_new_version_message">"Er is een nieuwe versie van 'Tools for Boox' beschikbaar, gelieve te upgraden, tenzij bepaalde functies niet werken."</string>
 
     <!-- Strings related to team drawer plugin -->
-    <string name="team_drawer_title">"Tekenaarsteam"</string>
+    <string name="team_drawer_title">"Tekenaarsteam – %1$s"</string>
 
     <!-- Strings related to team drawer page fragment -->
     <string name="team_drawer_page_title">"'%s' pagina's"</string>
