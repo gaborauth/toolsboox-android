@@ -314,6 +314,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     /**
      * OnBackPressed hook.
      */
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()

@@ -397,7 +397,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
                     val currentCard = cardsByLane[lane][position]
                     drawStroke(currentCard, previewCanvas)
                     val cardPreview = view.findViewById<ImageView>(R.id.cardPreview)
-                    cardPreview.setImageBitmap(previewBitmap.copy(previewBitmap.config, false))
+                    cardPreview.setImageBitmap(previewBitmap.copy(previewBitmap.config!!, false))
                     cardPreview.invalidate()
 
                     val dueDate = view.findViewById<TextView>(R.id.dueDateText)
