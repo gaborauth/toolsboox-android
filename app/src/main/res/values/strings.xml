@@ -71,7 +71,7 @@
     <string name="about_this_translation_contributors_title">Contributors of the current translation</string>
     <string name="about_this_translation_contributors_list">anonymous contributor</string>
 
-    <string name="calendar_main_title">Calendars &#8211; %1$s</string>
+    <string name="calendar_main_title">Calendar &#8211; %1$s</string>
     <string name="calendar_navigator_image">Calendar navigator image</string>
     <string name="calendar_template_image">Calendar template image</string>
 
