@@ -4,7 +4,6 @@ import com.toolsboox.plugin.calendar.da.v1.CalendarItem
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
-import java.util.*
 
 /**
  * Calendar service interface.

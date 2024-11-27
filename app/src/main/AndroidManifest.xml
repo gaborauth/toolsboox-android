@@ -47,8 +47,10 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data android:scheme="https" android:host="app.toolsboox.com"/>
-                <data android:scheme="toolsboox" android:host="app"/>
+                <data android:scheme="https"/>
+                <data android:host="app.toolsboox.com"/>
+                <data android:scheme="toolsboox"/>
+                <data android:host="app"/>
             </intent-filter>
         </activity>
     </application>

@@ -39,7 +39,6 @@ android {
     }
 
     buildFeatures {
-        dataBinding true
         viewBinding true
     }
 
@@ -117,8 +116,9 @@ android {
     }
 
     namespace 'com.toolsboox'
-    lint {
-        disable 'MissingTranslation', 'MissingQuantity'
+    lintOptions {
+        disable 'MissingTranslation'
+        disable 'MissingQuantity'
     }
 }
 
@@ -161,7 +161,7 @@ dependencies {
 
     // OkHttp, Retrofit and GSON
     ksp 'com.squareup.moshi:moshi-kotlin-codegen:1.15.1'
-    implementation 'com.squareup.moshi:moshi:1.15.0'
+    implementation 'com.squareup.moshi:moshi:1.15.1'
 
     implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

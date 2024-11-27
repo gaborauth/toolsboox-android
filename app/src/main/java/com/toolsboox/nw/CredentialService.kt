@@ -4,7 +4,6 @@ import com.toolsboox.da.Credential
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
-import java.util.*
 
 /**
  * Credential service interface.

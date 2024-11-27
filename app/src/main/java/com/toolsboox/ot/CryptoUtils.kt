@@ -147,5 +147,23 @@ class CryptoUtils {
         val secretKey: SecretKeySpec,
         val ivSpec: IvParameterSpec,
         val salt: ByteArray
-    )
+    ) {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is KeySpecs) return false
+
+            if (secretKey != other.secretKey) return false
+            if (ivSpec != other.ivSpec) return false
+            if (!salt.contentEquals(other.salt)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = secretKey.hashCode()
+            result = 31 * result + ivSpec.hashCode()
+            result = 31 * result + salt.contentHashCode()
+            return result
+        }
+    }
 }
