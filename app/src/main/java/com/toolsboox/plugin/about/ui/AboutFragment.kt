@@ -79,8 +79,7 @@ class AboutFragment @Inject constructor() : ScreenFragment() {
     override fun onResume() {
         super.onResume()
 
-        toolbar.root.title = getString(R.string.drawer_title)
-            .format(getString(R.string.app_name), getString(R.string.about_title))
+        toolbar.root.title = getString(R.string.drawer_title, getString(R.string.app_name), getString(R.string.about_title))
     }
 
     /**

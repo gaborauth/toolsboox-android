@@ -397,7 +397,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
                     val currentCard = cardsByLane[lane][position]
                     drawStroke(currentCard, previewCanvas)
                     val cardPreview = view.findViewById<ImageView>(R.id.cardPreview)
-                    cardPreview.setImageBitmap(previewBitmap.copy(previewBitmap.config, false))
+                    cardPreview.setImageBitmap(previewBitmap.copy(previewBitmap.config!!, false))
                     cardPreview.invalidate()
 
                     val dueDate = view.findViewById<TextView>(R.id.dueDateText)
@@ -413,8 +413,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
     override fun onResume() {
         super.onResume()
 
-        toolbar.root.title = getString(R.string.drawer_title)
-            .format(getString(R.string.app_name), getString(R.string.kanban_planner_main_title))
+        toolbar.root.title = getString(R.string.drawer_title, getString(R.string.app_name), getString(R.string.kanban_planner_main_title))
 
         firebaseAnalytics.logEvent("kanbanBoard") {}
     }

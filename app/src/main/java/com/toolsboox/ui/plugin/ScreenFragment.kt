@@ -145,6 +145,7 @@ abstract class ScreenFragment : Fragment() {
     /**
      * Result of request permission.
      */
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             REQUEST_PERMISSIONS -> {

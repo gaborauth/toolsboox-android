@@ -31,7 +31,7 @@
     <string name="main_write_external_storage_permission_missing">"Brak uprawnień do zapisu w pamięci zewnętrznej..."</string>
 
     <!-- Strings related to calendar plugin -->
-    <string name="calendar_main_title">"Kalendarz"</string>
+    <string name="calendar_main_title">"Kalendarz – %1$s"</string>
 
     <!-- Strings related to dashboard plugin
 Strings related to dashboard fragment -->
@@ -40,7 +40,7 @@ Strings related to dashboard fragment -->
     <string name="dashboard_new_version_message">"Dostępna jest nowa wersja 'Tools for Boox', rekomendowana jest aktualizacja, zanim niektóre funkcjonalności przestaną działać."</string>
 
     <!-- Strings related to team drawer plugin -->
-    <string name="team_drawer_title">"TeamDrawer"</string>
+    <string name="team_drawer_title">"TeamDrawer – %1$s"</string>
 
     <!-- Strings related to team drawer page fragment -->
     <string name="team_drawer_page_title">"'%s' stron"</string>
