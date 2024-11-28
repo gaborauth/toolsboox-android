@@ -19,8 +19,8 @@ plugins {
 
 ext {
     applicationName = 'toolboox'
-    parentVersionCode =  1_05_17_00
-    parentVersionName = '1.05.17-00'
+    parentVersionCode =  1_05_17_01
+    parentVersionName = '1.05.17-01'
 }
 
 allprojects {
@@ -33,8 +33,4 @@ allprojects {
             allowInsecureProtocol = true
         }
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }
