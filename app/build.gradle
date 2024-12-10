@@ -130,7 +130,7 @@ dependencies {
     implementation 'com.android.billingclient:billing:7.1.1'
     implementation 'com.android.billingclient:billing-ktx:7.1.1'
     implementation 'com.android.support:support-annotations:28.0.0'
-    implementation 'com.google.android.gms:play-services-ads:23.5.0'
+    implementation 'com.google.android.gms:play-services-ads:23.6.0'
 
     // AndroidX dependencies
     implementation 'androidx.appcompat:appcompat:1.7.0'
@@ -149,10 +149,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
 
     // Dagger and Hilt DI and its dependency
-    ksp 'com.google.dagger:dagger-compiler:2.52'
-    implementation 'com.google.dagger:dagger:2.52'
-    ksp 'com.google.dagger:hilt-android-compiler:2.52'
-    implementation 'com.google.dagger:hilt-android:2.52'
+    ksp 'com.google.dagger:dagger-compiler:2.53.1'
+    implementation 'com.google.dagger:dagger:2.53.1'
+    ksp 'com.google.dagger:hilt-android-compiler:2.53.1'
+    implementation 'com.google.dagger:hilt-android:2.53.1'
 
     // Onyx SDK
     implementation 'com.onyx.android.sdk:onyxsdk-base:1.7.8'
@@ -175,7 +175,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
 
     // Firebase integrations
-    implementation platform('com.google.firebase:firebase-bom:33.6.0')
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-perf-ktx'
