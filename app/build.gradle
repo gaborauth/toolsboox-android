@@ -151,7 +151,7 @@ dependencies {
     // Dagger and Hilt DI and its dependency
     ksp 'com.google.dagger:dagger-compiler:2.53.1'
     implementation 'com.google.dagger:dagger:2.53.1'
-    ksp 'com.google.dagger:hilt-android-compiler:2.53.1'
+    ksp 'com.google.dagger:hilt-android-compiler:2.54'
     implementation 'com.google.dagger:hilt-android:2.53.1'
 
     // Onyx SDK
