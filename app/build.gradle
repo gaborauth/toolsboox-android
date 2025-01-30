@@ -141,18 +141,18 @@ dependencies {
     implementation 'androidx.hilt:hilt-navigation-fragment:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.4'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.8.4'
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.6'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.8.6'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
 
     // Material design
     implementation 'com.google.android.material:material:1.12.0'
 
     // Dagger and Hilt DI and its dependency
-    ksp 'com.google.dagger:dagger-compiler:2.53.1'
-    implementation 'com.google.dagger:dagger:2.53.1'
-    ksp 'com.google.dagger:hilt-android-compiler:2.53.1'
-    implementation 'com.google.dagger:hilt-android:2.53.1'
+    ksp 'com.google.dagger:dagger-compiler:2.55'
+    implementation 'com.google.dagger:dagger:2.55'
+    ksp 'com.google.dagger:hilt-android-compiler:2.55'
+    implementation 'com.google.dagger:hilt-android:2.55'
 
     // Onyx SDK
     implementation 'com.onyx.android.sdk:onyxsdk-base:1.7.8'
@@ -160,8 +160,8 @@ dependencies {
     implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.12'
 
     // OkHttp, Retrofit and GSON
-    ksp 'com.squareup.moshi:moshi-kotlin-codegen:1.15.1'
-    implementation 'com.squareup.moshi:moshi:1.15.1'
+    ksp 'com.squareup.moshi:moshi-kotlin-codegen:1.15.2'
+    implementation 'com.squareup.moshi:moshi:1.15.2'
 
     implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
     implementation 'com.squareup.retrofit2:retrofit:2.11.0'
@@ -171,11 +171,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.11.0'
 
     // Kotlin and extensions
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1'
 
     // Firebase integrations
-    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+    implementation platform('com.google.firebase:firebase-bom:33.8.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-perf-ktx'
