@@ -142,7 +142,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.8.4'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.8.4'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.8.6'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
 
     // Material design
