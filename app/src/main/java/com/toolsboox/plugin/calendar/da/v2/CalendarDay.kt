@@ -2,6 +2,7 @@ package com.toolsboox.plugin.calendar.da.v2
 
 import com.squareup.moshi.JsonClass
 import com.toolsboox.da.Stroke
+import com.toolsboox.plugin.calendar.da.v1.CalendarEvent
 import java.util.*
 
 /**
@@ -14,7 +15,9 @@ data class CalendarDay(
     val year: Int,
     val month: Int,
     val day: Int,
+    var startHour: Int?,
     val locale: Locale = Locale.getDefault(),
+    val events: MutableList<CalendarEvent> = mutableListOf(),
 
     override var calendarStrokes: MutableMap<String, List<Stroke>> = mutableMapOf(),
     override var calendarValues: MutableMap<String, Map<String, Float?>> = mutableMapOf(),
@@ -53,7 +56,7 @@ data class CalendarDay(
             val calendarValues = mutableMapOf(DEFAULT_STYLE to mapOf<String, Float?>())
             val noteStrokes = mutableMapOf("0" to notesStrokes)
 
-            return CalendarDay(v1.year, v1.month, v1.day, v1.locale, calendarStrokes, calendarValues, noteStrokes)
+            return CalendarDay(v1.year, v1.month, v1.day, null, v1.locale, mutableListOf(), calendarStrokes, calendarValues, noteStrokes)
         }
     }
 
@@ -62,7 +65,7 @@ data class CalendarDay(
      */
     fun deepCopy(): CalendarDay {
         return CalendarDay(
-            this.year, this.month, this.day, this.locale,
+            this.year, this.month, this.day, this.startHour, this.locale, this.events.toMutableList(),
             Calendar.strokesDeepCopy(calendarStrokes), Calendar.valuesDeepCopy(calendarValues), Calendar.strokesDeepCopy(noteStrokes)
         )
     }

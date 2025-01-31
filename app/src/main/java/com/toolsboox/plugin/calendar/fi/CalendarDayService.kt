@@ -46,16 +46,20 @@ class CalendarDayService @Inject constructor() {
      *
      * @param rootPath the root path
      * @param currentDate the current date
+     * @param defaultStartHour the default start hour
      * @param locale the current locale
      */
-    fun load(rootPath: File, currentDate: LocalDate, locale: Locale): CalendarDay {
-        val calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, locale)
+    fun load(rootPath: File, currentDate: LocalDate, defaultStartHour: Int?, locale: Locale): CalendarDay {
+        val calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, defaultStartHour, locale)
 
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
         val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
         val day = currentDate.format(DateTimeFormatter.ofPattern("dd"))
 
-        return load(rootPath, "$year/$month/", "day-$year-$month-$day") ?: calendarDay
+        val loadedCalendarDay = load(rootPath, "$year/$month/", "day-$year-$month-$day") ?: calendarDay
+        loadedCalendarDay.startHour = loadedCalendarDay.startHour ?: defaultStartHour
+
+        return loadedCalendarDay
     }
 
     /**

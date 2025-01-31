@@ -92,13 +92,14 @@ class TimeBoxDayPage {
          * @param startHour start hour
          */
         fun drawPage(
-            context: Context, canvas: Canvas, calendarDay: CalendarDay, startHour: Int
+            context: Context, canvas: Canvas, calendarDay: CalendarDay
         ) {
             val timeBoxText = context.getString(R.string.calendar_time_box_day_time_box)
             val tasksText = context.getString(R.string.calendar_time_box_day_tasks)
             val brainDumpText = context.getString(R.string.calendar_time_box_day_brain_dump)
             val notesText = context.getString(R.string.calendar_time_box_day_notes)
             val locale = calendarDay.locale
+            val startHour = calendarDay.startHour!!
 
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)
 
