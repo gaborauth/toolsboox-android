@@ -119,6 +119,8 @@ class CalendarDayPage {
             val startHour = calendarDay.startHour!!
             if (startHour < 0) {
                 outside.addAll(calendarEvents)
+            } else if (!calendarDay.hasLanes) {
+                outside.addAll(calendarEvents)
             } else {
                 for (event in calendarEvents) {
                     if (event.allDay) {

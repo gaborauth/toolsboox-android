@@ -50,7 +50,7 @@ class CalendarDayService @Inject constructor() {
      * @param locale the current locale
      */
     fun load(rootPath: File, currentDate: LocalDate, defaultStartHour: Int?, locale: Locale): CalendarDay {
-        val calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, locale, mutableListOf(), defaultStartHour)
+        val calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, locale, mutableListOf(), true, defaultStartHour)
 
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
         val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))

@@ -119,6 +119,9 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                 try {
                     val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
 
+                    val emptyStrokes = calendarDay.calendarStrokes[CalendarDay.DEFAULT_STYLE]?.isEmpty() ?: true
+                    calendarDay.hasLanes = calendarDay.hasLanes or emptyStrokes
+
                     calendarDayService.save(rootPath, currentDate, calendarDay)
                     calendarPatternService.save(rootPath, currentDate, calendarPattern)
                 } catch (e: IOException) {
