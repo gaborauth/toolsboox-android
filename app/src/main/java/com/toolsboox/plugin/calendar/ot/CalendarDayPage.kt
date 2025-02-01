@@ -94,7 +94,6 @@ class CalendarDayPage {
          * @param canvas the canvas
          * @param calendarDay data class
          * @param calendarEvents the list of calendar events
-         * @param startHour start hour
          */
         fun drawPage(
             context: Context, canvas: Canvas, calendarDay: CalendarDay, calendarEvents: List<CalendarEvent>
@@ -114,7 +113,7 @@ class CalendarDayPage {
             calendarEvents.sortedWith(compareBy({ it.startDate }, { it.endDate }))
             val laneOne = mutableListOf<CalendarEvent>()
             val laneTwo = mutableListOf<CalendarEvent>()
-            val fullLane = mutableListOf<CalendarEvent>()
+            val laneFull = mutableListOf<CalendarEvent>()
             val outside = mutableListOf<CalendarEvent>()
 
             val startHour = calendarDay.startHour!!
@@ -157,7 +156,7 @@ class CalendarDayPage {
                     if (endLocalDate.hour * 60 + endLocalDate.minute > (startHour + 17) * 60) continue
 
                     if (!checkFullWidth(event, laneOne, laneTwo)) {
-                        fullLane.add(event)
+                        laneFull.add(event)
                     }
                 }
             }
@@ -201,8 +200,8 @@ class CalendarDayPage {
             if (laneTwo.isNotEmpty()) {
                 drawEventLane(canvas, startHour, laneTwo, 120.0f + (cew - 120.0f) / 2, (cew - 120.0f) / 2)
             }
-            if (fullLane.isNotEmpty()) {
-                drawEventLane(canvas, startHour, fullLane, 120.0f, cew - 120.0f)
+            if (laneFull.isNotEmpty()) {
+                drawEventLane(canvas, startHour, laneFull, 120.0f, cew - 120.0f)
             }
 
             // Tasks title

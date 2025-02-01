@@ -182,7 +182,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         notePage = arguments?.getString("notePage")
 
         val defaultStartHour = sharedPreferences.getInt("calendarStartHour", 5)
-        calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, defaultStartHour, locale)
+        calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, locale, mutableListOf(), defaultStartHour)
 
         binding.navigatorImageView.setOnTouchListener { view, motionEvent ->
             CalendarDayNavigator.onTouchEvent(view, motionEvent, this@CalendarDayFragment, calendarDay)
