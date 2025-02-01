@@ -16,12 +16,14 @@ interface Creator {
 
     companion object {
         val colorBlack = Color.argb(1.0f, 0.0f, 0.0f, 0.0f)
+        val colorGrey10 = Color.argb(1.0f, 0.9f, 0.9f, 0.9f)
         val colorGrey20 = Color.argb(0.2f, 0.5f, 0.5f, 0.5f)
         val colorGrey50 = Color.argb(0.5f, 0.5f, 0.5f, 0.5f)
         val colorGrey80 = Color.argb(0.8f, 0.5f, 0.5f, 0.5f)
         val colorWhite = Color.argb(1.0f, 1.0f, 1.0f, 1.0f)
 
         val fillBlack = Paint()
+        val fillGrey10 = Paint()
         val fillGrey20 = Paint()
         val fillGrey80 = Paint()
         val fillWhite = Paint()
@@ -52,6 +54,10 @@ interface Creator {
             fillBlack.strokeWidth = 1.0f
             fillBlack.color = Color.BLACK
             fillBlack.style = Paint.Style.FILL_AND_STROKE
+
+            fillGrey10.strokeWidth = 1.0f
+            fillGrey10.color = colorGrey10
+            fillGrey10.style = Paint.Style.FILL_AND_STROKE
 
             fillGrey20.strokeWidth = 1.0f
             fillGrey20.color = colorGrey20

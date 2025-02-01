@@ -105,7 +105,7 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
         selectedLocaleLanguageTag = savedLocaleLanguageTag ?: Locale.getDefault().toLanguageTag()
 
         selectedStartView = sharedPreferences.getInt("calendarStartView", 0)
-        selectedStartHour = sharedPreferences.getInt("calendarStartHour", -1)
+        selectedStartHour = sharedPreferences.getInt("calendarStartHour", 5)
         selectedNoteTemplate = sharedPreferences.getInt("calendarNoteTemplate", 0)
 
         // Start view settings

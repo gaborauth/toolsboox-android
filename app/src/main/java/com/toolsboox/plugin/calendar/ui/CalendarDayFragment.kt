@@ -10,8 +10,8 @@ import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.calendar.CalendarNavigator
+import com.toolsboox.plugin.calendar.da.v1.CalendarEvent
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
-import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
 import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.ot.*
 import com.toolsboox.ui.plugin.SurfaceFragment
@@ -181,7 +181,8 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         calendarStyle = arguments?.getString("calendarStyle") ?: CalendarDay.DEFAULT_STYLE
         notePage = arguments?.getString("notePage")
 
-        calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, locale)
+        val defaultStartHour = sharedPreferences.getInt("calendarStartHour", 5)
+        calendarDay = CalendarDay(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth, locale, mutableListOf(), true, defaultStartHour)
 
         binding.navigatorImageView.setOnTouchListener { view, motionEvent ->
             CalendarDayNavigator.onTouchEvent(view, motionEvent, this@CalendarDayFragment, calendarDay)
@@ -243,15 +244,15 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         }
         binding.toolbarDrawing.toolbarCalendarView.setOnClickListener {
             calendarStyle = CalendarDay.DEFAULT_STYLE
-            presenter.load(this@CalendarDayFragment, binding, currentDate, locale)
+            presenter.load(this@CalendarDayFragment, binding, currentDate, defaultStartHour, locale)
         }
         binding.toolbarDrawing.toolbarHealthView.setOnClickListener {
             calendarStyle = CalendarDay.HEALTH_V1_STYLE
-            presenter.load(this@CalendarDayFragment, binding, currentDate, locale)
+            presenter.load(this@CalendarDayFragment, binding, currentDate, defaultStartHour, locale)
         }
         binding.toolbarDrawing.toolbarTimeboxView.setOnClickListener {
             calendarStyle = CalendarDay.TIME_BOX_V1_STYLE
-            presenter.load(this@CalendarDayFragment, binding, currentDate, locale)
+            presenter.load(this@CalendarDayFragment, binding, currentDate, defaultStartHour, locale)
         }
 
         utils.updateToolbar(binding)
@@ -268,8 +269,9 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         binding.navigatorImageView.setImageBitmap(navigatorBitmap)
         updateNavigator(true)
 
+        val defaultStartHour = sharedPreferences.getInt("calendarStartHour", 5)
         timer = GlobalScope.launch(Dispatchers.Main) {
-            presenter.load(this@CalendarDayFragment, binding, currentDate, locale)
+            presenter.load(this@CalendarDayFragment, binding, currentDate, defaultStartHour, locale)
         }
     }
 
@@ -288,10 +290,10 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
      *
      * @param calendarDay the data class
      * @param calendarPattern the pattern data class
-     * @param googleCalendarEvents the Google Calender events
+     * @param calendarEvents the calendar events
      */
     fun renderPage(
-        calendarDay: CalendarDay, calendarPattern: CalendarPattern, googleCalendarEvents: List<GoogleCalendarEvent>
+        calendarDay: CalendarDay, calendarPattern: CalendarPattern, calendarEvents: List<CalendarEvent>
     ) {
         this.calendarDay = calendarDay
         this.calendarPattern = calendarPattern
@@ -303,16 +305,15 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
             CalendarDayPageNotes.drawPage(this.requireContext(), templateCanvas, calendarDay, noteTemplate, notePage!!)
             applyStrokes(surfaceTo(noteStrokes), true)
         } else {
-            val startHour = sharedPreferences.getInt("calendarStartHour", 0)
             val calendarStrokes = calendarDay.calendarStrokes[calendarStyle] ?: listOf()
             if (calendarStyle == CalendarDay.DEFAULT_STYLE) {
-                CalendarDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, googleCalendarEvents, startHour)
+                CalendarDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, calendarEvents)
             }
             if (calendarStyle == CalendarDay.HEALTH_V1_STYLE) {
                 HealthDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay)
             }
             if (calendarStyle == CalendarDay.TIME_BOX_V1_STYLE) {
-                TimeBoxDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, startHour)
+                TimeBoxDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay)
             }
             applyStrokes(surfaceTo(calendarStrokes), true)
         }

@@ -7,8 +7,8 @@ import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.fi.CalendarDayService
+import com.toolsboox.plugin.calendar.fi.CalendarEventsService
 import com.toolsboox.plugin.calendar.fi.CalendarPatternService
-import com.toolsboox.plugin.calendar.fi.GoogleCalendarService
 import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -39,10 +39,10 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
     lateinit var calendarPatternService: CalendarPatternService
 
     /**
-     * The Google Calendar service.
+     * The calendar events service.
      */
     @Inject
-    lateinit var googleCalendarService: GoogleCalendarService
+    lateinit var calendarEventsService: CalendarEventsService
 
     /**
      * Load the daily calendar data.
@@ -50,11 +50,12 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
      * @param fragment the fragment
      * @param binding the data binding
      * @param currentDate the current date
+     * @param defaultStartHour the default start hour
      * @param locale the default locale
      */
     fun load(
         fragment: CalendarDayFragment, binding: FragmentCalendarBinding,
-        currentDate: LocalDate, locale: Locale
+        currentDate: LocalDate, defaultStartHour: Int, locale: Locale
     ) {
         if (!checkPermissions(fragment, binding.root)) return
 
@@ -70,11 +71,23 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                 try {
                     val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
 
-                    val calendarDay = calendarDayService.load(rootPath, currentDate, locale)
+                    val calendarDay = calendarDayService.load(rootPath, currentDate, defaultStartHour, locale)
                     val calendarPattern = calendarPatternService.load(rootPath, currentDate, locale)
-                    val googleCalendarEvents = googleCalendarService.loadEvents(fragment, currentDate)
+                    var calendarEvents = calendarEventsService.loadEvents(fragment, currentDate)
+                    calendarDay.startHour = calendarDay.startHour ?: defaultStartHour
 
-                    withContext(Dispatchers.Main) { fragment.renderPage(calendarDay, calendarPattern, googleCalendarEvents) }
+                    if (currentDate < LocalDate.now()) {
+                        if (calendarDay.events.isEmpty()) {
+                            calendarDay.events.addAll(calendarEvents)
+                        } else {
+                            calendarEvents = calendarDay.events
+                        }
+                    } else {
+                        calendarDay.events.clear()
+                        calendarDay.events.addAll(calendarEvents)
+                    }
+
+                    withContext(Dispatchers.Main) { fragment.renderPage(calendarDay, calendarPattern, calendarEvents) }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }
@@ -105,6 +118,9 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
 
                 try {
                     val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
+
+                    val emptyStrokes = calendarDay.calendarStrokes[CalendarDay.DEFAULT_STYLE]?.isEmpty() ?: true
+                    calendarDay.hasLanes = calendarDay.hasLanes or emptyStrokes
 
                     calendarDayService.save(rootPath, currentDate, calendarDay)
                     calendarPatternService.save(rootPath, currentDate, calendarPattern)

@@ -9,9 +9,10 @@ import com.toolsboox.R
 import com.toolsboox.ot.Creator
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
-import com.toolsboox.plugin.calendar.da.v1.GoogleCalendarEvent
+import com.toolsboox.plugin.calendar.da.v1.CalendarEvent
 import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.ui.CalendarDayFragment
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
@@ -92,21 +93,14 @@ class CalendarDayPage {
          * @param context the context
          * @param canvas the canvas
          * @param calendarDay data class
-         * @param googleCalendarEvents the list of Google calendar events
-         * @param startHour start hour
+         * @param calendarEvents the list of calendar events
          */
         fun drawPage(
-            context: Context, canvas: Canvas, calendarDay: CalendarDay, googleCalendarEvents: List<GoogleCalendarEvent>,
-            startHour: Int
+            context: Context, canvas: Canvas, calendarDay: CalendarDay, calendarEvents: List<CalendarEvent>
         ) {
             val schedulesText = context.getString(R.string.calendar_day_schedules)
             val tasksText = context.getString(R.string.calendar_day_tasks)
             val notesText = context.getString(R.string.calendar_day_notes)
-            val notesCalsText = if (googleCalendarEvents.size > 8) {
-                context.getString(R.string.calendar_day_notes_events_ex).format(googleCalendarEvents.size)
-            } else {
-                context.getString(R.string.calendar_day_notes_events).format(googleCalendarEvents.size)
-            }
             val allDayText = context.getString(R.string.calendar_day_all_day)
             val locale = calendarDay.locale
 
@@ -115,6 +109,65 @@ class CalendarDayPage {
             // Schedules title
             canvas.drawRect(lo, to, lo + cew, to + ceh, Creator.fillGrey80)
             canvas.drawText(schedulesText, lo + 10.0f, to + ceh - 10.0f, Creator.textDefaultWhite)
+
+            calendarEvents.sortedWith(compareBy({ it.startDate }, { it.endDate }))
+            val laneOne = mutableListOf<CalendarEvent>()
+            val laneTwo = mutableListOf<CalendarEvent>()
+            val laneFull = mutableListOf<CalendarEvent>()
+            val outside = mutableListOf<CalendarEvent>()
+
+            val startHour = calendarDay.startHour!!
+            if (startHour < 0) {
+                outside.addAll(calendarEvents)
+            } else if (!calendarDay.hasLanes) {
+                outside.addAll(calendarEvents)
+            } else {
+                for (event in calendarEvents) {
+                    if (event.allDay) {
+                        outside.add(event)
+                        continue
+                    }
+
+                    val startLocalDate = Instant.ofEpochMilli(event.startDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                    if (startLocalDate.hour * 60 + startLocalDate.minute < startHour * 60) {
+                        outside.add(event)
+                        continue
+                    }
+                    val endLocalDate = Instant.ofEpochMilli(event.endDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                    if (endLocalDate.hour * 60 + endLocalDate.minute > (startHour + 17) * 60) {
+                        outside.add(event)
+                        continue
+                    }
+
+                    if (checkOverlap(event, laneOne)) {
+                        if (checkOverlap(event, laneTwo)) {
+                            outside.add(event)
+                        } else {
+                            laneTwo.add(event)
+                        }
+                    } else {
+                        laneOne.add(event)
+                    }
+                }
+
+                for (event in calendarEvents) {
+                    if (event.allDay) continue
+                    val startLocalDate = Instant.ofEpochMilli(event.startDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                    if (startLocalDate.hour * 60 + startLocalDate.minute < startHour * 60) continue
+                    val endLocalDate = Instant.ofEpochMilli(event.endDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                    if (endLocalDate.hour * 60 + endLocalDate.minute > (startHour + 17) * 60) continue
+
+                    if (!checkFullWidth(event, laneOne, laneTwo)) {
+                        laneFull.add(event)
+                    }
+                }
+            }
+
+            val notesCalsText = if (outside.size > 8) {
+                context.getString(R.string.calendar_day_notes_events_ex).format(outside.size)
+            } else {
+                context.getString(R.string.calendar_day_notes_events).format(outside.size)
+            }
 
             // Schedules grid
             canvas.drawLine(lo, to + ceh, lo + cew, to + ceh, Creator.lineDefaultBlack)
@@ -142,6 +195,16 @@ class CalendarDayPage {
             }
             canvas.drawLine(lo, to + 35 * ceh, lo + cew, to + 35 * ceh, Creator.lineDefaultBlack)
             canvas.drawLine(lo + 120.0f, to + ceh, lo + 120.0f, to + 35 * ceh, Creator.lineDefaultBlack)
+
+            if (laneOne.isNotEmpty()) {
+                drawEventLane(canvas, startHour, laneOne, 120.0f, (cew - 120.0f) / 2)
+            }
+            if (laneTwo.isNotEmpty()) {
+                drawEventLane(canvas, startHour, laneTwo, 120.0f + (cew - 120.0f) / 2, (cew - 120.0f) / 2)
+            }
+            if (laneFull.isNotEmpty()) {
+                drawEventLane(canvas, startHour, laneFull, 120.0f, cew - 120.0f)
+            }
 
             // Tasks title
             canvas.drawRect(lo + cew + 50.0f, to, lo + 2 * cew + 50.0f, to + ceh, Creator.fillGrey80)
@@ -176,7 +239,7 @@ class CalendarDayPage {
 
             // Notes title
             canvas.drawRect(lo + cew + 50.0f, to + 18 * ceh, lo + 2 * cew + 50.0f, to + 19 * ceh, Creator.fillGrey80)
-            if (googleCalendarEvents.isEmpty()) {
+            if (outside.isEmpty()) {
                 canvas.drawText(notesText, lo + cew + 60.0f, to + 19 * ceh - 10.0f, Creator.textDefaultWhite)
             } else {
                 canvas.drawText(notesCalsText, lo + cew + 60.0f, to + 19 * ceh - 10.0f, Creator.textDefaultWhite)
@@ -207,10 +270,10 @@ class CalendarDayPage {
                 Creator.lineDefaultBlack
             )
 
-            // Google Calendar events
+            // Calendar events
             for (i in 0..7) {
-                if (i < googleCalendarEvents.size) {
-                    googleCalendarEvents[i].let { event ->
+                if (i < outside.size) {
+                    outside[i].let { event ->
                         Creator.drawEllipsizedText(
                             canvas, event.title, Creator.textDefaultBlack,
                             lo + cew + 60.0f, to + (20 + i * 2) * ceh - 10.0f, cew
@@ -221,10 +284,10 @@ class CalendarDayPage {
                                 Creator.textSmallBlack
                             )
                         } else {
-                            val startDate = event.startDate.atZone(ZoneId.systemDefault())
-                                .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.LONG))
-                            val endDate = event.endDate.atZone(ZoneId.systemDefault())
-                                .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.LONG))
+                            val startLocalDate = Instant.ofEpochMilli(event.startDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                            val endLocalDate = Instant.ofEpochMilli(event.endDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                            val startDate = startLocalDate.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
+                            val endDate = endLocalDate.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
                             canvas.drawText(
                                 startDate, lo + cew + 60.0f, to + (21 + i * 2) * ceh - 10.0f,
                                 Creator.textSmallBlack
@@ -237,6 +300,50 @@ class CalendarDayPage {
                     }
                 }
             }
+        }
+
+        private fun drawEventLane(canvas: Canvas, startHour: Int, lane: MutableList<CalendarEvent>, llo: Float, lw: Float) {
+            for (event in lane) {
+                val startLocalDate = Instant.ofEpochMilli(event.startDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                val endLocalDate = Instant.ofEpochMilli(event.endDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                val cehs = (startLocalDate.hour * 60 + startLocalDate.minute - startHour * 60) / 30.0f * ceh + 1.0f * ceh
+                val cehe = (endLocalDate.hour * 60 + endLocalDate.minute - startHour * 60) / 30.0f * ceh + 1.0f * ceh
+                canvas.drawRect(lo + llo + 5.0f, to + cehs, lo + llo + lw - 5.0f, to + cehe, Creator.fillGrey10)
+                canvas.drawRect(lo + llo + 5.0f, to + cehs, lo + llo + lw - 5.0f, to + cehe, Creator.lineDefaultBlack)
+
+                Creator.drawEllipsizedText(
+                    canvas, event.title, Creator.textSmallBlack,
+                    lo + llo + 15.0f, to + cehs + ceh * 0.66f - 10.0f, lw - 20.0f
+                )
+            }
+        }
+
+        private fun checkOverlap(event: CalendarEvent, lane: MutableList<CalendarEvent>): Boolean {
+            for (laneEvent in lane) {
+                if (event.startDate in laneEvent.startDate..<laneEvent.endDate) return true
+                if (laneEvent.startDate in event.startDate..<event.endDate) return true
+            }
+
+            return false
+        }
+
+        private fun checkFullWidth(event: CalendarEvent, laneOne: MutableList<CalendarEvent>, laneTwo: MutableList<CalendarEvent>): Boolean {
+            for (laneEvent in laneOne) {
+                if (laneEvent.id == event.id) continue
+                if (event.startDate in laneEvent.startDate..<laneEvent.endDate) return true
+                if (laneEvent.startDate in event.startDate..<event.endDate) return true
+            }
+
+            for (laneEvent in laneTwo) {
+                if (laneEvent.id == event.id) continue
+                if (event.startDate in laneEvent.startDate..<laneEvent.endDate) return true
+                if (laneEvent.startDate in event.startDate..<event.endDate) return true
+            }
+
+            laneOne.remove(event)
+            laneTwo.remove(event)
+
+            return false
         }
     }
 }
