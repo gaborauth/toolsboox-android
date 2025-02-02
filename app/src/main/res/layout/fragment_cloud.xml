@@ -55,8 +55,15 @@
             android:maxLines="4"
             android:singleLine="false"/>
 
+    <androidx.constraintlayout.widget.Group
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+
+            app:constraint_referenced_ids="cloud_account_title,cloud_account_message,cloud_account_login_status_message,cloud_account_login_username_message,cloud_account_login_user_id_message,cloud_account_sign_up_button,cloud_account_login_button"/>
+
     <TextView
-            android:id="@+id/account_title"
+            android:id="@+id/cloud_account_title"
             android:text="@string/cloud_account_title"
 
             android:layout_marginTop="16dp"
@@ -72,13 +79,13 @@
             android:singleLine="false"/>
 
     <TextView
-            android:id="@+id/account_message"
+            android:id="@+id/cloud_account_message"
             android:text="@string/cloud_account_message"
 
             android:layout_marginTop="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/account_title"
+            app:layout_constraintTop_toBottomOf="@id/cloud_account_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
@@ -87,13 +94,13 @@
             android:singleLine="false"/>
 
     <TextView
-            android:id="@+id/account_login_status_message"
+            android:id="@+id/cloud_account_login_status_message"
             android:text="@string/cloud_account_login_status_message"
 
             android:layout_marginTop="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/account_message"
+            app:layout_constraintTop_toBottomOf="@id/cloud_account_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
@@ -102,12 +109,12 @@
             android:singleLine="false"/>
 
     <TextView
-            android:id="@+id/account_login_username_message"
+            android:id="@+id/cloud_account_login_username_message"
             android:text="@string/cloud_account_login_username_message"
 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/account_login_status_message"
+            app:layout_constraintTop_toBottomOf="@id/cloud_account_login_status_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
@@ -116,12 +123,12 @@
             android:singleLine="false"/>
 
     <TextView
-            android:id="@+id/account_login_user_id_message"
+            android:id="@+id/cloud_account_login_user_id_message"
             android:text="@string/cloud_account_login_user_id_message"
 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/account_login_username_message"
+            app:layout_constraintTop_toBottomOf="@id/cloud_account_login_username_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
@@ -130,7 +137,7 @@
             android:singleLine="false"/>
 
     <Button
-            android:id="@+id/account_sign_up_button"
+            android:id="@+id/cloud_account_sign_up_button"
             android:text="@string/cloud_account_sign_up_button"
 
             android:layout_width="0dp"
@@ -138,14 +145,14 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toBottomOf="@id/account_login_user_id_message"
+            app:layout_constraintTop_toBottomOf="@id/cloud_account_login_user_id_message"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/account_login_button"
+            app:layout_constraintEnd_toStartOf="@id/cloud_account_login_button"
 
             android:background="@color/widgetColor"/>
 
     <Button
-            android:id="@+id/account_login_button"
+            android:id="@+id/cloud_account_login_button"
             android:text="@string/cloud_account_log_in_button"
 
             android:layout_width="0dp"
@@ -153,8 +160,84 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toBottomOf="@id/account_login_user_id_message"
-            app:layout_constraintStart_toEndOf="@id/account_sign_up_button"
+            app:layout_constraintTop_toBottomOf="@id/cloud_account_login_user_id_message"
+            app:layout_constraintStart_toEndOf="@id/cloud_account_sign_up_button"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:background="@color/widgetColor"/>
+
+    <TextView
+            android:id="@+id/cloud_google_drive_title"
+            android:text="@string/cloud_google_drive_title"
+
+            android:layout_marginTop="16dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/cloud_account_login_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:gravity="start"
+            android:textSize="20sp"
+            android:maxLines="4"
+            android:singleLine="false"/>
+
+    <TextView
+            android:id="@+id/cloud_google_drive_message"
+            android:text="@string/cloud_google_drive_message"
+
+            android:layout_marginTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/cloud_google_drive_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:gravity="start"
+            android:maxLines="4"
+            android:singleLine="false"/>
+
+    <TextView
+            android:id="@+id/cloud_google_drive_status_message"
+            android:text="@string/cloud_google_drive_status_not_connected"
+
+            android:layout_marginTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/cloud_google_drive_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:gravity="start"
+            android:maxLines="4"
+            android:singleLine="false"/>
+
+    <Button
+            android:id="@+id/cloud_google_drive_connect_button"
+            android:text="@string/cloud_google_drive_connect_button"
+
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@id/cloud_google_drive_status_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cloud_google_drive_disconnect_button"
+
+            android:background="@color/widgetColor"/>
+
+    <Button
+            android:id="@+id/cloud_google_drive_disconnect_button"
+            android:text="@string/cloud_google_drive_disconnect_button"
+
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@id/cloud_google_drive_status_message"
+            app:layout_constraintStart_toEndOf="@id/cloud_google_drive_connect_button"
             app:layout_constraintEnd_toEndOf="parent"
 
             android:background="@color/widgetColor"/>
@@ -166,7 +249,7 @@
             android:layout_marginTop="16dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/account_sign_up_button"
+            app:layout_constraintTop_toBottomOf="@id/cloud_google_drive_connect_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
@@ -176,7 +259,7 @@
             android:singleLine="false"/>
 
     <TextView
-            android:id="@+id/cloud_message"
+            android:id="@+id/cloud_subscription_message"
             android:text="@string/cloud_subscription_message"
 
             android:layout_marginTop="10dp"
@@ -197,7 +280,7 @@
             android:layout_marginTop="10dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/cloud_message"
+            app:layout_constraintTop_toBottomOf="@id/cloud_subscription_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 

@@ -1,17 +1,30 @@
 package com.toolsboox.plugin.cloud.ui
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
+import android.text.Html
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClient.ProductType
 import com.android.billingclient.api.QueryProductDetailsParams.Product
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.Scope
 import com.google.android.material.textfield.TextInputEditText
+import com.google.api.services.drive.DriveScopes
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.squareup.moshi.Moshi
 import com.toolsboox.R
@@ -95,6 +108,34 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
      */
     private var billingClientFinished = false
 
+    // Google sign-in options.
+    val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestScopes(Scope(DriveScopes.DRIVE_APPDATA), Scope(DriveScopes.DRIVE_FILE))
+        .requestEmail()
+        .build()
+
+    val connectResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                .addOnSuccessListener {
+                    googleAccount = it
+                    Timber.i("Signed into a GoogleAccount: ${it.email}")
+                    requireActivity().runOnUiThread { updateButtons() }
+                }
+        } else {
+            googleAccount = null
+            val message = getString(R.string.cloud_google_drive_connection_failed_toast).format("failed")
+            Toast.makeText(this.context, message, Toast.LENGTH_LONG).show()
+            updateButtons()
+        }
+    }
+
+    // Access token for Google Drive.
+    private var googleAccount: GoogleSignInAccount? = null
+
+    // Google sign-in client.
+    private var signInClient: GoogleSignInClient? = null
+
     /**
      * OnViewCreated hook.
      *
@@ -125,16 +166,31 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             )
         ).build()
 
-        binding.accountSignUpButton.setOnClickListener {
+        binding.cloudAccountSignUpButton.setOnClickListener {
             signUpDialog()
         }
 
-        binding.accountLoginButton.setOnClickListener {
+        binding.cloudAccountLoginButton.setOnClickListener {
             val refreshToken = sharedPreferences.getString("refreshToken", null)
             if (refreshToken == null) {
                 loginDialog()
             } else {
                 logoutDialog()
+            }
+        }
+
+        binding.cloudGoogleDriveConnectButton.setOnClickListener {
+            signInClient = GoogleSignIn.getClient(this.requireContext(), googleSignInOptions)
+            connectResult.launch(signInClient!!.signInIntent)
+        }
+
+        binding.cloudGoogleDriveDisconnectButton.setOnClickListener {
+            if (signInClient == null) return@setOnClickListener
+
+            signInClient!!.revokeAccess().addOnCompleteListener {
+                Timber.i("Google Drive scopes revoked")
+                googleAccount = null
+                requireActivity().runOnUiThread { updateButtons() }
             }
         }
 
@@ -159,6 +215,11 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             val decryptedOpenSSL = CryptoUtils.decrypt(Base64.getDecoder().decode(encryptedOpenSSL), "pass1234")
             Timber.e("Decrypted OpenSSL:    " + String(decryptedOpenSSL))
         }
+
+        htmlLinks(
+            binding.cloudSubscriptionMessage, R.string.cloud_subscription_message,
+            "https://discord.gg/S3sKsbmaSk"
+        )
     }
 
     /**
@@ -246,6 +307,24 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                 Timber.i("onBillingServiceDisconnected")
             }
         })
+
+        // Check Google Drive connection.
+        signInClient = GoogleSignIn.getClient(this.requireContext(), googleSignInOptions)
+        signInClient!!.silentSignIn()
+            .addOnSuccessListener { result ->
+                Timber.i("Silent-signed into a GoogleAccount: $result.id")
+                googleAccount = result
+                requireActivity().runOnUiThread {
+                    updateButtons()
+                }
+            }
+            .addOnFailureListener {
+                Timber.e("Silent-sign-in failed: $it")
+                googleAccount = null
+                requireActivity().runOnUiThread {
+                    updateButtons()
+                }
+            }
     }
 
     /**
@@ -347,24 +426,38 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         val userIdKey = sharedPreferences.getString("userIdKey", null)
         val username = sharedPreferences.getString("username", null)
         if (userIdKey == null || username == null) {
-            binding.accountLoginUserIdMessage.text = getString(R.string.cloud_account_login_user_id_message).format(notLoggedIn)
-            binding.accountLoginUsernameMessage.text = getString(R.string.cloud_account_login_username_message).format(notLoggedIn)
+            binding.cloudAccountLoginUserIdMessage.text = getString(R.string.cloud_account_login_user_id_message).format(notLoggedIn)
+            binding.cloudAccountLoginUsernameMessage.text = getString(R.string.cloud_account_login_username_message).format(notLoggedIn)
         } else {
-            binding.accountLoginUserIdMessage.text = getString(R.string.cloud_account_login_user_id_message).format(userIdKey)
-            binding.accountLoginUsernameMessage.text = getString(R.string.cloud_account_login_username_message).format(username)
+            binding.cloudAccountLoginUserIdMessage.text = getString(R.string.cloud_account_login_user_id_message).format(userIdKey)
+            binding.cloudAccountLoginUsernameMessage.text = getString(R.string.cloud_account_login_username_message).format(username)
         }
 
         val refreshToken = sharedPreferences.getString("refreshToken", null)
         if (refreshToken == null) {
-            binding.accountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(notLoggedIn)
-            binding.accountLoginButton.text = getString(R.string.cloud_account_log_in_button)
-            binding.accountSignUpButton.isEnabled = true
-            binding.accountSignUpButton.alpha = 1.0f
+            binding.cloudAccountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(notLoggedIn)
+            binding.cloudAccountLoginButton.text = getString(R.string.cloud_account_log_in_button)
+            binding.cloudAccountSignUpButton.isEnabled = true
+            binding.cloudAccountSignUpButton.alpha = 1.0f
         } else {
-            binding.accountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(loggedIn)
-            binding.accountLoginButton.text = getString(R.string.cloud_account_log_out_button)
-            binding.accountSignUpButton.isEnabled = false
-            binding.accountSignUpButton.alpha = 0.5f
+            binding.cloudAccountLoginStatusMessage.text = getString(R.string.cloud_account_login_status_message).format(loggedIn)
+            binding.cloudAccountLoginButton.text = getString(R.string.cloud_account_log_out_button)
+            binding.cloudAccountSignUpButton.isEnabled = false
+            binding.cloudAccountSignUpButton.alpha = 0.5f
+        }
+
+        if (googleAccount == null) {
+            binding.cloudGoogleDriveStatusMessage.text = getString(R.string.cloud_google_drive_status_not_connected)
+            binding.cloudGoogleDriveConnectButton.isEnabled = true
+            binding.cloudGoogleDriveConnectButton.alpha = 1.0f
+            binding.cloudGoogleDriveDisconnectButton.isEnabled = false
+            binding.cloudGoogleDriveDisconnectButton.alpha = 0.5f
+        } else {
+            binding.cloudGoogleDriveStatusMessage.text = getString(R.string.cloud_google_drive_status_connected)
+            binding.cloudGoogleDriveConnectButton.isEnabled = false
+            binding.cloudGoogleDriveConnectButton.alpha = 0.5f
+            binding.cloudGoogleDriveDisconnectButton.isEnabled = true
+            binding.cloudGoogleDriveDisconnectButton.alpha = 1.0f
         }
 
         if (!billingClientFinished) {
@@ -378,7 +471,7 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
 
             binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(loading)
         } else {
-            if (refreshToken == null) {
+            if ((refreshToken == null) and (googleAccount == null)) {
                 binding.cloudMonthlyButton.isEnabled = false
                 binding.cloudMonthlyButton.alpha = 0.5f
 
@@ -529,6 +622,22 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         logOutDialog.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
 
         logOutDialog.show()
+    }
+
+    /**
+     * Update textView content to clickable link.
+     *
+     * @param linkView the link holder textView
+     * @param messageResId the message resource id
+     * @param link the link
+     */
+    private fun htmlLinks(linkView: TextView, messageResId: Int, link: String) {
+        val linkMessage = getString(messageResId)
+        val linkHtml = "$linkMessage <a href=\"$link\">$link</a>"
+        linkView.text = Html.fromHtml(linkHtml, Html.FROM_HTML_MODE_COMPACT)
+        linkView.setOnClickListener {
+            this.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+        }
     }
 
     /**
