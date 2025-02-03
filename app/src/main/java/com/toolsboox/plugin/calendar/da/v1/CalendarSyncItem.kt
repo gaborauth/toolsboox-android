@@ -7,11 +7,12 @@ import java.util.*
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
-data class CalendarItem(
+data class CalendarSyncItem(
     val userId: UUID,
     val path: String,
     val baseName: String,
     val version: String,
     val created: Date?,
-    val updated: Date?
+    val updated: Date?,
+    var json: String? = null
 )

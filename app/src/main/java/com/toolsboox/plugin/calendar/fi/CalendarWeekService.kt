@@ -1,7 +1,7 @@
 package com.toolsboox.plugin.calendar.fi
 
 import com.squareup.moshi.Moshi
-import com.toolsboox.plugin.calendar.da.v1.CalendarItem
+import com.toolsboox.plugin.calendar.da.v1.CalendarSyncItem
 import com.toolsboox.plugin.calendar.da.v2.CalendarWeek
 import timber.log.Timber
 import java.io.File
@@ -29,16 +29,40 @@ class CalendarWeekService @Inject constructor() {
     lateinit var moshi: Moshi
 
     /**
-     * Returns with the item of the data class.
+     * Returns with the sync item of the data class.
      *
      * @param userId the user ID
      * @param calendarWeek the data class
-     * @return the calendar item data class
+     * @return the calendar sync item data class
      */
-    fun getItem(userId: UUID, calendarWeek: CalendarWeek): CalendarItem {
+    fun getItem(userId: UUID, calendarWeek: CalendarWeek): CalendarSyncItem {
         val year = "%04d".format(calendarWeek.year)
         val week = "%02d".format(calendarWeek.weekOfYear)
-        return CalendarItem(userId, "$year/", "week-$year-$week", "v2", calendarWeek.created, calendarWeek.updated)
+        return CalendarSyncItem(userId, "$year/", "week-$year-$week", "v2", calendarWeek.created, calendarWeek.updated)
+    }
+
+    /**
+     * Load the data class from the sync item.
+     *
+     * @param calendarSyncItem the calendar sync item
+     * @return the data class
+     */
+    fun fromSyncItem(calendarSyncItem: CalendarSyncItem): CalendarWeek? {
+        if (!calendarSyncItem.baseName.startsWith("week-")) return null
+
+        when (calendarSyncItem.version) {
+            "v1" -> {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarWeek::class.java)
+                    .fromJson(calendarSyncItem.json!!)?.let { return CalendarWeek.convert(it) }
+            }
+
+            "v2" -> {
+                moshi.adapter(CalendarWeek::class.java)
+                    .fromJson(calendarSyncItem.json!!)?.let { return it }
+            }
+        }
+
+        return null
     }
 
     /**
@@ -122,7 +146,7 @@ class CalendarWeekService @Inject constructor() {
         val week = currentDate.format(DateTimeFormatter.ofPattern("ww", calendarWeek.locale))
 
         calendarWeek.created = calendarWeek.created ?: Date.from(Instant.now())
-        calendarWeek.updated = Date.from(Instant.now())
+        calendarWeek.updated = calendarWeek.updated ?: Date.from(Instant.now())
         save(rootPath, "$year/", "week-$year-$week", calendarWeek)
     }
 

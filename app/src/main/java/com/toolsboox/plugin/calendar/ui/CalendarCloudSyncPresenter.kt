@@ -2,7 +2,7 @@ package com.toolsboox.plugin.calendar.ui
 
 import android.os.Environment
 import com.toolsboox.databinding.FragmentCalendarCloudSyncBinding
-import com.toolsboox.plugin.calendar.da.v1.CalendarItem
+import com.toolsboox.plugin.calendar.da.v1.CalendarSyncItem
 import com.toolsboox.plugin.calendar.fi.*
 import com.toolsboox.plugin.calendar.nw.CalendarService
 import com.toolsboox.ui.plugin.FragmentPresenter
@@ -71,7 +71,7 @@ class CalendarCloudSyncPresenter @Inject constructor() : FragmentPresenter() {
     fun fileList(fragment: CalendarCloudSyncFragment, userId: UUID, binding: FragmentCalendarCloudSyncBinding) {
         if (!checkPermissions(fragment, binding.root)) return
 
-        val calendarItems: MutableList<CalendarItem> = mutableListOf()
+        val calendarSyncItems: MutableList<CalendarSyncItem> = mutableListOf()
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
@@ -86,24 +86,24 @@ class CalendarCloudSyncPresenter @Inject constructor() : FragmentPresenter() {
                             if (item.name.startsWith("pattern-")) return@forEach
 
                             calendarYearService.load(item)?.let { calendarYear ->
-                                calendarItems.add(calendarYearService.getItem(userId, calendarYear))
+                                calendarSyncItems.add(calendarYearService.getItem(userId, calendarYear))
                             }
                             calendarQuarterService.load(item)?.let { calendarQuarter ->
-                                calendarItems.add(calendarQuarterService.getItem(userId, calendarQuarter))
+                                calendarSyncItems.add(calendarQuarterService.getItem(userId, calendarQuarter))
                             }
                             calendarMonthService.load(item)?.let { calendarMonth ->
-                                calendarItems.add(calendarMonthService.getItem(userId, calendarMonth))
+                                calendarSyncItems.add(calendarMonthService.getItem(userId, calendarMonth))
                             }
                             calendarWeekService.load(item)?.let { calendarWeek ->
-                                calendarItems.add(calendarWeekService.getItem(userId, calendarWeek))
+                                calendarSyncItems.add(calendarWeekService.getItem(userId, calendarWeek))
                             }
                             calendarDayService.load(item)?.let { calendarDay ->
-                                calendarItems.add(calendarDayService.getItem(userId, calendarDay))
+                                calendarSyncItems.add(calendarDayService.getItem(userId, calendarDay))
                             }
                         }
                     }
 
-                    fragment.fileListResult(calendarItems)
+                    fragment.fileListResult(calendarSyncItems)
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }
@@ -117,11 +117,11 @@ class CalendarCloudSyncPresenter @Inject constructor() : FragmentPresenter() {
      * Load the specified item from file to JSON.
      *
      * @param fragment the fragment
-     * @param calendarItem the calendar item
+     * @param calendarSyncItem the calendar sync item
      * @param binding the binding on the fragment
      * @return the loaded JSON
      */
-    fun fileLoadJson(fragment: CalendarCloudSyncFragment, calendarItem: CalendarItem, binding: FragmentCalendarCloudSyncBinding) {
+    fun fileLoadJson(fragment: CalendarCloudSyncFragment, calendarSyncItem: CalendarSyncItem, binding: FragmentCalendarCloudSyncBinding) {
         if (!checkPermissions(fragment, binding.root)) return
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -131,20 +131,20 @@ class CalendarCloudSyncPresenter @Inject constructor() : FragmentPresenter() {
                 try {
                     val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
 
-                    calendarYearService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                        fragment.fileLoadJsonResult(calendarItem, calendarYearService.json(it))
+                    calendarYearService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                        fragment.fileLoadJsonResult(calendarSyncItem, calendarYearService.json(it))
                     }
-                    calendarQuarterService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                        fragment.fileLoadJsonResult(calendarItem, calendarQuarterService.json(it))
+                    calendarQuarterService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                        fragment.fileLoadJsonResult(calendarSyncItem, calendarQuarterService.json(it))
                     }
-                    calendarMonthService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                        fragment.fileLoadJsonResult(calendarItem, calendarMonthService.json(it))
+                    calendarMonthService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                        fragment.fileLoadJsonResult(calendarSyncItem, calendarMonthService.json(it))
                     }
-                    calendarWeekService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                        fragment.fileLoadJsonResult(calendarItem, calendarWeekService.json(it))
+                    calendarWeekService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                        fragment.fileLoadJsonResult(calendarSyncItem, calendarWeekService.json(it))
                     }
-                    calendarDayService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                        fragment.fileLoadJsonResult(calendarItem, calendarDayService.json(it))
+                    calendarDayService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                        fragment.fileLoadJsonResult(calendarSyncItem, calendarDayService.json(it))
                     }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
@@ -159,11 +159,11 @@ class CalendarCloudSyncPresenter @Inject constructor() : FragmentPresenter() {
      * Update the cloudUpdate field of the specified item.
      *
      * @param fragment the fragment
-     * @param calendarItem the calendar item
+     * @param calendarSyncItem the calendar sync item
      * @param binding the binding on the fragment
      * @return the loaded JSON
      */
-    fun fileUpdate(fragment: CalendarCloudSyncFragment, calendarItem: CalendarItem, binding: FragmentCalendarCloudSyncBinding) {
+    fun fileUpdate(fragment: CalendarCloudSyncFragment, calendarSyncItem: CalendarSyncItem, binding: FragmentCalendarCloudSyncBinding) {
         if (!checkPermissions(fragment, binding.root)) return
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -173,35 +173,35 @@ class CalendarCloudSyncPresenter @Inject constructor() : FragmentPresenter() {
                 try {
                     val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
 
-                    calendarYearService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                        it.created = calendarItem.created
-                        it.updated = calendarItem.updated
-                        calendarYearService.save(rootPath, calendarItem.path, calendarItem.baseName, it)
-                        fragment.fileUpdateResult(calendarItem, it)
+                    calendarYearService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                        it.created = calendarSyncItem.created
+                        it.updated = calendarSyncItem.updated
+                        calendarYearService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
+                        fragment.fileUpdateResult(calendarSyncItem, it)
                     }
-                    calendarQuarterService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                        it.created = calendarItem.created
-                        it.updated = calendarItem.updated
-                        calendarQuarterService.save(rootPath, calendarItem.path, calendarItem.baseName, it)
-                        fragment.fileUpdateResult(calendarItem, it)
+                    calendarQuarterService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                        it.created = calendarSyncItem.created
+                        it.updated = calendarSyncItem.updated
+                        calendarQuarterService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
+                        fragment.fileUpdateResult(calendarSyncItem, it)
                     }
-                    calendarMonthService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                        it.created = calendarItem.created
-                        it.updated = calendarItem.updated
-                        calendarMonthService.save(rootPath, calendarItem.path, calendarItem.baseName, it)
-                        fragment.fileUpdateResult(calendarItem, it)
+                    calendarMonthService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                        it.created = calendarSyncItem.created
+                        it.updated = calendarSyncItem.updated
+                        calendarMonthService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
+                        fragment.fileUpdateResult(calendarSyncItem, it)
                     }
-                    calendarWeekService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                        it.created = calendarItem.created
-                        it.updated = calendarItem.updated
-                        calendarWeekService.save(rootPath, calendarItem.path, calendarItem.baseName, it)
-                        fragment.fileUpdateResult(calendarItem, it)
+                    calendarWeekService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                        it.created = calendarSyncItem.created
+                        it.updated = calendarSyncItem.updated
+                        calendarWeekService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
+                        fragment.fileUpdateResult(calendarSyncItem, it)
                     }
-                    calendarDayService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                        it.created = calendarItem.created
-                        it.updated = calendarItem.updated
-                        calendarDayService.save(rootPath, calendarItem.path, calendarItem.baseName, it)
-                        fragment.fileUpdateResult(calendarItem, it)
+                    calendarDayService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                        it.created = calendarSyncItem.created
+                        it.updated = calendarSyncItem.updated
+                        calendarDayService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
+                        fragment.fileUpdateResult(calendarSyncItem, it)
                     }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
@@ -305,15 +305,17 @@ class CalendarCloudSyncPresenter @Inject constructor() : FragmentPresenter() {
      * Update the specified calendar item.
      *
      * @param fragment the fragment
+     * @param calendarSyncItem the calendar sync item
+     * @param data the data
      * @return the list of calendar items
      */
-    fun cloudUpdate(fragment: CalendarCloudSyncFragment, calendarItem: CalendarItem, data: String) {
-        val path = calendarItem.path.replace("/", "%2F")
-        val baseName = calendarItem.baseName.replace("/", "%2F")
+    fun cloudUpdate(fragment: CalendarCloudSyncFragment, calendarSyncItem: CalendarSyncItem, data: String) {
+        val path = calendarSyncItem.path.replace("/", "%2F")
+        val baseName = calendarSyncItem.baseName.replace("/", "%2F")
 
         coroutinesCallHelper(
             fragment,
-            { calendarService.updateAsync(path, baseName, calendarItem.version, data) },
+            { calendarService.updateAsync(path, baseName, calendarSyncItem.version, data) },
             { response ->
                 when (response.code()) {
                     200 -> {
