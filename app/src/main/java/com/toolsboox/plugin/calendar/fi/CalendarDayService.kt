@@ -42,6 +42,30 @@ class CalendarDayService @Inject constructor() {
     }
 
     /**
+     * Load the data class from the item.
+     *
+     * @param calendarItem the calendar item
+     * @return the data class
+     */
+    fun fromItem(calendarItem: CalendarItem): CalendarDay? {
+        if (!calendarItem.baseName.startsWith("day-")) return null
+
+        when (calendarItem.version) {
+            "v1" -> {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarDay::class.java)
+                    .fromJson(calendarItem.json!!)?.let { return CalendarDay.convert(it) }
+            }
+
+            "v2" -> {
+                moshi.adapter(CalendarDay::class.java)
+                    .fromJson(calendarItem.json!!)?.let { return it }
+            }
+        }
+
+        return null
+    }
+
+    /**
      * Load the data class from JSON file on the specified path.
      *
      * @param rootPath the root path
@@ -127,7 +151,7 @@ class CalendarDayService @Inject constructor() {
         val day = currentDate.format(DateTimeFormatter.ofPattern("dd"))
 
         calendarDay.created = calendarDay.created ?: Date.from(Instant.now())
-        calendarDay.updated = Date.from(Instant.now())
+        calendarDay.updated = calendarDay.updated ?: Date.from(Instant.now())
         save(rootPath, "$year/$month/", "day-$year-$month-$day", calendarDay)
     }
 

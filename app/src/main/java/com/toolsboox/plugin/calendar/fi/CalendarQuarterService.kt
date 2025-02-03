@@ -41,6 +41,31 @@ class CalendarQuarterService @Inject constructor() {
     }
 
     /**
+     * Load the data class from the item.
+     *
+     * @param calendarItem the calendar item
+     * @return the data class
+     */
+    fun fromItem(calendarItem: CalendarItem): CalendarQuarter? {
+        if (!calendarItem.baseName.startsWith("quarter-")) return null
+
+        when (calendarItem.version) {
+            "v1" -> {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarQuarter::class.java)
+                    .fromJson(calendarItem.json!!)?.let { return CalendarQuarter.convert(it) }
+            }
+
+            "v2" -> {
+                moshi.adapter(CalendarQuarter::class.java)
+                    .fromJson(calendarItem.json!!)?.let { return it }
+            }
+        }
+
+        return null
+    }
+
+
+    /**
      * Load the data class from JSON file on the specified path.
      *
      * @param rootPath the root path
@@ -120,7 +145,7 @@ class CalendarQuarterService @Inject constructor() {
         val quarter = currentDate.format(DateTimeFormatter.ofPattern("QQ"))
 
         calendarQuarter.created = calendarQuarter.created ?: Date.from(Instant.now())
-        calendarQuarter.updated = Date.from(Instant.now())
+        calendarQuarter.updated = calendarQuarter.updated ?: Date.from(Instant.now())
         save(rootPath, "$year/", "quarter-$year-$quarter", calendarQuarter)
     }
 

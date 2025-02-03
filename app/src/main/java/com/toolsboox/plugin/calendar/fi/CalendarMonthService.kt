@@ -41,6 +41,30 @@ class CalendarMonthService @Inject constructor() {
     }
 
     /**
+     * Load the data class from the item.
+     *
+     * @param calendarItem the calendar item
+     * @return the data class
+     */
+    fun fromItem(calendarItem: CalendarItem): CalendarMonth? {
+        if (!calendarItem.baseName.startsWith("month-")) return null
+
+        when (calendarItem.version) {
+            "v1" -> {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarMonth::class.java)
+                    .fromJson(calendarItem.json!!)?.let { return CalendarMonth.convert(it) }
+            }
+
+            "v2" -> {
+                moshi.adapter(CalendarMonth::class.java)
+                    .fromJson(calendarItem.json!!)?.let { return it }
+            }
+        }
+
+        return null
+    }
+
+    /**
      * Load the data class from JSON file on the specified path.
      *
      * @param rootPath the root path
@@ -119,7 +143,7 @@ class CalendarMonthService @Inject constructor() {
         val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
 
         calendarMonth.created = calendarMonth.created ?: Date.from(Instant.now())
-        calendarMonth.updated = Date.from(Instant.now())
+        calendarMonth.updated = calendarMonth.updated ?: Date.from(Instant.now())
         save(rootPath, "$year/$month/", "month-$year-$month", calendarMonth)
     }
 

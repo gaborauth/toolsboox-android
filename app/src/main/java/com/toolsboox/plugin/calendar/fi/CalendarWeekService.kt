@@ -42,6 +42,30 @@ class CalendarWeekService @Inject constructor() {
     }
 
     /**
+     * Load the data class from the item.
+     *
+     * @param calendarItem the calendar item
+     * @return the data class
+     */
+    fun fromItem(calendarItem: CalendarItem): CalendarWeek? {
+        if (!calendarItem.baseName.startsWith("week-")) return null
+
+        when (calendarItem.version) {
+            "v1" -> {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarWeek::class.java)
+                    .fromJson(calendarItem.json!!)?.let { return CalendarWeek.convert(it) }
+            }
+
+            "v2" -> {
+                moshi.adapter(CalendarWeek::class.java)
+                    .fromJson(calendarItem.json!!)?.let { return it }
+            }
+        }
+
+        return null
+    }
+
+    /**
      * Load the data class from JSON file on the specified path.
      *
      * @param rootPath the root path
@@ -122,7 +146,7 @@ class CalendarWeekService @Inject constructor() {
         val week = currentDate.format(DateTimeFormatter.ofPattern("ww", calendarWeek.locale))
 
         calendarWeek.created = calendarWeek.created ?: Date.from(Instant.now())
-        calendarWeek.updated = Date.from(Instant.now())
+        calendarWeek.updated = calendarWeek.updated ?: Date.from(Instant.now())
         save(rootPath, "$year/", "week-$year-$week", calendarWeek)
     }
 

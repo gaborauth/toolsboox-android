@@ -40,6 +40,30 @@ class CalendarYearService @Inject constructor() {
     }
 
     /**
+     * Load the data class from the item.
+     *
+     * @param calendarItem the calendar item
+     * @return the data class
+     */
+    fun fromItem(calendarItem: CalendarItem): CalendarYear? {
+        if (!calendarItem.baseName.startsWith("year-")) return null
+
+        when (calendarItem.version) {
+            "v1" -> {
+                moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarYear::class.java)
+                    .fromJson(calendarItem.json!!)?.let { return CalendarYear.convert(it) }
+            }
+
+            "v2" -> {
+                moshi.adapter(CalendarYear::class.java)
+                    .fromJson(calendarItem.json!!)?.let { return it }
+            }
+        }
+
+        return null
+    }
+
+    /**
      * Load the data class from JSON file on the specified path.
      *
      * @param rootPath the root path
@@ -117,7 +141,7 @@ class CalendarYearService @Inject constructor() {
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
 
         calendarYear.created = calendarYear.created ?: Date.from(Instant.now())
-        calendarYear.updated = Date.from(Instant.now())
+        calendarYear.updated = calendarYear.updated ?: Date.from(Instant.now())
         save(rootPath, "$year/", "year-$year", calendarYear)
     }
 

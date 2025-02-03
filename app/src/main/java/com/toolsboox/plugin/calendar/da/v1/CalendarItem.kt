@@ -13,5 +13,6 @@ data class CalendarItem(
     val baseName: String,
     val version: String,
     val created: Date?,
-    val updated: Date?
+    val updated: Date?,
+    var json: String? = null
 )

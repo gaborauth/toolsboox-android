@@ -3,22 +3,15 @@ package com.toolsboox.plugin.calendar.ui
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.Scope
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
-import com.google.api.services.drive.DriveScopes
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarGoogleDriveSyncBinding
+import com.toolsboox.di.GoogleDriveModule
 import com.toolsboox.ot.StringArrayAdapter
 import com.toolsboox.plugin.calendar.da.v1.CalendarItem
-import com.toolsboox.plugin.calendar.da.v2.Calendar
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -51,6 +44,10 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
     @Inject
     lateinit var presenter: CalendarGoogleDriveSyncPresenter
 
+    // Google sign-in client.
+    @Inject
+    lateinit var googleSignInClient: GoogleSignInClient
+
     /**
      * The inflated layout.
      */
@@ -76,35 +73,16 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
      */
     private val toCloudList: MutableList<CalendarItem> = mutableListOf()
 
-    // Google sign-in options.
-    val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestScopes(Scope(DriveScopes.DRIVE_APPDATA), Scope(DriveScopes.DRIVE_FILE))
-        .requestEmail()
-        .build()
-
     /**
      * The view binding.
      */
     private lateinit var binding: FragmentCalendarGoogleDriveSyncBinding
 
-    /**
-     * Flag of cloud list finished.
-     */
-    private var cloudListFinished = false
-
-    /**
-     * Flag of file list finished.
-     */
-    private var fileListFinished = false
-
     // Access token for Google Drive.
     private var googleAccount: GoogleSignInAccount? = null
 
-    // Google sign-in client.
-    private var signInClient: GoogleSignInClient? = null
-
     // Google Drive service.
-    private var googleDriveService: Drive? = null
+    private var googleDrive: Drive? = null
 
     /**
      * OnViewCreated hook.
@@ -119,10 +97,25 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
-        sharedPreferences.getString("userId", null)?.let { userId ->
-            requireActivity().runOnUiThread {
-                presenter.fileList(this@CalendarGoogleDriveSyncFragment, UUID.fromString(userId), binding)
+        // Set the compare button, to compare the cloud and the device.
+        binding.buttonCompare.setOnClickListener {
+            if (googleAccount != null && googleDrive != null) {
+                presenter.fileList(this@CalendarGoogleDriveSyncFragment, UUID.randomUUID(), binding)
             }
+        }
+
+        // Set the to-cloud list adapter.
+        binding.toCloudListView.setOnItemClickListener { _, _, position, _ ->
+            if (toCloudList.isEmpty()) return@setOnItemClickListener
+            Timber.i("Try to upload: %s", toCloudList[position])
+            presenter.fileLoad(this@CalendarGoogleDriveSyncFragment, toCloudList[position], binding)
+        }
+
+        // Set the from-cloud list adapter.
+        binding.fromCloudListView.setOnItemClickListener { _, _, position, _ ->
+            if (fromCloudList.isEmpty()) return@setOnItemClickListener
+            Timber.i("Try to download: %s", fromCloudList[position])
+            presenter.cloudLoad(this@CalendarGoogleDriveSyncFragment, googleDrive!!, fromCloudList[position])
         }
 
         binding.buttonCompare.isEnabled = false
@@ -142,53 +135,26 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
 
         toolbar.root.title = getString(R.string.drawer_title, getString(R.string.app_name), getString(R.string.calendar_google_drive_title))
 
-        // Query the encrypted credential content from the cloud when compare button is clicked.
-        binding.buttonCompare.setOnClickListener {
-            if (googleAccount != null && googleDriveService != null) {
-                presenter.cloudList(this@CalendarGoogleDriveSyncFragment, googleDriveService!!)
-                presenter.fileList(this@CalendarGoogleDriveSyncFragment, UUID.randomUUID(), binding)
-            }
-        }
-
-        // Set the to-cloud list adapter.
-        binding.toCloudListView.setOnItemClickListener { parent, view, position, id ->
-            if (toCloudList.isEmpty()) return@setOnItemClickListener
-            Timber.i("Try to upload: %s", toCloudList[position])
-            presenter.fileLoadJson(this@CalendarGoogleDriveSyncFragment, toCloudList[position], binding)
-        }
-
-        // Set the from-cloud list adapter.
-        binding.fromCloudListView.setOnItemClickListener { parent, view, position, id ->
-            if (fromCloudList.isEmpty()) return@setOnItemClickListener
-            Timber.i("Try to download: %s", fromCloudList[position])
-            // TODO: presenter method to download and update the calendar item
-        }
-
         googleAccount = null
         binding.googleDriveStatusMessage.text = getString(R.string.calendar_google_drive_disconnected)
         binding.buttonCompare.isEnabled = false
         binding.buttonCompare.alpha = 0.5f
 
         // Check Google Drive connection.
-        signInClient = GoogleSignIn.getClient(this.requireContext(), googleSignInOptions)
-        signInClient!!.silentSignIn()
+        googleSignInClient.silentSignIn()
             .addOnSuccessListener { result ->
-                Timber.i("Silent-signed into a GoogleAccount: $result.id")
+                Timber.i("Silent-signed into a GoogleAccount: ${result.id}")
                 googleAccount = result
+
                 requireActivity().runOnUiThread {
                     binding.googleDriveStatusMessage.text = getString(R.string.calendar_google_drive_connected)
                     binding.buttonCompare.isEnabled = true
                     binding.buttonCompare.alpha = 1.0f
 
-                    val credential: GoogleAccountCredential = GoogleAccountCredential.usingOAuth2(
-                        this.requireContext(), setOf(DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_FILE)
-                    )
-                    credential.setSelectedAccount(googleAccount!!.account)
-                    googleDriveService = Drive.Builder(
-                        AndroidHttp.newCompatibleTransport(),
-                        GsonFactory(),
-                        credential
-                    ).setApplicationName(R.string.app_name.toString()).build()
+                    GoogleDriveModule.provideCredential(this.requireContext(), googleAccount!!)
+                        .let { credential ->
+                            googleDrive = GoogleDriveModule.provideDrive(credential)
+                        }
                 }
             }
     }
@@ -203,19 +169,6 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
     }
 
     /**
-     * Cloud items list result.
-     *
-     * @param calendarItems the calendar items in the cloud
-     */
-    fun cloudListResult(calendarItems: List<CalendarItem>) {
-        cloudList.clear()
-        cloudList.addAll(calendarItems)
-
-        cloudListFinished = true
-        updateListViews()
-    }
-
-    /**
      * File items list result.
      *
      * @param calendarItems the calendar items on the device
@@ -224,19 +177,48 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
         fileList.clear()
         fileList.addAll(calendarItems.distinctBy { cis -> cis.baseName })
 
-        fileListFinished = true
+        presenter.cloudList(this@CalendarGoogleDriveSyncFragment, googleDrive!!)
+    }
+
+    /**
+     * Cloud items list result.
+     *
+     * @param calendarItems the calendar items in the cloud
+     */
+    fun cloudListResult(calendarItems: List<CalendarItem>) {
+        cloudList.clear()
+        cloudList.addAll(calendarItems)
+
         updateListViews()
     }
 
     /**
-     * Result of the JSON file load.
+     * Result of the JSON file load from filesystem.
      *
      * @param calendarItem the calendar item
-     * @param json the JSON of the calendar item
      */
-    fun fileLoadJsonResult(calendarItem: CalendarItem, json: String) {
-        Timber.i("Data to encrypt: $json")
-        presenter.cloudUpdate(this@CalendarGoogleDriveSyncFragment, googleDriveService!!, calendarItem)
+    fun fileLoadResult(calendarItem: CalendarItem) {
+        Timber.i("FileLoadResult: $calendarItem")
+        presenter.cloudUpdate(this@CalendarGoogleDriveSyncFragment, googleDrive!!, calendarItem)
+    }
+
+    /**
+     * Result of the JSON file load from cloud.
+     *
+     * @param calendarItem the calendar item
+     */
+    fun cloudLoadResult(calendarItem: CalendarItem) {
+        Timber.i("CloudLoadResult: $calendarItem")
+        presenter.fileUpdate(this@CalendarGoogleDriveSyncFragment, calendarItem, binding)
+    }
+
+    /**
+     * Result of the file update process.
+     *
+     * @param calendarItem the calendar item
+     */
+    fun fileUpdateResult(calendarItem: CalendarItem) {
+        Timber.i("$calendarItem - $calendarItem")
     }
 
     /**
@@ -247,26 +229,12 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
      */
     fun cloudUpdateResult(calendarItem: CalendarItem) {
         Timber.i("$calendarItem")
-        presenter.fileUpdate(this@CalendarGoogleDriveSyncFragment, calendarItem, binding)
-    }
-
-    fun fileUpdateResult(calendarItem: CalendarItem, calendar: Calendar) {
-        Timber.i("$calendarItem - $calendar")
-
-        sharedPreferences.getString("userId", null)?.let { userId ->
-            requireActivity().runOnUiThread {
-                presenter.cloudList(this@CalendarGoogleDriveSyncFragment, googleDriveService!!)
-                presenter.fileList(this@CalendarGoogleDriveSyncFragment, UUID.fromString(userId), binding)
-            }
-        }
     }
 
     /**
      * Update the list view of sync items.
      */
     private fun updateListViews() {
-        if (!cloudListFinished or !fileListFinished) return
-
         toCloudList.clear()
         fileList.forEach { fci ->
             // If the file is not in the cloud, add it.
@@ -287,8 +255,7 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
                 return@forEach
             }
 
-            // If the file is in the cloud, checks the updated date.
-            if ((cloudItem.updated != null) and (cloudItem.updated!! < fci.updated)) {
+            if ((cloudItem.updated != null) and (cloudItem.updated!!.time < fci.updated.time)) {
                 toCloudList.add(fci)
                 return@forEach
             }
@@ -300,7 +267,7 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
             val toCloudAdapter = StringArrayAdapter(
                 this.requireContext(),
                 R.layout.list_item_locale, toCloudList
-            ) { i -> "${i.path}${i.baseName}.${i.version}" }
+            ) { i -> "${i.path}${i.baseName}-${i.version}\n(${i.updated})" }
             binding.toCloudListView.adapter = toCloudAdapter
             toCloudAdapter.notifyDataSetChanged()
         }
@@ -320,7 +287,7 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
             if (fileItem == null) {
                 fromCloudList.add(cci)
             } else if (fileItem.updated != null) {
-                if (fileItem.updated < cci.updated) {
+                if (fileItem.updated.time < cci.updated.time) {
                     fromCloudList.add(cci)
                 }
             }
@@ -332,7 +299,7 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
             val fromCloudAdapter = StringArrayAdapter(
                 this.requireContext(),
                 R.layout.list_item_locale, fromCloudList
-            ) { i -> "${i.path}${i.baseName}.${i.version}" }
+            ) { i -> "${i.path}${i.baseName}-${i.version}\n(${i.updated})" }
             binding.fromCloudListView.adapter = fromCloudAdapter
             fromCloudAdapter.notifyDataSetChanged()
         }
