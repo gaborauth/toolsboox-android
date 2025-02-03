@@ -9,7 +9,7 @@ import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarCloudSyncBinding
 import com.toolsboox.ot.CryptoUtils
 import com.toolsboox.ot.StringArrayAdapter
-import com.toolsboox.plugin.calendar.da.v1.CalendarItem
+import com.toolsboox.plugin.calendar.da.v1.CalendarSyncItem
 import com.toolsboox.plugin.calendar.da.v2.Calendar
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,22 +51,22 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
     /**
      * Stored items in the cloud.
      */
-    private val cloudList: MutableList<CalendarItem> = mutableListOf()
+    private val cloudList: MutableList<CalendarSyncItem> = mutableListOf()
 
     /**
      * Stored items in the device.
      */
-    private val fileList: MutableList<CalendarItem> = mutableListOf()
+    private val fileList: MutableList<CalendarSyncItem> = mutableListOf()
 
     /**
      * Calendar items selected to sync from cloud.
      */
-    private val fromCloudList: MutableList<CalendarItem> = mutableListOf()
+    private val fromCloudList: MutableList<CalendarSyncItem> = mutableListOf()
 
     /**
      * Calendar items selected to sync to cloud.
      */
-    private val toCloudList: MutableList<CalendarItem> = mutableListOf()
+    private val toCloudList: MutableList<CalendarSyncItem> = mutableListOf()
 
     /**
      * The view binding.
@@ -207,26 +207,26 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
     }
 
     /**
-     * Cloud items list result.
+     * Cloud sync items list result.
      *
-     * @param calendarItems the calendar items in the cloud
+     * @param calendarSyncItems the calendar sync items in the cloud
      */
-    fun cloudListResult(calendarItems: List<CalendarItem>) {
+    fun cloudListResult(calendarSyncItems: List<CalendarSyncItem>) {
         cloudList.clear()
-        cloudList.addAll(calendarItems)
+        cloudList.addAll(calendarSyncItems)
 
         cloudListFinished = true
         updateListViews()
     }
 
     /**
-     * File items list result.
+     * File sync items list result.
      *
-     * @param calendarItems the calendar items on the device
+     * @param calendarSyncItems the calendar sync items on the device
      */
-    fun fileListResult(calendarItems: List<CalendarItem>) {
+    fun fileListResult(calendarSyncItems: List<CalendarSyncItem>) {
         fileList.clear()
-        fileList.addAll(calendarItems.distinctBy { cis -> cis.baseName })
+        fileList.addAll(calendarSyncItems.distinctBy { cis -> cis.baseName })
 
         fileListFinished = true
         updateListViews()
@@ -235,29 +235,29 @@ class CalendarCloudSyncFragment @Inject constructor() : ScreenFragment() {
     /**
      * Result of the JSON file load.
      *
-     * @param calendarItem the calendar item
+     * @param calendarSyncItem the calendar sync item
      * @param json the JSON of the calendar item
      */
-    fun fileLoadJsonResult(calendarItem: CalendarItem, json: String) {
+    fun fileLoadJsonResult(calendarSyncItem: CalendarSyncItem, json: String) {
         Timber.i("Data to encrypt: $json")
         val passphrase = binding.passphraseEditText.text.toString()
         val encrypted = CryptoUtils.encrypt(json.toByteArray(Charsets.UTF_8), passphrase)
         val encryptedBase64 = Base64.getEncoder().encodeToString(encrypted)
-        presenter.cloudUpdate(this@CalendarCloudSyncFragment, calendarItem, encryptedBase64)
+        presenter.cloudUpdate(this@CalendarCloudSyncFragment, calendarSyncItem, encryptedBase64)
     }
 
     /**
      * Result of the cloud update process.
      *
-     * @param calendarItem the calendar item
+     * @param calendarSyncItem the calendar sync item
      *
      */
-    fun cloudUpdateResult(calendarItem: CalendarItem) {
-        Timber.i("$calendarItem")
-        presenter.fileUpdate(this@CalendarCloudSyncFragment, calendarItem, binding)
+    fun cloudUpdateResult(calendarSyncItem: CalendarSyncItem) {
+        Timber.i("$calendarSyncItem")
+        presenter.fileUpdate(this@CalendarCloudSyncFragment, calendarSyncItem, binding)
     }
 
-    fun fileUpdateResult(calendarItem: CalendarItem, calendar: Calendar) {
+    fun fileUpdateResult(calendarItem: CalendarSyncItem, calendar: Calendar) {
         Timber.i("$calendarItem - $calendar")
 
         sharedPreferences.getString("userId", null)?.let { userId ->

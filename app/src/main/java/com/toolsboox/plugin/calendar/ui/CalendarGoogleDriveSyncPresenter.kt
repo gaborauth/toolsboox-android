@@ -6,7 +6,7 @@ import com.google.api.client.http.ByteArrayContent
 import com.google.api.services.drive.Drive
 import com.toolsboox.databinding.FragmentCalendarGoogleDriveSyncBinding
 import com.toolsboox.fi.GoogleDriveService
-import com.toolsboox.plugin.calendar.da.v1.CalendarItem
+import com.toolsboox.plugin.calendar.da.v1.CalendarSyncItem
 import com.toolsboox.plugin.calendar.fi.*
 import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
@@ -72,7 +72,7 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
         if (!checkPermissions(fragment, binding.root)) return
 
         fragment.showLoading()
-        val calendarItems: MutableList<CalendarItem> = mutableListOf()
+        val calendarSyncItems: MutableList<CalendarSyncItem> = mutableListOf()
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
@@ -84,19 +84,19 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
                         if (item.name.startsWith("pattern-")) return@forEach
 
                         calendarYearService.load(item)?.let { calendarYear ->
-                            calendarItems.add(calendarYearService.getItem(userId, calendarYear))
+                            calendarSyncItems.add(calendarYearService.getItem(userId, calendarYear))
                         }
                         calendarQuarterService.load(item)?.let { calendarQuarter ->
-                            calendarItems.add(calendarQuarterService.getItem(userId, calendarQuarter))
+                            calendarSyncItems.add(calendarQuarterService.getItem(userId, calendarQuarter))
                         }
                         calendarMonthService.load(item)?.let { calendarMonth ->
-                            calendarItems.add(calendarMonthService.getItem(userId, calendarMonth))
+                            calendarSyncItems.add(calendarMonthService.getItem(userId, calendarMonth))
                         }
                         calendarWeekService.load(item)?.let { calendarWeek ->
-                            calendarItems.add(calendarWeekService.getItem(userId, calendarWeek))
+                            calendarSyncItems.add(calendarWeekService.getItem(userId, calendarWeek))
                         }
                         calendarDayService.load(item)?.let { calendarDay ->
-                            calendarItems.add(calendarDayService.getItem(userId, calendarDay))
+                            calendarSyncItems.add(calendarDayService.getItem(userId, calendarDay))
                         }
                     }
                 }
@@ -107,7 +107,7 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
             } finally {
                 withContext(Dispatchers.Main) {
                     fragment.hideLoading()
-                    fragment.fileListResult(calendarItems)
+                    fragment.fileListResult(calendarSyncItems)
                 }
             }
         }
@@ -121,7 +121,7 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
      */
     fun cloudList(fragment: CalendarGoogleDriveSyncFragment, driveService: Drive) {
         fragment.showLoading()
-        val calendarItems = mutableListOf<CalendarItem>()
+        val calendarSyncItems = mutableListOf<CalendarSyncItem>()
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val appRoot = GoogleDriveService.getOrCreateRootFolder(driveService, "calendar")
@@ -133,7 +133,7 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
                     val version = it.properties["version"] ?: return@forEach
                     val created = it.properties["created"]?.toLong() ?: return@forEach
                     val modified = it.properties["modified"]?.toLong() ?: return@forEach
-                    calendarItems.add(CalendarItem(UUID.randomUUID(), path, baseName, version, Date(created), Date(modified), null))
+                    calendarSyncItems.add(CalendarSyncItem(UUID.randomUUID(), path, baseName, version, Date(created), Date(modified), null))
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) {
@@ -142,7 +142,7 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
             } finally {
                 withContext(Dispatchers.Main) {
                     fragment.hideLoading()
-                    fragment.cloudListResult(calendarItems)
+                    fragment.cloudListResult(calendarSyncItems)
                 }
             }
         }
@@ -152,50 +152,50 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
      * Load the specified item from file.
      *
      * @param fragment the fragment
-     * @param calendarItem the calendar item
+     * @param calendarSyncItem the calendar sync item
      * @param binding the binding on the fragment
      * @return the loaded content
      */
-    fun fileLoad(fragment: CalendarGoogleDriveSyncFragment, calendarItem: CalendarItem, binding: FragmentCalendarGoogleDriveSyncBinding) {
+    fun fileLoad(fragment: CalendarGoogleDriveSyncFragment, calendarSyncItem: CalendarSyncItem, binding: FragmentCalendarGoogleDriveSyncBinding) {
         if (!checkPermissions(fragment, binding.root)) return
 
         fragment.showLoading()
         val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             try {
-                calendarYearService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                    calendarItem.json = calendarYearService.json(it)
+                calendarYearService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                    calendarSyncItem.json = calendarYearService.json(it)
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
-                        fragment.fileLoadResult(calendarItem)
+                        fragment.fileLoadResult(calendarSyncItem)
                     }
                 }
-                calendarQuarterService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                    calendarItem.json = calendarQuarterService.json(it)
+                calendarQuarterService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                    calendarSyncItem.json = calendarQuarterService.json(it)
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
-                        fragment.fileLoadResult(calendarItem)
+                        fragment.fileLoadResult(calendarSyncItem)
                     }
                 }
-                calendarMonthService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                    calendarItem.json = calendarMonthService.json(it)
+                calendarMonthService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                    calendarSyncItem.json = calendarMonthService.json(it)
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
-                        fragment.fileLoadResult(calendarItem)
+                        fragment.fileLoadResult(calendarSyncItem)
                     }
                 }
-                calendarWeekService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                    calendarItem.json = calendarWeekService.json(it)
+                calendarWeekService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                    calendarSyncItem.json = calendarWeekService.json(it)
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
-                        fragment.fileLoadResult(calendarItem)
+                        fragment.fileLoadResult(calendarSyncItem)
                     }
                 }
-                calendarDayService.load(rootPath, calendarItem.path, calendarItem.baseName)?.let {
-                    calendarItem.json = calendarDayService.json(it)
+                calendarDayService.load(rootPath, calendarSyncItem.path, calendarSyncItem.baseName)?.let {
+                    calendarSyncItem.json = calendarDayService.json(it)
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
-                        fragment.fileLoadResult(calendarItem)
+                        fragment.fileLoadResult(calendarSyncItem)
                     }
                 }
             } catch (e: IOException) {
@@ -211,24 +211,24 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
      *
      * @param fragment the fragment
      * @param driveService the Google Drive service
-     * @param calendarItem the calendar item
+     * @param calendarSyncItem the calendar sync item
      */
-    fun cloudLoad(fragment: CalendarGoogleDriveSyncFragment, driveService: Drive, calendarItem: CalendarItem) {
+    fun cloudLoad(fragment: CalendarGoogleDriveSyncFragment, driveService: Drive, calendarSyncItem: CalendarSyncItem) {
         fragment.showLoading()
-        val fileName = "${calendarItem.baseName}-${calendarItem.version}.json"
+        val fileName = "${calendarSyncItem.baseName}-${calendarSyncItem.version}.json"
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val appRoot = GoogleDriveService.getOrCreateRootFolder(driveService, "calendar")
-                val folder = GoogleDriveService.getOrCreatePath(driveService, appRoot!!, calendarItem.path)
+                val folder = GoogleDriveService.getOrCreatePath(driveService, appRoot!!, calendarSyncItem.path)
                 val file = GoogleDriveService.getFile(driveService, folder!!, fileName)
 
                 val byteArrayOutputStream = ByteArrayOutputStream()
                 GoogleDriveService.downloadFile(driveService, file!!, byteArrayOutputStream)
-                calendarItem.json = byteArrayOutputStream.toString("UTF-8")
+                calendarSyncItem.json = byteArrayOutputStream.toString("UTF-8")
 
                 withContext(Dispatchers.Main) {
                     fragment.hideLoading()
-                    fragment.cloudLoadResult(calendarItem)
+                    fragment.cloudLoadResult(calendarSyncItem)
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) {
@@ -242,50 +242,50 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
      * Update the cloudUpdate field of the specified item.
      *
      * @param fragment the fragment
-     * @param calendarItem the calendar item
+     * @param calendarSyncItem the calendar sync item
      * @param binding the binding on the fragment
      * @return the loaded JSON
      */
-    fun fileUpdate(fragment: CalendarGoogleDriveSyncFragment, calendarItem: CalendarItem, binding: FragmentCalendarGoogleDriveSyncBinding) {
+    fun fileUpdate(fragment: CalendarGoogleDriveSyncFragment, calendarSyncItem: CalendarSyncItem, binding: FragmentCalendarGoogleDriveSyncBinding) {
         if (!checkPermissions(fragment, binding.root)) return
 
         fragment.showLoading()
         val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             try {
-                calendarYearService.fromItem(calendarItem)?.let {
-                    calendarYearService.save(rootPath, calendarItem.path, calendarItem.baseName, it)
+                calendarYearService.fromSyncItem(calendarSyncItem)?.let {
+                    calendarYearService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
-                        fragment.fileUpdateResult(calendarItem)
+                        fragment.fileUpdateResult(calendarSyncItem)
                     }
                 }
-                calendarQuarterService.fromItem(calendarItem)?.let {
-                    calendarQuarterService.save(rootPath, calendarItem.path, calendarItem.baseName, it)
+                calendarQuarterService.fromSyncItem(calendarSyncItem)?.let {
+                    calendarQuarterService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
-                        fragment.fileUpdateResult(calendarItem)
+                        fragment.fileUpdateResult(calendarSyncItem)
                     }
                 }
-                calendarMonthService.fromItem(calendarItem)?.let {
-                    calendarMonthService.save(rootPath, calendarItem.path, calendarItem.baseName, it)
+                calendarMonthService.fromSyncItem(calendarSyncItem)?.let {
+                    calendarMonthService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
-                        fragment.fileUpdateResult(calendarItem)
+                        fragment.fileUpdateResult(calendarSyncItem)
                     }
                 }
-                calendarWeekService.fromItem(calendarItem)?.let {
-                    calendarWeekService.save(rootPath, calendarItem.path, calendarItem.baseName, it)
+                calendarWeekService.fromSyncItem(calendarSyncItem)?.let {
+                    calendarWeekService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
-                        fragment.fileUpdateResult(calendarItem)
+                        fragment.fileUpdateResult(calendarSyncItem)
                     }
                 }
-                calendarDayService.fromItem(calendarItem)?.let {
-                    calendarDayService.save(rootPath, calendarItem.path, calendarItem.baseName, it)
+                calendarDayService.fromSyncItem(calendarSyncItem)?.let {
+                    calendarDayService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
-                        fragment.fileUpdateResult(calendarItem)
+                        fragment.fileUpdateResult(calendarSyncItem)
                     }
                 }
             } catch (e: IOException) {
@@ -305,30 +305,30 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
      *
      * @param fragment the fragment
      * @param driveService the Google Drive service
-     * @param calendarItem the calendar item
+     * @param calendarSyncItem the calendar sync item
      */
-    fun cloudUpdate(fragment: CalendarGoogleDriveSyncFragment, driveService: Drive, calendarItem: CalendarItem) {
+    fun cloudUpdate(fragment: CalendarGoogleDriveSyncFragment, driveService: Drive, calendarSyncItem: CalendarSyncItem) {
         fragment.showLoading()
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val appRoot = GoogleDriveService.getOrCreateRootFolder(driveService, "calendar")
-                val folder = GoogleDriveService.getOrCreatePath(driveService, appRoot!!, calendarItem.path)
+                val folder = GoogleDriveService.getOrCreatePath(driveService, appRoot!!, calendarSyncItem.path)
 
                 val properties = mutableMapOf<String, String>()
-                properties["path"] = calendarItem.path
-                properties["baseName"] = calendarItem.baseName
-                properties["version"] = calendarItem.version
-                properties["created"] = (calendarItem.created?.time ?: Instant.now().toEpochMilli()).toString()
-                properties["modified"] = (calendarItem.updated?.time ?: Instant.now().toEpochMilli()).toString()
+                properties["path"] = calendarSyncItem.path
+                properties["baseName"] = calendarSyncItem.baseName
+                properties["version"] = calendarSyncItem.version
+                properties["created"] = (calendarSyncItem.created?.time ?: Instant.now().toEpochMilli()).toString()
+                properties["modified"] = (calendarSyncItem.updated?.time ?: Instant.now().toEpochMilli()).toString()
 
-                val fileName = "${calendarItem.baseName}-${calendarItem.version}.json"
-                val content = ByteArrayContent.fromString("application/json", calendarItem.json!!)
+                val fileName = "${calendarSyncItem.baseName}-${calendarSyncItem.version}.json"
+                val content = ByteArrayContent.fromString("application/json", calendarSyncItem.json!!)
 
                 val uploaded = GoogleDriveService.uploadFile(driveService, folder!!, fileName, content, properties)
                 Timber.i("App root: $appRoot, folder: $folder, uploaded: $uploaded")
                 withContext(Dispatchers.Main) {
                     fragment.hideLoading()
-                    fragment.cloudUpdateResult(calendarItem)
+                    fragment.cloudUpdateResult(calendarSyncItem)
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) {

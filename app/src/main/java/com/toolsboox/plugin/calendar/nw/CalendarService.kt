@@ -1,6 +1,6 @@
 package com.toolsboox.plugin.calendar.nw
 
-import com.toolsboox.plugin.calendar.da.v1.CalendarItem
+import com.toolsboox.plugin.calendar.da.v1.CalendarSyncItem
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
@@ -34,10 +34,10 @@ interface CalendarService {
     /**
      * List the cloud calendar items.
      *
-     * @return the list of calendar items
+     * @return the list of calendar sync items
      */
     @GET(value = "calendarItem/list")
-    fun listAsync(): Deferred<Response<List<CalendarItem>>>
+    fun listAsync(): Deferred<Response<List<CalendarSyncItem>>>
 
     /**
      * Upload an encrypted calendar page.
@@ -46,7 +46,7 @@ interface CalendarService {
      * @param baseName the base name of the file
      * @param version the version of the file
      * @param encoded the encoded data
-     * @return the saved calendar item
+     * @return the saved calendar sync item
      */
     @POST(value = "calendarItem/update/{path}/{baseName}/{version}")
     fun updateAsync(
@@ -54,5 +54,5 @@ interface CalendarService {
         @Path("baseName") baseName: String,
         @Path("version") version: String,
         @Body encoded: String
-    ): Deferred<Response<CalendarItem>>
+    ): Deferred<Response<CalendarSyncItem>>
 }

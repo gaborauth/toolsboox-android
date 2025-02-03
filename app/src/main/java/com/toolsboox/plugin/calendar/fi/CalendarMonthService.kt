@@ -1,7 +1,7 @@
 package com.toolsboox.plugin.calendar.fi
 
 import com.squareup.moshi.Moshi
-import com.toolsboox.plugin.calendar.da.v1.CalendarItem
+import com.toolsboox.plugin.calendar.da.v1.CalendarSyncItem
 import com.toolsboox.plugin.calendar.da.v2.CalendarMonth
 import timber.log.Timber
 import java.io.File
@@ -28,36 +28,36 @@ class CalendarMonthService @Inject constructor() {
     lateinit var moshi: Moshi
 
     /**
-     * Returns with the item of the data class.
+     * Returns with the sync item of the data class.
      *
      * @param userId the user ID
      * @param calendarMonth the data class
-     * @return the calendar item data class
+     * @return the calendar sync item data class
      */
-    fun getItem(userId: UUID, calendarMonth: CalendarMonth): CalendarItem {
+    fun getItem(userId: UUID, calendarMonth: CalendarMonth): CalendarSyncItem {
         val year = "%04d".format(calendarMonth.year)
         val month = "%02d".format(calendarMonth.month)
-        return CalendarItem(userId, "$year/$month/", "month-$year-$month", "v2", calendarMonth.created, calendarMonth.updated)
+        return CalendarSyncItem(userId, "$year/$month/", "month-$year-$month", "v2", calendarMonth.created, calendarMonth.updated)
     }
 
     /**
-     * Load the data class from the item.
+     * Load the data class from the sync item.
      *
-     * @param calendarItem the calendar item
+     * @param calendarSyncItem the calendar sync item
      * @return the data class
      */
-    fun fromItem(calendarItem: CalendarItem): CalendarMonth? {
-        if (!calendarItem.baseName.startsWith("month-")) return null
+    fun fromSyncItem(calendarSyncItem: CalendarSyncItem): CalendarMonth? {
+        if (!calendarSyncItem.baseName.startsWith("month-")) return null
 
-        when (calendarItem.version) {
+        when (calendarSyncItem.version) {
             "v1" -> {
                 moshi.adapter(com.toolsboox.plugin.calendar.da.v1.CalendarMonth::class.java)
-                    .fromJson(calendarItem.json!!)?.let { return CalendarMonth.convert(it) }
+                    .fromJson(calendarSyncItem.json!!)?.let { return CalendarMonth.convert(it) }
             }
 
             "v2" -> {
                 moshi.adapter(CalendarMonth::class.java)
-                    .fromJson(calendarItem.json!!)?.let { return it }
+                    .fromJson(calendarSyncItem.json!!)?.let { return it }
             }
         }
 

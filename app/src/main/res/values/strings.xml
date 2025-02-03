@@ -89,9 +89,13 @@
     <string name="calendar_google_drive_compare_button">Compare</string>
     <string name="calendar_google_drive_connected">Google Drive connected, you can compare the state of the cloud backup and this devise, and select differences to sync.</string>
     <string name="calendar_google_drive_disconnected">Google Drive disconnected, you need to connect your Google Drive to sync your calendar items between devices.</string>
-    <string name="calendar_google_drive_to_cloud_text">Sync to cloud (touch item to sync):</string>
-    <string name="calendar_google_drive_from_cloud_text">Sync from cloud (touch item to sync):</string>
     <string name="calendar_google_drive_nothing_to_sync">Nothing to sync…</string>
+    <string name="calendar_google_drive_sync_file_last_modification">File last modification: %s ago</string>
+    <string name="calendar_google_drive_sync_file_missing">File last modification: missing</string>
+    <string name="calendar_google_drive_sync_cloud_last_modification">Cloud last modification: %s ago</string>
+    <string name="calendar_google_drive_sync_cloud_missing">Cloud last modification: missing</string>
+    <string name="calendar_google_drive_sync_button_download">Download</string>
+    <string name="calendar_google_drive_sync_button_upload">Upload</string>
 
     <string name="calendar_settings_title">Settings</string>
     <string name="calendar_settings_select_start_view_text">Select the start view of the Calendar:</string>
