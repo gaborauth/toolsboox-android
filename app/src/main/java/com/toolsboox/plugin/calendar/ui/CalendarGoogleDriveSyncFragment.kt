@@ -1,14 +1,10 @@
 package com.toolsboox.plugin.calendar.ui
 
-import android.content.Context
+import android.app.ProgressDialog
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.drive.Drive
@@ -17,11 +13,11 @@ import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarGoogleDriveSyncBinding
 import com.toolsboox.di.GoogleDriveModule
 import com.toolsboox.plugin.calendar.da.v1.CalendarSyncItem
+import com.toolsboox.plugin.calendar.da.v1.CalendarSyncViewItem
+import com.toolsboox.plugin.calendar.ot.CalendarSyncViewAdapter
 import com.toolsboox.ui.plugin.ScreenFragment
-import com.toolsboox.utils.FluentDuration
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 
@@ -73,12 +69,15 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
     /**
      * Calendar items selected to sync from and to cloud.
      */
-    private val syncList: MutableList<ViewHolderItem> = mutableListOf()
+    private val syncList: MutableList<CalendarSyncViewItem> = mutableListOf()
 
     /**
      * The view binding.
      */
     private lateinit var binding: FragmentCalendarGoogleDriveSyncBinding
+
+    // Progress dialog.
+    private lateinit var progressDialog: ProgressDialog
 
     // Access token for Google Drive.
     private var googleAccount: GoogleSignInAccount? = null
@@ -99,6 +98,8 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
 
+        progressDialog = ProgressDialog(this.requireContext())
+
         // Set the compare button, to compare the cloud and the device.
         binding.buttonCompare.setOnClickListener {
             if (googleAccount != null && googleDrive != null) {
@@ -107,7 +108,7 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
         }
 
         // Set the sync list adapter.
-        val syncViewAdapter = SyncViewAdapter(requireContext(), syncList, { item ->
+        val syncViewAdapter = CalendarSyncViewAdapter(requireContext(), syncList, { item ->
             val fileLastModified = item.file?.updated?.time ?: 0
             val cloudLastModified = item.cloud?.updated?.time ?: 0
             if (fileLastModified < cloudLastModified) {
@@ -241,7 +242,7 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
         fileList.forEach { fci ->
             // If the file is not in the cloud, add it.
             if (fci.updated == null) {
-                syncList.add(ViewHolderItem(fci, null))
+                syncList.add(CalendarSyncViewItem(fci, fci, null))
                 return@forEach
             }
 
@@ -253,12 +254,12 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
 
             // If the file is not in the cloud, add it.
             if (cloudItem == null) {
-                syncList.add(ViewHolderItem(fci, null))
+                syncList.add(CalendarSyncViewItem(fci, fci, null))
                 return@forEach
             }
 
             if ((cloudItem.updated != null) and (cloudItem.updated!!.time < fci.updated.time)) {
-                syncList.add(ViewHolderItem(fci, cloudItem))
+                syncList.add(CalendarSyncViewItem(fci, fci, cloudItem))
                 return@forEach
             }
         }
@@ -275,10 +276,10 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
                 .firstOrNull { it.version == cci.version }
 
             if (fileItem == null) {
-                syncList.add(ViewHolderItem(null, cci))
+                syncList.add(CalendarSyncViewItem(cci, null, cci))
             } else if (fileItem.updated != null) {
                 if (fileItem.updated.time < cci.updated.time) {
-                    syncList.add(ViewHolderItem(fileItem, cci))
+                    syncList.add(CalendarSyncViewItem(fileItem, fileItem, cci))
                 }
             }
         }
@@ -289,6 +290,7 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
             binding.syncListEmpty.visibility = View.GONE
         }
 
+        syncList.sortByDescending { it.title.baseName }
         requireActivity().runOnUiThread {
             binding.syncListView.adapter?.notifyDataSetChanged()
         }
@@ -298,6 +300,8 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
      * Show the progress bar.
      */
     override fun showLoading() {
+        progressDialog.setTitle("Working...")
+        progressDialog.show()
         binding.mainProgress.visibility = View.VISIBLE
     }
 
@@ -305,66 +309,7 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
      * Hide the progress bar.
      */
     override fun hideLoading() {
+        progressDialog.dismiss()
         binding.mainProgress.visibility = View.INVISIBLE
-    }
-
-    data class ViewHolderItem(
-        val file: CalendarSyncItem?,
-        val cloud: CalendarSyncItem?
-    )
-
-    internal class SyncViewAdapter(
-        private val context: Context,
-        private val items: List<ViewHolderItem>,
-        private val onItemClick: ((ViewHolderItem) -> Unit)
-    ) : RecyclerView.Adapter<SyncViewAdapter.ViewHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_calendar_sync, parent, false)
-            return ViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bindTo(items[position])
-        }
-
-        override fun getItemCount(): Int = items.size
-
-        internal inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private val nameTextView = itemView.findViewById<TextView>(R.id.calendar_sync_name)
-            private val syncButton = itemView.findViewById<TextView>(R.id.calendar_sync_button)
-            private val fileTextView = itemView.findViewById<TextView>(R.id.calendar_sync_file_last_modification)
-            private val cloudTextView = itemView.findViewById<TextView>(R.id.calendar_sync_cloud_last_modification)
-
-            fun bindTo(item: ViewHolderItem) {
-                val titleItem = item.file ?: item.cloud ?: return
-                nameTextView.text = titleItem.baseName
-
-                val fileLastModified = item.file?.updated?.time ?: 0L
-                val fileLastModifiedText = FluentDuration.convert(itemView.context, Instant.now().toEpochMilli() - fileLastModified)
-                if (fileLastModified == 0L) {
-                    fileTextView.text = context.getString(R.string.calendar_google_drive_sync_file_missing)
-                } else {
-                    fileTextView.text = context.getString(R.string.calendar_google_drive_sync_file_last_modification, fileLastModifiedText)
-                }
-
-                val cloudLastModified = item.cloud?.updated?.time ?: 0L
-                val cloudLastModifiedText = FluentDuration.convert(itemView.context, Instant.now().toEpochMilli() - cloudLastModified)
-                if (cloudLastModified == 0L) {
-                    cloudTextView.text = context.getString(R.string.calendar_google_drive_sync_cloud_missing)
-                } else {
-                    cloudTextView.text = context.getString(R.string.calendar_google_drive_sync_cloud_last_modification, cloudLastModifiedText)
-                }
-
-                if (fileLastModified < cloudLastModified) {
-                    syncButton.text = context.getString(R.string.calendar_google_drive_sync_button_download)
-                } else {
-                    syncButton.text = context.getString(R.string.calendar_google_drive_sync_button_upload)
-                }
-
-                syncButton.setOnClickListener {
-                    onItemClick.invoke(item)
-                }
-            }
-        }
     }
 }

@@ -228,14 +228,14 @@ abstract class SurfaceFragment : ScreenFragment() {
         val jsonAdapter = moshi.adapter<List<String>>(earlyAdopterDeviceIdsType)
         val earlyAdopterDeviceIds = jsonAdapter.fromJson(earlyAdopterDeviceIdsJson!!)
 
-        val cloudPluginEnabled = sharedPreferences.getString("cloudPluginEnabled", "false").toBoolean()
-        Timber.i("Cloud plugin enabled: $cloudPluginEnabled")
+        val googleDrivePluginEnabled = sharedPreferences.getString("googleDrivePluginEnabled", "false").toBoolean()
+        Timber.i("Google Drive plugin enabled: $googleDrivePluginEnabled")
 
         val earlyAdopter = earlyAdopterDeviceIds?.contains(androidId) ?: false
         Timber.i("Early adopter: $earlyAdopter")
 
         // Show the cloud sync feature in case of early adopter or enable it generally.
-        if (earlyAdopter or cloudPluginEnabled) {
+        if (earlyAdopter or googleDrivePluginEnabled) {
             provideToolbarDrawing().toolbarCloudSync.visibility = View.VISIBLE
         } else {
             provideToolbarDrawing().toolbarCloudSync.visibility = View.GONE

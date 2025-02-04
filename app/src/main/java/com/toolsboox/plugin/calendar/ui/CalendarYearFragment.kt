@@ -275,7 +275,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         val year = currentDate.year
 
         val pageTitle = getString(R.string.calendar_year_title).format(year)
-        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
+        toolbar.root.title = getString(R.string.calendar_main_title, pageTitle)
 
         CalendarYearNavigator.draw(this.requireContext(), navigatorCanvas, calendarYear, calendarPattern)
 
