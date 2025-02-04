@@ -38,14 +38,7 @@ import javax.inject.Inject
 class DashboardFragment @Inject constructor() : ScreenFragment() {
 
     companion object {
-        /**
-         * User already notified about device mismatch.
-         */
-        private var notifiedAboutDeviceMismatch: Boolean = false
-
-        /**
-         * User already notified about new version.
-         */
+        // User already notified about new version.
         private var notifiedAboutNewVersion: Boolean = false
     }
 
@@ -245,11 +238,12 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         val brand = Build.BRAND.lowercase().contains("onyx")
         val device = Build.DEVICE.lowercase().contains("onyx")
         val manufacturer = Build.MANUFACTURER.lowercase().contains("onyx")
+        val notifiedAboutDeviceMismatch = sharedPreferences.getBoolean("notifiedAboutDeviceMismatch", false)
         if (brand || device || manufacturer || notifiedAboutDeviceMismatch) return
 
         val message = getString(R.string.dashboard_device_mismatch_message).format(Build.BRAND, Build.DEVICE)
 
-        notifiedAboutDeviceMismatch = true
+        sharedPreferences.edit().putBoolean("notifiedAboutDeviceMismatch", true).apply()
         val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
         builder.setTitle(R.string.dashboard_device_mismatch_title)
             .setMessage(message)

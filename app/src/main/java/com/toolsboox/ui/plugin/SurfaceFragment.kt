@@ -14,6 +14,7 @@ import com.onyx.android.sdk.data.note.TouchPoint
 import com.onyx.android.sdk.pen.RawInputCallback
 import com.onyx.android.sdk.pen.TouchHelper
 import com.onyx.android.sdk.pen.data.TouchPointList
+import com.onyx.android.sdk.utils.DeviceFeatureUtil
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.toolsboox.R
@@ -57,7 +58,7 @@ abstract class SurfaceFragment : ScreenFragment() {
     /**
      * TouchHelper of the Onyx's pen.
      */
-    private lateinit var touchHelper: TouchHelper
+    private var touchHelper: TouchHelper? = null
 
     /**
      * The gesture detector
@@ -171,8 +172,8 @@ abstract class SurfaceFragment : ScreenFragment() {
         super.onResume()
 
         initializeSurface()
-        touchHelper.setRawDrawingEnabled(true)
-        touchHelper.isRawDrawingRenderEnabled = true
+        touchHelper?.setRawDrawingEnabled(true)
+        touchHelper?.isRawDrawingRenderEnabled = true
 
         penState = true
         provideToolbarDrawing().toolbarPen.background.setTint(Color.GRAY)
@@ -261,10 +262,10 @@ abstract class SurfaceFragment : ScreenFragment() {
     override fun onPause() {
         super.onPause()
 
-        touchHelper.setRawDrawingEnabled(false)
-        touchHelper.isRawDrawingRenderEnabled = false
+        touchHelper?.setRawDrawingEnabled(false)
+        touchHelper?.isRawDrawingRenderEnabled = false
 
-        touchHelper.closeRawDrawing()
+        touchHelper?.closeRawDrawing()
         bitmap?.recycle()
     }
 
@@ -298,8 +299,10 @@ abstract class SurfaceFragment : ScreenFragment() {
      * @param first first initialization flag
      */
     fun initializeSurface(first: Boolean = false) {
+        val hasStylus = DeviceFeatureUtil.hasStylus(requireContext())
+
         if (first) {
-            touchHelper = TouchHelper.create(provideSurfaceView(), callback)
+            if (hasStylus) touchHelper = TouchHelper.create(provideSurfaceView(), callback)
             provideSurfaceView().setZOrderOnTop(true)
             provideSurfaceView().holder.setFormat(PixelFormat.TRANSPARENT)
         }
@@ -329,10 +332,8 @@ abstract class SurfaceFragment : ScreenFragment() {
 
                     clearSurface()
 
-                    touchHelper.setLimitRect(limit, ArrayList())
-                        .setStrokeWidth(3.0f)
-                        .openRawDrawing()
-                    touchHelper.setStrokeStyle(TouchHelper.STROKE_STYLE_PENCIL)
+                    touchHelper?.setLimitRect(limit, ArrayList())?.setStrokeWidth(3.0f)?.openRawDrawing()
+                    touchHelper?.setStrokeStyle(TouchHelper.STROKE_STYLE_PENCIL)
                 }
 
                 override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -419,11 +420,11 @@ abstract class SurfaceFragment : ScreenFragment() {
             }
         }
 
-        touchHelper.setRawDrawingEnabled(false)
-        touchHelper.isRawDrawingRenderEnabled = false
+        touchHelper?.setRawDrawingEnabled(false)
+        touchHelper?.isRawDrawingRenderEnabled = false
         provideSurfaceView().holder.unlockCanvasAndPost(lockCanvas)
-        touchHelper.setRawDrawingEnabled(true)
-        touchHelper.isRawDrawingRenderEnabled = true
+        touchHelper?.setRawDrawingEnabled(true)
+        touchHelper?.isRawDrawingRenderEnabled = true
     }
 
     /**
