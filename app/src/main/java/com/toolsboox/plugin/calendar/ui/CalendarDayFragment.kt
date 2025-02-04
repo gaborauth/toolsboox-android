@@ -330,7 +330,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         val titleDate = currentDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
 
         val pageTitle = getString(R.string.calendar_day_title).format(titleDate)
-        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
+        toolbar.root.title = getString(R.string.calendar_main_title, pageTitle)
 
         CalendarDayNavigator.draw(this.requireContext(), navigatorCanvas, calendarDay, calendarPattern)
 

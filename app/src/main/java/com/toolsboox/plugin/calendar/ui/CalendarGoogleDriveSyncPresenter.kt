@@ -20,6 +20,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Instant
+import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
 
@@ -41,6 +42,12 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
      */
     @Inject
     lateinit var calendarMonthService: CalendarMonthService
+
+    /**
+     * The calendar pattern service.
+     */
+    @Inject
+    lateinit var calendarPatternService: CalendarPatternService
 
     /**
      * The calendar quarter service.
@@ -255,6 +262,12 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
             try {
                 calendarYearService.fromSyncItem(calendarSyncItem)?.let {
                     calendarYearService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
+
+                    val currentDate = LocalDate.ofYearDay(it.year, 1)
+                    val calendarPattern = calendarPatternService.load(rootPath, currentDate, it.locale)
+                    calendarPattern.updateYear(it)
+                    calendarPatternService.save(rootPath, currentDate, calendarPattern)
+
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
                         fragment.fileUpdateResult(calendarSyncItem)
@@ -262,6 +275,12 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
                 }
                 calendarQuarterService.fromSyncItem(calendarSyncItem)?.let {
                     calendarQuarterService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
+
+                    val currentDate = LocalDate.ofYearDay(it.year, 1)
+                    val calendarPattern = calendarPatternService.load(rootPath, currentDate, it.locale)
+                    calendarPattern.updateQuarter(it)
+                    calendarPatternService.save(rootPath, currentDate, calendarPattern)
+
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
                         fragment.fileUpdateResult(calendarSyncItem)
@@ -269,6 +288,12 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
                 }
                 calendarMonthService.fromSyncItem(calendarSyncItem)?.let {
                     calendarMonthService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
+
+                    val currentDate = LocalDate.ofYearDay(it.year, 1)
+                    val calendarPattern = calendarPatternService.load(rootPath, currentDate, it.locale)
+                    calendarPattern.updateMonth(it)
+                    calendarPatternService.save(rootPath, currentDate, calendarPattern)
+
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
                         fragment.fileUpdateResult(calendarSyncItem)
@@ -276,6 +301,12 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
                 }
                 calendarWeekService.fromSyncItem(calendarSyncItem)?.let {
                     calendarWeekService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
+
+                    val currentDate = LocalDate.ofYearDay(it.year, 1)
+                    val calendarPattern = calendarPatternService.load(rootPath, currentDate, it.locale)
+                    calendarPattern.updateWeek(it)
+                    calendarPatternService.save(rootPath, currentDate, calendarPattern)
+
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
                         fragment.fileUpdateResult(calendarSyncItem)
@@ -283,6 +314,12 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
                 }
                 calendarDayService.fromSyncItem(calendarSyncItem)?.let {
                     calendarDayService.save(rootPath, calendarSyncItem.path, calendarSyncItem.baseName, it)
+
+                    val currentDate = LocalDate.ofYearDay(it.year, 1)
+                    val calendarPattern = calendarPatternService.load(rootPath, currentDate, it.locale)
+                    calendarPattern.updateDay(it)
+                    calendarPatternService.save(rootPath, currentDate, calendarPattern)
+
                     withContext(Dispatchers.Main) {
                         fragment.hideLoading()
                         fragment.fileUpdateResult(calendarSyncItem)

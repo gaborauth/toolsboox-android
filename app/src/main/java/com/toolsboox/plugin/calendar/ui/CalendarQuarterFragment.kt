@@ -284,7 +284,7 @@ class CalendarQuarterFragment @Inject constructor() : SurfaceFragment() {
         val titleDate = dateFormat.format(Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
 
         val pageTitle = getString(R.string.calendar_quarter_title).format(titleDate)
-        toolbar.root.title = getString(R.string.drawer_title).format(getString(R.string.calendar_main_title), pageTitle)
+        toolbar.root.title = getString(R.string.calendar_main_title, pageTitle)
 
         CalendarQuarterNavigator.draw(this.requireContext(), navigatorCanvas, calendarQuarter, calendarPattern)
 

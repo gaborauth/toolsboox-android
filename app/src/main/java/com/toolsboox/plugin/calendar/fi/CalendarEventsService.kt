@@ -45,7 +45,10 @@ class CalendarEventsService @Inject constructor() {
             CalendarContract.Instances.START_DAY, CalendarContract.Instances.END_DAY
         )
 
-        contentResolver.query(uri, instanceFields, null, null, null)?.use { cursor ->
+        val selection = CalendarContract.Calendars.VISIBLE + "=?"
+        val selectionArgs = arrayOf("1")
+
+        contentResolver.query(uri, instanceFields, selection, selectionArgs, null)?.use { cursor ->
             while (cursor.moveToNext()) {
                 val id = cursor.getString(0)
                 val eventColor = 0xff000000 or (cursor.getLongOrNull(1) ?: 0)

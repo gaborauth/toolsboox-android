@@ -168,6 +168,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
 
         presenter.parameter(this, "earlyAdopterDeviceIds")
         presenter.parameter(this, "cloudPluginEnabled")
+        presenter.parameter(this, "googleDrivePluginEnabled")
         presenter.version(this)
 
         val inputManager = requireContext().getSystemService(Context.INPUT_SERVICE) as InputManager?

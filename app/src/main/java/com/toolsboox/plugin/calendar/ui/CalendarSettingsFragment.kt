@@ -99,6 +99,8 @@ class CalendarSettingsFragment @Inject constructor() : ScreenFragment() {
     override fun onResume() {
         super.onResume()
 
+        toolbar.root.title = getString(R.string.calendar_main_title, getString(R.string.calendar_settings_title))
+
         val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         val savedLocaleLanguageTag = sharedPreferences.getString("calendarLocale", Locale.getDefault().toLanguageTag())
