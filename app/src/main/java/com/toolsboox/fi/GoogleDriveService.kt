@@ -27,7 +27,7 @@ class GoogleDriveService @Inject constructor() {
         fun getFile(drive: Drive, parent: File, fileName: String): File? {
             val files = drive.files().list().setSpaces("appDataFolder")
                 .setQ("'${parent.id}' in parents and name='$fileName' and trashed=false")
-                .setFields("files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
+                .setFields("nextPageToken, files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
                 .execute().files.sortedByDescending { it.createdTime.value }
             return if (files.isNotEmpty()) files[0] else null
         }
@@ -43,7 +43,7 @@ class GoogleDriveService @Inject constructor() {
         fun getOrCreateRootFolder(drive: Drive, root: String): File? {
             val files = drive.files().list().setSpaces("appDataFolder")
                 .setQ("mimeType='application/vnd.google-apps.folder' and name='$root' and trashed=false")
-                .setFields("files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
+                .setFields("nextPageToken, files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
                 .execute().files.sortedByDescending { it.createdTime.value }
             if (files.isNotEmpty()) return files[0]
 
@@ -66,7 +66,7 @@ class GoogleDriveService @Inject constructor() {
         fun getOrCreateFolder(drive: Drive, parent: File, folderName: String): File? {
             val files = drive.files().list().setSpaces("appDataFolder")
                 .setQ("mimeType='application/vnd.google-apps.folder' and name='$folderName' and '${parent.id}' in parents and trashed=false")
-                .setFields("files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
+                .setFields("nextPageToken, files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
                 .execute().files.sortedByDescending { it.createdTime.value }
             if (files.isNotEmpty()) return files[0]
 
@@ -145,9 +145,10 @@ class GoogleDriveService @Inject constructor() {
          */
         fun walk(drive: Drive, parent: File, relativePath: String): List<File> {
             val filePaths = mutableListOf<File>()
+            // TODO: Implement paging
             val files = drive.files().list().setSpaces("appDataFolder")
                 .setQ("'${parent.id}' in parents and trashed=false")
-                .setFields("files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
+                .setFields("nextPageToken, files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
                 .execute().files.sortedBy { it.name }
             files.forEach {
                 if (it.mimeType == "application/vnd.google-apps.folder") {
@@ -164,17 +165,24 @@ class GoogleDriveService @Inject constructor() {
          * Walk through the folder structure.
          *
          * @param drive the Drive instance
-         * @param relativePath the relative path of the folder
+         * @param property the property key-value pair
          * @return the list of file metadata
          * @throws Exception if the folder structure cannot be walked
          */
         fun walkByProperty(drive: Drive, property: Pair<String, String>): List<File> {
-            val files = drive.files().list().setSpaces("appDataFolder")
-                .setQ("properties has { key='${property.first}' and value='${property.second}' } and trashed=false")
-                .setFields("files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
-                .execute().files.sortedByDescending { it.name }
+            val files = mutableListOf<File>()
+            var nextPageToken: String? = null
+            do {
+                val result = drive.files().list().setSpaces("appDataFolder")
+                    .setPageToken(nextPageToken)
+                    .setQ("properties has { key='${property.first}' and value='${property.second}' } and trashed=false")
+                    .setFields("nextPageToken, files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
+                    .execute()
+                files.addAll(result.files)
+                nextPageToken = result.nextPageToken
+            } while (nextPageToken != null)
 
-            return files
+            return files.sortedByDescending { it.name }
         }
     }
 }
