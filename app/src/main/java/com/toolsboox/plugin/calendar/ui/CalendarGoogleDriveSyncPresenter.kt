@@ -131,8 +131,7 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
         val calendarSyncItems = mutableListOf<CalendarSyncItem>()
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val appRoot = GoogleDriveService.getOrCreateRootFolder(driveService, "calendar")
-                val files = GoogleDriveService.walk(driveService, appRoot!!, "")
+                val files = GoogleDriveService.walkByProperty(driveService, Pair("type", "calendar"))
                 files.forEach {
                     if (it.properties == null) return@forEach
                     val path = it.properties["path"] ?: return@forEach
@@ -352,6 +351,7 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
                 val folder = GoogleDriveService.getOrCreatePath(driveService, appRoot!!, calendarSyncItem.path)
 
                 val properties = mutableMapOf<String, String>()
+                properties["type"] = "calendar"
                 properties["path"] = calendarSyncItem.path
                 properties["baseName"] = calendarSyncItem.baseName
                 properties["version"] = calendarSyncItem.version

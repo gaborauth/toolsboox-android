@@ -159,5 +159,22 @@ class GoogleDriveService @Inject constructor() {
 
             return filePaths.sortedByDescending { it.name }
         }
+
+        /**
+         * Walk through the folder structure.
+         *
+         * @param drive the Drive instance
+         * @param relativePath the relative path of the folder
+         * @return the list of file metadata
+         * @throws Exception if the folder structure cannot be walked
+         */
+        fun walkByProperty(drive: Drive, property: Pair<String, String>): List<File> {
+            val files = drive.files().list().setSpaces("appDataFolder")
+                .setQ("properties has { key='${property.first}' and value='${property.second}' } and trashed=false")
+                .setFields("files(id, kind, name, size, mimeType, createdTime, modifiedTime, properties, parents)")
+                .execute().files.sortedByDescending { it.name }
+
+            return files
+        }
     }
 }

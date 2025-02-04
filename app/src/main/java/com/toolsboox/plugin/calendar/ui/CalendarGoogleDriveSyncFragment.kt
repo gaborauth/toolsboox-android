@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.drive.Drive
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarGoogleDriveSyncBinding
 import com.toolsboox.di.GoogleDriveModule
@@ -103,6 +104,9 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
         // Set the compare button, to compare the cloud and the device.
         binding.buttonCompare.setOnClickListener {
             if (googleAccount != null && googleDrive != null) {
+                firebaseAnalytics.logEvent("googleDriveSync") {
+                    param("method", "compareButton")
+                }
                 presenter.fileList(this@CalendarGoogleDriveSyncFragment, UUID.randomUUID(), binding)
             }
         }
@@ -152,6 +156,9 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
                     GoogleDriveModule.provideCredential(this.requireContext(), googleAccount!!)
                         .let { credential ->
                             googleDrive = GoogleDriveModule.provideDrive(credential)
+                            firebaseAnalytics.logEvent("googleDriveSync") {
+                                param("method", "autoStart")
+                            }
                             presenter.fileList(this@CalendarGoogleDriveSyncFragment, UUID.randomUUID(), binding)
                         }
                 }
@@ -218,7 +225,9 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
      */
     fun fileUpdateResult(calendarSyncItem: CalendarSyncItem) {
         Timber.i("$calendarSyncItem - $calendarSyncItem")
-        // TODO: Remove the item from the sync list.
+        firebaseAnalytics.logEvent("googleDriveSync") {
+            param("method", "fileUpdateResult")
+        }
         presenter.fileList(this@CalendarGoogleDriveSyncFragment, UUID.randomUUID(), binding)
     }
 
@@ -230,7 +239,9 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
      */
     fun cloudUpdateResult(calendarSyncItem: CalendarSyncItem) {
         Timber.i("$calendarSyncItem")
-        // TODO: Remove the item from the sync list.
+        firebaseAnalytics.logEvent("googleDriveSync") {
+            param("method", "cloudUpdateResult")
+        }
         presenter.fileList(this@CalendarGoogleDriveSyncFragment, UUID.randomUUID(), binding)
     }
 
