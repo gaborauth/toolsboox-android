@@ -159,8 +159,10 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
 
-        presenter.parameter(this, "earlyAdopterDeviceIds")
         presenter.parameter(this, "cloudPluginEnabled")
+        presenter.parameter(this, "cloudSubscriptionRequired")
+        presenter.parameter(this, "earlyAdopterDeviceIds")
+        presenter.parameter(this, "googleDriveAutoSyncEnabled")
         presenter.parameter(this, "googleDrivePluginEnabled")
         presenter.version(this)
 
@@ -176,10 +178,10 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         binding.buttonToggleAd.setOnClickListener {
             if (sharedPreferences.getBoolean("advertisements", true)) {
                 sharedPreferences.edit().putBoolean("advertisements", false).apply()
-                firebaseAnalytics.logEvent("advertisementSwitchOff") {}
+                firebaseAnalytics.logEvent("advertisementSwitchOff", null)
             } else {
                 sharedPreferences.edit().putBoolean("advertisements", true).apply()
-                firebaseAnalytics.logEvent("advertisementSwitchOn") {}
+                firebaseAnalytics.logEvent("advertisementSwitchOn", null)
             }
 
             updateAdButton()
@@ -260,6 +262,11 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      * @param value the value
      */
     fun parameterResult(key: String, value: String) {
+        if ("earlyAdopterDeviceIds" == key) {
+            sharedPreferences.getString("androidId", null)?.let { androidId ->
+                sharedPreferences.edit().putBoolean("earlyAdopter", value.contains(androidId)).apply()
+            }
+        }
         Timber.i("Store parameter in shared preferences: $key - $value")
         sharedPreferences.edit().putString(key, value).apply()
     }

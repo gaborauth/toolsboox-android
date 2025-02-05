@@ -14,6 +14,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingFlowParams
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -235,6 +237,20 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
                             val purchaseToken = purchase.purchaseToken
                             val productId = purchase.products[0]
                             Timber.i("ProductId: $productId, purchaseToken: $purchaseToken")
+
+                            // Acknowledge the purchase.
+                            if (!purchase.isAcknowledged) {
+                                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                                    .setPurchaseToken(purchase.purchaseToken)
+                                    .build()
+
+                                billingClient.acknowledgePurchase(acknowledgePurchaseParams, { acknowledgePurchaseResult ->
+                                    if (acknowledgePurchaseResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                                        Timber.i("Purchase acknowledged: $purchaseToken")
+                                        firebaseAnalytics.logEvent("purchaseAcknowledged", null)
+                                    }
+                                })
+                            }
 
                             val userId = sharedPreferences.getString("userId", null)
                             if (userId != null) {
