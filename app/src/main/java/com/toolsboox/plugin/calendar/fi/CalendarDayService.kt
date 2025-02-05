@@ -151,7 +151,7 @@ class CalendarDayService @Inject constructor() {
         val day = currentDate.format(DateTimeFormatter.ofPattern("dd"))
 
         calendarDay.created = calendarDay.created ?: Date.from(Instant.now())
-        calendarDay.updated = calendarDay.updated ?: Date.from(Instant.now())
+        calendarDay.updated = Date.from(Instant.now())
         save(rootPath, "$year/$month/", "day-$year-$month-$day", calendarDay)
     }
 

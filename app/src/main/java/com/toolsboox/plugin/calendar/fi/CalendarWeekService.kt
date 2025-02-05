@@ -146,7 +146,7 @@ class CalendarWeekService @Inject constructor() {
         val week = currentDate.format(DateTimeFormatter.ofPattern("ww", calendarWeek.locale))
 
         calendarWeek.created = calendarWeek.created ?: Date.from(Instant.now())
-        calendarWeek.updated = calendarWeek.updated ?: Date.from(Instant.now())
+        calendarWeek.updated = Date.from(Instant.now())
         save(rootPath, "$year/", "week-$year-$week", calendarWeek)
     }
 

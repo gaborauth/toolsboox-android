@@ -145,7 +145,7 @@ class CalendarQuarterService @Inject constructor() {
         val quarter = currentDate.format(DateTimeFormatter.ofPattern("QQ"))
 
         calendarQuarter.created = calendarQuarter.created ?: Date.from(Instant.now())
-        calendarQuarter.updated = calendarQuarter.updated ?: Date.from(Instant.now())
+        calendarQuarter.updated = Date.from(Instant.now())
         save(rootPath, "$year/", "quarter-$year-$quarter", calendarQuarter)
     }
 
