@@ -88,6 +88,9 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
     // Flag of subscription list finished.
     private var subscriptionListFinished = false
 
+    // The map of subscriptions (productId - token).
+    private val subscriptions: MutableMap<String, String> = mutableMapOf()
+
     // Access token for Google Drive.
     private var googleAccount: GoogleSignInAccount? = null
 
@@ -227,16 +230,17 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
 
                 BillingClientService.subscriptions(
                     billingClient,
-                    { subscriptions ->
-                        Timber.i("Subscriptions: $subscriptions")
+                    { purchaseList ->
+                        Timber.i("Subscriptions: $purchaseList")
                         var status = getString(R.string.cloud_subscription_status_no_subs)
-                        if (subscriptions.isNotEmpty()) {
+                        if (purchaseList.isNotEmpty()) {
                             status = getString(R.string.cloud_subscription_status_subs)
-                            val purchase = subscriptions[0]
+                            val purchase = purchaseList[0]
                             Timber.i("Purchase: $purchase")
-                            val purchaseToken = purchase.purchaseToken
                             val productId = purchase.products[0]
+                            val purchaseToken = purchase.purchaseToken
                             Timber.i("ProductId: $productId, purchaseToken: $purchaseToken")
+                            subscriptions[productId] = purchaseToken
 
                             // Acknowledge the purchase.
                             if (!purchase.isAcknowledged) {
@@ -431,33 +435,19 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             binding.cloudGoogleDriveDisconnectButton.alpha = 1.0f
         }
 
-        if (productDetailsFinished and subscriptionListFinished) {
-            if ((refreshToken == null) and (googleAccount == null)) {
-                binding.cloudMonthlyButton.isEnabled = false
-                binding.cloudMonthlyButton.alpha = 0.5f
-
-                binding.cloudYearlyButton.isEnabled = false
-                binding.cloudYearlyButton.alpha = 0.5f
-            } else {
-                binding.cloudMonthlyButton.isEnabled = true
-                binding.cloudMonthlyButton.alpha = 1.0f
-
-                binding.cloudYearlyButton.isEnabled = true
-                binding.cloudYearlyButton.alpha = 1.0f
-            }
-        } else {
-            binding.cloudMonthlyButton.isEnabled = false
-            binding.cloudMonthlyButton.alpha = 0.5f
+        if (!productDetailsFinished) {
             binding.cloudMonthlyButton.text = getString(R.string.cloud_subscription_monthly_button).format(loading)
-
-            binding.cloudYearlyButton.isEnabled = false
-            binding.cloudYearlyButton.alpha = 0.5f
             binding.cloudYearlyButton.text = getString(R.string.cloud_subscription_yearly_button).format(loading)
-
-            if (!subscriptionListFinished) {
-                binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(loading)
-            }
         }
+        if (!subscriptionListFinished) {
+            binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(loading)
+        }
+
+        binding.cloudMonthlyButton.isEnabled = productDetailsFinished && !subscriptions.contains("cloud_v1")
+        binding.cloudMonthlyButton.alpha = if (binding.cloudMonthlyButton.isEnabled) 1.0f else 0.5f
+
+        binding.cloudYearlyButton.isEnabled = productDetailsFinished && !subscriptions.contains("cloud_v1")
+        binding.cloudYearlyButton.alpha = if (binding.cloudYearlyButton.isEnabled) 1.0f else 0.5f
     }
 
     /**
