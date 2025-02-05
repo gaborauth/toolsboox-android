@@ -47,6 +47,10 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     @Inject
     lateinit var presenter: CalendarDayPresenter
 
+    // The Google Drive sync presenter.
+    @Inject
+    lateinit var syncPresenter: CalendarGoogleDriveSyncPresenter
+
     /**
      * The calendar utils.
      */
@@ -272,6 +276,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         val defaultStartHour = sharedPreferences.getInt("calendarStartHour", 5)
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarDayFragment, binding, currentDate, defaultStartHour, locale)
+            syncPresenter.backgroundSync(this@CalendarDayFragment, UUID.randomUUID())
         }
     }
 

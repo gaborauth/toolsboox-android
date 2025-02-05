@@ -250,50 +250,7 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
      */
     private fun updateListViews() {
         syncList.clear()
-        fileList.forEach { fci ->
-            // If the file is not in the cloud, add it.
-            if (fci.updated == null) {
-                syncList.add(CalendarSyncViewItem(fci, fci, null))
-                return@forEach
-            }
-
-            // If the file is in the cloud, checks the path, the baseName and the version.
-            val cloudItem = cloudList
-                .filter { it.path == fci.path }
-                .filter { it.baseName == fci.baseName }
-                .firstOrNull { it.version == fci.version }
-
-            // If the file is not in the cloud, add it.
-            if (cloudItem == null) {
-                syncList.add(CalendarSyncViewItem(fci, fci, null))
-                return@forEach
-            }
-
-            if ((cloudItem.updated != null) and (cloudItem.updated!!.time < fci.updated.time)) {
-                syncList.add(CalendarSyncViewItem(fci, fci, cloudItem))
-                return@forEach
-            }
-        }
-
-        cloudList.forEach { cci ->
-            // It's a bug?!
-            if (cci.updated == null) {
-                return@forEach
-            }
-
-            val fileItem = fileList
-                .filter { it.path == cci.path }
-                .filter { it.baseName == cci.baseName }
-                .firstOrNull { it.version == cci.version }
-
-            if (fileItem == null) {
-                syncList.add(CalendarSyncViewItem(cci, null, cci))
-            } else if (fileItem.updated != null) {
-                if (fileItem.updated.time < cci.updated.time) {
-                    syncList.add(CalendarSyncViewItem(fileItem, fileItem, cci))
-                }
-            }
-        }
+        syncList.addAll(presenter.calculateSyncList(fileList, cloudList))
 
         if (syncList.isEmpty()) {
             binding.syncListEmpty.visibility = View.VISIBLE
