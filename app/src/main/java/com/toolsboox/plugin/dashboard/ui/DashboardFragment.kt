@@ -15,6 +15,9 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.gms.ads.AdRequest
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.UserMessagingPlatform
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.squareup.moshi.Moshi
@@ -80,6 +83,9 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      * The dashboard item adapter.
      */
     private lateinit var adapter: SquareItemAdapter
+
+    // Consent information.
+    private lateinit var consentInformation: ConsentInformation
 
     /**
      * OnViewCreated hook.
@@ -186,6 +192,8 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
 
             updateAdButton()
         }
+
+        consentInformation = UserMessagingPlatform.getConsentInformation(requireContext())
     }
 
     /**
@@ -203,6 +211,33 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         apiLevelCheck()
 
         updateAdButton()
+
+        val consentRequestParameters = ConsentRequestParameters.Builder().build()
+        consentInformation.requestConsentInfoUpdate(
+            requireActivity(), consentRequestParameters,
+            {
+                if (consentInformation.isConsentFormAvailable) {
+                    Timber.i("Consent information updated successfully.")
+                    if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.REQUIRED) {
+                        Timber.i("Consent form is required.")
+                        UserMessagingPlatform.loadConsentForm(requireContext(), { consentForm ->
+                            consentForm.show(requireActivity()) { formError ->
+                                if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.OBTAINED) {
+                                    Timber.i("Consent form accepted.")
+                                } else {
+                                    Timber.w("Error while obtaining consent form: $formError")
+                                }
+                            }
+                        }, { formError ->
+                            Timber.w("Error while loading consent form: $formError")
+                        })
+                    }
+                }
+            },
+            { requestConsentError ->
+                Timber.e("Error while updating consent information: $requestConsentError")
+            },
+        )
     }
 
     /**
