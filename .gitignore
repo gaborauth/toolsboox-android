@@ -1,6 +1,7 @@
 *.iml
 .gradle
 .idea
+.kotlin
 app/build
 build
 README.md

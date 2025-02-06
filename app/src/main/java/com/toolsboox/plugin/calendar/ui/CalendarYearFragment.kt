@@ -48,6 +48,10 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     @Inject
     lateinit var presenter: CalendarYearPresenter
 
+    // The Google Drive sync presenter.
+    @Inject
+    lateinit var syncPresenter: CalendarGoogleDriveSyncPresenter
+
     /**
      * The calendar utils.
      */
@@ -228,6 +232,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
 
         timer = GlobalScope.launch(Dispatchers.Main) {
             presenter.load(this@CalendarYearFragment, binding, currentDate, locale)
+            syncPresenter.backgroundSync(this@CalendarYearFragment, UUID.randomUUID())
         }
     }
 

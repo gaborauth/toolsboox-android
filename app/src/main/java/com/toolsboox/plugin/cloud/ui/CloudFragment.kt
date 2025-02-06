@@ -14,10 +14,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
-import com.android.billingclient.api.*
-import com.android.billingclient.api.BillingClient.BillingResponseCode
-import com.android.billingclient.api.BillingClient.ProductType
-import com.android.billingclient.api.QueryProductDetailsParams.Product
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingFlowParams
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -30,11 +29,11 @@ import com.squareup.moshi.Moshi
 import com.toolsboox.R
 import com.toolsboox.da.Credential
 import com.toolsboox.databinding.FragmentCloudBinding
+import com.toolsboox.fi.BillingClientService
 import com.toolsboox.ot.CryptoUtils
 import com.toolsboox.plugin.cloud.da.Purchase
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.immutableListOf
 import timber.log.Timber
 import java.time.Instant
 import java.util.*
@@ -83,38 +82,28 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
      */
     private lateinit var binding: FragmentCloudBinding
 
-    /**
-     * The purchases updated listener.
-     */
-    private lateinit var purchasesUpdatedListener: PurchasesUpdatedListener
+    // Flag of product details finished.
+    private var productDetailsFinished = false
 
-    /**
-     * The product details params.
-     */
-    private lateinit var queryProductDetailsParams: QueryProductDetailsParams
+    // Flag of subscription list finished.
+    private var subscriptionListFinished = false
 
-    /**
-     * The product details.
-     */
-    private lateinit var productDetails: ProductDetails
+    // The map of subscriptions (productId - token).
+    private val subscriptions: MutableMap<String, String> = mutableMapOf()
 
-    /**
-     * The billing client.
-     */
-    private lateinit var billingClient: BillingClient
+    // Access token for Google Drive.
+    private var googleAccount: GoogleSignInAccount? = null
 
-    /**
-     * Flag of billing client finished.
-     */
-    private var billingClientFinished = false
+    // Google sign-in client.
+    private var signInClient: GoogleSignInClient? = null
 
     // Google sign-in options.
-    val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+    private val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestScopes(Scope(DriveScopes.DRIVE_APPDATA), Scope(DriveScopes.DRIVE_FILE))
         .requestEmail()
         .build()
 
-    val connectResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val connectResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 .addOnSuccessListener {
@@ -130,12 +119,6 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         }
     }
 
-    // Access token for Google Drive.
-    private var googleAccount: GoogleSignInAccount? = null
-
-    // Google sign-in client.
-    private var signInClient: GoogleSignInClient? = null
-
     /**
      * OnViewCreated hook.
      *
@@ -146,25 +129,6 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentCloudBinding.bind(view)
-
-        purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
-            if (billingResult.responseCode == BillingResponseCode.OK) {
-                Timber.i("PurchasesUpdatedListener: $purchases")
-            } else {
-                Timber.w("PurchasesUpdatedListener: $billingResult")
-            }
-        }
-
-        billingClient = BillingClient.newBuilder(requireContext())
-            .setListener(purchasesUpdatedListener)
-            .enablePendingPurchases()
-            .build()
-
-        queryProductDetailsParams = QueryProductDetailsParams.newBuilder().setProductList(
-            immutableListOf(
-                Product.newBuilder().setProductId("cloud_v1").setProductType(ProductType.SUBS).build()
-            )
-        ).build()
 
         binding.cloudAccountSignUpButton.setOnClickListener {
             signUpDialog()
@@ -233,80 +197,91 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
         // Update state of the buttons.
         updateButtons()
 
-        // Start the billing client async connection.
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingResponseCode.OK) {
-                    Timber.i("onBillingSetupFinished: OK")
-                    billingClient.queryProductDetailsAsync(queryProductDetailsParams) { queryResult, productDetailsList ->
-                        if (queryResult.responseCode == BillingResponseCode.OK) {
-                            Timber.i("queryProductDetailsAsync: $productDetailsList")
-                            if (productDetailsList.isNotEmpty()) {
-                                productDetails = productDetailsList[0]
-                                Timber.i("ProductDetails: $productDetails")
-                                requireActivity().runOnUiThread {
-                                    productDetails.subscriptionOfferDetails?.forEach { offer ->
-                                        val price = offer.pricingPhases.pricingPhaseList[0].formattedPrice
-                                        if (offer.basePlanId == "monthly") {
-                                            val buttonText = getString(R.string.cloud_subscription_monthly_button).format(price)
-                                            binding.cloudMonthlyButton.text = buttonText
-                                        }
-                                        if (offer.basePlanId == "yearly") {
-                                            val buttonText = getString(R.string.cloud_subscription_yearly_button).format(price)
-                                            binding.cloudYearlyButton.text = buttonText
-                                        }
-                                    }
-                                }
-                            }
-                            billingClientFinished = true
-                        } else {
-                            Timber.w("queryProductDetailsAsync: $queryResult")
-                            billingClientFinished = false
-                        }
-
-                        requireActivity().runOnUiThread { updateButtons() }
-                    }
-
-                    billingClient.queryPurchasesAsync(QueryPurchasesParams.newBuilder().setProductType(ProductType.SUBS).build())
-                    { purchasesResult, purchaseList ->
-                        if (purchasesResult.responseCode == BillingResponseCode.OK) {
-                            Timber.i("queryPurchasesAsync: $purchaseList")
-                            val status: String
-                            if (purchaseList.isNotEmpty()) {
-                                status = getString(R.string.cloud_subscription_status_subs)
-                                val purchase = purchaseList[0]
-                                Timber.i("Purchase: $purchase")
-                                val purchaseToken = purchase.purchaseToken
-                                val productId = purchase.products[0]
-                                Timber.i("ProductId: $productId, purchaseToken: $purchaseToken")
-
-                                val userId = sharedPreferences.getString("userId", null)
-                                if (userId != null) {
-                                    moshi.adapter(Purchase::class.java).fromJson(purchase.originalJson)?.let {
-                                        presenter.updatePurchase(this@CloudFragment, UUID.fromString(userId), it)
-                                    }
-                                }
-                            } else {
-                                status = getString(R.string.cloud_subscription_status_no_subs)
-                            }
+        BillingClientService.connectClient(
+            requireActivity(),
+            { billingClient ->
+                BillingClientService.subscriptionDetails(
+                    billingClient, "cloud_v1",
+                    { productDetails ->
+                        if (productDetails.isNotEmpty()) {
+                            Timber.i("ProductDetails: $productDetails")
                             requireActivity().runOnUiThread {
-                                binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(status)
+                                productDetails[0].subscriptionOfferDetails?.forEach { offer ->
+                                    val price = offer.pricingPhases.pricingPhaseList[0].formattedPrice
+                                    if (offer.basePlanId == "monthly") {
+                                        val buttonText = getString(R.string.cloud_subscription_monthly_button).format(price)
+                                        binding.cloudMonthlyButton.text = buttonText
+                                    }
+                                    if (offer.basePlanId == "yearly") {
+                                        val buttonText = getString(R.string.cloud_subscription_yearly_button).format(price)
+                                        binding.cloudYearlyButton.text = buttonText
+                                    }
+                                }
                             }
-                        } else {
-                            Timber.w("queryPurchasesAsync: $purchasesResult")
                         }
-                    }
-                } else {
-                    Timber.w("onBillingSetupFinished: $billingResult")
-                }
+                        productDetailsFinished = true
+                        requireActivity().runOnUiThread { updateButtons() }
+                    },
+                    { result ->
+                        Timber.w("OnFailed: $result")
+                        productDetailsFinished = false
+                        requireActivity().runOnUiThread { updateButtons() }
+                    })
 
+                BillingClientService.subscriptions(
+                    billingClient,
+                    { purchaseList ->
+                        Timber.i("Subscriptions: $purchaseList")
+                        var status = getString(R.string.cloud_subscription_status_no_subs)
+                        if (purchaseList.isNotEmpty()) {
+                            status = getString(R.string.cloud_subscription_status_subs)
+                            val purchase = purchaseList[0]
+                            Timber.i("Purchase: $purchase")
+                            val productId = purchase.products[0]
+                            val purchaseToken = purchase.purchaseToken
+                            Timber.i("ProductId: $productId, purchaseToken: $purchaseToken")
+                            subscriptions[productId] = purchaseToken
+
+                            // Acknowledge the purchase.
+                            if (!purchase.isAcknowledged) {
+                                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                                    .setPurchaseToken(purchase.purchaseToken)
+                                    .build()
+
+                                billingClient.acknowledgePurchase(acknowledgePurchaseParams, { acknowledgePurchaseResult ->
+                                    if (acknowledgePurchaseResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                                        Timber.i("Purchase acknowledged: $purchaseToken")
+                                        firebaseAnalytics.logEvent("purchaseAcknowledged", null)
+                                    }
+                                })
+                            }
+
+                            val userId = sharedPreferences.getString("userId", null)
+                            if (userId != null) {
+                                moshi.adapter(Purchase::class.java).fromJson(purchase.originalJson)?.let {
+                                    presenter.updatePurchase(this@CloudFragment, UUID.fromString(userId), it)
+                                }
+                            }
+                        }
+                        subscriptionListFinished = true
+                        requireActivity().runOnUiThread {
+                            binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(status)
+                            updateButtons()
+                        }
+                    },
+                    { result ->
+                        Timber.w("OnFailed: $result")
+                        subscriptionListFinished = false
+                        requireActivity().runOnUiThread { updateButtons() }
+                    })
+            },
+            { result ->
+                Timber.w("OnFailed: $result")
+                productDetailsFinished = false
+                subscriptionListFinished = false
                 requireActivity().runOnUiThread { updateButtons() }
             }
-
-            override fun onBillingServiceDisconnected() {
-                Timber.i("onBillingServiceDisconnected")
-            }
-        })
+        )
 
         // Check Google Drive connection.
         signInClient = GoogleSignIn.getClient(this.requireContext(), googleSignInOptions)
@@ -460,31 +435,19 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
             binding.cloudGoogleDriveDisconnectButton.alpha = 1.0f
         }
 
-        if (!billingClientFinished) {
-            binding.cloudMonthlyButton.isEnabled = false
-            binding.cloudMonthlyButton.alpha = 0.5f
+        if (!productDetailsFinished) {
             binding.cloudMonthlyButton.text = getString(R.string.cloud_subscription_monthly_button).format(loading)
-
-            binding.cloudYearlyButton.isEnabled = false
-            binding.cloudYearlyButton.alpha = 0.5f
             binding.cloudYearlyButton.text = getString(R.string.cloud_subscription_yearly_button).format(loading)
-
-            binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(loading)
-        } else {
-            if ((refreshToken == null) and (googleAccount == null)) {
-                binding.cloudMonthlyButton.isEnabled = false
-                binding.cloudMonthlyButton.alpha = 0.5f
-
-                binding.cloudYearlyButton.isEnabled = false
-                binding.cloudYearlyButton.alpha = 0.5f
-            } else {
-                binding.cloudMonthlyButton.isEnabled = true
-                binding.cloudMonthlyButton.alpha = 1.0f
-
-                binding.cloudYearlyButton.isEnabled = true
-                binding.cloudYearlyButton.alpha = 1.0f
-            }
         }
+        if (!subscriptionListFinished) {
+            binding.cloudSubscriptionStatusMessage.text = getString(R.string.cloud_subscription_status_message).format(loading)
+        }
+
+        binding.cloudMonthlyButton.isEnabled = productDetailsFinished && !subscriptions.contains("cloud_v1")
+        binding.cloudMonthlyButton.alpha = if (binding.cloudMonthlyButton.isEnabled) 1.0f else 0.5f
+
+        binding.cloudYearlyButton.isEnabled = productDetailsFinished && !subscriptions.contains("cloud_v1")
+        binding.cloudYearlyButton.alpha = if (binding.cloudYearlyButton.isEnabled) 1.0f else 0.5f
     }
 
     /**
@@ -494,23 +457,37 @@ class CloudFragment @Inject constructor() : ScreenFragment() {
      */
     private fun subscriptionFlow(basePlan: String) {
         Timber.i("Checking '%s' offer of cloud_v1 product...", basePlan)
-        val offers = productDetails.subscriptionOfferDetails ?: return
-        val offer = offers.firstOrNull { offer -> offer.basePlanId == basePlan } ?: return
+        BillingClientService.connectClient(
+            requireActivity(),
+            { billingClient ->
+                BillingClientService.subscriptionDetails(
+                    billingClient, "cloud_v1",
+                    { productDetails ->
+                        if (productDetails.isNotEmpty()) {
+                            val offers = productDetails[0].subscriptionOfferDetails ?: return@subscriptionDetails
+                            val offer = offers.firstOrNull { offer -> offer.basePlanId == basePlan } ?: return@subscriptionDetails
 
-        val productDetailsParamsList = listOf(
-            BillingFlowParams.ProductDetailsParams.newBuilder()
-                .setProductDetails(productDetails)
-                .setOfferToken(offer.offerToken)
-                .build()
+                            val productDetailsParamsList = listOf(
+                                BillingFlowParams.ProductDetailsParams.newBuilder()
+                                    .setProductDetails(productDetails[0])
+                                    .setOfferToken(offer.offerToken)
+                                    .build()
+                            )
+
+                            Timber.i("Starting billing flow...")
+                            val billingFlowParams = BillingFlowParams.newBuilder()
+                                .setProductDetailsParamsList(productDetailsParamsList)
+                                .build()
+
+                            val billingResult = billingClient.launchBillingFlow(requireActivity(), billingFlowParams)
+                            Timber.i("BillingResult: $billingResult")
+                        }
+                    },
+                    { _ -> }
+                )
+            },
+            { _ -> }
         )
-
-        Timber.i("Starting billing flow...")
-        val billingFlowParams = BillingFlowParams.newBuilder()
-            .setProductDetailsParamsList(productDetailsParamsList)
-            .build()
-
-        val billingResult = billingClient.launchBillingFlow(requireActivity(), billingFlowParams)
-        Timber.i("BillingResult: $billingResult")
     }
 
     /**

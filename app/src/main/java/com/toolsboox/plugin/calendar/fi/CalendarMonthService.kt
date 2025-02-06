@@ -143,7 +143,7 @@ class CalendarMonthService @Inject constructor() {
         val month = currentDate.format(DateTimeFormatter.ofPattern("MM"))
 
         calendarMonth.created = calendarMonth.created ?: Date.from(Instant.now())
-        calendarMonth.updated = calendarMonth.updated ?: Date.from(Instant.now())
+        calendarMonth.updated = Date.from(Instant.now())
         save(rootPath, "$year/$month/", "month-$year-$month", calendarMonth)
     }
 

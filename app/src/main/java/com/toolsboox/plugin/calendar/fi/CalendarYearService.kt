@@ -141,7 +141,7 @@ class CalendarYearService @Inject constructor() {
         val year = currentDate.format(DateTimeFormatter.ofPattern("yyyy"))
 
         calendarYear.created = calendarYear.created ?: Date.from(Instant.now())
-        calendarYear.updated = calendarYear.updated ?: Date.from(Instant.now())
+        calendarYear.updated = Date.from(Instant.now())
         save(rootPath, "$year/", "year-$year", calendarYear)
     }
 
