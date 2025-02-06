@@ -1,10 +1,13 @@
 package com.toolsboox.plugin.calendar.ui
 
 import android.Manifest
+import android.content.ContentResolver
+import android.net.Uri
 import android.os.Environment
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import com.toolsboox.plugin.calendar.da.v1.ReadingProgress
 import com.toolsboox.plugin.calendar.da.v2.CalendarDay
 import com.toolsboox.plugin.calendar.fi.CalendarDayService
 import com.toolsboox.plugin.calendar.fi.CalendarEventsService
@@ -14,8 +17,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.IOException
 import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
 import javax.inject.Inject
 
@@ -76,6 +81,9 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                     var calendarEvents = calendarEventsService.loadEvents(fragment, currentDate)
                     calendarDay.startHour = calendarDay.startHour ?: defaultStartHour
 
+                    calendarDay.readingProgress.clear()
+                    calendarDay.readingProgress.addAll(readingProgress(fragment, currentDate))
+
                     if (currentDate < LocalDate.now()) {
                         if (calendarDay.events.isEmpty()) {
                             calendarDay.events.addAll(calendarEvents)
@@ -131,5 +139,38 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                 withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
             }
         }
+    }
+
+    /**
+     * Provides the authors, title, progress and lastAccess fields of reading progress of current day.
+     *
+     * @return the list of reading progress
+     */
+    private fun readingProgress(fragment: CalendarDayFragment, currentDate: LocalDate): List<ReadingProgress> {
+        val result = mutableListOf<ReadingProgress>()
+
+        val startEpoch = currentDate.atStartOfDay().atZone(ZoneId.systemDefault()).toEpochSecond() * 1000L
+        val endEpoch = startEpoch + 24 * 60 * 60 * 1000L
+
+        val resolver: ContentResolver = fragment.requireContext().contentResolver
+        val uri = Uri.parse("content://com.onyx.content.database.ContentProvider/Metadata")
+        val projection = arrayOf("authors", "title", "progress", "lastAccess")
+        resolver.query(uri, projection, null, null, null)?.use {
+            while (it.moveToNext()) {
+                val authors = it.getString(0)
+                val title = it.getString(1)
+                val progress = it.getString(2)
+                val lastAccess = it.getLong(3)
+
+                Timber.i("$lastAccess $authors $title $progress $startEpoch $endEpoch")
+                if (title == null) continue
+                if (lastAccess < startEpoch) continue
+                if (lastAccess >= endEpoch) continue
+                result.add(ReadingProgress(authors, title, progress, Date(lastAccess)))
+            }
+        }
+
+        Timber.i("Reading progress: $result")
+        return result
     }
 }
