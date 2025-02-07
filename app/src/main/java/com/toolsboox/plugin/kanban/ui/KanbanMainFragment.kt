@@ -20,7 +20,7 @@ import com.toolsboox.da.StrokePoint
 import com.toolsboox.databinding.FragmentKanbanMainBinding
 import com.toolsboox.ot.DeepCopy
 import com.toolsboox.ot.OnGestureListener
-import com.toolsboox.ot.PenRawInputCallback
+import com.toolsboox.ot.OnxyPenInputCallback
 import com.toolsboox.plugin.kanban.da.v1.CardItem
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -128,7 +128,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
     /**
      * The pen raw input callback class.
      */
-    private lateinit var callback: PenRawInputCallback
+    private lateinit var callback: OnxyPenInputCallback
 
     /**
      * TouchHelper of the Onyx's pen.
@@ -178,7 +178,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
             gridSize = (width / 9.0f).toInt()
 
             surfaceView = createEditCard()
-            callback = PenRawInputCallback(penCallback, eraseCallback)
+            callback = OnxyPenInputCallback(penCallback, eraseCallback)
             touchHelper = TouchHelper.create(binding.drawLayout, callback)
             initializeSurface()
 
@@ -646,7 +646,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
     /**
      * Pen callback of the raw input callback.
      */
-    private val penCallback = object : PenRawInputCallback.PenCallback {
+    private val penCallback = object : OnxyPenInputCallback.PenCallback {
         override fun addStrokes(strokes: List<StrokePoint>) {
             val offsetStrokes = mutableListOf<StrokePoint>()
             for (stroke in strokes) {
@@ -659,7 +659,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
     /**
      * Pen callback of the raw input callback.
      */
-    private val eraseCallback = object : PenRawInputCallback.EraseCallback {
+    private val eraseCallback = object : OnxyPenInputCallback.EraseCallback {
         override fun removeStroke(strokeId: UUID) {
             Timber.i("Not implemented yet.")
         }
