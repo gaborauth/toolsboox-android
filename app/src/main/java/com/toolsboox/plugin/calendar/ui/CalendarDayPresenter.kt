@@ -81,8 +81,12 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                     var calendarEvents = calendarEventsService.loadEvents(fragment, currentDate)
                     calendarDay.startHour = calendarDay.startHour ?: defaultStartHour
 
-                    calendarDay.readingProgress.clear()
-                    calendarDay.readingProgress.addAll(readingProgress(fragment, currentDate))
+                    if (currentDate >= LocalDate.now()) {
+                        calendarDay.readingProgress.clear()
+                    }
+                    if (calendarDay.readingProgress.isEmpty()) {
+                        calendarDay.readingProgress.addAll(readingProgress(fragment, currentDate))
+                    }
 
                     if (currentDate < LocalDate.now()) {
                         if (calendarDay.events.isEmpty()) {

@@ -41,9 +41,9 @@ abstract class SurfaceFragment : ScreenFragment() {
 
     companion object {
         /**
-         * Touch state.
+         * Touch drawing state.
          */
-        private var touchState: Boolean? = null
+        private var touchDrawingState: Boolean = false
     }
 
     /**
@@ -197,10 +197,7 @@ abstract class SurfaceFragment : ScreenFragment() {
         provideToolbarDrawing().toolbarPen.background.setTint(Color.GRAY)
         provideToolbarDrawing().toolbarEraser.background.setTint(Color.WHITE)
 
-        if (touchState == null)
-            touchState = !stylusCheck()
-
-        if (touchState!!)
+        if (touchDrawingState)
             provideToolbarDrawing().toolbarHandTouch.setImageResource(R.drawable.ic_toolbar_hand_draw)
         else
             provideToolbarDrawing().toolbarHandTouch.setImageResource(R.drawable.ic_toolbar_hand_touch)
@@ -218,9 +215,8 @@ abstract class SurfaceFragment : ScreenFragment() {
         }
 
         provideToolbarDrawing().toolbarHandTouch.setOnClickListener {
-            if (touchState == null) touchState = false
-            touchState = !touchState!!
-            if (touchState!!)
+            touchDrawingState = !touchDrawingState
+            if (touchDrawingState)
                 provideToolbarDrawing().toolbarHandTouch.setImageResource(R.drawable.ic_toolbar_hand_draw)
             else
                 provideToolbarDrawing().toolbarHandTouch.setImageResource(R.drawable.ic_toolbar_hand_touch)
@@ -560,7 +556,7 @@ abstract class SurfaceFragment : ScreenFragment() {
         val actionMove = listOf(MotionEvent.ACTION_MOVE, ACTION_ERASE_MOVE).contains(motionEvent.action)
         val actionUp = listOf(MotionEvent.ACTION_UP, ACTION_ERASE_UP).contains(motionEvent.action)
 
-        val drawing = (motionStylus && !touchState!!) || (motionFinger && touchState!!)
+        val drawing = (motionStylus && !touchDrawingState) || (motionFinger && touchDrawingState)
         val erasing = motionEvent.buttonState != 0
 
         if (drawing) {
