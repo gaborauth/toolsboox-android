@@ -17,7 +17,7 @@ import kotlin.math.sqrt
  * @param penCallback pen callback
  * @param eraseCallback erase callback
  */
-class PenRawInputCallback(private val penCallback: PenCallback?, private val eraseCallback: EraseCallback?) : RawInputCallback() {
+class OnxyPenInputCallback(private val penCallback: PenCallback?, private val eraseCallback: EraseCallback?) : RawInputCallback() {
 
     private var lastPoint: TouchPoint? = null
     private var strokes: List<Stroke> = mutableListOf()

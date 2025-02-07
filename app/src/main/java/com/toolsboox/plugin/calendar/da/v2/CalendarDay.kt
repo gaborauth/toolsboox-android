@@ -3,6 +3,7 @@ package com.toolsboox.plugin.calendar.da.v2
 import com.squareup.moshi.JsonClass
 import com.toolsboox.da.Stroke
 import com.toolsboox.plugin.calendar.da.v1.CalendarEvent
+import com.toolsboox.plugin.calendar.da.v1.ReadingProgress
 import java.util.*
 
 /**
@@ -17,8 +18,9 @@ data class CalendarDay(
     val day: Int,
     val locale: Locale = Locale.getDefault(),
     val events: MutableList<CalendarEvent> = mutableListOf(),
+    val readingProgress: MutableList<ReadingProgress> = mutableListOf(),
 
-    var hasLanes : Boolean = false,
+    var hasLanes: Boolean = false,
     var startHour: Int?,
 
     override var calendarStrokes: MutableMap<String, List<Stroke>> = mutableMapOf(),
@@ -58,7 +60,10 @@ data class CalendarDay(
             val calendarValues = mutableMapOf(DEFAULT_STYLE to mapOf<String, Float?>())
             val noteStrokes = mutableMapOf("0" to notesStrokes)
 
-            return CalendarDay(v1.year, v1.month, v1.day, v1.locale, mutableListOf(), false, null, calendarStrokes, calendarValues, noteStrokes)
+            return CalendarDay(
+                v1.year, v1.month, v1.day, v1.locale, mutableListOf(), mutableListOf(),
+                false, null, calendarStrokes, calendarValues, noteStrokes
+            )
         }
     }
 
@@ -67,7 +72,7 @@ data class CalendarDay(
      */
     fun deepCopy(): CalendarDay {
         return CalendarDay(
-            this.year, this.month, this.day, this.locale, this.events.toMutableList(), this.hasLanes, this.startHour,
+            this.year, this.month, this.day, this.locale, this.events.toMutableList(), this.readingProgress.toMutableList(), this.hasLanes, this.startHour,
             Calendar.strokesDeepCopy(calendarStrokes), Calendar.valuesDeepCopy(calendarValues), Calendar.strokesDeepCopy(noteStrokes)
         )
     }

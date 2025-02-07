@@ -130,6 +130,7 @@
     <string name="calendar_settings_button_save">Save</string>
     <string name="calendar_settings_button_back">Back</string>
 
+    <string name="calendar_drawing_toolbar_touch">Touch</string>
     <string name="calendar_drawing_toolbar_pen">Pen</string>
     <string name="calendar_drawing_toolbar_eraser">Eraser</string>
     <string name="calendar_drawing_toolbar_trash">Trash page</string>

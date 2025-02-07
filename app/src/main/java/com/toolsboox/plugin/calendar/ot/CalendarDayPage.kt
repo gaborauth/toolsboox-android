@@ -163,10 +163,40 @@ class CalendarDayPage {
                 }
             }
 
-            val notesCalsText = if (outside.size > 8) {
-                context.getString(R.string.calendar_day_notes_events_ex).format(outside.size)
+            val notesTitle: MutableList<String> = mutableListOf()
+            val notesLeft: MutableList<String> = mutableListOf()
+            val notesRight: MutableList<String> = mutableListOf()
+
+            calendarDay.readingProgress.take(8).forEach {
+                if (it.authors == null) notesTitle.add(it.title)
+                else notesTitle.add("${it.authors}: ${it.title}")
+
+                notesLeft.add(it.progress ?: "-")
+                notesRight.add(DateFormat.getTimeFormat(context).format(it.lastAccess))
+            }
+
+            if (notesTitle.size < 8) {
+                outside.take(8 - notesTitle.size).forEach {
+                    notesTitle.add(it.title)
+                    if (it.allDay) {
+                        notesLeft.add(allDayText)
+                        notesRight.add("")
+                    } else {
+                        val startLocalDate = Instant.ofEpochMilli(it.startDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        val endLocalDate = Instant.ofEpochMilli(it.endDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        val startDate = startLocalDate.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
+                        val endDate = endLocalDate.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
+
+                        notesLeft.add(startDate)
+                        notesRight.add(endDate)
+                    }
+                }
+            }
+
+            val notesCalsText = if (notesTitle.size > 8) {
+                context.getString(R.string.calendar_day_notes_events_ex).format(notesTitle.size)
             } else {
-                context.getString(R.string.calendar_day_notes_events).format(outside.size)
+                context.getString(R.string.calendar_day_notes_events).format(notesTitle.size)
             }
 
             // Schedules grid
@@ -272,32 +302,19 @@ class CalendarDayPage {
 
             // Calendar events
             for (i in 0..7) {
-                if (i < outside.size) {
-                    outside[i].let { event ->
-                        Creator.drawEllipsizedText(
-                            canvas, event.title, Creator.textDefaultBlack,
-                            lo + cew + 60.0f, to + (20 + i * 2) * ceh - 10.0f, cew
-                        )
-                        if (event.allDay) {
-                            canvas.drawText(
-                                allDayText, lo + cew + 60.0f, to + (21 + i * 2) * ceh - 10.0f,
-                                Creator.textSmallBlack
-                            )
-                        } else {
-                            val startLocalDate = Instant.ofEpochMilli(event.startDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
-                            val endLocalDate = Instant.ofEpochMilli(event.endDate).atZone(ZoneId.systemDefault()).toLocalDateTime()
-                            val startDate = startLocalDate.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
-                            val endDate = endLocalDate.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
-                            canvas.drawText(
-                                startDate, lo + cew + 60.0f, to + (21 + i * 2) * ceh - 10.0f,
-                                Creator.textSmallBlack
-                            )
-                            canvas.drawText(
-                                endDate, lo + cew + 40.0f + cew, to + (21 + i * 2) * ceh - 10.0f,
-                                Creator.textSmallBlackRight
-                            )
-                        }
-                    }
+                if (i < notesTitle.size) {
+                    Creator.drawEllipsizedText(
+                        canvas, notesTitle[i], Creator.textDefaultBlack,
+                        lo + cew + 60.0f, to + (20 + i * 2) * ceh - 10.0f, cew
+                    )
+                    canvas.drawText(
+                        notesLeft[i], lo + cew + 60.0f, to + (21 + i * 2) * ceh - 10.0f,
+                        Creator.textSmallBlack
+                    )
+                    canvas.drawText(
+                        notesRight[i], lo + cew + 40.0f + cew, to + (21 + i * 2) * ceh - 10.0f,
+                        Creator.textSmallBlackRight
+                    )
                 }
             }
         }
