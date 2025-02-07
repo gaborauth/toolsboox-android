@@ -248,7 +248,9 @@ abstract class ScreenFragment : Fragment() {
     }
 
     /**
+     * Check if the device supports stylus input.
      *
+     * @return true, if the device supports stylus input
      */
     fun stylusCheck(): Boolean {
         val inputManager = requireContext().getSystemService(Context.INPUT_SERVICE) as InputManager?
