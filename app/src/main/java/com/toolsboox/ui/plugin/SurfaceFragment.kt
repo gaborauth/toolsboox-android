@@ -9,6 +9,10 @@ import android.view.SurfaceView
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GestureDetectorCompat
+import androidx.lifecycle.lifecycleScope
+import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.common.model.RemoteModelManager
+import com.google.mlkit.vision.digitalink.*
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.data.note.TouchPoint
 import com.onyx.android.sdk.pen.RawInputCallback
@@ -23,6 +27,9 @@ import com.toolsboox.da.StrokePoint
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.time.Instant
 import java.util.*
@@ -503,6 +510,7 @@ abstract class SurfaceFragment : ScreenFragment() {
 
             applyStrokes(strokes, false)
             onStrokeChanged(strokes)
+            processStrokes(strokes)
         }
 
         override fun onBeginRawDrawing(b: Boolean, touchPoint: TouchPoint) {
@@ -533,7 +541,8 @@ abstract class SurfaceFragment : ScreenFragment() {
                 StrokePoint(
                     (10 * prevPoint.x).roundToInt() / 10.0f,
                     (10 * prevPoint.y).roundToInt() / 10.0f,
-                    (10 * prevPoint.pressure).roundToInt() / 10.0f
+                    (10 * prevPoint.pressure).roundToInt() / 10.0f,
+                    Instant.now().toEpochMilli()
                 )
             )
             for (tp in touchPointList) {
@@ -543,7 +552,8 @@ abstract class SurfaceFragment : ScreenFragment() {
                         StrokePoint(
                             (10 * tp.x).roundToInt() / 10.0f,
                             (10 * tp.y).roundToInt() / 10.0f,
-                            (10 * tp.pressure).roundToInt() / 10.0f
+                            (10 * tp.pressure).roundToInt() / 10.0f,
+                            Instant.now().toEpochMilli()
                         )
                     )
                 }
@@ -595,6 +605,42 @@ abstract class SurfaceFragment : ScreenFragment() {
 
             applyStrokes(strokes, true)
             onStrokeChanged(strokes)
+        }
+    }
+
+    fun processStrokes(strokes: List<Stroke>) {
+        val inkBuilder = Ink.builder()
+        strokes.forEach { stroke ->
+            val strokeBuilder: Ink.Stroke.Builder = Ink.Stroke.builder()
+            stroke.strokePoints.forEach { point ->
+                strokeBuilder.addPoint(Ink.Point.create(point.x, point.y, point.t))
+            }
+            inkBuilder.addStroke(strokeBuilder.build())
+        }
+        val ink = inkBuilder.build()
+
+        val remoteModelManager = RemoteModelManager.getInstance()
+        DigitalInkRecognitionModelIdentifier.fromLanguageTag("en-US")?.let { mi ->
+            val model = DigitalInkRecognitionModel.builder(mi).build()
+            this@SurfaceFragment.lifecycleScope.launch(Dispatchers.IO) {
+                if (remoteModelManager.isModelDownloaded(model).await()) {
+                    val recognizer = DigitalInkRecognition.getClient(DigitalInkRecognizerOptions.builder(model).build())
+                    recognizer.recognize(ink).addOnSuccessListener { result ->
+                        Timber.i("Recognition result: $result")
+                    }.addOnFailureListener { e ->
+                        Timber.e(e, "Recognition failed")
+                    }
+                } else {
+                    Timber.i("Model not downloaded")
+                    remoteModelManager.download(model, DownloadConditions.Builder().build())
+                        .addOnSuccessListener {
+                            Timber.i("Model downloaded")
+                        }
+                        .addOnFailureListener { e: Exception ->
+                            Timber.e(e, "Error while downloading a model")
+                        }
+                }
+            }
         }
     }
 }
