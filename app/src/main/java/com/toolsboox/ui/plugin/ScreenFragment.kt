@@ -1,9 +1,12 @@
 package com.toolsboox.ui.plugin
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.input.InputManager
 import android.os.Build
 import android.os.Bundle
+import android.view.InputDevice
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -242,5 +245,23 @@ abstract class ScreenFragment : Fragment() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this.requireActivity(), permissionName)) {
             permissionNeeded.add(permissionName)
         }
+    }
+
+    /**
+     *
+     */
+    fun stylusCheck(): Boolean {
+        val inputManager = requireContext().getSystemService(Context.INPUT_SERVICE) as InputManager?
+        val inputs = inputManager!!.inputDeviceIds
+        var foundStylus = false
+        for (i in inputs.indices) {
+            val inputDevice = inputManager.getInputDevice(inputs[i])
+            if (inputDevice?.supportsSource(InputDevice.SOURCE_STYLUS) == true) {
+                Timber.e("Input %s supports stylus input", inputDevice.name)
+                foundStylus = true
+            }
+        }
+
+        return foundStylus
     }
 }

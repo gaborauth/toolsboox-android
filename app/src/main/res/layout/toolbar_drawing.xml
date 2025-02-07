@@ -12,6 +12,19 @@
         app:layout_constraintEnd_toEndOf="parent">
 
     <ImageButton
+            android:id="@+id/toolbarHandTouch"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_toolbar_hand_touch"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/toolbarPen"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/calendar_drawing_toolbar_touch"/>
+
+    <ImageButton
             android:id="@+id/toolbarPen"
             android:layout_width="50dp"
             android:layout_height="50dp"

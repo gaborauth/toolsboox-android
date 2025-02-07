@@ -33,11 +33,18 @@ import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 /**
- * SurfaceView fragment of Boox pen supports.
+ * SurfaceView fragment of Boox pen and native stylus supports.
  *
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 abstract class SurfaceFragment : ScreenFragment() {
+
+    companion object {
+        /**
+         * Touch state.
+         */
+        private var touchState: Boolean? = null
+    }
 
     /**
      * The injected presenter.
@@ -190,6 +197,14 @@ abstract class SurfaceFragment : ScreenFragment() {
         provideToolbarDrawing().toolbarPen.background.setTint(Color.GRAY)
         provideToolbarDrawing().toolbarEraser.background.setTint(Color.WHITE)
 
+        if (touchState == null)
+            touchState = !stylusCheck()
+
+        if (touchState!!)
+            provideToolbarDrawing().toolbarHandTouch.setImageResource(R.drawable.ic_toolbar_hand_draw)
+        else
+            provideToolbarDrawing().toolbarHandTouch.setImageResource(R.drawable.ic_toolbar_hand_touch)
+
         provideToolbarDrawing().toolbarPen.setOnClickListener {
             penState = true
             provideToolbarDrawing().toolbarPen.background.setTint(Color.GRAY)
@@ -200,6 +215,15 @@ abstract class SurfaceFragment : ScreenFragment() {
             penState = false
             provideToolbarDrawing().toolbarEraser.background.setTint(Color.GRAY)
             provideToolbarDrawing().toolbarPen.background.setTint(Color.WHITE)
+        }
+
+        provideToolbarDrawing().toolbarHandTouch.setOnClickListener {
+            if (touchState == null) touchState = false
+            touchState = !touchState!!
+            if (touchState!!)
+                provideToolbarDrawing().toolbarHandTouch.setImageResource(R.drawable.ic_toolbar_hand_draw)
+            else
+                provideToolbarDrawing().toolbarHandTouch.setImageResource(R.drawable.ic_toolbar_hand_touch)
         }
 
         provideToolbarDrawing().toolbarTrash.setOnClickListener {
@@ -305,15 +329,15 @@ abstract class SurfaceFragment : ScreenFragment() {
     }
 
     /**
-     * Initialize the surface view of Onyx's drawing.
+     * Initialize the surface view of drawing.
      *
      * @param first first initialization flag
      */
     fun initializeSurface(first: Boolean = false) {
-        val hasStylus = DeviceFeatureUtil.hasStylus(requireContext())
+        val hasOnyxStylus = DeviceFeatureUtil.hasStylus(requireContext())
 
         if (first) {
-            if (hasStylus) touchHelper = TouchHelper.create(provideSurfaceView(), callback)
+            if (hasOnyxStylus) touchHelper = TouchHelper.create(provideSurfaceView(), callback)
             provideSurfaceView().setZOrderOnTop(true)
             provideSurfaceView().holder.setFormat(PixelFormat.TRANSPARENT)
         }
@@ -529,12 +553,17 @@ abstract class SurfaceFragment : ScreenFragment() {
         val ACTION_ERASE_UP = 212
         val ACTION_ERASE_MOVE = 213
 
+        val motionStylus = motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS
+        val motionFinger = motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_FINGER
+
         val actionDown = listOf(MotionEvent.ACTION_DOWN, ACTION_ERASE_DOWN).contains(motionEvent.action)
         val actionMove = listOf(MotionEvent.ACTION_MOVE, ACTION_ERASE_MOVE).contains(motionEvent.action)
         val actionUp = listOf(MotionEvent.ACTION_UP, ACTION_ERASE_UP).contains(motionEvent.action)
+
+        val drawing = (motionStylus && !touchState!!) || (motionFinger && touchState!!)
         val erasing = motionEvent.buttonState != 0
 
-        if (motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS) {
+        if (drawing) {
             val x = (10.0f * motionEvent.x).roundToInt() / 10.0f
             val y = (10.0f * motionEvent.y).roundToInt() / 10.0f
             val p = (10.0f * motionEvent.pressure).roundToInt() / 10.0f
@@ -552,8 +581,8 @@ abstract class SurfaceFragment : ScreenFragment() {
         return false
     }
 
-    private fun epsilon(touchPoint: StrokePoint, lastPoint: StrokePoint, epsilon: Float): Boolean {
-        return epsilon(touchPoint.x, touchPoint.y, lastPoint.x, lastPoint.y, epsilon)
+    private fun epsilon(touchPoint: StrokePoint, lastPoint: StrokePoint): Boolean {
+        return epsilon(touchPoint.x, touchPoint.y, lastPoint.x, lastPoint.y, 3.0f)
     }
 
     private fun epsilon(x1: Float, y1: Float, x2: Float, y2: Float, epsilon: Float): Boolean {
@@ -570,7 +599,7 @@ abstract class SurfaceFragment : ScreenFragment() {
     }
 
     private fun onMoveDrawing(touchPoint: StrokePoint) {
-        if (!epsilon(touchPoint, lastPoint!!, 3.0f)) {
+        if (!epsilon(touchPoint, lastPoint!!)) {
             Timber.d("onMoveDrawing (${touchPoint.x}/${touchPoint.y} - ${touchPoint.p})")
 
             val sigma = paint.strokeWidth
