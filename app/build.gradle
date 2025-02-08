@@ -175,7 +175,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
     // Temporary (?) fix for https://github.com/gaborauth/toolsboox-android/issues/305
-    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
