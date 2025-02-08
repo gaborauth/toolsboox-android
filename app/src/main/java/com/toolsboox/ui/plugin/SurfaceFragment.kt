@@ -3,6 +3,7 @@ package com.toolsboox.ui.plugin
 import android.Manifest
 import android.content.SharedPreferences
 import android.graphics.*
+import android.os.Build
 import android.provider.MediaStore
 import android.view.MotionEvent
 import android.view.SurfaceHolder
@@ -11,6 +12,8 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GestureDetectorCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.vision.digitalink.*
@@ -51,7 +54,19 @@ abstract class SurfaceFragment : ScreenFragment() {
          * Touch drawing state.
          */
         private var touchDrawingState: Boolean = false
+
+        // List of unrecognized actions.
+        private val actions = mutableListOf<String>()
+
+        // List of unrecognized buttons.
+        private val buttons = mutableListOf<String>()
     }
+
+    /**
+     * The Firebase analytics.
+     */
+    @Inject
+    lateinit var privateFirebaseAnalytics: FirebaseAnalytics
 
     /**
      * The injected presenter.
@@ -556,15 +571,16 @@ abstract class SurfaceFragment : ScreenFragment() {
         val ACTION_ERASE_UP = 212
         val ACTION_ERASE_MOVE = 213
 
-        val motionStylus = motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS
-        val motionFinger = motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_FINGER
+        val toolTypeStylus = motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS
+        val toolTypeEraser = motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_ERASER
+        val toolTypeFinger = motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_FINGER
 
         val actionDown = listOf(MotionEvent.ACTION_DOWN, ACTION_ERASE_DOWN).contains(motionEvent.action)
         val actionMove = listOf(MotionEvent.ACTION_MOVE, ACTION_ERASE_MOVE).contains(motionEvent.action)
         val actionUp = listOf(MotionEvent.ACTION_UP, ACTION_ERASE_UP).contains(motionEvent.action)
 
-        val drawing = (motionStylus && !touchDrawingState) || (motionFinger && touchDrawingState)
-        val erasing = motionEvent.buttonState != 0
+        val drawing = ((toolTypeStylus || toolTypeEraser) && !touchDrawingState) || (toolTypeFinger && touchDrawingState)
+        val erasing = motionEvent.buttonState != 0 || toolTypeEraser
 
         if (drawing) {
             val x = (10.0f * motionEvent.x).roundToInt() / 10.0f
@@ -577,6 +593,9 @@ abstract class SurfaceFragment : ScreenFragment() {
                 onMoveDrawing(StrokePoint(x, y, p, t))
             } else if (actionUp) {
                 onEndDrawing(StrokePoint(x, y, p, t), erasing)
+            } else {
+                if (!actions.contains("${motionEvent.action}")) actions.add("${motionEvent.action}")
+                if (!buttons.contains("${motionEvent.buttonState}")) buttons.add("${motionEvent.buttonState}")
             }
 
             return true
@@ -657,6 +676,16 @@ abstract class SurfaceFragment : ScreenFragment() {
 
             onStrokesAdded(strokesToAdd.toList())
             strokesToAdd.clear()
+        }
+
+        if (actions.isNotEmpty() || buttons.isNotEmpty()) {
+            privateFirebaseAnalytics.logEvent("actionsAndButtons") {
+                param("brand", Build.BRAND.lowercase())
+                param("device", Build.DEVICE.lowercase())
+                param("manufacturer", Build.MANUFACTURER.lowercase())
+                param("actions", actions.sortedBy { it }.joinToString(","))
+                param("buttons", buttons.sortedBy { it }.joinToString(","))
+            }
         }
 
         lastPoint = null
