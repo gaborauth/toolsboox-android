@@ -652,7 +652,7 @@ class KanbanMainFragment @Inject constructor() : ScreenFragment() {
             for (stroke in strokes) {
                 offsetStrokes.add(StrokePoint(stroke.x - surfaceOffset.left, stroke.y - surfaceOffset.top, stroke.p))
             }
-            editedCard?.strokes?.add(Stroke(UUID.randomUUID(), offsetStrokes))
+            editedCard?.strokes?.add(Stroke(UUID.randomUUID(), 0L, offsetStrokes))
         }
     }
 

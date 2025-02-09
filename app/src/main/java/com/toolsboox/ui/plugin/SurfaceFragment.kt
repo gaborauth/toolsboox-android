@@ -120,6 +120,9 @@ abstract class SurfaceFragment : ScreenFragment() {
      */
     private var lastPoint: StrokePoint? = null
 
+    // First point timestamp.
+    private var firstPointTimestamp = 0L
+
     /**
      * The list of stylus points.
      */
@@ -618,11 +621,14 @@ abstract class SurfaceFragment : ScreenFragment() {
     private fun onBeginDrawing(touchPoint: StrokePoint) {
         Timber.i("onBeginDrawing (${touchPoint.x}/${touchPoint.y})")
         lastPoint = touchPoint
+        firstPointTimestamp = Instant.now().toEpochMilli()
+        touchPoint.t = 0L
         stylusPointList.add(touchPoint)
     }
 
     private fun onMoveDrawing(touchPoint: StrokePoint) {
         if (!epsilon(touchPoint, lastPoint!!)) {
+            touchPoint.t = Instant.now().toEpochMilli() - firstPointTimestamp
             Timber.d("onMoveDrawing (${touchPoint.x}/${touchPoint.y} - ${touchPoint.p})")
 
             val sigma = paint.strokeWidth
@@ -649,6 +655,8 @@ abstract class SurfaceFragment : ScreenFragment() {
 
     private fun onEndDrawing(touchPoint: StrokePoint, erasing: Boolean = false) {
         Timber.i("onEndDrawing (${touchPoint.x}/${touchPoint.y})")
+        touchPoint.t = Instant.now().toEpochMilli() - firstPointTimestamp
+        stylusPointList.add(touchPoint)
 
         if (!penState || erasing) {
             val strokesToRemove: MutableSet<UUID> = mutableSetOf()
@@ -667,7 +675,7 @@ abstract class SurfaceFragment : ScreenFragment() {
             applyStrokes(strokes, true)
             onStrokeChanged(strokes)
         } else {
-            val stroke = Stroke(UUID.randomUUID(), stylusPointList.toList())
+            val stroke = Stroke(UUID.randomUUID(), firstPointTimestamp, stylusPointList.toList())
             strokes.add(stroke)
             strokesToAdd.add(stroke)
             applyStrokes(strokes, false)
@@ -692,7 +700,10 @@ abstract class SurfaceFragment : ScreenFragment() {
         stylusPointList.clear()
     }
 
-    fun processStrokes(strokes: List<Stroke>) {
+    /**
+     * Process the strokes, recognize the written text with ML Kit Digital Ink Recognition.
+     */
+    private fun processStrokes(strokes: List<Stroke>) {
         val inkBuilder = Ink.builder()
         strokes.forEach { stroke ->
             val strokeBuilder: Ink.Stroke.Builder = Ink.Stroke.builder()
@@ -710,7 +721,7 @@ abstract class SurfaceFragment : ScreenFragment() {
                 if (remoteModelManager.isModelDownloaded(model).await()) {
                     val recognizer = DigitalInkRecognition.getClient(DigitalInkRecognizerOptions.builder(model).build())
                     recognizer.recognize(ink).addOnSuccessListener { result ->
-                        Timber.i("Recognition result: $result")
+                        Timber.i("Recognition result: ${result.candidates}")
                     }.addOnFailureListener { e ->
                         Timber.e(e, "Recognition failed")
                     }

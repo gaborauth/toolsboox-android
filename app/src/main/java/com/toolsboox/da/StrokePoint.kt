@@ -12,5 +12,5 @@ data class StrokePoint(
     var x: Float,
     var y: Float,
     var p: Float,
-    val t: Long = 0L
+    var t: Long = 0L
 )
