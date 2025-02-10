@@ -15,6 +15,8 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.gms.ads.AdRequest
+import com.google.android.play.core.review.ReviewException
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
@@ -30,7 +32,10 @@ import com.toolsboox.plugin.dashboard.da.Version
 import com.toolsboox.ui.plugin.ScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.random.Random
 
 /**
  * Dashboard main fragment.
@@ -209,6 +214,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         apiLevelCheck()
 
         updateAdButton()
+        askForRate()
 
         val consentRequestParameters = ConsentRequestParameters.Builder().build()
         consentInformation.requestConsentInfoUpdate(
@@ -366,6 +372,30 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
             binding.buttonToggleAd.text = getString(R.string.dashboard_ad_settings_button_show)
             binding.adView.visibility = View.GONE
             binding.adView.destroy()
+        }
+    }
+
+    /**
+     * Ask for app rate.
+     */
+    private fun askForRate() {
+        val randomFuture = Instant.now().plus(Random.nextLong(7, 14), ChronoUnit.DAYS).toEpochMilli()
+        val nextRateTimestamp = sharedPreferences.getLong("nextRateTimestamp", randomFuture)
+        if (nextRateTimestamp > Instant.now().toEpochMilli()) return
+        sharedPreferences.edit().putLong("nextRateTimestamp", randomFuture).apply()
+
+        firebaseAnalytics.logEvent("reviewRequest", null)
+
+        val manager = ReviewManagerFactory.create(requireContext())
+        manager.requestReviewFlow().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                manager.launchReviewFlow(requireActivity(), task.result).addOnCompleteListener { _ ->
+                    Timber.i("Review completed.")
+                }
+            } else {
+                val reviewErrorCode = (task.exception as ReviewException).errorCode
+                Timber.e("Review error: $reviewErrorCode")
+            }
         }
     }
 }
