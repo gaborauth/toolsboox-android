@@ -11,5 +11,6 @@ import com.squareup.moshi.JsonClass
 data class StrokePoint(
     var x: Float,
     var y: Float,
-    var p: Float
+    var p: Float,
+    var t: Long = 0L
 )

@@ -14,6 +14,7 @@ import java.util.*
 @JsonClass(generateAdapter = true)
 data class Stroke(
     var strokeId: UUID,
+    var timestamp: Long = 0L,
     var strokePoints: List<StrokePoint>
 ) {
     companion object {

@@ -11,8 +11,12 @@ import android.view.SurfaceView
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GestureDetectorCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.common.model.RemoteModelManager
+import com.google.mlkit.vision.digitalink.*
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.data.note.TouchPoint
 import com.onyx.android.sdk.pen.RawInputCallback
@@ -27,6 +31,9 @@ import com.toolsboox.da.StrokePoint
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.plugin.calendar.CalendarNavigator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.time.Instant
 import java.util.*
@@ -112,6 +119,9 @@ abstract class SurfaceFragment : ScreenFragment() {
      * The last point of the stroke.
      */
     private var lastPoint: StrokePoint? = null
+
+    // First point timestamp.
+    private var firstPointTimestamp = 0L
 
     /**
      * The list of stylus points.
@@ -579,12 +589,13 @@ abstract class SurfaceFragment : ScreenFragment() {
             val x = (10.0f * motionEvent.x).roundToInt() / 10.0f
             val y = (10.0f * motionEvent.y).roundToInt() / 10.0f
             val p = (10.0f * motionEvent.pressure).roundToInt() / 10.0f
+            val t = Instant.now().toEpochMilli()
             if (actionDown) {
-                onBeginDrawing(StrokePoint(x, y, p))
+                onBeginDrawing(StrokePoint(x, y, p, t))
             } else if (actionMove) {
-                onMoveDrawing(StrokePoint(x, y, p))
+                onMoveDrawing(StrokePoint(x, y, p, t))
             } else if (actionUp) {
-                onEndDrawing(StrokePoint(x, y, p), erasing)
+                onEndDrawing(StrokePoint(x, y, p, t), erasing)
             } else {
                 if (!actions.contains("${motionEvent.action}")) actions.add("${motionEvent.action}")
                 if (!buttons.contains("${motionEvent.buttonState}")) buttons.add("${motionEvent.buttonState}")
@@ -610,11 +621,14 @@ abstract class SurfaceFragment : ScreenFragment() {
     private fun onBeginDrawing(touchPoint: StrokePoint) {
         Timber.i("onBeginDrawing (${touchPoint.x}/${touchPoint.y})")
         lastPoint = touchPoint
+        firstPointTimestamp = Instant.now().toEpochMilli()
+        touchPoint.t = 0L
         stylusPointList.add(touchPoint)
     }
 
     private fun onMoveDrawing(touchPoint: StrokePoint) {
         if (!epsilon(touchPoint, lastPoint!!)) {
+            touchPoint.t = Instant.now().toEpochMilli() - firstPointTimestamp
             Timber.d("onMoveDrawing (${touchPoint.x}/${touchPoint.y} - ${touchPoint.p})")
 
             val sigma = paint.strokeWidth
@@ -641,6 +655,8 @@ abstract class SurfaceFragment : ScreenFragment() {
 
     private fun onEndDrawing(touchPoint: StrokePoint, erasing: Boolean = false) {
         Timber.i("onEndDrawing (${touchPoint.x}/${touchPoint.y})")
+        touchPoint.t = Instant.now().toEpochMilli() - firstPointTimestamp
+        stylusPointList.add(touchPoint)
 
         if (!penState || erasing) {
             val strokesToRemove: MutableSet<UUID> = mutableSetOf()
@@ -659,11 +675,12 @@ abstract class SurfaceFragment : ScreenFragment() {
             applyStrokes(strokes, true)
             onStrokeChanged(strokes)
         } else {
-            val stroke = Stroke(UUID.randomUUID(), stylusPointList.toList())
+            val stroke = Stroke(UUID.randomUUID(), firstPointTimestamp, stylusPointList.toList())
             strokes.add(stroke)
             strokesToAdd.add(stroke)
             applyStrokes(strokes, false)
             onStrokeChanged(strokes)
+            processStrokes(strokes)
 
             onStrokesAdded(strokesToAdd.toList())
             strokesToAdd.clear()
@@ -681,5 +698,44 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         lastPoint = null
         stylusPointList.clear()
+    }
+
+    /**
+     * Process the strokes, recognize the written text with ML Kit Digital Ink Recognition.
+     */
+    private fun processStrokes(strokes: List<Stroke>) {
+        val inkBuilder = Ink.builder()
+        strokes.forEach { stroke ->
+            val strokeBuilder: Ink.Stroke.Builder = Ink.Stroke.builder()
+            stroke.strokePoints.forEach { point ->
+                strokeBuilder.addPoint(Ink.Point.create(point.x, point.y, point.t))
+            }
+            inkBuilder.addStroke(strokeBuilder.build())
+        }
+        val ink = inkBuilder.build()
+
+        val remoteModelManager = RemoteModelManager.getInstance()
+        DigitalInkRecognitionModelIdentifier.fromLanguageTag("en-US")?.let { mi ->
+            val model = DigitalInkRecognitionModel.builder(mi).build()
+            this@SurfaceFragment.lifecycleScope.launch(Dispatchers.IO) {
+                if (remoteModelManager.isModelDownloaded(model).await()) {
+                    val recognizer = DigitalInkRecognition.getClient(DigitalInkRecognizerOptions.builder(model).build())
+                    recognizer.recognize(ink).addOnSuccessListener { result ->
+                        Timber.i("Recognition result: ${result.candidates}")
+                    }.addOnFailureListener { e ->
+                        Timber.e(e, "Recognition failed")
+                    }
+                } else {
+                    Timber.i("Model not downloaded")
+                    remoteModelManager.download(model, DownloadConditions.Builder().build())
+                        .addOnSuccessListener {
+                            Timber.i("Model downloaded")
+                        }
+                        .addOnFailureListener { e: Exception ->
+                            Timber.e(e, "Error while downloading a model")
+                        }
+                }
+            }
+        }
     }
 }

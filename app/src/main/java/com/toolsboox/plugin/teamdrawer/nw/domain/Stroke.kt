@@ -38,7 +38,7 @@ data class Stroke(
          */
         fun convertTo(teamStrokes: List<Stroke>): List<com.toolsboox.da.Stroke> {
             val strokes = mutableListOf<com.toolsboox.da.Stroke>()
-            teamStrokes.forEach { s -> strokes.add(com.toolsboox.da.Stroke(s.strokeId, s.strokePoints)) }
+            teamStrokes.forEach { s -> strokes.add(com.toolsboox.da.Stroke(s.strokeId, 0L, s.strokePoints)) }
 
             return strokes.toList()
         }
