@@ -165,11 +165,7 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
 
-        presenter.parameter(this, "cloudPluginEnabled")
-        presenter.parameter(this, "cloudSubscriptionRequired")
-        presenter.parameter(this, "earlyAdopterDeviceIds")
-        presenter.parameter(this, "googleDriveAutoSyncEnabled")
-        presenter.parameter(this, "googleDrivePluginEnabled")
+        presenter.parameters(this)
         presenter.version(this)
 
         presenter.downloadInkRecognition(this, "en-US")
@@ -295,17 +291,18 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
     /**
      * Render the result of 'parameter' service call.
      *
-     * @param key the key
-     * @param value the value
+     * @param parameters the parameters
      */
-    fun parameterResult(key: String, value: String) {
-        if ("earlyAdopterDeviceIds" == key) {
-            sharedPreferences.getString("androidId", null)?.let { androidId ->
-                sharedPreferences.edit().putBoolean("earlyAdopter", value.contains(androidId)).apply()
+    fun parameterResult(parameters: Map<String, String>) {
+        parameters.forEach { (key, value) ->
+            if ("earlyAdopterDeviceIds" == key) {
+                sharedPreferences.getString("androidId", null)?.let { androidId ->
+                    sharedPreferences.edit().putBoolean("earlyAdopter", value.contains(androidId)).apply()
+                }
             }
+            Timber.i("Store parameter in shared preferences: $key - $value")
+            sharedPreferences.edit().putString(key, value).apply()
         }
-        Timber.i("Store parameter in shared preferences: $key - $value")
-        sharedPreferences.edit().putString(key, value).apply()
     }
 
     /**

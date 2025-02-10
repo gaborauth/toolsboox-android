@@ -15,15 +15,12 @@ interface DashboardService {
 
 
     /**
-     * Get a value of the parameter by key.
+     * Get a values of the parameters.
      *
-     * @param key the key
-     * @return the value of the parameter
+     * @return the value of the parameters
      */
-    @GET(value = "dashboard/parameter/{key}")
-    fun parameterAsync(
-        @Path("key") key: String
-    ): Deferred<Response<String>>
+    @GET(value = "dashboard/parameters")
+    fun parametersAsync(): Deferred<Response<Map<String, String>>>
 
     /**
      * Get the server API version.

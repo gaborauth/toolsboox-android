@@ -31,13 +31,12 @@ class DashboardPresenter @Inject constructor() : FragmentPresenter() {
      * Get a value of the parameter by key.
      *
      * @param fragment the fragment
-     * @param key the key
-     * @return the value of the parameter
+     * @return the value of the parameters
      */
-    fun parameter(fragment: DashboardFragment, key: String) {
+    fun parameters(fragment: DashboardFragment) {
         coroutinesCallHelper(
             fragment,
-            { dashboardService.parameterAsync(key) },
+            { dashboardService.parametersAsync() },
             { response ->
                 when (response.code()) {
                     200 -> {
@@ -45,7 +44,7 @@ class DashboardPresenter @Inject constructor() : FragmentPresenter() {
                         if (body == null) {
                             fragment.somethingHappened(true)
                         } else {
-                            fragment.parameterResult(key, body)
+                            fragment.parameterResult(body)
                         }
                     }
 
