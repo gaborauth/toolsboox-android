@@ -172,6 +172,8 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
         presenter.parameter(this, "googleDrivePluginEnabled")
         presenter.version(this)
 
+        presenter.downloadInkRecognition(this, "en-US")
+
         val inputManager = requireContext().getSystemService(Context.INPUT_SERVICE) as InputManager?
         val inputs = inputManager!!.inputDeviceIds
         for (i in inputs.indices) {

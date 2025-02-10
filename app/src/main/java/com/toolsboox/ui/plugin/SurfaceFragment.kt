@@ -14,7 +14,6 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.vision.digitalink.*
 import com.onyx.android.sdk.api.device.epd.EpdController
@@ -723,17 +722,10 @@ abstract class SurfaceFragment : ScreenFragment() {
                     recognizer.recognize(ink).addOnSuccessListener { result ->
                         Timber.i("Recognition result: ${result.candidates}")
                     }.addOnFailureListener { e ->
-                        Timber.e(e, "Recognition failed")
+                        Timber.e("Recognition failed: $e")
                     }
                 } else {
-                    Timber.i("Model not downloaded")
-                    remoteModelManager.download(model, DownloadConditions.Builder().build())
-                        .addOnSuccessListener {
-                            Timber.i("Model downloaded")
-                        }
-                        .addOnFailureListener { e: Exception ->
-                            Timber.e(e, "Error while downloading a model")
-                        }
+                    Timber.w("Model not downloaded yet")
                 }
             }
         }

@@ -1,8 +1,17 @@
 package com.toolsboox.plugin.dashboard.ui
 
+import androidx.lifecycle.lifecycleScope
+import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.common.model.RemoteModelManager
+import com.google.mlkit.vision.digitalink.DigitalInkRecognitionModel
+import com.google.mlkit.vision.digitalink.DigitalInkRecognitionModelIdentifier
 import com.toolsboox.BuildConfig
 import com.toolsboox.plugin.dashboard.nw.DashboardService
 import com.toolsboox.ui.plugin.FragmentPresenter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -73,5 +82,31 @@ class DashboardPresenter @Inject constructor() : FragmentPresenter() {
             },
             true
         )
+    }
+
+    /**
+     * Download the ink recognition model.
+     *
+     * @param fragment the fragment
+     * @param languageTag the language tag
+     */
+    fun downloadInkRecognition(fragment: DashboardFragment, languageTag: String) {
+        val remoteModelManager = RemoteModelManager.getInstance()
+        DigitalInkRecognitionModelIdentifier.fromLanguageTag(languageTag)?.let { mi ->
+            fragment.lifecycleScope.launch(Dispatchers.IO) {
+                val model = DigitalInkRecognitionModel.builder(mi).build()
+                if (!remoteModelManager.isModelDownloaded(model).await()) {
+                    remoteModelManager.download(model, DownloadConditions.Builder().build())
+                        .addOnSuccessListener {
+                            Timber.i("Model downloaded")
+                        }
+                        .addOnFailureListener { e: Exception ->
+                            Timber.e(e, "Error while downloading a model")
+                        }
+                } else {
+                    Timber.i("Model already downloaded")
+                }
+            }
+        }
     }
 }
