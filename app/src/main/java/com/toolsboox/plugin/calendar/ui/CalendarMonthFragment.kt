@@ -186,8 +186,11 @@ class CalendarMonthFragment @Inject constructor() : SurfaceFragment() {
             CalendarMonthNavigator.onTouchEvent(view, motionEvent, this@CalendarMonthFragment, calendarMonth)
         }
 
+        binding.surfaceView.setOnHoverListener { _, motionEvent ->
+            return@setOnHoverListener callback(motionEvent, true)
+        }
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
-            if (callback(motionEvent)) return@setOnTouchListener true
+            if (callback(motionEvent, false)) return@setOnTouchListener true
 
             val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
 
