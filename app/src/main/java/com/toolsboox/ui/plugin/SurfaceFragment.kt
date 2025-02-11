@@ -4,6 +4,9 @@ import android.Manifest
 import android.content.SharedPreferences
 import android.graphics.*
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.view.MotionEvent
 import android.view.SurfaceHolder
@@ -537,6 +540,7 @@ abstract class SurfaceFragment : ScreenFragment() {
         }
 
         override fun onPenUpRefresh(refreshRect: RectF) {
+            convertStrokes()
         }
 
         override fun onBeginRawDrawing(b: Boolean, touchPoint: TouchPoint) {
@@ -567,19 +571,36 @@ abstract class SurfaceFragment : ScreenFragment() {
     /**
      * The input callback of stylus events.
      */
-    fun callback(motionEvent: MotionEvent): Boolean {
-        // TODO: check on other devices (stylus extra button)
-        val ACTION_ERASE_DOWN = 211
-        val ACTION_ERASE_UP = 212
-        val ACTION_ERASE_MOVE = 213
+    fun callback(motionEvent: MotionEvent, hover: Boolean): Boolean {
+        if (hover) {
+            val actionHoverEnter = motionEvent.action == MotionEvent.ACTION_HOVER_ENTER
+            val actionHoverMove = motionEvent.action == MotionEvent.ACTION_HOVER_MOVE
+            val actionHoverExit = motionEvent.action == MotionEvent.ACTION_HOVER_EXIT
+
+            if (actionHoverEnter) {
+                return true
+            } else if (actionHoverMove) {
+                return true
+            } else if (actionHoverExit) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (lastPoint == null) {
+                        convertStrokes()
+                    }
+                }, 50)
+                return true
+            }
+
+            return false
+        }
 
         val toolTypeStylus = motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS
         val toolTypeEraser = motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_ERASER
         val toolTypeFinger = motionEvent.getToolType(0) == MotionEvent.TOOL_TYPE_FINGER
 
-        val actionDown = listOf(MotionEvent.ACTION_DOWN, ACTION_ERASE_DOWN).contains(motionEvent.action)
-        val actionMove = listOf(MotionEvent.ACTION_MOVE, ACTION_ERASE_MOVE).contains(motionEvent.action)
-        val actionUp = listOf(MotionEvent.ACTION_UP, ACTION_ERASE_UP).contains(motionEvent.action)
+        // TODO: check on other devices (stylus extra button)
+        val actionDown = listOf(MotionEvent.ACTION_DOWN, 211).contains(motionEvent.action)
+        val actionMove = listOf(MotionEvent.ACTION_MOVE, 213).contains(motionEvent.action)
+        val actionUp = listOf(MotionEvent.ACTION_UP, 212).contains(motionEvent.action)
 
         val drawing = ((toolTypeStylus || toolTypeEraser) && !touchDrawingState) || (toolTypeFinger && touchDrawingState)
         val erasing = motionEvent.buttonState != 0 || toolTypeEraser
@@ -589,12 +610,24 @@ abstract class SurfaceFragment : ScreenFragment() {
             val y = (10.0f * motionEvent.y).roundToInt() / 10.0f
             val p = (10.0f * motionEvent.pressure).roundToInt() / 10.0f
             val t = Instant.now().toEpochMilli()
+            val strokePoint = StrokePoint(x, y, p, t)
+
             if (actionDown) {
-                onBeginDrawing(StrokePoint(x, y, p, t))
+                onBeginDrawing(strokePoint)
             } else if (actionMove) {
-                onMoveDrawing(StrokePoint(x, y, p, t))
+                val touchPoints = mutableListOf<StrokePoint>()
+                for (i in 0 until motionEvent.historySize) {
+                    val hx = (10.0f * motionEvent.getHistoricalX(i)).roundToInt() / 10.0f
+                    val hy = (10.0f * motionEvent.getHistoricalY(i)).roundToInt() / 10.0f
+                    val hp = (10.0f * motionEvent.getHistoricalPressure(i)).roundToInt() / 10.0f
+                    val ht = Instant.now().toEpochMilli() + motionEvent.getHistoricalEventTime(i) - SystemClock.uptimeMillis()
+                    touchPoints.add(StrokePoint(hx, hy, hp, ht))
+                }
+
+                touchPoints.add(strokePoint)
+                onMoveDrawing(touchPoints)
             } else if (actionUp) {
-                onEndDrawing(StrokePoint(x, y, p, t), erasing)
+                onEndDrawing(strokePoint, erasing, toolTypeFinger)
             } else {
                 if (!actions.contains("${motionEvent.action}")) actions.add("${motionEvent.action}")
                 if (!buttons.contains("${motionEvent.buttonState}")) buttons.add("${motionEvent.buttonState}")
@@ -625,34 +658,34 @@ abstract class SurfaceFragment : ScreenFragment() {
         stylusPointList.add(touchPoint)
     }
 
-    private fun onMoveDrawing(touchPoint: StrokePoint) {
-        if (!epsilon(touchPoint, lastPoint!!)) {
-            touchPoint.t = Instant.now().toEpochMilli() - firstPointTimestamp
-            Timber.d("onMoveDrawing (${touchPoint.x}/${touchPoint.y} - ${touchPoint.p})")
+    private fun onMoveDrawing(touchPoints: List<StrokePoint>) {
+        val sigma = paint.strokeWidth
+        val rectLeft = (Math.min(lastPoint!!.x, touchPoints.map { it.x }.min()) - sigma).toInt()
+        val rectRight = (Math.max(lastPoint!!.x, touchPoints.map { it.x }.max()) + sigma).toInt()
+        val rectTop = (Math.min(lastPoint!!.y, touchPoints.map { it.y }.min()) - sigma).toInt()
+        val rectBottom = (Math.max(lastPoint!!.y, touchPoints.map { it.y }.max()) + sigma).toInt()
+        val rect = Rect(rectLeft, rectTop, rectRight, rectBottom)
+        val lockCanvas = provideSurfaceView().holder.lockCanvas(rect)
 
-            val sigma = paint.strokeWidth
-            val rectLeft = (Math.min(lastPoint!!.x, touchPoint.x) - sigma).toInt()
-            val rectRight = (Math.max(lastPoint!!.x, touchPoint.x) + sigma).toInt()
-            val rectTop = (Math.min(lastPoint!!.y, touchPoint.y) - sigma).toInt()
-            val rectBottom = (Math.max(lastPoint!!.y, touchPoint.y) + sigma).toInt()
-            val rect = Rect(rectLeft, rectTop, rectRight, rectBottom)
-
-            val lockCanvas = provideSurfaceView().holder.lockCanvas(rect)
-            val path = Path()
-            path.moveTo(stylusPointList[0].x, stylusPointList[0].y)
-            stylusPointList.forEach {
-                path.lineTo(it.x, it.y)
-            }
-            path.lineTo(touchPoint.x, touchPoint.y)
-            lockCanvas?.drawPath(path, paint)
-            provideSurfaceView().holder.unlockCanvasAndPost(lockCanvas)
-
-            lastPoint = touchPoint
-            stylusPointList.add(touchPoint)
+        val path = Path()
+        path.moveTo(stylusPointList[0].x, stylusPointList[0].y)
+        stylusPointList.forEach{
+            path.lineTo(it.x, it.y)
         }
+        touchPoints.forEach { touchPoint ->
+            path.lineTo(touchPoint.x, touchPoint.y)
+            if (!epsilon(touchPoint, lastPoint!!)) {
+                touchPoint.t = Instant.now().toEpochMilli() - firstPointTimestamp
+                lastPoint = touchPoint
+                stylusPointList.add(touchPoint)
+            }
+        }
+        lockCanvas?.drawPath(path, paint)
+
+        provideSurfaceView().holder.unlockCanvasAndPost(lockCanvas)
     }
 
-    private fun onEndDrawing(touchPoint: StrokePoint, erasing: Boolean = false) {
+    private fun onEndDrawing(touchPoint: StrokePoint, erasing: Boolean, finger: Boolean) {
         Timber.i("onEndDrawing (${touchPoint.x}/${touchPoint.y})")
         touchPoint.t = Instant.now().toEpochMilli() - firstPointTimestamp
         stylusPointList.add(touchPoint)
@@ -677,12 +710,8 @@ abstract class SurfaceFragment : ScreenFragment() {
             val stroke = Stroke(UUID.randomUUID(), firstPointTimestamp, stylusPointList.toList())
             strokes.add(stroke)
             strokesToAdd.add(stroke)
-            applyStrokes(strokes, false)
-            onStrokeChanged(strokes)
-            processStrokes(strokes)
 
-            onStrokesAdded(strokesToAdd.toList())
-            strokesToAdd.clear()
+            if (finger) convertStrokes()
         }
 
         if (actions.isNotEmpty() || buttons.isNotEmpty()) {
@@ -697,6 +726,20 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         lastPoint = null
         stylusPointList.clear()
+    }
+
+    /**
+     * Convert and add the strokes to the internal format and execute the events, like recognition.
+     */
+    private fun convertStrokes() {
+        if (strokesToAdd.isEmpty()) return
+
+        applyStrokes(strokes, false)
+        onStrokeChanged(strokes)
+        onStrokesAdded(strokesToAdd.toList())
+
+        processStrokes(strokesToAdd)
+        strokesToAdd.clear()
     }
 
     /**
