@@ -254,10 +254,8 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
      * @param driveService the Google Drive service
      */
     fun backgroundSync(fragment: ScreenFragment, userId: UUID) {
-        // Prevent sync if the auto-sync is disabled.
-        val googleDriveAutoSyncEnabled = sharedPreferences.getString("googleDriveAutoSyncEnabled", "false").toBoolean()
-        val earlyAdopter = sharedPreferences.getBoolean("earlyAdopter", false)
-        if (!earlyAdopter && !googleDriveAutoSyncEnabled) return
+        // Prevent sync if the auto-sync is manually disabled.
+        if (!sharedPreferences.getString("googleDriveAutoSyncOptIn", "false").toBoolean()) return
 
         // Prevent multiple syncs in a short time.
         val lastCalendarGoogleDriveBackgroundSync = Instant.ofEpochMilli(sharedPreferences.getLong("lastCalendarGoogleDriveBackgroundSync", 0L))

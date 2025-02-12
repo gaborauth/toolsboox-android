@@ -142,6 +142,14 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
         binding.buttonCompare.isEnabled = false
         binding.buttonCompare.alpha = 0.5f
 
+        val googleDriveAutoSyncOptIn = sharedPreferences.getString("googleDriveAutoSyncOptIn", "false").toBoolean()
+        binding.googleDriveBackgroundSync.isChecked = googleDriveAutoSyncOptIn
+
+        binding.googleDriveBackgroundSync.setOnClickListener { _ ->
+            val isChecked = binding.googleDriveBackgroundSync.isChecked
+            sharedPreferences.edit().putString("googleDriveAutoSyncOptIn", isChecked.toString()).apply()
+        }
+
         // Check Google Drive connection.
         googleSignInClient.silentSignIn()
             .addOnSuccessListener { result ->
