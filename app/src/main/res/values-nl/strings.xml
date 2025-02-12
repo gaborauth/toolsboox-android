@@ -209,8 +209,6 @@ Strings related to dashboard fragment -->
     <string name="about_other_links_facebook_link">"Facebook:"</string>
     <string name="about_other_links_discord_link">"Discord:"</string>
     <string name="calendar_day_all_day">"De hele dag"</string>
-    <string name="dashboard_api_level_warning_title">"waarschuwing android versie"</string>
-    <string name="dashboard_api_level_warning_message">"Het lijkt erop dat uw toestel gebaseerd is op Android %s, wat het directe gebruik van de externe opslag beperkt, zodat de toepassing geen notitiesjablonen rechtstreeks naar de map notitie sjablonen kan exporteren."</string>
     <string name="calendar_navigator_image">"Kalender navigatie afbeelding"</string>
     <string name="util_fluent_days">"Dagen"</string>
     <string name="util_fluent_hours">"Uren"</string>

@@ -209,8 +209,6 @@ Strings related to dashboard fragment -->
     <string name="about_other_links_facebook_link">"Facebook:"</string>
     <string name="about_other_links_discord_link">"Discord:"</string>
     <string name="calendar_day_all_day">"Ganztags"</string>
-    <string name="dashboard_api_level_warning_title">"Android Version Warnung"</string>
-    <string name="dashboard_api_level_warning_message">"Es sieht aus, als würde das Gerät auf Android %s aufbauen. Das bedeutet, die Möglichkeiten direkt auf den Speicher zu schreiben sind eingeschränkt. Die Anwendung kann keine Templates direkt in den Template-Ordner schreiben."</string>
     <string name="calendar_navigator_image">"Kalender Navigations Bild"</string>
     <string name="util_fluent_days">"Tage"</string>
     <string name="util_fluent_hours">"Stunden"</string>

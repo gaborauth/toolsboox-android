@@ -210,8 +210,6 @@ Strings related to dashboard fragment -->
     <string name="about_other_links_facebook_link">"Facebook:"</string>
     <string name="about_other_links_discord_link">"Discord:"</string>
     <string name="calendar_day_all_day">"Celodenní akce"</string>
-    <string name="dashboard_api_level_warning_title">"Upozornění na verzi Androidu"</string>
-    <string name="dashboard_api_level_warning_message">"Zdá se, že vaše zařízení je založeno na systému Android %s, což omezuje přímé použití externího úložiště, takže aplikace nemůže exportovat šablony poznámek přímo do složky noteTemplate."</string>
     <string name="calendar_navigator_image">"Obrázek navigátoru kalendáře"</string>
     <string name="util_fluent_days">"dní"</string>
     <string name="util_fluent_hours">"hodin"</string>

@@ -209,8 +209,6 @@ Strings related to dashboard fragment -->
     <string name="about_other_links_facebook_link">"Facebook:"</string>
     <string name="about_other_links_discord_link">"Discord:"</string>
     <string name="calendar_day_all_day">"Evento de día completo"</string>
-    <string name="dashboard_api_level_warning_title">"Aviso de versión de Android"</string>
-    <string name="dashboard_api_level_warning_message">"Parece que tu dispositivo usa la versión %s de Android, que impide usar directamente el almacenamiento externo. Por tanto, la aplicación no puede exportar las plantillas directamente al directorio noteTemplate."</string>
     <string name="calendar_navigator_image">"Imagen de navegador de calendario"</string>
     <string name="util_fluent_days">"días"</string>
     <string name="util_fluent_hours">"horas"</string>
