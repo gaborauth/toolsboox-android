@@ -10,6 +10,7 @@ import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.time.LocalDate
@@ -92,8 +93,10 @@ class CalendarYearPresenter @Inject constructor() : FragmentPresenter() {
                 try {
                     val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
 
-                    calendarYearService.save(rootPath, currentDate, calendarYear)
-                    calendarPatternService.save(rootPath, currentDate, calendarPattern)
+                    CalendarPatternService.mutex.withLock {
+                        calendarYearService.save(rootPath, currentDate, calendarYear)
+                        calendarPatternService.save(rootPath, currentDate, calendarPattern)
+                    }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }

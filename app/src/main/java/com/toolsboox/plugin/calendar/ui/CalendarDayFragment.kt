@@ -139,6 +139,16 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     }
 
     /**
+     * On strokes procrastinated event.
+     *
+     * @param strokes the strokes to procrastinate
+     */
+    override fun onStrokesProcrastinated(strokes: List<Stroke>) {
+        firebaseAnalytics.logEvent("procrastinator", null)
+        presenter.procrastinate(this, binding, surfaceFrom(strokes), currentDate, calendarDay, calendarStyle)
+    }
+
+    /**
      * On side switched event.
      */
     override fun onSideSwitched() {
@@ -313,11 +323,13 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         updateNavigator()
 
         if (notePage != null) {
+            binding.toolbarDrawing.toolbarProcrastinator.visibility = View.GONE
             val noteTemplate = sharedPreferences.getInt("calendarNoteTemplate", 0)
             val noteStrokes = calendarDay.noteStrokes[notePage] ?: listOf()
             CalendarDayPageNotes.drawPage(this.requireContext(), templateCanvas, calendarDay, noteTemplate, notePage!!)
             applyStrokes(surfaceTo(noteStrokes), true)
         } else {
+            binding.toolbarDrawing.toolbarProcrastinator.visibility = View.VISIBLE
             val calendarStrokes = calendarDay.calendarStrokes[calendarStyle] ?: listOf()
             if (calendarStyle == CalendarDay.DEFAULT_STYLE) {
                 CalendarDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay, calendarEvents)

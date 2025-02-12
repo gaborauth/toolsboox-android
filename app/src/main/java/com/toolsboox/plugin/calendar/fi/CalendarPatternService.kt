@@ -2,6 +2,7 @@ package com.toolsboox.plugin.calendar.fi
 
 import com.squareup.moshi.Moshi
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
+import kotlinx.coroutines.sync.Mutex
 import timber.log.Timber
 import java.io.File
 import java.io.FileReader
@@ -19,6 +20,14 @@ import javax.inject.Inject
  * @author <a href="mailto:gabor.auth@toolsboox.com">Gábor AUTH</a>
  */
 class CalendarPatternService @Inject constructor() {
+
+    // Companion object
+    companion object {
+
+        // Mutex of mutual exclusion of the service.
+        val mutex = Mutex()
+    }
+
     /**
      * The Moshi instance.
      */
@@ -85,6 +94,7 @@ class CalendarPatternService @Inject constructor() {
 
         val baseName = "pattern-$year"
 
+        Timber.i("Try to save of ${baseName}-v1.json to $path")
         PrintWriter(FileWriter(File(path, "$baseName-v1.json"))).use {
             val adapter = moshi.adapter(CalendarPattern::class.java)
             it.write(adapter.toJson(calendarPattern))

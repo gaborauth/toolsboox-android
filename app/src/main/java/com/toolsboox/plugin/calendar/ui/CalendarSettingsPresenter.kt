@@ -150,8 +150,8 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
     fun patternSync(fragment: CalendarSettingsFragment, binding: FragmentCalendarSettingsBinding, locale: Locale) {
         if (!checkPermissions(fragment, binding.root)) return
 
-        // Sync only the 2022.
-        val year = 2022
+        // Sync only the years of the current year and the previous and the next year.
+        val years = listOf(LocalDate.now().year - 1, LocalDate.now().year, LocalDate.now().year + 1)
 
         GlobalScope.launch(Dispatchers.IO) {
             try {
@@ -159,51 +159,53 @@ class CalendarSettingsPresenter @Inject constructor() : FragmentPresenter() {
 
                 try {
                     val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
-                    val path = File(rootPath, "calendar/$year/")
-                    if (!path.exists()) return@launch
+                    years.forEach { year ->
+                        val path = File(rootPath, "calendar/$year/")
+                        if (!path.exists()) return@launch
 
-                    val calendarPattern = calendarPatternService.load(rootPath, LocalDate.of(year, 1, 1), locale)
+                        val calendarPattern = calendarPatternService.load(rootPath, LocalDate.of(year, 1, 1), locale)
 
-                    Files.walk(Paths.get(path.toURI())).use { stream ->
-                        stream.map(Path::toFile).filter(File::isFile).filter { it.name.endsWith(".json") }.forEach { item ->
-                            if (item.name.startsWith("pattern-")) return@forEach
+                        Files.walk(Paths.get(path.toURI())).use { stream ->
+                            stream.map(Path::toFile).filter(File::isFile).filter { it.name.endsWith(".json") }.forEach { item ->
+                                if (item.name.startsWith("pattern-")) return@forEach
 
-                            calendarYearService.load(item)?.let { calendarYear ->
-                                if (calendarYear.year == year) {
-                                    calendarPattern.updateYear(calendarYear)
+                                calendarYearService.load(item)?.let { calendarYear ->
+                                    if (calendarYear.year == year) {
+                                        calendarPattern.updateYear(calendarYear)
+                                    }
                                 }
-                            }
 
-                            calendarQuarterService.load(item)?.let { calendarQuarter ->
-                                if (calendarQuarter.year == year) {
-                                    calendarPattern.updateQuarter(calendarQuarter)
+                                calendarQuarterService.load(item)?.let { calendarQuarter ->
+                                    if (calendarQuarter.year == year) {
+                                        calendarPattern.updateQuarter(calendarQuarter)
+                                    }
                                 }
-                            }
 
 
-                            calendarMonthService.load(item)?.let { calendarMonth ->
-                                if (calendarMonth.year == year) {
-                                    calendarPattern.updateMonth(calendarMonth)
+                                calendarMonthService.load(item)?.let { calendarMonth ->
+                                    if (calendarMonth.year == year) {
+                                        calendarPattern.updateMonth(calendarMonth)
+                                    }
                                 }
-                            }
 
 
-                            calendarWeekService.load(item)?.let { calendarWeek ->
-                                if (calendarWeek.year == year) {
-                                    calendarPattern.updateWeek(calendarWeek)
+                                calendarWeekService.load(item)?.let { calendarWeek ->
+                                    if (calendarWeek.year == year) {
+                                        calendarPattern.updateWeek(calendarWeek)
+                                    }
                                 }
-                            }
 
 
-                            calendarDayService.load(item)?.let { calendarDay ->
-                                if (calendarDay.year == year) {
-                                    calendarPattern.updateDay(calendarDay)
+                                calendarDayService.load(item)?.let { calendarDay ->
+                                    if (calendarDay.year == year) {
+                                        calendarPattern.updateDay(calendarDay)
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    calendarPatternService.save(rootPath, LocalDate.of(year, 1, 1), calendarPattern)
+                        calendarPatternService.save(rootPath, LocalDate.of(year, 1, 1), calendarPattern)
+                    }
 
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
