@@ -56,6 +56,17 @@
             app:layout_constraintHorizontal_weight="3"
 
             app:layout_constraintTop_toBottomOf="@id/hr"
+            app:layout_constraintBottom_toTopOf="@id/google_drive_background_sync"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_compare"/>
+
+    <CheckBox
+            android:id="@+id/google_drive_background_sync"
+            android:text="@string/calendar_google_drive_background_sync"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/google_drive_status_message"
             app:layout_constraintBottom_toTopOf="@id/hr2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/button_compare"/>
@@ -81,7 +92,7 @@
             android:layout_marginTop="4dp"
             android:background="#808080"
 
-            app:layout_constraintTop_toBottomOf="@id/google_drive_status_message"
+            app:layout_constraintTop_toBottomOf="@id/google_drive_background_sync"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
