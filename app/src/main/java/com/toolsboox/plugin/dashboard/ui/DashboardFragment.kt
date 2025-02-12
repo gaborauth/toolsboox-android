@@ -211,7 +211,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
 
         askAppPermissions()
         deviceCheck()
-        apiLevelCheck()
 
         updateAdButton()
         askForRate()
@@ -242,34 +241,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
                 Timber.e("Error while updating consent information: $requestConsentError")
             },
         )
-    }
-
-    /**
-     * Render the result of API level check dialog.
-     */
-    private fun apiLevelCheck() {
-        val notifiedAboutApiLevelWarning = sharedPreferences.getBoolean("notifiedAboutApiLevelWarning", false)
-        if (notifiedAboutApiLevelWarning) return
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            sharedPreferences.edit().putBoolean("notifiedAboutApiLevelWarning", true).apply()
-
-            val androidVersion = when (Build.VERSION.SDK_INT) {
-                Build.VERSION_CODES.R -> "11"
-                Build.VERSION_CODES.S -> "12"
-                else -> "13+"
-            }
-
-            val message = getString(R.string.dashboard_api_level_warning_message).format(androidVersion)
-
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
-            builder.setTitle(R.string.dashboard_api_level_warning_title)
-                .setMessage(message)
-                .setPositiveButton(R.string.ok) { dialog, _ ->
-                    dialog.cancel()
-                }
-            builder.create().show()
-        }
     }
 
     /**

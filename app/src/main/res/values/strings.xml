@@ -280,8 +280,6 @@
     <string name="dashboard_new_version_message">There is a new version of \'Tools for Boox\' available, please upgrade it unless some functions may not work.</string>
     <string name="dashboard_device_mismatch_title">Device mismatch</string>
     <string name="dashboard_device_mismatch_message">The \'Tools for Boox\' application is developed to Onyx Boox devices, your device does not look like an Onxy Boox (%1$s - %2$s), there may be bugs and crashes.</string>
-    <string name="dashboard_api_level_warning_title">Android version warning</string>
-    <string name="dashboard_api_level_warning_message">It looks like your device based on Android %s, which is restricts the direct usage of the external storage, so that the application cannot export note templates directly to the noteTemplate folder.</string>
     <string name="dashboard_item_calendar_title">Calendar</string>
     <string name="dashboard_item_templates_title">Templates</string>
     <string name="dashboard_item_teamdrawer_title">TeamDrawer</string>
