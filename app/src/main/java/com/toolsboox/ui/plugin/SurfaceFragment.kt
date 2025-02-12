@@ -150,6 +150,9 @@ abstract class SurfaceFragment : ScreenFragment() {
      */
     private var penState: Boolean = true
 
+    // In case of eraser, is it procrastinator?
+    private var procrastinator: Boolean = false
+
     /**
      * The canvas of the navigator.
      */
@@ -211,6 +214,13 @@ abstract class SurfaceFragment : ScreenFragment() {
     open fun onStrokeChanged(strokes: MutableList<Stroke>) {}
 
     /**
+     * Strokes procrastinated callback.
+     *
+     * @param strokes the strokes to procrastinate
+     */
+    open fun onStrokesProcrastinated(strokes: List<Stroke>) {}
+
+    /**
      * OnResume hook.
      */
     override fun onResume() {
@@ -223,6 +233,7 @@ abstract class SurfaceFragment : ScreenFragment() {
         penState = true
         provideToolbarDrawing().toolbarPen.background.setTint(Color.GRAY)
         provideToolbarDrawing().toolbarEraser.background.setTint(Color.WHITE)
+        provideToolbarDrawing().toolbarProcrastinator.background.setTint(Color.WHITE)
 
         if (touchDrawingState)
             provideToolbarDrawing().toolbarHandTouch.setImageResource(R.drawable.ic_toolbar_hand_draw)
@@ -231,14 +242,27 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         provideToolbarDrawing().toolbarPen.setOnClickListener {
             penState = true
+            procrastinator = false
             provideToolbarDrawing().toolbarPen.background.setTint(Color.GRAY)
             provideToolbarDrawing().toolbarEraser.background.setTint(Color.WHITE)
+            provideToolbarDrawing().toolbarProcrastinator.background.setTint(Color.WHITE)
         }
 
         provideToolbarDrawing().toolbarEraser.setOnClickListener {
             penState = false
-            provideToolbarDrawing().toolbarEraser.background.setTint(Color.GRAY)
+            procrastinator = false
             provideToolbarDrawing().toolbarPen.background.setTint(Color.WHITE)
+            provideToolbarDrawing().toolbarEraser.background.setTint(Color.GRAY)
+            provideToolbarDrawing().toolbarProcrastinator.background.setTint(Color.WHITE)
+        }
+
+        provideToolbarDrawing().toolbarProcrastinator.visibility = View.GONE
+        provideToolbarDrawing().toolbarProcrastinator.setOnClickListener {
+            penState = false
+            procrastinator = true
+            provideToolbarDrawing().toolbarPen.background.setTint(Color.WHITE)
+            provideToolbarDrawing().toolbarEraser.background.setTint(Color.WHITE)
+            provideToolbarDrawing().toolbarProcrastinator.background.setTint(Color.GRAY)
         }
 
         provideToolbarDrawing().toolbarHandTouch.setOnClickListener {
@@ -669,7 +693,7 @@ abstract class SurfaceFragment : ScreenFragment() {
 
         val path = Path()
         path.moveTo(stylusPointList[0].x, stylusPointList[0].y)
-        stylusPointList.forEach{
+        stylusPointList.forEach {
             path.lineTo(it.x, it.y)
         }
         touchPoints.forEach { touchPoint ->
@@ -700,6 +724,9 @@ abstract class SurfaceFragment : ScreenFragment() {
                         }
                     }
                 }
+            }
+            if (procrastinator) {
+                onStrokesProcrastinated(strokes.filter { it.strokeId in strokesToRemove }.toList())
             }
             strokesToRemove.forEach { strokes.removeIf { stroke -> stroke.strokeId == it } }
             onStrokesDeleted(strokesToRemove.toList())

@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.net.Uri
 import android.os.Environment
 import com.toolsboox.R
+import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
 import com.toolsboox.plugin.calendar.da.v1.ReadingProgress
@@ -16,6 +17,7 @@ import com.toolsboox.ui.plugin.FragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.IOException
@@ -134,8 +136,54 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                     val emptyStrokes = calendarDay.calendarStrokes[CalendarDay.DEFAULT_STYLE]?.isEmpty() ?: true
                     calendarDay.hasLanes = calendarDay.hasLanes or emptyStrokes
 
-                    calendarDayService.save(rootPath, currentDate, calendarDay)
-                    calendarPatternService.save(rootPath, currentDate, calendarPattern)
+                    CalendarPatternService.mutex.withLock {
+                        calendarDayService.save(rootPath, currentDate, calendarDay)
+                        calendarPatternService.save(rootPath, currentDate, calendarPattern)
+                    }
+                } catch (e: IOException) {
+                    withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
+                }
+            } finally {
+                withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.hideLoading() } }
+            }
+        }
+    }
+
+    /**
+     * Procrastinate the strokes to the next day.
+     *
+     * @param fragment the fragment
+     * @param binding the data binding
+     * @param strokes the strokes
+     * @param currentDate the current date
+     * @param fromCalendarDay the calendar day of the strokes
+     * @param fromCalendarStyle the calendar style of the strokes
+     */
+    fun procrastinate(
+        fragment: CalendarDayFragment, binding: FragmentCalendarBinding, strokes: List<Stroke>,
+        currentDate: LocalDate, fromCalendarDay: CalendarDay, fromCalendarStyle: String
+    ) {
+        if (!checkPermissions(fragment, binding.root)) return
+
+        val nextDate = currentDate.plusDays(1)
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                withContext(Dispatchers.Main) { fragment.runOnActivity { fragment.showLoading() } }
+
+                try {
+                    CalendarPatternService.mutex.withLock {
+                        val rootPath = rootPath(fragment, Environment.DIRECTORY_DOCUMENTS)
+                        val calendarDay = calendarDayService.load(rootPath, nextDate, fromCalendarDay.startHour, fromCalendarDay.locale)
+                        val calendarPattern = calendarPatternService.load(rootPath, nextDate, fromCalendarDay.locale)
+
+                        val existsStrokes = calendarDay.calendarStrokes[fromCalendarStyle]?.toMutableList() ?: mutableListOf()
+                        existsStrokes.addAll(strokes)
+                        calendarDay.calendarStrokes[fromCalendarStyle] = existsStrokes.toList()
+
+                        calendarPattern.updateDay(calendarDay)
+                        calendarDayService.save(rootPath, nextDate, calendarDay)
+                        calendarPatternService.save(rootPath, nextDate, calendarPattern)
+                    }
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }
@@ -148,6 +196,8 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
     /**
      * Provides the authors, title, progress and lastAccess fields of reading progress of current day.
      *
+     * @param fragment the fragment
+     * @param currentDate the current date
      * @return the list of reading progress
      */
     private fun readingProgress(fragment: CalendarDayFragment, currentDate: LocalDate): List<ReadingProgress> {
@@ -166,7 +216,6 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                 val progress = it.getString(2)
                 val lastAccess = it.getLong(3)
 
-                Timber.i("$lastAccess $authors $title $progress $startEpoch $endEpoch")
                 if (title == null) continue
                 if (lastAccess < startEpoch) continue
                 if (lastAccess >= endEpoch) continue
