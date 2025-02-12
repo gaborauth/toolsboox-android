@@ -144,6 +144,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the strokes to procrastinate
      */
     override fun onStrokesProcrastinated(strokes: List<Stroke>) {
+        firebaseAnalytics.logEvent("procrastinator", null)
         presenter.procrastinate(this, binding, surfaceFrom(strokes), currentDate, calendarDay, calendarStyle)
     }
 
