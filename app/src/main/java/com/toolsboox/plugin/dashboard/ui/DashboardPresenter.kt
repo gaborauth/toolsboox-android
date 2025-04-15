@@ -90,22 +90,26 @@ class DashboardPresenter @Inject constructor() : FragmentPresenter() {
      * @param languageTag the language tag
      */
     fun downloadInkRecognition(fragment: DashboardFragment, languageTag: String) {
-        val remoteModelManager = RemoteModelManager.getInstance()
-        DigitalInkRecognitionModelIdentifier.fromLanguageTag(languageTag)?.let { mi ->
-            fragment.lifecycleScope.launch(Dispatchers.IO) {
-                val model = DigitalInkRecognitionModel.builder(mi).build()
-                if (!remoteModelManager.isModelDownloaded(model).await()) {
-                    remoteModelManager.download(model, DownloadConditions.Builder().build())
-                        .addOnSuccessListener {
-                            Timber.i("Model downloaded")
-                        }
-                        .addOnFailureListener { e: Exception ->
-                            Timber.e(e, "Error while downloading a model")
-                        }
-                } else {
-                    Timber.i("Model already downloaded")
+        try {
+            val remoteModelManager = RemoteModelManager.getInstance()
+            DigitalInkRecognitionModelIdentifier.fromLanguageTag(languageTag)?.let { mi ->
+                fragment.lifecycleScope.launch(Dispatchers.IO) {
+                    val model = DigitalInkRecognitionModel.builder(mi).build()
+                    if (!remoteModelManager.isModelDownloaded(model).await()) {
+                        remoteModelManager.download(model, DownloadConditions.Builder().build())
+                            .addOnSuccessListener {
+                                Timber.i("Model downloaded")
+                            }
+                            .addOnFailureListener { e: Exception ->
+                                Timber.e(e, "Error while downloading a model")
+                            }
+                    } else {
+                        Timber.i("Model already downloaded")
+                    }
                 }
             }
+        } catch (e: Exception) {
+            Timber.e(e, "Error while downloading a model")
         }
     }
 }
