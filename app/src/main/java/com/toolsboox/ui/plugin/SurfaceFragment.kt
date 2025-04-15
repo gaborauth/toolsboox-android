@@ -103,12 +103,12 @@ abstract class SurfaceFragment : ScreenFragment() {
     protected lateinit var gestureListener: OnGestureListener
 
     /**
-     * The bitmap of the canvas.
+     * The bitmap of the canvas (for export).
      */
     private var bitmap: Bitmap? = null
 
     /**
-     * The canvas of the surface view.
+     * The canvas of the surface view (for export).
      */
     private lateinit var canvas: Canvas
 
@@ -472,15 +472,6 @@ abstract class SurfaceFragment : ScreenFragment() {
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         }
 
-        // TODO: Without this the template image flickers... refresh race condition somewhere?!
-        val trickPath = Path()
-        trickPath.moveTo(0.0f, 0.0f)
-        for (i in 1..1404) {
-            trickPath.quadTo((i - 1) * 1.0f, 0.0f, i * 1.0f, 0.0f)
-        }
-        lockCanvas.drawPath(trickPath, paint)
-        canvas.drawPath(trickPath, paint)
-
         for (stroke in strokes) {
             val points = stroke.strokePoints
             if (points.isNotEmpty()) {
@@ -564,7 +555,6 @@ abstract class SurfaceFragment : ScreenFragment() {
         }
 
         override fun onPenUpRefresh(refreshRect: RectF) {
-            convertStrokes()
         }
 
         override fun onBeginRawDrawing(b: Boolean, touchPoint: TouchPoint) {
@@ -683,14 +673,6 @@ abstract class SurfaceFragment : ScreenFragment() {
     }
 
     private fun onMoveDrawing(touchPoints: List<StrokePoint>) {
-        val sigma = paint.strokeWidth
-        val rectLeft = (Math.min(lastPoint!!.x, touchPoints.map { it.x }.min()) - sigma).toInt()
-        val rectRight = (Math.max(lastPoint!!.x, touchPoints.map { it.x }.max()) + sigma).toInt()
-        val rectTop = (Math.min(lastPoint!!.y, touchPoints.map { it.y }.min()) - sigma).toInt()
-        val rectBottom = (Math.max(lastPoint!!.y, touchPoints.map { it.y }.max()) + sigma).toInt()
-        val rect = Rect(rectLeft, rectTop, rectRight, rectBottom)
-        val lockCanvas = provideSurfaceView().holder.lockCanvas(rect)
-
         val path = Path()
         path.moveTo(stylusPointList[0].x, stylusPointList[0].y)
         stylusPointList.forEach {
@@ -704,9 +686,19 @@ abstract class SurfaceFragment : ScreenFragment() {
                 stylusPointList.add(touchPoint)
             }
         }
-        lockCanvas?.drawPath(path, paint)
 
-        provideSurfaceView().holder.unlockCanvasAndPost(lockCanvas)
+        if (touchHelper == null) {
+            val sigma = paint.strokeWidth * 4.0f
+            val rectLeft = (Math.min(lastPoint!!.x, touchPoints.map { it.x }.min()) - sigma).toInt()
+            val rectRight = (Math.max(lastPoint!!.x, touchPoints.map { it.x }.max()) + sigma).toInt()
+            val rectTop = (Math.min(lastPoint!!.y, touchPoints.map { it.y }.min()) - sigma).toInt()
+            val rectBottom = (Math.max(lastPoint!!.y, touchPoints.map { it.y }.max()) + sigma).toInt()
+            val rect = Rect(rectLeft, rectTop, rectRight, rectBottom)
+
+            val lockCanvas = provideSurfaceView().holder.lockCanvas(rect)
+            lockCanvas?.drawPath(path, paint)
+            provideSurfaceView().holder.unlockCanvasAndPost(lockCanvas)
+        }
     }
 
     private fun onEndDrawing(touchPoint: StrokePoint, erasing: Boolean, finger: Boolean) {
