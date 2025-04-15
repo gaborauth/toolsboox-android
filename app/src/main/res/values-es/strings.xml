@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="drawer_title">"%s – %s"</string>
+    <string name="drawer_title">"%1$s – %2$s"</string>
     <string name="fab_add_item">"Añadir elemento"</string>
     <string name="something_happened_error">"Ha habido un problema. Comprueba la conexión de red. :("</string>
     <string name="something_happened_action">"Vale"</string>
@@ -20,7 +20,7 @@
     <string name="drawer_menu_logout">"Cerrar sesión"</string>
     <string name="toolbar_previous_image">"Anterior"</string>
     <string name="toolbar_pages_placeholder">"1 / 1"</string>
-    <string name="toolbar_pages_template">"%d / %d"</string>
+    <string name="toolbar_pages_template">"%1$d / %2$d"</string>
     <string name="toolbar_next_image">"Siguiente"</string>
     <string name="toolbar_back_image">"Atrás"</string>
 
@@ -28,7 +28,7 @@
     <string name="square_item_image">"Imagen de elemento cuadrada"</string>
 
     <!-- Strings related to main activity -->
-    <string name="main_version">"%s–%s"</string>
+    <string name="main_version">"%1$s–%2$s"</string>
     <string name="main_update_not_now">"Ahora no"</string>
     <string name="main_update">"Actualizar"</string>
     <string name="main_read_external_storage_permission_missing">"Falta el permiso de lectura para el almacenamiento externo…"</string>
@@ -86,7 +86,7 @@ Strings related to dashboard fragment -->
     <string name="templates_this_weeks_calendar_preview_description">"Imagen de vista previa"</string>
     <string name="templates_this_weeks_calendar_button_export_text">"Exportar"</string>
     <string name="templates_this_weeks_calendar_message">"Exportar esta vista previa como plantilla local"</string>
-    <string name="templates_this_weeks_calendar_preview_title">"%dS%d"</string>
+    <string name="templates_this_weeks_calendar_preview_title">"%1$dS%2$d"</string>
     <string name="templates_this_weeks_calendar_preview_weekly_notes">"Notas semanales"</string>
     <string name="templates_this_weeks_calendar_preview_export_message">"Exportada como %s"</string>
 
@@ -96,7 +96,7 @@ Strings related to dashboard fragment -->
     <string name="util_fluent_hour">"hora"</string>
     <string name="util_fluent_minute">"minuto"</string>
     <string name="util_fluent_second">"segundo"</string>
-    <string name="templates_boxed_week_calendar_creator_title">"%dS%d"</string>
+    <string name="templates_boxed_week_calendar_creator_title">"%1$dS%2$d"</string>
     <string name="templates_boxed_week_calendar_creator_weekly_notes">"Notas semanales"</string>
 
     <!-- Strings related to templates 'flat week's calendar' fragment -->
@@ -105,7 +105,7 @@ Strings related to dashboard fragment -->
     <string name="templates_flat_weeks_calendar_button_export_text">"Exportar"</string>
     <string name="templates_flat_weeks_calendar_message">"Exportar esta vista previa como plantilla local en PDF de varias páginas"</string>
     <string name="templates_flat_weeks_calendar_preview_export_message">"Exportada como %s"</string>
-    <string name="templates_flat_week_calendar_creator_title">"%dS%d"</string>
+    <string name="templates_flat_week_calendar_creator_title">"%1$dS%2$d"</string>
     <string name="templates_flat_weeks_calendar_settings_with_days">"Generar con fechas"</string>
 
     <!-- Strings related to templates 'boxed week's calendar' fragment -->
@@ -186,19 +186,19 @@ Strings related to dashboard fragment -->
     <string name="calendar_year_title">"Agenda anual – %s"</string>
     <string name="calendar_quarter_title">"Agenda trimestral – %s"</string>
     <string name="calendar_month_title">"Agenda mensual – %s"</string>
-    <string name="calendar_week_title">"Agenda semanal - %s semana %s"</string>
+    <string name="calendar_week_title">"Agenda semanal - %1$s semana %2$s"</string>
     <string name="calendar_week_notes">"Notas"</string>
     <string name="calendar_day_title">"Agenda diaria – %s"</string>
     <string name="calendar_day_schedules">"Programación"</string>
     <string name="calendar_day_tasks">"Tareas"</string>
     <string name="calendar_day_notes">"Notas"</string>
     <string name="dashboard_device_mismatch_title">"Dispositivo no compatible"</string>
-    <string name="dashboard_device_mismatch_message">"La aplicación «Tools for Boox» se ha desarrollado solo para dispositivos Onyx Boox. Tu dispositivo no parece un Onyx Boox (%s - %s) y puedes experimentar fallos y bloqueos."</string>
+    <string name="dashboard_device_mismatch_message">"La aplicación «Tools for Boox» se ha desarrollado solo para dispositivos Onyx Boox. Tu dispositivo no parece un Onyx Boox (%1$s - %2$s) y puedes experimentar fallos y bloqueos."</string>
 
     <!-- Strings related to about plugin -->
     <string name="about_title">"Información"</string>
     <string name="about_about_me_title">"Acerca de mí"</string>
-    <string name="about_about_me_message">"Me llamo Gábor AUTH, soy desarrollador de Android y estoy desarrollando esta aplicación para dispositivos Onyx Boox :)"</string>
+    <string name="about_about_me_message">"Me llamo Gábor AUTH, soy desarrollador de Android y desarrollo esta aplicación para dispositivos Onyx Boox :)"</string>
     <string name="about_about_me_link">"Enlace:"</string>
     <string name="about_project_home_title">"Sitio del proyecto"</string>
     <string name="about_project_home_message">"Este proyecto es de código abierto y puedes encontrarlo en mi repositorio de GitHub:"</string>
@@ -311,7 +311,7 @@ esta semana"</string>
     <string name="calendar_health_day_productivity">"Productividad"</string>
     <string name="calendar_health_day_overall">"General"</string>
     <string name="calendar_day_notes_events">"Notas y eventos (%d)"</string>
-    <string name="calendar_day_notes_events_ex">"Notas y eventos (%d!)"</string>
+    <string name="calendar_day_notes_events_ex">"Notas y eventos (%d+)"</string>
     <string name="dashboard_ad_settings_button_hide">"Ocultar publicidad"</string>
     <string name="dashboard_ad_settings_button_show">"Mostrar publicidad"</string>
     <string name="calendar_time_box_day_title">"Planificador de bloques diario - %s"</string>
@@ -343,7 +343,7 @@ esta semana"</string>
     <string name="cloud_account_log_out_dialog_title">"Cerrar sesión"</string>
     <string name="cloud_account_log_out_dialog_message">"¿Seguro?"</string>
     <string name="cloud_subscription_title">"Suscripción a la nube"</string>
-    <string name="cloud_subscription_message">"Haz una copia de seguridad de tus datos con un cifrado potente en la nube (¡muy experimental!). Si quieres probarlo de forma gratuita, puedes pedirme un cupón en Discord."</string>
+    <string name="cloud_subscription_message">"Haz una copia de seguridad de tus datos con un cifrado potente opcional en la nube (por ahora, solo se admite Google Drive). Si quieres probarlo de forma gratuita, puedes pedirme un cupón en Discord:"</string>
     <string name="cloud_subscription_status_message">"Estado de suscripción: %s"</string>
     <string name="cloud_subscription_status_subs">"Suscrito"</string>
     <string name="cloud_subscription_status_no_subs">"No suscrito"</string>
@@ -352,4 +352,42 @@ esta semana"</string>
     <string name="cloud_subscription_yearly_button">"Suscripción anual
 (%s)"</string>
     <string name="dashboard_item_cloud_title">"Nube"</string>
+    <string name="calendar_cloud_title">"Sincronización en nube"</string>
+    <string name="calendar_cloud_passphrase_text">"Tu contraseña:"</string>
+    <string name="calendar_cloud_passphrase_hint">"Contraseña, mínimo de 8 caracteres"</string>
+    <string name="calendar_cloud_to_cloud_text">"Sincronizar hacia nube (toca el elemento):"</string>
+    <string name="calendar_cloud_from_cloud_text">"Sincronizar desde nube (toca el elemento):"</string>
+    <string name="calendar_cloud_nothing_to_sync">"No hay nada que sincronizar…"</string>
+    <string name="calendar_drawing_toolbar_cloud_sync">"Sinc. en nube"</string>
+    <string name="cloud_account_login_username_message">"Tu usuario: %s"</string>
+    <string name="cloud_account_sign_up_view_username_hint">"Nombre de usuario (5-25 caracteres en minúscula)"</string>
+    <string name="cloud_account_sign_up_view_username_conflict_error">"Ese nombre ya está en uso"</string>
+    <string name="cloud_account_log_in_view_username_hint">"Nombre de usuario (5-25 caracteres en minúscula)"</string>
+    <string name="calendar_cloud_passphrase_mismatch">"La contraseña no coincide, no se pueden descifrar los elementos"</string>
+    <string name="calendar_cloud_compare_button">"Comparar"</string>
+    <string name="calendar_cloud_sync_remember_passphrase">"Recordar contraseña (¡no es seguro!)"</string>
+    <string name="calendar_google_drive_title">"Sincronización en Google Drive"</string>
+    <string name="calendar_google_drive_compare_button">"Comparar"</string>
+    <string name="calendar_google_drive_connected">"Google Drive está conectado. Puedes comparar el estado de la copia en la nube con el de este dispositivo y seleccionar las diferencias que quieres sincronizar."</string>
+    <string name="calendar_google_drive_disconnected">"Google Drive está desconectado. Si quieres sincronizar el calendario entre dispositivos, debes conectarte a Google Drive."</string>
+    <string name="calendar_google_drive_nothing_to_sync">"No hay nada que sincronizar…"</string>
+    <string name="calendar_google_drive_sync_file_last_modification">"Última modificación: hace %s"</string>
+    <string name="calendar_google_drive_sync_file_missing">"Última modificación: no existe"</string>
+    <string name="calendar_google_drive_sync_cloud_last_modification">"Última modificación en nube: hace %s"</string>
+    <string name="calendar_google_drive_sync_cloud_missing">"Última modificación en nube: no existe"</string>
+    <string name="calendar_google_drive_sync_button_download">"Descargar"</string>
+    <string name="calendar_google_drive_sync_button_upload">"Cargar"</string>
+    <string name="cloud_google_drive_title">"Google Drive"</string>
+    <string name="cloud_google_drive_message">"Para usar Google Drive como copia de seguridad en la nube, debes conectar tu cuenta."</string>
+    <string name="cloud_google_drive_status_connected">"Estado de tu cuenta: &lt;strong&gt;conectada&lt;/strong&gt;"</string>
+    <string name="cloud_google_drive_status_not_connected">"Estado de tu cuenta: &lt;strong&gt;desconectada&lt;/strong&gt;"</string>
+    <string name="cloud_google_drive_connect_button">"Conectar"</string>
+    <string name="cloud_google_drive_disconnect_button">"Desconectar"</string>
+    <string name="cloud_google_drive_connected_toast">"¡Google Drive conectado!"</string>
+    <string name="cloud_google_drive_disconnected_toast">"¡Google Drive desconectado!"</string>
+    <string name="cloud_google_drive_connection_failed_toast">"Ha fallado la conexión a Google Drive."</string>
+
+    <!-- Please clarify. Is it a call to action ("Please, touch here"), a toggle to activate the touch input, anything else...? -->
+    <string name="calendar_drawing_toolbar_touch">"Tocar"</string>
+    <string name="calendar_google_drive_background_sync">"Activar sincronización de calendario en segundo plano"</string>
 </resources>
