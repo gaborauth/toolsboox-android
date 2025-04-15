@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.9.1'
+        classpath 'com.android.tools.build:gradle:8.7.3'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.3'
         classpath 'com.google.firebase:perf-plugin:1.4.2'
         classpath 'com.google.gms:google-services:4.4.2'
@@ -19,8 +19,8 @@ plugins {
 
 ext {
     applicationName = 'toolboox'
-    parentVersionCode =  1_06_04_00
-    parentVersionName = '1.06.04-00'
+    parentVersionCode =  1_06_05_00
+    parentVersionName = '1.06.05-00'
 }
 
 allprojects {
