@@ -153,7 +153,7 @@ dependencies {
     implementation 'com.google.dagger:hilt-android:2.56.2'
 
     // Onyx SDK
-    implementation 'com.onyx.android.sdk:onyxsdk-base:1.7.8'
+    implementation 'com.onyx.android.sdk:onyxsdk-base:1.8.1'
     implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.32'
     implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.12'
 
