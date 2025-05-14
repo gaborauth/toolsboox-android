@@ -38,10 +38,6 @@ android {
             }
     }
 
-    packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
-        exclude("META-INF/INDEX.LIST")
-    }
 
     buildFeatures {
         viewBinding = true
@@ -119,12 +115,14 @@ android {
                     'lib/x86/libc++_shared.so',
                     'lib/x86_64/libc++_shared.so']
         }
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/INDEX.LIST']
+        }
     }
 
     namespace 'com.toolsboox'
-    lintOptions {
-        disable 'MissingTranslation'
-        disable 'MissingQuantity'
+    lint {
+        disable 'MissingTranslation', 'MissingQuantity'
     }
 }
 
