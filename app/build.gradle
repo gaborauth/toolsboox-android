@@ -133,12 +133,12 @@ dependencies {
     // Google clients and libraries
     implementation 'com.android.billingclient:billing:7.1.1'
     implementation 'com.android.billingclient:billing-ktx:7.1.1'
-    implementation 'com.google.android.gms:play-services-ads:24.2.0'
+    implementation 'com.google.android.gms:play-services-ads:24.3.0'
     implementation 'com.google.android.gms:play-services-auth:21.3.0'
     implementation 'com.google.android.play:review:2.0.2'
     implementation 'com.google.android.play:review-ktx:2.0.2'
     implementation 'com.google.api-client:google-api-client-android:2.7.2'
-    implementation 'com.google.apis:google-api-services-drive:v3-rev20250506-2.0.0'
+    implementation 'com.google.apis:google-api-services-drive:v3-rev20250511-2.0.0'
     implementation 'com.google.mlkit:digital-ink-recognition:18.1.0'
 
     // AndroidX dependencies
@@ -158,13 +158,13 @@ dependencies {
     // OkHttp, Retrofit and GSON
     ksp 'com.squareup.moshi:moshi-kotlin-codegen:1.15.2'
     implementation 'com.squareup.moshi:moshi:1.15.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:3.0.0'
     // Deprecated, use suspend functions
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
     // Firebase integrations
-    implementation platform('com.google.firebase:firebase-bom:33.13.0')
+    implementation platform('com.google.firebase:firebase-bom:33.14.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-perf-ktx'
