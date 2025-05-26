@@ -142,9 +142,10 @@ dependencies {
     implementation 'com.google.mlkit:digital-ink-recognition:18.1.0'
 
     // AndroidX dependencies
-    implementation 'androidx.gridlayout:gridlayout:1.0.0'
+    implementation 'androidx.gridlayout:gridlayout:1.1.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.9.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.9.0'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     // Dagger and Hilt DI and its dependency
     ksp 'com.google.dagger:hilt-android-compiler:2.56.2'
