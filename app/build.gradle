@@ -137,7 +137,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:21.3.0'
     implementation 'com.google.android.play:review:2.0.2'
     implementation 'com.google.android.play:review-ktx:2.0.2'
-    implementation 'com.google.api-client:google-api-client-android:2.7.2'
+    implementation 'com.google.api-client:google-api-client-android:2.8.0'
     implementation 'com.google.apis:google-api-services-drive:v3-rev20250511-2.0.0'
     implementation 'com.google.mlkit:digital-ink-recognition:18.1.0'
 
@@ -151,8 +151,8 @@ dependencies {
     implementation 'com.google.dagger:hilt-android:2.56.2'
 
     // Onyx SDK
-    implementation 'com.onyx.android.sdk:onyxsdk-base:1.7.8'
-    implementation 'com.onyx.android.sdk:onyxsdk-device:1.2.32'
+    implementation 'com.onyx.android.sdk:onyxsdk-base:1.8.1'
+    implementation 'com.onyx.android.sdk:onyxsdk-device:1.3.1'
     implementation 'com.onyx.android.sdk:onyxsdk-pen:1.4.12'
 
     // OkHttp, Retrofit and GSON
@@ -176,7 +176,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
     // Temporary (?) fix for https://github.com/gaborauth/toolsboox-android/issues/305
-    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
