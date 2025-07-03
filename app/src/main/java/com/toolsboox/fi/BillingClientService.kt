@@ -45,7 +45,7 @@ class BillingClientService @Inject constructor() {
             // Create the billing client.
             billingClient = BillingClient.newBuilder(activity)
                 .setListener(purchasesUpdatedListener)
-                .enablePendingPurchases()
+                .enablePendingPurchases(PendingPurchasesParams.newBuilder().build())
                 .build()
 
             // Start the billing client async connection.
@@ -86,7 +86,7 @@ class BillingClientService @Inject constructor() {
             // Query the subscription details.
             billingClient.queryProductDetailsAsync(queryProductDetailsParams) { queryResult, productDetailsList ->
                 if (queryResult.responseCode == BillingResponseCode.OK) {
-                    onSuccess(productDetailsList)
+                    onSuccess(productDetailsList.productDetailsList)
                 } else {
                     onFailed(queryResult)
                 }
