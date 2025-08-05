@@ -143,13 +143,13 @@ dependencies {
 
     // AndroidX dependencies
     implementation 'androidx.gridlayout:gridlayout:1.1.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.9.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.9.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.9.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.9.3'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     // Dagger and Hilt DI and its dependency
-    ksp 'com.google.dagger:hilt-android-compiler:2.56.2'
-    implementation 'com.google.dagger:hilt-android:2.56.2'
+    ksp 'com.google.dagger:hilt-android-compiler:2.57'
+    implementation 'com.google.dagger:hilt-android:2.57'
 
     // Onyx SDK
     implementation 'com.onyx.android.sdk:onyxsdk-base:1.8.1'
