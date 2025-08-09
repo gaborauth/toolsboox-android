@@ -6,7 +6,7 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.analytics.logEvent
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesFlatWeeksCalendarBinding
 import com.toolsboox.plugin.templates.ot.FlatWeekCalendarCreator
