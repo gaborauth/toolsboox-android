@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.GestureDetectorCompat
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.analytics.logEvent
 import com.onyx.android.sdk.api.device.epd.EpdController
 import com.onyx.android.sdk.pen.TouchHelper
 import com.toolsboox.R

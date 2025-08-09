@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.analytics.logEvent
 import com.toolsboox.R
 import com.toolsboox.databinding.FragmentTemplatesThisWeeksCalendarBinding
 import com.toolsboox.ui.plugin.ScreenFragment
