@@ -30,7 +30,8 @@
                 android:name=".ui.main.MainActivity"
                 android:screenOrientation="sensorPortrait"
                 android:configChanges="orientation"
-                android:exported="true">
+                android:enableOnBackInvokedCallback="true"
+        android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
