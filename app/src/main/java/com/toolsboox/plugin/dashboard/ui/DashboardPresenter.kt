@@ -3,8 +3,8 @@ package com.toolsboox.plugin.dashboard.ui
 import androidx.lifecycle.lifecycleScope
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
-import com.google.mlkit.vision.digitalink.DigitalInkRecognitionModel
-import com.google.mlkit.vision.digitalink.DigitalInkRecognitionModelIdentifier
+import com.google.mlkit.vision.digitalink.recognition.DigitalInkRecognitionModel
+import com.google.mlkit.vision.digitalink.recognition.DigitalInkRecognitionModelIdentifier
 import com.toolsboox.BuildConfig
 import com.toolsboox.plugin.dashboard.nw.DashboardService
 import com.toolsboox.ui.plugin.FragmentPresenter
