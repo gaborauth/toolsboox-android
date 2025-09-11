@@ -142,6 +142,7 @@ dependencies {
     implementation 'com.google.mlkit:digital-ink-recognition:19.0.0'
 
     // AndroidX dependencies
+    implementation "androidx.activity:activity-ktx:1.11.0"
     implementation 'androidx.gridlayout:gridlayout:1.1.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.9.4'
     implementation 'androidx.navigation:navigation-ui-ktx:2.9.4'

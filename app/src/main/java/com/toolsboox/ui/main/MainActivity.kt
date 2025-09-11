@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBar
@@ -163,6 +164,21 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             true
         }
 
+        onBackPressedDispatcher.addCallback( this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                } else {
+                    if (supportFragmentManager.backStackEntryCount > 0) {
+                        supportFragmentManager.popBackStack()
+                        orientateFragment(null)
+                    } else {
+                        finish()
+                    }
+                }
+            }
+        })
+
         binding.mainToolbar.toolbarBack.setOnClickListener {
             onBackPressed()
         }
@@ -308,19 +324,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             }
 
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    /**
-     * OnBackPressed hook.
-     */
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 0) {
-            supportFragmentManager.popBackStack()
-            orientateFragment(null)
-        } else {
-            super.onBackPressed()
         }
     }
 
