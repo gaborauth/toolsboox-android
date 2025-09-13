@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.MenuItem
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBar
@@ -19,9 +18,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
-import com.google.firebase.Firebase
 import com.toolsboox.BuildConfig
 import com.toolsboox.R
 import com.toolsboox.databinding.ActivityMainBinding
@@ -163,21 +162,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             binding.drawerLayout.closeDrawers()
             true
         }
-
-        onBackPressedDispatcher.addCallback( this, object: OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
-                } else {
-                    if (supportFragmentManager.backStackEntryCount > 0) {
-                        supportFragmentManager.popBackStack()
-                        orientateFragment(null)
-                    } else {
-                        finish()
-                    }
-                }
-            }
-        })
 
         binding.mainToolbar.toolbarBack.setOnClickListener {
             onBackPressed()
@@ -324,6 +308,19 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             }
 
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * OnBackPressed hook.
+     */
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+            orientateFragment(null)
+        } else {
+            super.onBackPressed()
         }
     }
 
