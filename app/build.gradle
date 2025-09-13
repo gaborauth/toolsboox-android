@@ -122,7 +122,7 @@ android {
 
     namespace 'com.toolsboox'
     lint {
-        disable 'MissingTranslation', 'MissingQuantity'
+        disable 'MissingTranslation', 'MissingQuantity', 'GestureBackNavigation'
     }
 }
 
