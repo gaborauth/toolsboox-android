@@ -144,8 +144,8 @@ dependencies {
     // AndroidX dependencies
     implementation "androidx.activity:activity-ktx:1.11.0"
     implementation 'androidx.gridlayout:gridlayout:1.1.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.9.4'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.9.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.9.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.9.5'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     // Dagger and Hilt DI and its dependency
