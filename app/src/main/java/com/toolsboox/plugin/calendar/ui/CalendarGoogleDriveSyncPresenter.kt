@@ -255,7 +255,7 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
      */
     fun backgroundSync(fragment: ScreenFragment, userId: UUID) {
         // Prevent sync if the auto-sync is manually disabled.
-        if (!sharedPreferences.getString("googleDriveAutoSyncOptIn", "false").toBoolean()) return
+        if (!sharedPreferences.getString("googleDriveAutoSyncOptIn", "true").toBoolean()) return
 
         // Prevent multiple syncs in a short time.
         val lastCalendarGoogleDriveBackgroundSync = Instant.ofEpochMilli(sharedPreferences.getLong("lastCalendarGoogleDriveBackgroundSync", 0L))
@@ -278,7 +278,7 @@ class CalendarGoogleDriveSyncPresenter @Inject constructor() : FragmentPresenter
                                 if (syncList.isEmpty()) return@launch
 
                                 Timber.i("Background sync items: ${syncList}")
-                                syncList.take(1).forEach { item ->
+                                syncList.forEach { item ->
                                     val fileLastModified = item.file?.updated?.time ?: 0L
                                     val cloudLastModified = item.cloud?.updated?.time ?: 0L
 

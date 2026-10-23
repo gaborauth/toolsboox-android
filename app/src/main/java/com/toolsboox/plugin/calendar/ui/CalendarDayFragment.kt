@@ -1,13 +1,17 @@
 package com.toolsboox.plugin.calendar.ui
 
+import android.graphics.Matrix
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
+import android.widget.ImageView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
 import com.toolsboox.R
 import com.toolsboox.da.Stroke
+import com.toolsboox.da.TextElement
 import com.toolsboox.databinding.FragmentCalendarBinding
+import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarEvent
@@ -122,11 +126,11 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        val normalizedStrokes = surfaceFrom(strokes)
+        val strokesCopy = Stroke.listDeepCopy(strokes)
         if (notePage != null) {
-            calendarDay.noteStrokes[notePage!!] = normalizedStrokes
+            calendarDay.noteStrokes[notePage!!] = strokesCopy
         } else {
-            calendarDay.calendarStrokes[calendarStyle] = normalizedStrokes
+            calendarDay.calendarStrokes[calendarStyle] = strokesCopy
         }
 
         if (calendarStyle == CalendarDay.HEALTH_V1_STYLE) {
@@ -139,13 +143,24 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
     }
 
     /**
+     * Text elements changed callback.
+     *
+     * @param textElements the current text elements
+     */
+    override fun onTextElementsChanged(textElements: MutableList<TextElement>) {
+        calendarDay.textElements = textElements
+        calendarPattern.updateDay(calendarDay)
+        presenter.save(this, binding, calendarDay, calendarPattern, currentDate)
+    }
+
+    /**
      * On strokes procrastinated event.
      *
      * @param strokes the strokes to procrastinate
      */
     override fun onStrokesProcrastinated(strokes: List<Stroke>) {
         firebaseAnalytics.logEvent("procrastinator", null)
-        presenter.procrastinate(this, binding, surfaceFrom(strokes), currentDate, calendarDay, calendarStyle)
+        presenter.procrastinate(this, binding, Stroke.listDeepCopy(strokes), currentDate, calendarDay, calendarStyle)
     }
 
     /**
@@ -210,8 +225,10 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         }
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             if (callback(motionEvent, false)) return@setOnTouchListener true
+            if (handleZoomPanTouch(motionEvent)) return@setOnTouchListener true
 
-            val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
+            val rawGesture = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
+            val gestureResult = if (twoFingerGesture) rawGesture else OnGestureListener.NONE
 
             if (notePage != null)
                 CalendarDayPageNotes.onTouchEvent(
@@ -246,11 +263,15 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
 
         binding.toolbarDrawing.toolbarSwipeUp.setOnClickListener {
             if (notePage != null) {
-                val page = notePage!!.toIntOrNull() ?: 0
-                if (page == 0) {
+                if (notePage == "gratitude") {
                     CalendarNavigator.toDayPage(this, currentDate, CalendarDay.DEFAULT_STYLE)
                 } else {
-                    CalendarNavigator.toDayNote(this, currentDate, "${page - 1}")
+                    val page = notePage!!.toIntOrNull() ?: 0
+                    if (page == 0) {
+                        CalendarNavigator.toDayNote(this, currentDate, "gratitude")
+                    } else {
+                        CalendarNavigator.toDayNote(this, currentDate, "${page - 1}")
+                    }
                 }
             } else {
                 CalendarNavigator.toWeekPage(this, currentDate, locale)
@@ -258,15 +279,20 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         }
         binding.toolbarDrawing.toolbarSwipeDown.setOnClickListener {
             if (notePage != null) {
-                val page = notePage!!.toIntOrNull() ?: 0
-                CalendarNavigator.toDayNote(this, currentDate, "${page + 1}")
+                if (notePage == "gratitude") {
+                    CalendarNavigator.toDayNote(this, currentDate, "0")
+                } else {
+                    val page = notePage!!.toIntOrNull() ?: 0
+                    CalendarNavigator.toDayNote(this, currentDate, "${page + 1}")
+                }
             } else {
-                CalendarNavigator.toDayNote(this, currentDate, "0")
+                CalendarNavigator.toDayNote(this, currentDate, "gratitude")
             }
         }
         binding.toolbarDrawing.toolbarCalendarView.setOnClickListener {
-            calendarStyle = CalendarDay.DEFAULT_STYLE
-            presenter.load(this@CalendarDayFragment, binding, currentDate, defaultStartHour, locale)
+            // Always jump to today's day page (Default style), regardless of what
+            // date you're currently viewing or whether you're on a note page.
+            CalendarNavigator.toDayPage(this, LocalDate.now(), CalendarDay.DEFAULT_STYLE)
         }
         binding.toolbarDrawing.toolbarHealthView.setOnClickListener {
             calendarStyle = CalendarDay.HEALTH_V1_STYLE
@@ -306,6 +332,14 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
 
         toolbar.toolbarPager.visibility = View.GONE
         timer.cancel()
+        syncPresenter.backgroundSync(this@CalendarDayFragment, UUID.randomUUID())
+    }
+
+    override fun onTransformChanged(matrix: Matrix) {
+        if (::binding.isInitialized) {
+            binding.templateImageView.scaleType = ImageView.ScaleType.MATRIX
+            binding.templateImageView.imageMatrix = matrix
+        }
     }
 
     /**
@@ -322,12 +356,15 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
         this.calendarPattern = calendarPattern
         updateNavigator()
 
+        // Load text elements from the calendar data
+        setTextElements(calendarDay.textElements)
+
         if (notePage != null) {
             binding.toolbarDrawing.toolbarProcrastinator.visibility = View.GONE
             val noteTemplate = sharedPreferences.getInt("calendarNoteTemplate", 0)
             val noteStrokes = calendarDay.noteStrokes[notePage] ?: listOf()
             CalendarDayPageNotes.drawPage(this.requireContext(), templateCanvas, calendarDay, noteTemplate, notePage!!)
-            applyStrokes(surfaceTo(noteStrokes), true)
+            applyStrokes(Stroke.listDeepCopy(noteStrokes), true)
         } else {
             binding.toolbarDrawing.toolbarProcrastinator.visibility = View.VISIBLE
             val calendarStrokes = calendarDay.calendarStrokes[calendarStyle] ?: listOf()
@@ -340,7 +377,7 @@ class CalendarDayFragment @Inject constructor() : SurfaceFragment() {
             if (calendarStyle == CalendarDay.TIME_BOX_V1_STYLE) {
                 TimeBoxDayPage.drawPage(this.requireContext(), templateCanvas, calendarDay)
             }
-            applyStrokes(surfaceTo(calendarStrokes), true)
+            applyStrokes(Stroke.listDeepCopy(calendarStrokes), true)
         }
     }
 

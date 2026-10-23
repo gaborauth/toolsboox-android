@@ -1,10 +1,13 @@
 package com.toolsboox.plugin.calendar.ui
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.api.services.drive.Drive
@@ -86,6 +89,32 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
     // Google Drive service.
     private var googleDrive: Drive? = null
 
+    // Activity result launcher for interactive Google Sign-In.
+    private val signInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                .addOnSuccessListener { account ->
+                    Timber.i("Interactive sign-in successful: ${account.email}")
+                    googleAccount = account
+                    binding.googleDriveStatusMessage.text = getString(R.string.calendar_google_drive_connected)
+                    binding.buttonCompare.isEnabled = true
+                    binding.buttonCompare.alpha = 1.0f
+                    binding.buttonSignIn.visibility = View.GONE
+
+                    GoogleDriveModule.provideCredential(requireContext(), account).let { credential ->
+                        googleDrive = GoogleDriveModule.provideDrive(credential)
+                        presenter.fileList(this@CalendarGoogleDriveSyncFragment, UUID.randomUUID(), binding)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Timber.e(e, "Interactive sign-in failed")
+                    binding.googleDriveStatusMessage.text = "Sign-in failed: ${e.localizedMessage}"
+                }
+        }
+    }
+
     /**
      * OnViewCreated hook.
      *
@@ -127,6 +156,10 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
 
         binding.buttonCompare.isEnabled = false
         binding.buttonCompare.alpha = 0.5f
+
+        binding.buttonSignIn.setOnClickListener {
+            signInLauncher.launch(googleSignInClient.signInIntent)
+        }
     }
 
     /**
@@ -160,6 +193,7 @@ class CalendarGoogleDriveSyncFragment @Inject constructor() : ScreenFragment() {
                     binding.googleDriveStatusMessage.text = getString(R.string.calendar_google_drive_connected)
                     binding.buttonCompare.isEnabled = true
                     binding.buttonCompare.alpha = 1.0f
+                    binding.buttonSignIn.visibility = View.GONE
 
                     GoogleDriveModule.provideCredential(this.requireContext(), googleAccount!!)
                         .let { credential ->

@@ -3,8 +3,6 @@ package com.toolsboox.ui
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.toolsboox.BuildConfig
 
 /**
  * Base activity, it provides required methods and presenter instantiation and calls.
@@ -26,8 +24,6 @@ abstract class BaseActivity<P : BasePresenter<BaseView>> : BaseView, AppCompatAc
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
 
         presenter = presenter()
     }

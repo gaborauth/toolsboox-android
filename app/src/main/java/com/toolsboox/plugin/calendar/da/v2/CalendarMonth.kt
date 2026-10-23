@@ -2,6 +2,7 @@ package com.toolsboox.plugin.calendar.da.v2
 
 import com.squareup.moshi.JsonClass
 import com.toolsboox.da.Stroke
+import com.toolsboox.da.TextElement
 import java.util.*
 
 /**
@@ -18,6 +19,7 @@ data class CalendarMonth(
     override var calendarStrokes: MutableMap<String, List<Stroke>> = mutableMapOf(),
     override var calendarValues: MutableMap<String, Map<String, Float?>> = mutableMapOf(),
     override var noteStrokes: MutableMap<String, List<Stroke>> = mutableMapOf(),
+    override var textElements: MutableList<TextElement> = mutableListOf(),
     override var created: Date? = null,
     override var updated: Date? = null
 ) : Calendar {
@@ -52,7 +54,8 @@ data class CalendarMonth(
     fun deepCopy(): CalendarMonth {
         return CalendarMonth(
             this.year, this.month, this.locale,
-            Calendar.strokesDeepCopy(calendarStrokes), Calendar.valuesDeepCopy(calendarValues), Calendar.strokesDeepCopy(noteStrokes)
+            Calendar.strokesDeepCopy(calendarStrokes), Calendar.valuesDeepCopy(calendarValues), Calendar.strokesDeepCopy(noteStrokes),
+            Calendar.textElementsDeepCopy(textElements)
         )
     }
 }

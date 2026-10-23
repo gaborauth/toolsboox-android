@@ -17,7 +17,7 @@ interface Creator {
     companion object {
         val colorBlack = Color.argb(1.0f, 0.0f, 0.0f, 0.0f)
         val colorGrey10 = Color.argb(1.0f, 0.9f, 0.9f, 0.9f)
-        val colorGrey20 = Color.argb(0.2f, 0.5f, 0.5f, 0.5f)
+        val colorGrey20 = Color.argb(0.08f, 0.5f, 0.5f, 0.5f)
         val colorGrey50 = Color.argb(0.5f, 0.5f, 0.5f, 0.5f)
         val colorGrey80 = Color.argb(0.8f, 0.5f, 0.5f, 0.5f)
         val colorWhite = Color.argb(1.0f, 1.0f, 1.0f, 1.0f)

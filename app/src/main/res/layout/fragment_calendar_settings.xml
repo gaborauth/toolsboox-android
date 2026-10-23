@@ -318,12 +318,292 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <View
+                    android:id="@+id/divider_note_template"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginTop="8dp"
                     android:background="#e0e0e0"
 
                     app:layout_constraintTop_toBottomOf="@id/note_template_spinner_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- Rotation section -->
+            <TextView
+                    android:id="@+id/rotation_section_label"
+                    android:text="@string/calendar_settings_rotation_label"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/divider_note_template"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                    android:id="@+id/rotation_section_hint"
+                    android:text="@string/calendar_settings_rotation_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/rotation_section_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/rotation_portrait_check"
+                    android:text="@string/calendar_settings_rotation_portrait"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/rotation_section_hint"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/rotation_landscape_cw_check"
+                    android:text="@string/calendar_settings_rotation_landscape_cw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/rotation_portrait_check"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/rotation_reverse_portrait_check"
+                    android:text="@string/calendar_settings_rotation_reverse_portrait"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/rotation_landscape_cw_check"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/rotation_landscape_ccw_check"
+                    android:text="@string/calendar_settings_rotation_landscape_ccw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/rotation_reverse_portrait_check"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <View
+                    android:id="@+id/divider_rotation"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#e0e0e0"
+                    app:layout_constraintTop_toBottomOf="@id/rotation_landscape_ccw_check"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- Auto-sync section -->
+            <TextView
+                    android:id="@+id/auto_sync_section_label"
+                    android:text="@string/calendar_settings_auto_sync_label"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/divider_rotation"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/auto_sync_switch"
+                    android:text="@string/calendar_settings_auto_sync_enabled"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/auto_sync_section_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                    android:id="@+id/auto_sync_interval_text"
+                    android:text="@string/calendar_settings_auto_sync_interval_text"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/auto_sync_switch"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+
+                    android:id="@+id/auto_sync_interval_spinner_layout"
+                    android:spinnerMode="dropdown"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/auto_sync_interval_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <com.toolsboox.ot.AutoCompleteTextView
+                        android:id="@+id/auto_sync_interval_spinner"
+                        android:labelFor="@id/auto_sync_interval_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                    android:id="@+id/divider_auto_sync"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#e0e0e0"
+
+                    app:layout_constraintTop_toBottomOf="@id/auto_sync_interval_spinner_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- Ultrabridge Backup section -->
+            <TextView
+                    android:id="@+id/ultrabridge_section_label"
+                    android:text="@string/calendar_settings_ultrabridge_title"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/divider_auto_sync"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/ultrabridge_enable_switch"
+                    android:text="@string/calendar_settings_ultrabridge_enable"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    app:layout_constraintTop_toBottomOf="@id/ultrabridge_section_label"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+                    android:id="@+id/ultrabridge_url_layout"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    android:hint="@string/calendar_settings_ultrabridge_url_hint"
+
+                    app:layout_constraintTop_toBottomOf="@id/ultrabridge_enable_switch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ultrabridge_url_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textUri"
+                        android:singleLine="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+                    android:id="@+id/ultrabridge_user_layout"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    android:hint="@string/calendar_settings_ultrabridge_user_hint"
+
+                    app:layout_constraintTop_toBottomOf="@id/ultrabridge_url_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ultrabridge_user_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:singleLine="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+                    android:id="@+id/ultrabridge_pass_layout"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+
+                    android:hint="@string/calendar_settings_ultrabridge_pass_hint"
+                    app:passwordToggleEnabled="true"
+
+                    app:layout_constraintTop_toBottomOf="@id/ultrabridge_user_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ultrabridge_pass_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:singleLine="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                    android:id="@+id/divider_ultrabridge"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#e0e0e0"
+
+                    app:layout_constraintTop_toBottomOf="@id/ultrabridge_pass_layout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -349,7 +629,7 @@
 
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/barrierVertical"
-                    app:layout_constraintTop_toBottomOf="@+id/note_template_spinner_layout"
+                    app:layout_constraintTop_toBottomOf="@+id/divider_ultrabridge"
                     android:layout_marginTop="24dp"/>
 
             <Button
@@ -361,7 +641,7 @@
 
                     app:layout_constraintStart_toEndOf="@id/barrierVertical"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/note_template_spinner_layout"
+                    app:layout_constraintTop_toBottomOf="@+id/divider_ultrabridge"
                     android:layout_marginTop="24dp"/>
 
             <Button

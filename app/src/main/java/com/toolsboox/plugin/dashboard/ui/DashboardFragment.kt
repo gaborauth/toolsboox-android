@@ -14,12 +14,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.gms.ads.AdRequest
 import com.google.android.play.core.review.ReviewException
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.ump.ConsentInformation
-import com.google.android.ump.ConsentRequestParameters
-import com.google.android.ump.UserMessagingPlatform
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
 import com.squareup.moshi.Moshi
@@ -89,8 +85,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      */
     private lateinit var adapter: SquareItemAdapter
 
-    // Consent information.
-    private lateinit var consentInformation: ConsentInformation
 
     /**
      * OnViewCreated hook.
@@ -131,18 +125,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
             SquareItem(
                 getString(R.string.dashboard_item_templates_title), R.drawable.ic_dashboard_item_templates,
                 R.id.action_to_templates_main, bundleOf()
-            )
-        )
-        squareItems.add(
-            SquareItem(
-                getString(R.string.dashboard_item_teamdrawer_title), R.drawable.ic_dashboard_item_teamdrawer,
-                R.id.action_to_teamdrawer_room, bundleOf()
-            )
-        )
-        squareItems.add(
-            SquareItem(
-                getString(R.string.dashboard_item_kanban_planner_title), R.drawable.ic_dashboard_item_kanban,
-                R.id.action_to_kanban_main, bundleOf()
             )
         )
         squareItems.add(
@@ -196,12 +178,8 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
             updateAdButton()
         }
 
-        consentInformation = UserMessagingPlatform.getConsentInformation(requireContext())
     }
 
-    /**
-     * OnResume hook.
-     */
     override fun onResume() {
         super.onResume()
 
@@ -214,33 +192,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
 
         updateAdButton()
         askForRate()
-
-        val consentRequestParameters = ConsentRequestParameters.Builder().build()
-        consentInformation.requestConsentInfoUpdate(
-            requireActivity(), consentRequestParameters,
-            {
-                if (consentInformation.isConsentFormAvailable) {
-                    Timber.i("Consent information updated successfully.")
-                    if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.REQUIRED) {
-                        Timber.i("Consent form is required.")
-                        UserMessagingPlatform.loadConsentForm(requireContext(), { consentForm ->
-                            consentForm.show(requireActivity()) { formError ->
-                                if (consentInformation.consentStatus == ConsentInformation.ConsentStatus.OBTAINED) {
-                                    Timber.i("Consent form accepted.")
-                                } else {
-                                    Timber.w("Error while obtaining consent form: $formError")
-                                }
-                            }
-                        }, { formError ->
-                            Timber.w("Error while loading consent form: $formError")
-                        })
-                    }
-                }
-            },
-            { requestConsentError ->
-                Timber.e("Error while updating consent information: $requestConsentError")
-            },
-        )
     }
 
     /**
@@ -335,15 +286,6 @@ class DashboardFragment @Inject constructor() : ScreenFragment() {
      * Update the state of the advertisement enable-disable button.
      */
     private fun updateAdButton() {
-        if (sharedPreferences.getBoolean("advertisements", true)) {
-            binding.buttonToggleAd.text = getString(R.string.dashboard_ad_settings_button_hide)
-            binding.adView.loadAd(AdRequest.Builder().build())
-            binding.adView.visibility = View.VISIBLE
-        } else {
-            binding.buttonToggleAd.text = getString(R.string.dashboard_ad_settings_button_show)
-            binding.adView.visibility = View.GONE
-            binding.adView.destroy()
-        }
     }
 
     /**

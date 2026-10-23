@@ -4,7 +4,7 @@
             xmlns:tools="http://schemas.android.com/tools"
 
             android:id="@+id/navigation_main"
-            app:startDestination="@id/DashboardFragment">
+            app:startDestination="@id/CalendarDayFragment">
 
     <action
             android:id="@+id/action_to_dashboard"
@@ -24,12 +24,6 @@
     <action
             android:id="@+id/action_to_calendar_year"
             app:destination="@id/CalendarYearFragment"/>
-    <action
-            android:id="@+id/action_to_kanban_main"
-            app:destination="@id/KanbanMainFragment"/>
-    <action
-            android:id="@+id/action_to_teamdrawer_room"
-            app:destination="@id/TeamDrawerRoomFragment"/>
     <action
             android:id="@+id/action_to_templates_main"
             app:destination="@id/TemplatesMainFragment"/>
@@ -341,49 +335,6 @@
     </fragment>
 
     <fragment
-            android:id="@+id/KanbanMainFragment"
-            android:name="com.toolsboox.plugin.kanban.ui.KanbanMainFragment"
-            android:label="KanbanMainFragment"
-            tools:layout="@layout/fragment_kanban_main">
-    </fragment>
-
-    <fragment
-            android:id="@+id/TeamDrawerRoomFragment"
-            android:name="com.toolsboox.plugin.teamdrawer.ui.RoomFragment"
-            android:label="TeamDrawerRoomFragment"
-            tools:layout="@layout/fragment_teamdrawer_room">
-
-        <action
-                android:id="@+id/action_to_teamdrawer_note"
-                app:destination="@id/TeamDrawerNoteFragment"/>
-    </fragment>
-
-    <fragment
-            android:id="@+id/TeamDrawerNoteFragment"
-            android:name="com.toolsboox.plugin.teamdrawer.ui.NoteFragment"
-            android:label="TeamDrawerNoteFragment"
-            tools:layout="@layout/fragment_teamdrawer_note">
-
-        <action
-                android:id="@+id/action_to_teamdrawer_note"
-                app:destination="@id/TeamDrawerNoteFragment"/>
-        <action
-                android:id="@+id/action_to_teamdrawer_page"
-                app:destination="@id/TeamDrawerPageFragment"/>
-    </fragment>
-
-    <fragment
-            android:id="@+id/TeamDrawerPageFragment"
-            android:name="com.toolsboox.plugin.teamdrawer.ui.PageFragment"
-            android:label="TeamDrawerPageFragment"
-            tools:layout="@layout/fragment_teamdrawer_page">
-
-        <action
-                android:id="@+id/action_to_teamdrawer_note"
-                app:destination="@id/TeamDrawerNoteFragment"/>
-    </fragment>
-
-    <fragment
             android:id="@+id/TemplatesMainFragment"
             android:name="com.toolsboox.plugin.templates.ui.TemplatesMainFragment"
             android:label="TemplatesMainFragment"
@@ -453,5 +404,26 @@
             android:name="com.toolsboox.plugin.cloud.ui.CloudFragment"
             android:label="CloudFragment"
             tools:layout="@layout/fragment_cloud">
+    </fragment>
+
+    <!-- Dead fragments kept for compile compatibility (never navigated to) -->
+    <fragment
+            android:id="@+id/TeamDrawerRoomFragment"
+            android:name="com.toolsboox.plugin.teamdrawer.ui.RoomFragment"
+            android:label="TeamDrawerRoomFragment">
+        <action android:id="@+id/action_to_teamdrawer_note" app:destination="@id/TeamDrawerNoteFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/TeamDrawerNoteFragment"
+            android:name="com.toolsboox.plugin.teamdrawer.ui.NoteFragment"
+            android:label="TeamDrawerNoteFragment">
+        <action android:id="@+id/action_to_teamdrawer_note" app:destination="@id/TeamDrawerNoteFragment"/>
+        <action android:id="@+id/action_to_teamdrawer_page" app:destination="@id/TeamDrawerPageFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/TeamDrawerPageFragment"
+            android:name="com.toolsboox.plugin.teamdrawer.ui.PageFragment"
+            android:label="TeamDrawerPageFragment">
+        <action android:id="@+id/action_to_teamdrawer_note" app:destination="@id/TeamDrawerNoteFragment"/>
     </fragment>
 </navigation>

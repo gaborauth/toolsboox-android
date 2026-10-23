@@ -5,6 +5,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/fgColor</item>
         <item name="android:textColorSecondary">@color/fgColor</item>
+        <item name="android:fontFamily">@font/atkinson_hyperlegible</item>
     </style>
 
     <style name="App.FloatingActionButton" parent="@style/Widget.MaterialComponents.FloatingActionButton">

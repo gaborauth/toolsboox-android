@@ -9,6 +9,7 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.io.PrintWriter
 import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.time.Instant
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -162,8 +163,22 @@ class CalendarDayService @Inject constructor() {
         val fullPath = File(rootPath, "calendar/$path")
         fullPath.mkdirs()
 
-        // Try to save to v2
-        PrintWriter(FileWriter(File(fullPath, "$baseName-v2.json"))).use { it.write(json(calendarDay)) }
+        // Write to a temp file first, then atomically move it into place. A direct
+        // write to the final name leaves a truncated, unparseable file if the
+        // process is killed mid-write (low-memory kill, crash, battery death) —
+        // and that corrupt file then gets pushed downstream by the sync worker.
+        // The atomic rename guarantees the final file is always a complete day.
+        val target = File(fullPath, "$baseName-v2.json")
+        val temp = File(fullPath, "$baseName-v2.json.tmp")
+        PrintWriter(FileWriter(temp)).use { it.write(json(calendarDay)) }
+        try {
+            Files.move(temp.toPath(), target.toPath(), StandardCopyOption.ATOMIC_MOVE)
+        } catch (e: Exception) {
+            // ATOMIC_MOVE can be unsupported on some filesystems; fall back to a
+            // plain replace, which is still safer than writing the target directly.
+            Timber.w(e, "Atomic move unavailable for $baseName-v2.json; falling back to replace")
+            Files.move(temp.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING)
+        }
 
         // Try to rename the old file to .backup
         val source = File(fullPath, "$baseName.json")

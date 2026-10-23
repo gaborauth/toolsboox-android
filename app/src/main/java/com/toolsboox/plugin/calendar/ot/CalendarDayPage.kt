@@ -34,7 +34,7 @@ class CalendarDayPage {
         private const val ceh = 50.0f
 
         // Left offset
-        private const val lo = (1404.0f - 2 * cew - 50.0f) / 2.0f
+        private const val lo = 20.0f
 
         // Top offset
         private const val to = (1872.0f - 35 * ceh) / 2.0f
@@ -79,7 +79,7 @@ class CalendarDayPage {
                 }
 
                 OnGestureListener.DTU -> {
-                    CalendarNavigator.toDayNote(fragment, localDate, "0")
+                    CalendarNavigator.toDayNote(fragment, localDate, "gratitude")
                     return true
                 }
             }

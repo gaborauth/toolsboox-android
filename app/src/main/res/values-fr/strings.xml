@@ -32,7 +32,7 @@
     <string name="main_write_external_storage_permission_missing">"Permission d'écriture manquante"</string>
 
     <!-- Strings related to calendar plugin -->
-    <string name="calendar_main_title">"Calendrier – %1$s"</string>
+    <string name="calendar_main_title">%1$s</string>
 
     <!-- Strings related to dashboard plugin
 Strings related to dashboard fragment -->

@@ -2,6 +2,11 @@ package com.toolsboox.plugin.calendar.ot
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.DashPathEffect
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.text.TextPaint
 import android.view.MotionEvent
 import android.view.View
 import com.toolsboox.ot.Creator
@@ -56,19 +61,28 @@ class CalendarDayPageNotes : Creator {
 
             val localDate = LocalDate.of(year, month, day)
 
-            val page = notePage.toIntOrNull() ?: 0
             when (gestureResult) {
                 OnGestureListener.UTD -> {
-                    if (page == 0) {
+                    if (notePage == "gratitude") {
                         CalendarNavigator.toDayPage(fragment, localDate)
                     } else {
-                        CalendarNavigator.toDayNote(fragment, localDate, "${page - 1}")
+                        val page = notePage.toIntOrNull() ?: 0
+                        if (page == 0) {
+                            CalendarNavigator.toDayNote(fragment, localDate, "gratitude")
+                        } else {
+                            CalendarNavigator.toDayNote(fragment, localDate, "${page - 1}")
+                        }
                     }
                     return true
                 }
 
                 OnGestureListener.DTU -> {
-                    CalendarNavigator.toDayNote(fragment, localDate, "${page + 1}")
+                    if (notePage == "gratitude") {
+                        CalendarNavigator.toDayNote(fragment, localDate, "0")
+                    } else {
+                        val page = notePage.toIntOrNull() ?: 0
+                        CalendarNavigator.toDayNote(fragment, localDate, "${page + 1}")
+                    }
                     return true
                 }
             }
@@ -86,6 +100,11 @@ class CalendarDayPageNotes : Creator {
          * @param notePage current notePage
          */
         fun drawPage(context: Context, canvas: Canvas, calendarDay: CalendarDay, template: Int, notePage: String) {
+            if (notePage == "gratitude") {
+                drawGratitudePage(canvas)
+                return
+            }
+
             val page = notePage.toIntOrNull() ?: 0
 
             canvas.drawRect(0.0f, 0.0f, 1404.0f, 1872.0f, Creator.fillWhite)
@@ -111,6 +130,93 @@ class CalendarDayPageNotes : Creator {
                 }
                 canvas.drawLine(lo + 26 * 50.0f, to + 0 * ceh, lo + 26 * 50.0f, to + 35 * ceh, Creator.lineDefaultBlack)
             }
+        }
+
+        /**
+         * Draw the gratitude / journal page: two columns at the top
+         * (3 Things I'm Grateful For + The Best Thing That Happened Today),
+         * then a wide Doodle area below.
+         */
+        private fun drawGratitudePage(canvas: Canvas) {
+            canvas.drawRect(0f, 0f, 1404f, 1872f, Creator.fillWhite)
+
+            val robotBold = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
+            val robotPlain = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
+
+            val headerPaint = TextPaint().apply {
+                color = Color.BLACK
+                textAlign = Paint.Align.LEFT
+                textSize = 42f
+                typeface = robotBold
+                isAntiAlias = true
+            }
+            val headerCenterPaint = TextPaint(headerPaint).apply {
+                textAlign = Paint.Align.CENTER
+            }
+            val numberPaint = TextPaint().apply {
+                color = Color.BLACK
+                textAlign = Paint.Align.LEFT
+                textSize = 36f
+                typeface = robotPlain
+                isAntiAlias = true
+            }
+            val linePaint = Paint().apply {
+                color = Color.argb(140, 0, 0, 0)
+                strokeWidth = 1.5f
+                style = Paint.Style.STROKE
+                isAntiAlias = true
+            }
+            val dashedBorder = Paint().apply {
+                color = Color.argb(100, 0, 0, 0)
+                strokeWidth = 1.5f
+                style = Paint.Style.STROKE
+                pathEffect = DashPathEffect(floatArrayOf(10f, 10f), 0f)
+                isAntiAlias = true
+            }
+
+            val outerLeft = 60f
+            val outerRight = 1344f
+            val pageMidGap = 30f
+            val colLeft = outerLeft
+            val colMidRight = (outerLeft + outerRight) / 2f - pageMidGap / 2f  // 672
+            val colMidLeft = (outerLeft + outerRight) / 2f + pageMidGap / 2f   // 732
+            val colRight = outerRight
+
+            val headerY = 130f
+            val firstLineY = 200f
+            val lineSpacing = 70f
+            val numLines = 11
+            val bottomOfColumns = firstLineY + (numLines - 1) * lineSpacing  // 200 + 10*70 = 900
+
+            // --- Left column: 3 Things I'm Grateful For ---
+            canvas.drawText("3 THINGS I'M GRATEFUL FOR", colLeft, headerY, headerPaint)
+            // Three numbered slots, each with multiple lines below
+            val slotsPerItem = numLines / 3  // 3
+            val numberCol = colLeft
+            val textIndent = colLeft + 60f
+            for (i in 0 until numLines) {
+                val y = firstLineY + i * lineSpacing
+                if (i % slotsPerItem == 0) {
+                    val n = (i / slotsPerItem) + 1
+                    canvas.drawText("$n.", numberCol, y - 10f, numberPaint)
+                }
+                canvas.drawLine(textIndent, y, colMidRight, y, linePaint)
+            }
+
+            // --- Right column: The Best Thing That Happened Today ---
+            val rightColCenter = (colMidLeft + colRight) / 2f
+            canvas.drawText("THE BEST THING TODAY", rightColCenter, headerY, headerCenterPaint)
+            for (i in 0 until numLines) {
+                val y = firstLineY + i * lineSpacing
+                canvas.drawLine(colMidLeft, y, colRight, y, linePaint)
+            }
+
+            // --- Doodle area (full width) ---
+            val doodleHeaderY = bottomOfColumns + 80f
+            canvas.drawText("DOODLE", colLeft, doodleHeaderY, headerPaint)
+            val doodleTop = doodleHeaderY + 25f
+            val doodleBottom = 1820f
+            canvas.drawRect(colLeft, doodleTop, colRight, doodleBottom, dashedBorder)
         }
     }
 }

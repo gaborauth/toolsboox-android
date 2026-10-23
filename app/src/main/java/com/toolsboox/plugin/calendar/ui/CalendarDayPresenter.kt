@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.net.Uri
 import android.os.Environment
 import com.toolsboox.R
+import com.toolsboox.plugin.calendar.widget.CalendarWidgetProvider
 import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
@@ -140,6 +141,7 @@ class CalendarDayPresenter @Inject constructor() : FragmentPresenter() {
                         calendarDayService.save(rootPath, currentDate, calendarDay)
                         calendarPatternService.save(rootPath, currentDate, calendarPattern)
                     }
+                    CalendarWidgetProvider.refreshAll(fragment.requireContext())
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) { fragment.somethingHappened(e) }
                 }

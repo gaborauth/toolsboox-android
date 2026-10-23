@@ -15,6 +15,15 @@ class OnGestureListener : GestureDetector.SimpleOnGestureListener() {
         private val swipeDirections = arrayOf(0, 0, 0, 0)
 
         /**
+         * Minimum number of scroll segments in one direction before it counts as a
+         * deliberate swipe. A real finger swipe fires many onScroll events; a phantom
+         * touch (flat e-ink panel, stray contact) or the Onyx scroll manager produces
+         * only one or two. Requiring several filters those out so the page does not
+         * navigate on its own and discard uncommitted strokes.
+         */
+        private const val SWIPE_MIN_SEGMENTS = 4
+
+        /**
          * Swipe not finished yet
          */
         const val NONE = -1
@@ -44,7 +53,7 @@ class OnGestureListener : GestureDetector.SimpleOnGestureListener() {
         when (e.action) {
             MotionEvent.ACTION_DOWN -> swipeDirections.fill(0)
             MotionEvent.ACTION_UP -> {
-                if (swipeDirections.max() > 0) return swipeDirections.indexOf(swipeDirections.maxOrNull())
+                if (swipeDirections.max() >= SWIPE_MIN_SEGMENTS) return swipeDirections.indexOf(swipeDirections.maxOrNull())
             }
         }
 

@@ -35,7 +35,7 @@
     <string name="main_write_external_storage_permission_missing">"De toestemming om naar externe opslag te schrijven ontbreekt"</string>
 
     <!-- Strings related to calendar plugin -->
-    <string name="calendar_main_title">"Kalender – %1$s"</string>
+    <string name="calendar_main_title">%1$s</string>
 
     <!-- Strings related to dashboard plugin
 Strings related to dashboard fragment -->

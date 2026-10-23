@@ -91,61 +91,16 @@ class CalendarQuarterNavigator {
          * @param calendarPattern the calendar pattern
          */
         fun draw(context: Context, canvas: Canvas, calendarQuarter: CalendarQuarter, calendarPattern: CalendarPattern) {
-            canvas.drawRect(0.0f, 0.0f, 1404.0f, 140.4f, Creator.fillWhite)
-
-            canvas.drawLine(0.0f, 138.4f, 1404.0f, 138.4f, Creator.lineDefaultBlack)
-            canvas.drawLine(0.0f, 136.4f, 1404.0f, 136.4f, Creator.lineDefaultBlack)
-
             val year = calendarQuarter.year
             val quarterOfYear = calendarQuarter.quarter
 
-            canvas.drawRect(lo + 0 * cew, to + 0 * ceh, lo + 1 * cew, to + 1 * ceh, Creator.fillGrey20)
-            canvas.drawRect(lo + 0 * cew, to + 0 * ceh, lo + 1 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
-            canvas.drawText("<", lo + 0 * cew + cew / 2, to + 1 * ceh - 30.0f, Creator.textBigBlackCenter)
-
-            canvas.drawRect(lo + 1 * cew, to + 0 * ceh, lo + 3 * cew, to + 1 * ceh, Creator.fillGrey20)
-            canvas.drawRect(lo + 1 * cew, to + 0 * ceh, lo + 3 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
-
-            val today = ContextCompat.getDrawable(context, R.drawable.ic_calendar_today)
-            canvas.save()
-            today?.setBounds(10, 10, (2 * cew).toInt() - 10, ceh.toInt() - 10)
-            canvas.translate(lo + 1 * cew, to)
-            today?.draw(canvas)
-            canvas.restore()
-
-            canvas.drawRect(lo + 3 * cew, to + 0 * ceh, lo + 6 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
-
-            canvas.drawRect(lo + 6 * cew, to + 0 * ceh, lo + 9 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
-
-            canvas.drawRect(lo + 9 * cew, to + 0 * ceh, lo + 13 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
-
-            canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.fillGrey20)
-            canvas.drawRect(lo + 13 * cew, to + 0 * ceh, lo + 15 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
-            val quarterText = context.getString(R.string.quarter_abbreviation, quarterOfYear)
-            Creator.drawEllipsizedText(
-                canvas, quarterText, Creator.textBigBlackCenter, lo + 13 * cew, to + 1 * ceh - 30.0f, 2 * cew
-            )
-
-            if (calendarPattern.getQuarterPages(quarterOfYear) > 0) {
-                Creator.drawTriangle(canvas, lo + 13 * cew, to + 0 * ceh, 20.0f)
-            }
-            Creator.notesDots(canvas, lo + 13 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getQuarterNotes(quarterOfYear))
-
-
-            canvas.drawRect(lo + 15 * cew, to + 0 * ceh, lo + 19 * cew, to + 1 * ceh, Creator.fillGrey20)
-            canvas.drawRect(lo + 15 * cew, to + 0 * ceh, lo + 19 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
-            Creator.drawEllipsizedText(
-                canvas, "$year", Creator.textBigBlackCenter, lo + 15 * cew, to + 1 * ceh - 30.0f, 4 * cew
-            )
-
-            if (calendarPattern.getYearPages() > 0) {
-                Creator.drawTriangle(canvas, lo + 15 * cew, to + 0 * ceh, 20.0f)
-            }
-            Creator.notesDots(canvas, lo + 15 * cew + 10.0f, to + 1 * ceh - 10.0f, 5.0f, calendarPattern.getYearNotes())
-
-            canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.fillGrey20)
-            canvas.drawRect(lo + 19 * cew, to + 0 * ceh, lo + 20 * cew, to + 1 * ceh, Creator.lineDefaultBlack)
-            canvas.drawText(">", lo + 19 * cew + cew / 2, to + 1 * ceh - 30.0f, Creator.textBigBlackCenter)
+            NavigatorRenderer.render(context, canvas, listOf(
+                NavigatorRenderer.Slot(context.getString(R.string.quarter_abbreviation, quarterOfYear),
+                    NavigatorRenderer.Emphasis.FOCAL,
+                    calendarPattern.getQuarterPages(quarterOfYear) > 0, calendarPattern.getQuarterNotes(quarterOfYear)),
+                NavigatorRenderer.Slot("$year", NavigatorRenderer.Emphasis.MUTED,
+                    calendarPattern.getYearPages() > 0, calendarPattern.getYearNotes()),
+            ))
         }
     }
 }

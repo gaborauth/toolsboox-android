@@ -1,22 +1,16 @@
 package com.toolsboox.ui.main
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.MenuItem
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBar
 import androidx.core.os.bundleOf
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -83,7 +77,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        MobileAds.initialize(this) {}
         firebaseAnalytics = Firebase.analytics
 
         if (BuildConfig.DEBUG) {
@@ -108,60 +101,8 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         sharedPreferences.edit().putString("androidId", androidId).apply()
 
-        val headerUserId = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_user_id)
-
-        val userId = sharedPreferences.getString("userId", null)
-        if (userId == null) {
-            headerUserId.text = getString(R.string.main_not_logged_in)
-        } else {
-            headerUserId.text = userId
-        }
-
-        val headerAndroidId = binding.navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_android_id)
-        headerAndroidId.text = androidId
-
-        val headerVersion = binding.navigationView.getHeaderView(0)
-            .findViewById<TextView>(R.id.navigation_header_version)
-        headerVersion.text = getString(R.string.main_version)
-            .format(BuildConfig.VERSION_NAME, BuildConfig.BUILD_TYPE)
-
         val preferences = MainSharedPreferencesModule.provideSharedPreferences(this)
         preferences.edit().putLong("lastTimestamp", Date().time).apply()
-
-        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.drawer_item_dashboard -> {
-                    val bundle = bundleOf()
-                    binding.fragmentContent.findNavController().navigate(R.id.action_to_dashboard, bundle)
-                }
-
-                R.id.drawer_item_website -> {
-                    intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://toolsboox.com"))
-                    this.startActivity(intent)
-                }
-
-                R.id.drawer_item_forum -> {
-                    intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forum.toolsboox.com"))
-                    this.startActivity(intent)
-                }
-
-                R.id.drawer_item_facebook -> {
-                    Timber.i("Not implemented yet...")
-                }
-
-                R.id.drawer_item_twitter -> {
-                    Timber.i("Not implemented yet...")
-                }
-
-                R.id.drawer_item_logout -> {
-                    Timber.i("Not implemented yet...")
-                }
-            }
-
-            menuItem.isChecked = true
-            binding.drawerLayout.closeDrawers()
-            true
-        }
 
         binding.mainToolbar.toolbarBack.setOnClickListener {
             onBackPressed()
@@ -293,22 +234,6 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
      */
     override fun presenter(): MainPresenter {
         return MainPresenter(this, credentialService)
-    }
-
-    /**
-     * Close the drawer menu.
-     *
-     * @param item the selected menu item
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                binding.drawerLayout.openDrawer(GravityCompat.START)
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.toolsboox.plugin.calendar.da.v2
 
 import com.toolsboox.da.Stroke
+import com.toolsboox.da.TextElement
 import java.util.*
 
 /**
@@ -12,6 +13,7 @@ interface Calendar {
     val calendarStrokes: Map<String, List<Stroke>>
     val calendarValues: Map<String, Map<String, Float?>>
     val noteStrokes: Map<String, List<Stroke>>
+    val textElements: List<TextElement>
     val created: Date?
     val updated: Date?
 
@@ -38,6 +40,16 @@ interface Calendar {
             val values = mutableMapOf<String, Map<String, Float?>>()
             mapOfValues.forEach { values[it.key] = it.value.toMap() }
             return values
+        }
+
+        /**
+         * Deep copy of text elements list.
+         *
+         * @param elements the source list
+         * @return the copied list
+         */
+        fun textElementsDeepCopy(elements: List<TextElement>): MutableList<TextElement> {
+            return elements.map { it.copy() }.toMutableList()
         }
     }
 }

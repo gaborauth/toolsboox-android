@@ -4,6 +4,19 @@
     <string name="something_happened_error">Something happened&#8230; please check your network status. :(</string>
     <string name="something_happened_action">Okay</string>
 
+    <string name="widget_description">Today\'s full planner page with strokes and events</string>
+    <string name="widget_schedule_description">Today\'s schedule column with hour grid and events</string>
+    <string name="widget_tasks_notes_description">Today\'s tasks and notes columns</string>
+    <string name="calendar_settings_rotation_label">Rotation</string>
+    <string name="calendar_settings_rotation_hint">Pick which orientations the toolbar rotate button cycles through:</string>
+    <string name="calendar_settings_rotation_portrait">Portrait (upright)</string>
+    <string name="calendar_settings_rotation_landscape_cw">Landscape — clockwise (top tilts right)</string>
+    <string name="calendar_settings_rotation_reverse_portrait">Reverse portrait (upside down)</string>
+    <string name="calendar_settings_rotation_landscape_ccw">Landscape — counter-clockwise (top tilts left)</string>
+    <string name="widget_full_label">Ledger Full Page</string>
+    <string name="widget_schedule_label">Ledger Schedule</string>
+    <string name="widget_tasks_notes_label">Ledger Tasks &amp; Notes</string>
+
     <string name="validation_field_required">This field is required</string>
     <plurals name="validation_field_too_long">
         <item quantity="zero">Too long, content is not allowed</item>
@@ -71,7 +84,7 @@
     <string name="about_this_translation_contributors_title">Contributors of the current translation</string>
     <string name="about_this_translation_contributors_list">anonymous contributor</string>
 
-    <string name="calendar_main_title">Calendar &#8211; %1$s</string>
+    <string name="calendar_main_title">%1$s</string>
     <string name="calendar_navigator_image">Calendar navigator image</string>
     <string name="calendar_template_image">Calendar template image</string>
 
@@ -128,6 +141,22 @@
     <string name="calendar_settings_backup_done">Calendar backup exported to the Downloads</string>
     <string name="calendar_settings_button_restore">Import backup</string>
     <string name="calendar_settings_restore_done">Calendar backup imported from the Downloads</string>
+    <string name="calendar_settings_auto_sync_label">Automatic cloud sync</string>
+    <string name="calendar_settings_auto_sync_enabled">Enable auto-sync</string>
+    <string name="calendar_settings_auto_sync_interval_text">Sync interval:</string>
+    <string name="calendar_settings_auto_sync_interval_15_min">Every 15 minutes</string>
+    <string name="calendar_settings_auto_sync_interval_1_hr">Every hour</string>
+    <string name="calendar_settings_auto_sync_interval_6_hr">Every 6 hours</string>
+    <string name="calendar_settings_auto_sync_interval_daily">Daily</string>
+    <string name="calendar_settings_ultrabridge_title">WebCal Backup</string>
+    <string name="calendar_settings_ultrabridge_enable">Enable PDF backup to WebDAV</string>
+    <string name="calendar_settings_ultrabridge_url_hint">WebDAV URL</string>
+    <string name="calendar_settings_ultrabridge_user_hint">Username</string>
+    <string name="calendar_settings_ultrabridge_pass_hint">Password</string>
+    <string name="calendar_settings_ultrabridge_enabled_toast">WebCal backup enabled</string>
+    <string name="calendar_settings_ultrabridge_disabled_toast">WebCal backup disabled</string>
+    <string name="calendar_settings_ultrabridge_missing_fields">Please fill in all WebDAV fields</string>
+
     <string name="calendar_settings_button_save">Save</string>
     <string name="calendar_settings_button_back">Back</string>
 
@@ -144,6 +173,16 @@
     <string name="calendar_drawing_toolbar_switch_side">Switch side</string>
     <string name="calendar_drawing_toolbar_cloud_sync">Cloud sync</string>
     <string name="calendar_drawing_toolbar_settings">Settings</string>
+    <string name="calendar_drawing_toolbar_lasso">Lasso select</string>
+    <string name="calendar_drawing_toolbar_copy">Copy</string>
+    <string name="calendar_drawing_toolbar_paste">Paste</string>
+    <string name="calendar_drawing_toolbar_copied">Copied</string>
+    <string name="calendar_drawing_toolbar_pasted">Pasted</string>
+    <string name="calendar_drawing_toolbar_clipboard_empty">Clipboard empty</string>
+    <string name="calendar_drawing_toolbar_nothing_selected">Nothing selected</string>
+    <string name="calendar_drawing_toolbar_text">Text</string>
+    <string name="calendar_text_dialog_title">Enter text</string>
+    <string name="calendar_text_dialog_hint">Type here…</string>
 
     <string name="calendar_navigator_prev_button_text">&lt;</string>
     <string name="calendar_navigator_next_button_text">&gt;</string>

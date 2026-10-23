@@ -1,13 +1,16 @@
 package com.toolsboox.plugin.calendar.ui
 
+import android.graphics.Matrix
 import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
+import android.widget.ImageView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
 import com.toolsboox.R
 import com.toolsboox.da.Stroke
 import com.toolsboox.databinding.FragmentCalendarBinding
+import com.toolsboox.ot.OnGestureListener
 import com.toolsboox.databinding.ToolbarDrawingBinding
 import com.toolsboox.plugin.calendar.CalendarNavigator
 import com.toolsboox.plugin.calendar.da.v1.CalendarPattern
@@ -124,7 +127,7 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
      * @param strokes the actual strokes
      */
     override fun onStrokeChanged(strokes: MutableList<Stroke>) {
-        val normalizedStrokes = surfaceFrom(strokes)
+        val normalizedStrokes = Stroke.listDeepCopy(strokes)
         if (notePage != null) {
             calendarYear.noteStrokes[notePage!!] = normalizedStrokes
         } else {
@@ -186,8 +189,10 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
         }
         binding.surfaceView.setOnTouchListener { view, motionEvent ->
             if (callback(motionEvent, false)) return@setOnTouchListener true
+            if (handleZoomPanTouch(motionEvent)) return@setOnTouchListener true
 
-            val gestureResult = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
+            val rawGesture = gestureListener.onTouchEvent(gestureDetector, view, motionEvent)
+            val gestureResult = if (twoFingerGesture) rawGesture else OnGestureListener.NONE
 
             if (notePage != null) {
                 CalendarYearPageNotes.onTouchEvent(
@@ -252,6 +257,16 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
     }
 
     /**
+     * Sync template ImageView transform when zoom/pan changes.
+     */
+    override fun onTransformChanged(matrix: Matrix) {
+        if (::binding.isInitialized) {
+            binding.templateImageView.scaleType = ImageView.ScaleType.MATRIX
+            binding.templateImageView.imageMatrix = matrix
+        }
+    }
+
+    /**
      * Reload the current page.
      *
      * @param calendarYear the data class
@@ -266,11 +281,11 @@ class CalendarYearFragment @Inject constructor() : SurfaceFragment() {
             val noteTemplate = sharedPreferences.getInt("calendarNoteTemplate", 0)
             val noteStrokes = calendarYear.noteStrokes[notePage] ?: listOf()
             CalendarYearPageNotes.drawPage(this.requireContext(), templateCanvas, calendarYear, noteTemplate, notePage!!)
-            applyStrokes(surfaceTo(noteStrokes), true)
+            applyStrokes(Stroke.listDeepCopy(noteStrokes), true)
         } else {
             val calendarStrokes = calendarYear.calendarStrokes[calendarStyle ?: CalendarYear.DEFAULT_STYLE] ?: listOf()
             CalendarYearPage.drawPage(this.requireContext(), templateCanvas, calendarYear, calendarPattern)
-            applyStrokes(surfaceTo(calendarStrokes), true)
+            applyStrokes(Stroke.listDeepCopy(calendarStrokes), true)
         }
     }
 

@@ -3,8 +3,6 @@ plugins {
 
     id 'com.google.devtools.ksp'
     id 'com.google.dagger.hilt.android'
-    id 'com.google.firebase.crashlytics'
-    id 'com.google.firebase.firebase-perf'
 
     id 'kotlin-android'
 }
@@ -18,7 +16,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.toolsboox"
+        applicationId "com.toolsboox.mjh"
         minSdkVersion 26
         targetSdkVersion 36
 
@@ -48,17 +46,31 @@ android {
         appName = 'toolboox'
     }
 
-    flavorDimensions = ['tier']
+    flavorDimensions = ['tier', 'device']
     productFlavors {
         dev {
-            resValue "string", "app_name", "Tools for Boox - Dev"
+            resValue "string", "app_name", "Ledger Dev"
             applicationIdSuffix ""
             dimension 'tier'
         }
         prod {
-            resValue "string", "app_name", "Tools for Boox"
+            resValue "string", "app_name", "Ledger"
             applicationIdSuffix ""
             dimension 'tier'
+        }
+        // Default build for Boox and everything else — unchanged (targetSdk 36).
+        standard {
+            dimension 'device'
+            buildConfigField "boolean", "VIWOODS_FAST_INK", "false"
+        }
+        // Viwoods AiPaper build: targetSdk 30 puts the app in the untrusted_app_30 SELinux
+        // domain, which is required for ENoteSetting.initWriting() (libpaintworker.so) to
+        // load without crashing — enabling true full-screen hardware fast ink. Sideload the
+        // viwoods variant only to the Mini. See project_viwoods_fast_ink memory.
+        viwoods {
+            dimension 'device'
+            targetSdkVersion 30
+            buildConfigField "boolean", "VIWOODS_FAST_INK", "true"
         }
     }
 
@@ -86,11 +98,10 @@ android {
             debuggable true
 
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Tools for Boox (debug)"
+            resValue "string", "app_name", "Ledger Debug"
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            resValue("string", "ad_unit_id_dashboard", "ca-app-pub-3940256099942544/6300978111")
         }
         release {
             minifyEnabled false
@@ -101,8 +112,6 @@ android {
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             proguardFiles fileTree('proguard').asList().toArray()
-
-            resValue("string", "ad_unit_id_dashboard", "ca-app-pub-2136545277716623/7789111670")
         }
     }
 
@@ -133,7 +142,8 @@ dependencies {
     // Google clients and libraries
     implementation 'com.android.billingclient:billing:8.0.0'
     implementation 'com.android.billingclient:billing-ktx:8.0.0'
-    implementation 'com.google.android.gms:play-services-ads:24.6.0'
+    // Ads removed in fork
+    // implementation 'com.google.android.gms:play-services-ads:24.6.0'
     implementation 'com.google.android.gms:play-services-auth:21.4.0'
     implementation 'com.google.android.play:review:2.0.2'
     implementation 'com.google.android.play:review-ktx:2.0.2'
@@ -152,6 +162,12 @@ dependencies {
     ksp 'com.google.dagger:hilt-android-compiler:2.57.1'
     implementation 'com.google.dagger:hilt-android:2.57.1'
 
+    // WorkManager + Hilt Worker support
+    implementation "androidx.work:work-runtime-ktx:2.10.1"
+    implementation "androidx.security:security-crypto:1.1.0-alpha06"
+    implementation "androidx.hilt:hilt-work:1.2.0"
+    ksp "androidx.hilt:hilt-compiler:1.2.0"
+
     // Onyx SDK
     implementation 'com.onyx.android.sdk:onyxsdk-base:1.8.2.1'
     implementation 'com.onyx.android.sdk:onyxsdk-device:1.3.1.3'
@@ -167,11 +183,9 @@ dependencies {
     // Deprecated, use suspend functions
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
-    // Firebase integrations
+    // Firebase integrations (analytics kept for source compat; collection disabled in manifest)
     implementation platform('com.google.firebase:firebase-bom:34.2.0')
     implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-crashlytics'
-    implementation 'com.google.firebase:firebase-perf'
 
     // Test dependencies
     testImplementation 'junit:junit:4.13.2'
